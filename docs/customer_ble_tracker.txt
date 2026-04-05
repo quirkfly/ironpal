@@ -1,0 +1,81 @@
+Scaffold and implement a react native app that will use BLE to proximition detection to identify current user of a gym equipment. Account for calibration to avoid misidentifying nearby phones.
+
+
+---
+
+
+Realistic & Practical Methods
+1. Bluetooth Low Energy (BLE) Proximity Detection
+How it works:
+
+The triceps machine is equipped with a BLE scanner.
+
+Each user’s phone runs an app that broadcasts a BLE signal (advertising).
+
+The machine identifies the closest/strongest signal.
+
+Pros:
+
+No user interaction required once app is installed.
+
+Works indoors and in noisy RF environments.
+
+Can estimate proximity based on RSSI (signal strength).
+
+Cons:
+
+Users must install and run your app.
+
+iOS limits BLE advertising in the background (solvable with Background Modes and BLE Peripheral APIs).
+
+Needs calibration to avoid misidentifying nearby phones.
+
+Tech stack:
+
+Embedded BLE scanner (e.g., Nordic nRF52, Raspberry Pi with BLE)
+
+Mobile app with BLE advertising
+
+Matching logic based on UUID or device token
+
+
+Recommended Solution: BLE Passive Identification
+Why BLE?
+BLE is widely supported
+
+Can work in background
+
+Low energy
+
+Good signal-range mapping
+
+Implementation Overview
+📱 User’s Phone:
+App that:
+
+Registers unique device ID
+
+Broadcasts BLE beacon (e.g., Eddystone or iBeacon format)
+
+Runs in background
+
+🏋️ Triceps Machine:
+BLE scanner (e.g., Raspberry Pi + BLE dongle)
+
+Detects nearest/strongest beacon
+
+Resolves beacon to user ID via secure backend
+
+Begins personalized workout session
+
+🔐 Security:
+Use rotating UUIDs to prevent spoofing
+
+Secure registration handshake between phone and backend
+
+🛠️ Tips for Robustness
+Use motion sensors or load sensors to confirm someone is actually using the machine, not just walking by.
+
+Require proximity plus short activity (e.g., handle pull detection) to confirm user.
+
+Fallback to NFC or QR scan if multiple users detected.
