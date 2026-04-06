@@ -122,3 +122,49 @@ https://www.youtube.com/watch?v=Hv6EMd8dlQk
 Than evaluate the prompts and choose the best 3 that effectively showcase the product's features and benefits while appealing to our target audience. The prompts should be detailed and specific, providing clear guidance for the creation of the video content. Explain the rationale behind the selection of the top 3 prompts and how they align with our marketing goals for the Kickstarter campaign. Finally, save the selected prompts in a document for use in the campaign materials.
 
 save the document as docs/body-mounted-video-prompts.md and share it with the team for feedback and further development.
+
+
+Now create a detailed execution plan for the production of the video content based on the selected prompts using existing AI tools (such as Luma AI). Focus on the top ranked video prompt and outline the specific steps required to create the video, including scriptwriting, storyboarding, AI-generated visuals, voiceover recording, and post-production editing. Assign responsibilities for each task and establish a timeline for completion. Additionally, identify any potential challenges that may arise during the production process and propose strategies to address them effectively.
+
+save the execution plan as docs/video-production-execution-plan.md and share it with the team for feedback and further development.
+
+---
+
+come up with three modern and sleek color schemes appealing to fitness enthusiasts for the marketing materials that align with the brand identity of the body-mounted camera product.
+
+save the color schemes in a document as docs/color-schemes.md evaluate the color schemes based on their visual appeal, relevance to the fitness industry, and ability to convey the brand's values and personality. Provide a rationale for the selection of each color scheme and how it complements the overall marketing strategy for the product. Share the document with the team for feedback and further development.
+
+
+---
+
+now let's design the logo for the body-mounted camera product. The logo should be modern, sleek, and visually appealing, reflecting the innovative nature of the product. It should incorporate elements that convey the idea of fitness, technology, and connectivity. Consider using a combination of typography and iconography to create a memorable and distinctive logo that resonates with our target audience of fitness enthusiasts and gym owners. it should follow the color schemes we have selected for the marketing materials to ensure consistency across all branding elements. The logo should be versatile and scalable, suitable for use in various applications such as the product packaging, website, social media, and promotional materials.
+
+come up with 10 logo design concepts for the body-mounted camera product, each with a unique approach to representing the brand identity. Evaluate the logo concepts based on their visual appeal, relevance to the fitness and technology industries, and ability to effectively communicate the product's features and benefits. Select the top 3 logo designs that best align with our marketing goals and brand values, and provide a rationale for their selection. Save the selected logo designs in a document for use in the campaign materials.
+
+save the document as docs/logo-design-concepts.md and share it with the team for feedback and further development.
+
+
+update the logo document with image prompts for top 3 logo designs, providing detailed descriptions of the visual elements, color schemes, and overall style for each logo concept. The prompts should guide the creation of the logos using AI tools, ensuring that the final designs align with our brand identity and marketing strategy. Save the updated document as docs/logo-design-prompts.md and share it with the team for feedback and further development.
+
+---
+
+create a claude prompt as follows:
+
+you are a senior graphic designer and logo designer tasked to review and evaluated generated logo in input/images/logo/logo1*png and provide feedback on the designs based on their visual appeal, relevance to the fitness and technology industries, and ability to effectively communicate the product's features and benefits. For each logo design, provide specific feedback on the use of color, typography, iconography, and overall composition. Identify any areas for improvement and suggest potential revisions to enhance the logos' effectiveness in representing the brand identity of the body-mounted camera product. Save your feedback in a document for use in refining the logo designs.
+
+Modify /home/quirkfly/job_stuff/prj/ironpal/docs/logo-design-prompts.md accordingly with the feedback provided, ensuring that the prompts for the top 3 logo designs are updated to reflect the suggested revisions and improvements. The updated prompts should provide clear guidance for the creation of the logos using AI tools, with a focus on enhancing their visual appeal, relevance, and effectiveness in communicating the product's features and benefits. Save the updated document as docs/logo-design-prompts-updated.md and share it with the team for further feedback and development.
+
+refs:
+
+docs/
+
+---
+
+/home/quirkfly/job_stuff/prj/ironpal/docs/logo-design-prompts-updated.md 
+
+reviewed logos were produced at Round 1 not Round 2, so the feedback should be based on the initial logo concepts rather than the updated prompts. The feedback should focus on the original designs and provide insights into how they can be improved to better align with the brand identity and marketing goals for the body-mounted camera product. The document should clearly outline the strengths and weaknesses of each logo design, along with actionable suggestions for revisions that can enhance their effectiveness in representing the product and appealing to the target audience.
+
+
+---
+
+logo 2 and logo 3 are out of consideration due to their lack of visual appeal and relevance to the fitness and technology industries. Make a note about the decision to eliminate these designs from consideration in the document, providing a rationale for their exclusion based on the feedback provided. 
