@@ -69,6 +69,189 @@ This is the critical-path workstream. If gpt-5-nano cannot reliably identify exe
 | Can't access a gym for recording | Use public YouTube footage as primary dataset; recruit a friend who has a gym membership |
 | Insufficient exercise diversity | Focus on the 10 most common machines first; expand list after equipment audit |
 
+#### A1 Exercise Descriptions — Compound Leg Movements
+
+The following exercises are priority targets for the test dataset. Each description covers the movement pattern, equipment involved, key body positions, visual landmarks for the LLM, and recording guidelines.
+
+---
+
+##### 1. Squat (Barbell Back Squat)
+
+**Equipment:** Power rack / squat rack, Olympic barbell, weight plates.
+
+**Exercise classification:** Free-weight compound exercise. Primary muscles: quadriceps, glutes, hamstrings. Secondary: core, erector spinae, adductors.
+
+**Movement description:**
+1. **Setup:** The lifter approaches the barbell resting on J-hooks inside a squat rack at approximately upper-chest / shoulder height. They duck under the bar and position it across the upper trapezius (high bar) or rear deltoids (low bar). Hands grip the bar wider than shoulder-width. They unrack by extending the knees, then take 1-2 steps backward to clear the rack.
+2. **Descent (eccentric):** The lifter bends at the hips and knees simultaneously, lowering the torso until the hip crease drops to at least the level of the knee (parallel) or below. The back maintains a roughly 45-70° angle from horizontal. Heels stay flat on the ground. Knees track outward over the toes.
+3. **Bottom position:** Moment of deepest squat. Hip crease at or below the top of the knee. Torso inclined forward. This is the key frame for rep detection — maximum knee and hip flexion.
+4. **Ascent (concentric):** The lifter drives upward through the feet, extending hips and knees simultaneously until standing fully upright. The bar path should be roughly vertical when viewed from the side.
+5. **Lockout:** Full hip and knee extension at the top. This is the second key frame — the "standing" position that bookends each rep.
+
+**Visual landmarks for the LLM:**
+- Barbell positioned horizontally across the upper back/shoulders.
+- Squat rack structure (vertical metal uprights, J-hooks, safety bars) visible in background.
+- Weight plates loaded on both ends of the barbell (visible as circular discs — number and size indicate weight).
+- During descent: torso leans forward, knees bend deeply, bar moves downward.
+- During ascent: reverse of descent, lifter returns to standing.
+
+**Weight detection approach:**
+- Plates are loaded on the barbell ends. Standard plate sizes: 20 kg (red, large diameter), 15 kg (yellow), 10 kg (green), 5 kg (white), 2.5 kg (small, dark/black), 1.25 kg (very small). Colors follow IWF standard but not all gyms comply.
+- Most gym plates have the weight number printed/embossed on the face. The LLM should attempt to read plate labels or count plates by size.
+- The barbell itself weighs 20 kg (standard Olympic) — this must be added to the plate total.
+- **Difficulty:** Medium-High. Plates can overlap when multiple are loaded (only the outermost plate face is visible). May require supplementary user input for weight confirmation.
+
+**Rep counting cues:**
+- One rep = one full descent-to-standing cycle.
+- Key signals: vertical position of the bar (lowest point = bottom of rep, highest = lockout), angle of the torso (most inclined at bottom, most upright at top), knee angle (most bent at bottom, straight at top).
+
+**Recording guidelines:**
+- **Best camera angle:** Side view at 45°, 2-3m away, capturing the full rack and the lifter from head to feet.
+- **Critical to capture:** The weight plates on the bar (film a quick close-up of the loaded bar before the set begins), the full range of motion from standing to bottom position.
+- **Common issues:** Rack uprights may occlude parts of the lifter. Mirror reflections may create confusing duplicates. Other gym-goers may walk through the frame.
+- Record at least: 3 sets of 5 reps each, from 2 different angles (side 45° and rear 45°).
+
+---
+
+##### 2. Deadlift (Conventional Barbell Deadlift)
+
+**Equipment:** Olympic barbell, weight plates, flat floor (often a deadlift platform or rubber matting).
+
+**Exercise classification:** Free-weight compound exercise. Primary muscles: posterior chain — hamstrings, glutes, erector spinae. Secondary: quadriceps, trapezius, forearms (grip), core.
+
+**Movement description:**
+1. **Setup:** The barbell is on the floor, loaded with plates. The lifter stands with feet hip-width apart, shins close to (or lightly touching) the bar. The bar should be over the mid-foot. The lifter bends at the hips and knees to grip the bar just outside the knees (double overhand, mixed grip, or hook grip). Back is flat (neutral spine), chest is up, shoulders are slightly in front of or directly over the bar. Arms are straight.
+2. **Lift-off / first pull (concentric — floor to knees):** The lifter drives through the floor with the legs while maintaining back angle. The bar breaks contact with the floor and rises vertically. The knees extend first, and the bar passes up the shins. The back angle stays relatively constant during this phase.
+3. **Second pull (knees to lockout):** Once the bar clears the knees, the hips drive forward aggressively (hip extension). The torso becomes progressively more upright. The bar slides up the thighs.
+4. **Lockout:** Full hip and knee extension. The lifter stands tall — shoulders back, hips fully extended, knees straight. This is the top of the rep.
+5. **Descent (eccentric):** The lifter reverses the movement — hips push backward first (hinging), then the knees bend as the bar passes below the knees. The bar returns to the floor under control (or is dropped in some training contexts).
+
+**Visual landmarks for the LLM:**
+- Barbell on the floor at the start (distinctive — no other exercise starts with a loaded bar on the floor at the lifter's feet).
+- No rack or machine structure — just the lifter, a barbell, and the floor. Maybe a deadlift platform (wooden center, rubber sides).
+- The lifter's torso is nearly horizontal at the start position (much more bent-over than a squat).
+- The bar travels from floor to hip-height (short vertical range compared to squat).
+- Plate diameter is visible from the side — standard 20 kg / 45 lb plates have 450 mm diameter.
+
+**Weight detection approach:**
+- Same plate-reading approach as squat — read the outermost plate label, count visible plates by size.
+- Advantage over squat: when the bar is on the floor between reps, the plates are at a consistent, eye-level height relative to a camera at 1-1.5m, making plate labels potentially more readable.
+- Barbell = 20 kg to add to the plate total.
+- **Difficulty:** Medium. Similar to squat. Bumper plates (uniform diameter regardless of weight) make counting by plate thickness harder — label reading becomes essential.
+
+**Rep counting cues:**
+- One rep = bar leaves floor → lifter stands up → bar returns to floor.
+- Key signals: bar vertical position (floor vs. hip height), torso angle (near-horizontal at bottom vs. vertical at lockout), whether plates are touching the ground (bottom of rep).
+- **Important distinction:** Some lifters "touch and go" (brief floor touch between reps), while others do "dead stop" reps (full pause on floor). Both count as reps. The LLM must not confuse a pause between reps with the end of the set.
+
+**Recording guidelines:**
+- **Best camera angle:** Side view at 45°, 2-3m away. The side view best captures the bar path and torso angle changes. A front/rear view loses depth information.
+- **Critical to capture:** The loaded bar on the floor (for weight identification), the full lift from floor to lockout, and the return to the floor.
+- **Common issues:** In busy gyms, deadlifts often happen in open floor areas where other people may walk between the camera and the lifter. The lifter's body may occlude the plates from some angles.
+- Record at least: 3 sets of 5 reps, from side 45° and front 45° angles.
+
+---
+
+##### 3. Hack Squat on Machine (Hackenschmidt Machine)
+
+**Equipment:** Hack squat machine — an angled sled-and-rail system where the user stands on a fixed footplate and pushes a weighted sled up an inclined track (typically 45°). Weight is loaded via plate pegs on the sled.
+
+**Exercise classification:** Machine compound exercise (plate-loaded, **not** pin-loaded). Primary muscles: quadriceps. Secondary: glutes, hamstrings.
+
+**Movement description:**
+1. **Setup:** The lifter steps onto the machine's foot platform facing outward (back resting against the padded sled). Feet are placed shoulder-width apart on the platform, positioned mid-height or slightly higher. The shoulders press against the shoulder pads. The lifter unracks the sled by straightening the legs, then releases the safety handles/locks on either side.
+2. **Descent (eccentric):** The lifter bends the knees and hips, allowing the sled to slide downward along the angled rails. The back remains pressed against the sled pad. The descent continues until the thighs are at or below parallel to the foot platform (approximately 90° knee angle or deeper).
+3. **Bottom position:** Maximum knee flexion. The lifter's hips are at their lowest point on the machine. The sled is at its lowest position on the rails. This is the key frame for rep detection.
+4. **Ascent (concentric):** The lifter drives through the feet, extending the knees and hips to push the sled back up the rails. The sled rises along the track.
+5. **Lockout:** Legs nearly fully extended (most lifters stop just short of full knee lock to maintain tension). The sled is at its highest point.
+
+**Visual landmarks for the LLM:**
+- Distinctive machine structure: large angled metal frame with two steel guide rails. Usually at 45° incline.
+- Shoulder pads at the top of the sled.
+- The lifter faces outward (away from the machine), with their back resting against the sled.
+- Weight plates are loaded onto plate pegs on either side of the sled (not a weight stack with a pin — these are standard plates that must be slid on and off manually).
+- The sled moves up and down along the angled rails.
+- The foot platform is fixed and large (wide metal or rubber surface).
+
+**Weight detection approach:**
+- Plate-loaded machine: weight plates are loaded onto horizontal pegs on the sides of the sled, similar to a leg press.
+- Plates are visible from the side — the LLM needs to read plate labels or estimate from plate count and thickness.
+- Like barbell exercises, the outermost plate label is easiest to read. Multiple plates stack behind each other.
+- The machine sled itself has a base weight (typically 20-40 kg depending on manufacturer) — this is usually printed on the machine frame but may be hard to read from camera distance.
+- **Difficulty:** Medium-High. Plates are at an angle and may be partially occluded by the machine frame. The camera angle needs to capture the plate pegs clearly.
+
+**Rep counting cues:**
+- One rep = sled at top → descends to bottom → returns to top.
+- Key signals: vertical position of the sled on the rails (observe the sled/shoulder pad moving up and down), degree of knee bend, sound of the sled reaching bottom (not available from most video).
+- The sled movement is constrained to the rail, so tracking the sled position is highly reliable for rep counting.
+
+**Recording guidelines:**
+- **Best camera angle:** Side view at 30-45°, 2m away. This captures both the lifter's knee angle and the plate pegs on the near side of the machine.
+- **Critical to capture:** The plates loaded on the sled (close-up before the set if possible), the full range of motion of the sled.
+- **Common issues:** The machine is large and the motion is along an angled axis — a straight side view may foreshorten the movement. The plate pegs on the far side of the machine are not visible (only near-side plates can be read). Machine frame may occlude parts of the lifter.
+- Record at least: 3 sets of 8-12 reps, from side view and a front-angled view.
+
+---
+
+##### 4. Calf Raises on Machine (Seated or Standing Calf Raise Machine)
+
+**Equipment:** There are two common variants:
+- **Standing calf raise machine:** The lifter stands on a raised platform with shoulder pads pressing down. Weight is selected via a pin-loaded stack or loaded plates. The lifter raises onto the balls of the feet against resistance.
+- **Seated calf raise machine:** The lifter sits on a bench with a pad resting on the lower thighs (just above the knees). The balls of the feet are on a foot bar. Weight is loaded via plate pegs or a pin-loaded stack. The lifter raises the heels by plantar-flexing the ankles.
+
+**Exercise classification:** Machine isolation exercise. Primary muscle: gastrocnemius (standing) or soleus (seated). Secondary: tibialis posterior.
+
+**Movement description (standing variant):**
+1. **Setup:** The lifter steps under the shoulder pads and positions the balls of the feet on the edge of the foot platform, heels hanging off. They stand upright, extending the legs fully to lift the weight off the rest position.
+2. **Stretch (eccentric):** The lifter lowers the heels as far below the platform as possible, achieving a deep calf stretch. This is the bottom of the rep.
+3. **Rise (concentric):** The lifter pushes up onto the toes (plantar flexion), raising the heels as high as possible. The body rises a few centimeters. This is the top of the rep.
+4. **Contraction:** Brief hold at the top with calves fully contracted.
+5. **Return:** Controlled lowering back to the stretch position.
+
+**Movement description (seated variant):**
+1. **Setup:** The lifter sits on the bench, places the balls of the feet on the foot bar, and positions the knee pad on top of the lower thighs. They release the safety lever.
+2. **Stretch:** The lifter lowers the heels below the foot bar level, stretching the calves.
+3. **Rise:** The lifter pushes up onto the toes, raising the knee pad upward. Very short range of motion (a few centimeters of vertical movement).
+4. **Return:** Controlled lowering back to the stretch position.
+
+**Visual landmarks for the LLM:**
+- **Standing variant:** Lifter is upright, shoulder pads on both sides of the head/neck, feet on a small elevated platform. The range of motion is very small — only the heel rises and falls. The rest of the body stays almost stationary.
+- **Seated variant:** Lifter is sitting on a bench. A pad is across the lower thighs. Only the feet/ankles move, raising and lowering. Extremely small range of motion — this is one of the hardest exercises to detect from a wide-angle camera.
+- Either variant may have a pin-loaded weight stack (pin + numbered plates on the machine) or plate-loaded pegs.
+- The machine itself is relatively small compared to hack squat or leg press.
+
+**Weight detection approach:**
+- **Pin-loaded variant:** Standard weight stack OCR — read the number adjacent to the pin position. Same as other pin-loaded machines.
+- **Plate-loaded variant:** Read plate labels on the loading peg, same as hack squat.
+- The machine's base/sled weight varies by manufacturer (typically 10-25 kg).
+- **Difficulty (pin-loaded):** Medium. Weight stack is usually on the side of the machine and may be partially visible.
+- **Difficulty (plate-loaded):** Medium-High. Same challenges as other plate-loaded equipment.
+
+**Rep counting cues:**
+- One rep = heels drop below platform → heels rise to maximum height → return.
+- Key signals: heel/ankle vertical position (small movement — typically 5-10 cm). The knee pad (seated) or shoulder pad (standing) moves correspondingly.
+- **Challenge:** This exercise has the smallest range of motion of the four described here. From a 2m camera distance, the rep movement may be only 10-20 pixels of vertical change. Higher resolution or a closer camera angle helps significantly. MediaPipe ankle keypoints are critical for detecting this movement.
+- **Tip for the LLM:** Calf raise reps are fast (1-2 seconds per rep) and numerous (15-25+ reps per set is common). Expect higher rep counts than the other exercises.
+
+**Recording guidelines:**
+- **Best camera angle:** Side view at 1.5-2m, slightly lower than usual (camera at approximately knee height if possible) to amplify the visible heel movement. For seated variant, a side or front-side view at seat height.
+- **Critical to capture:** The foot platform / foot bar area where the heels rise and fall. For weight identification: a close-up of the weight stack or plate pegs before the set.
+- **Common issues:** The small range of motion makes this exercise difficult to see from wide angles. The standing variant may be confused with the lifter simply standing still (if the camera angle doesn't capture heel elevation). The seated variant looks like the lifter is just sitting with minimal movement.
+- Record at least: 3 sets of 15+ reps, from side view focusing on the lower legs/feet. Include close-up shots of the foot platform movement.
+
+---
+
+#### Summary: Recording Checklist for These Four Exercises
+
+| Exercise | Equipment Type | Weight Detection Method | Min Rep Range | Camera Priority Angle | Key Challenge |
+|---|---|---|---|---|---|
+| Squat | Free weight (barbell + rack) | Plate label OCR + plate counting | 3-8 reps | Side 45°, 2-3m | Overlapping plates, rack occlusion |
+| Deadlift | Free weight (barbell + floor) | Plate label OCR + plate counting | 3-8 reps | Side 45°, 2-3m | Lifter body occluding plates |
+| Hack Squat (Hackenschmidt) | Machine (plate-loaded) | Plate label OCR on sled pegs | 8-15 reps | Side 30-45°, 2m | Angled plates, machine frame occlusion |
+| Calf Raises | Machine (pin-loaded or plate-loaded) | Pin position OCR or plate label | 15-25 reps | Side, 1.5m, lower camera | Tiny range of motion, fast reps |
+
+**Note:** Squat and deadlift are **free-weight exercises**, not pin-loaded machines. Hack squat is typically **plate-loaded** (not pin-loaded). Only some calf raise machines use a pin-loaded stack. These exercises expand the MVP scope beyond the initial pin-loaded-only list in A1.1. Update the target exercise list accordingly and evaluate whether the LLM's accuracy on free-weight / plate-loaded exercises meets the same thresholds as pin-loaded machines.
+
 ---
 
 ### Task A2: Develop Candidate Prompts (Weeks 1-2)
