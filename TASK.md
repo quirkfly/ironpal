@@ -168,3 +168,29 @@ reviewed logos were produced at Round 1 not Round 2, so the feedback should be b
 ---
 
 logo 2 and logo 3 are out of consideration due to their lack of visual appeal and relevance to the fitness and technology industries. Make a note about the decision to eliminate these designs from consideration in the document, providing a rationale for their exclusion based on the feedback provided. 
+
+---
+
+update the document /home/quirkfly/job_stuff/prj/ironpal/docs/body-mounted-image-prompts.md
+
+rework the prompts so they all include ironpal logo as speficied in all logo related documents in docs/logo-*,md
+
+generated logos are in 
+
+[quirkfly: ~/job_stuff/prj/ironpal] main* ± ls input/images/logo/v4
+'Geometric teal circle on navy.png'         'Minimalist IRONPAL logo design.png'
+'Minimalist iron-inspired logo design.png'
+
+tailor these image prompts to be suitable for Leonardo AI..i also need specific instruction for each prompt..e.g. if a reference image is needed (if so what image..e.g. should i use logo from input/images/logo/v4/Minimalist IRONPAL logo design.png as a reference for the logo placement in the illustrations) and any specific details about the composition, lighting, and style of the illustrations to ensure they align with our brand identity and marketing strategy. The prompts should be detailed and specific, providing clear guidance for the creatioI n of the illustrations using Leonardo AI, while also allowing for creative flexibility to produce visually appealing and effective marketing materials. Save the updated prompts in docs/body-mounted-image-prompts-updated.md and share it with the team for feedback and further development
+
+---
+
+create a detailed execution plan how to launch kickstarter campaign for the body-mounted camera product IRONPAL.
+
+i have marketing image prompts and i have logo prompts but need to connect than all togeter. I need to feed these prompts to leonardo ai to generate the marketing materials, including the product illustrations and logo designs. Once the materials are generated, I will need to review and select the best designs that align with our brand identity and marketing goals for the Kickstarter campaign.
+I have also video production execution plan that I need to follow to create compelling video content for the campaign.
+
+The execution plan should outline the specific steps required to launch the Kickstarter campaign, including timelines for each task, assigned responsibilities, and any resources required to successfully execute the campaign. Additionally, identify any potential challenges that may arise during the campaign launch and propose strategies to address them effectively.
+I must be checkbox like to track the progress of each task and ensure that all necessary steps are completed in a timely manner. The plan should also include a strategy for promoting the campaign to reach a wider audience and maximize backer support. I am a solo founder, so I will need to manage all aspects of the campaign launch, from content creation to promotion and backer engagement. The execution plan should be comprehensive and actionable, providing a clear roadmap for successfully launching the Kickstarter campaign for IRONPAL.
+
+save the plan as docs/kickstarter-launch-execution-plan.md

@@ -1,0 +1,2 @@
+https://www.kickstarter.com/projects/mikkolle/gymbars-pro-ultraportable-smart-gym?ref=discovery_category&term=gym&total_hits=27&category_id=341
+https://www.kickstarter.com/projects/aeke/aeke-smart-home-gym-k1?ref=discovery_category&term=gym&total_hits=27&category_id=28
