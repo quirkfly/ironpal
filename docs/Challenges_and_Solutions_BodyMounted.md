@@ -121,6 +121,235 @@ Most gym images in LLM training data are third-person. To get the best results f
 
 ---
 
+## 1b. Exercise Recognition Strategy: Dumbbell & Unilateral Exercises from Head-Mounted Camera
+
+### Scope & Problem Statement
+
+Section 1 establishes the general framework for egocentric exercise recognition. This section zooms in on a specific — and significantly harder — subcategory: **identifying dumbbell-based and unilateral exercises using only video footage from a head-mounted camera (headband or baseball cap style)**.
+
+Target exercises include:
+- Bulgarian split squat (rear foot elevated on bench)
+- Shoulder press with dumbbells (seated or standing)
+- Lateral raises / shoulder flyes with dumbbells
+- Triceps pullovers with dumbbells (lying on bench)
+- Dumbbell rows (bent over, single-arm)
+- Bicep curls with dumbbells
+- Lunges with dumbbells
+- Dumbbell chest press / flyes (lying on bench)
+
+These exercises share characteristics that make them especially challenging for egocentric recognition:
+1. **No distinctive machine structure** — the user is at a bench or standing in open space. The environment provides weak contextual cues.
+2. **The same equipment (dumbbells + bench) is used for many different exercises** — a flat bench and two dumbbells could be chest press, flyes, triceps pullovers, or skull crushers.
+3. **Body posture is the primary differentiator**, but the camera cannot see the user's own body from outside.
+
+### Why Head-Mounted (Headband / Baseball Cap) for These Exercises
+
+A **head-mounted camera** (clipped to a headband or the brim of a baseball cap) has specific advantages over chest-mounted for dumbbell and unilateral exercises:
+
+| Factor | Chest-Mounted | Head-Mounted (Headband/Cap) |
+|---|---|---|
+| **Gaze tracking** | Fixed forward from torso | Follows where the user looks — captures setup, mirror checks, weight selection |
+| **Overhead movements** | Misses overhead press (arms go above camera) | Captures overhead movements as user looks up at the weight or forward |
+| **Supine exercises** | Camera points at ceiling, loses context | Camera points at the weight/hands as user looks at them during bench work |
+| **Dumbbell label visibility** | Only sees dumbbells when hands are at torso level | Sees dumbbells during pickup from rack (user looks at labels) |
+| **Bulgarian split squat** | Sees forward/floor, misses rear foot position | User naturally looks down or forward — captures the elevated rear foot on the bench AND the forward knee/dumbbell position |
+
+**Key insight:** For dumbbell exercises, the user's **gaze direction** during the exercise is itself a strong signal. A head-mounted camera implicitly encodes gaze — the center of the frame is approximately where the user is looking.
+
+### Multi-Signal Recognition Strategy
+
+Since no single signal is sufficient to distinguish between dumbbell exercises that use identical equipment, the system must fuse multiple signals:
+
+#### Signal 1: Scene Geometry & Spatial Layout (Visual)
+
+The head-mounted camera captures a distinctive spatial layout for each exercise that the LLM can learn to recognize:
+
+| Exercise | What the Head-Mounted Camera Sees | Distinctive Visual Signature |
+|---|---|---|
+| **Bulgarian split squat** | Forward/downward view: floor, front foot, dumbbells at sides, bench visible behind with rear foot elevated on it | Bench in the background with a foot/shoe resting on it; floor and front knee visible; scene rises and falls vertically with each rep |
+| **Shoulder press (seated)** | Forward or slightly upward view: mirror or gym wall ahead, dumbbells visible rising into upper frame as arms extend overhead | Dumbbells arc upward from shoulder level into the upper field of view; scene is relatively stable (user is seated); ceiling may become visible at top of rep |
+| **Lateral raises / shoulder flyes** | Forward view: mirror/gym environment, dumbbells start at sides (lower frame edge) and rise laterally | Dumbbells appear at the edges of the lower frame and arc outward/upward; the scene itself stays stable (standing exercise); distinctly lateral arm movement |
+| **Triceps pullover (lying)** | Upward view: ceiling, light fixtures, possibly the dumbbell above the face/chest, arms extending overhead | Ceiling-facing view; a single dumbbell moves from above the chest to behind/above the head in an arc; very distinctive overhead arc pattern |
+| **Dumbbell row (bent over)** | Downward view: bench surface or floor, one hand gripping bench, dumbbell in other hand pulling upward | Strong downward angle; bench surface dominates frame; one dumbbell visible moving vertically; asymmetric — one side of frame shows the support hand/bench |
+| **Dumbbell bicep curl** | Forward view: mirror or environment, dumbbells rise from waist level toward the camera (toward the face) | Dumbbells move toward and away from the camera (grow larger/smaller in frame); scene stable; forearms visible in lower frame curling upward |
+| **Lunges with dumbbells** | Forward/downward view: floor, leading foot, gym environment ahead, dumbbells at sides | Scene drops dramatically as user lunges down, rises back up; alternating legs may produce slight left-right scene shift; forward foot visible on floor |
+| **Dumbbell chest press (lying)** | Upward view: ceiling, dumbbells visible above the chest pressing upward | Ceiling-facing view; two dumbbells visible moving upward (away from face) and back down; similar to barbell bench press view but two separate weights |
+| **Dumbbell chest flyes (lying)** | Upward view: ceiling, dumbbells arc outward from center above chest | Ceiling-facing view; dumbbells move laterally apart and back together in a hugging arc; distinct from chest press (lateral vs. vertical motion) |
+
+#### Signal 2: Body Orientation via IMU (Sensor)
+
+The IMU in the camera device or paired phone provides orientation data that immediately narrows the exercise category:
+
+| Body Orientation (from IMU) | Exercises in this Posture |
+|---|---|
+| **Upright (standing/seated)** | Shoulder press, lateral raises, bicep curls, lunges, Bulgarian split squat |
+| **Supine (lying face-up)** | Chest press, chest flyes, triceps pullover |
+| **Prone / bent over (~45° forward lean)** | Dumbbell rows, bent-over lateral raises |
+| **Inclined (~30-45° recline)** | Incline dumbbell press, incline curls |
+
+This single sensor reading eliminates entire exercise families before the LLM even analyzes the video. For example, if the IMU says "supine," the candidate set shrinks to chest press, flyes, or pullovers — three exercises instead of dozens.
+
+#### Signal 3: Motion Trajectory Pattern (Visual + IMU Fusion)
+
+Each exercise has a characteristic repetitive motion pattern that can be detected from both video frame sequences and IMU acceleration data:
+
+| Exercise | Visual Motion Pattern (frame-to-frame) | IMU Acceleration Pattern |
+|---|---|---|
+| **Bulgarian split squat** | Scene oscillates vertically (large amplitude); bench with rear foot stays in background | Strong vertical acceleration cycle; slight forward-back lean |
+| **Shoulder press** | Dumbbells rise from shoulder level to overhead and back; small amplitude vertical scene shift from user's slight lean | Vertical acceleration; arms-overhead orientation change detectable if IMU on wrist |
+| **Lateral raises** | Dumbbells move laterally in the frame; minimal vertical scene shift | Lateral acceleration at shoulder level; small magnitude, high repetition rate |
+| **Triceps pullover** | Dumbbell arcs from above chest to behind head and back; large displacement in frame | Rotational acceleration around shoulder joint axis; supine orientation |
+| **Dumbbell row** | Dumbbell moves vertically in a downward-looking scene; asymmetric (one side only) | Vertical pull acceleration; bent-over orientation; unilateral force pattern |
+| **Bicep curl** | Dumbbells grow larger (approaching camera) and shrink (moving away) cyclically | Vertical acceleration at forearm; upright orientation; relatively small range of motion |
+| **Lunges** | Large vertical scene oscillation (similar to squat but with forward stepping motion) | Large vertical acceleration with forward weight shift; alternating left-right pattern |
+
+#### Signal 4: Setup Phase Context (Visual)
+
+The moments **before** the exercise begins contain critical recognition cues:
+
+1. **Dumbbell rack pickup:** The user approaches the dumbbell rack, looks at the labels (head-mounted camera captures this perfectly), selects a pair. The weight label reading happens here naturally.
+
+2. **Bench positioning:** The user adjusts a bench (flat, incline, decline) — the bench angle is visible and tells the system whether to expect a flat press vs. incline press vs. decline press.
+
+3. **Body positioning onto equipment:** The user sits on the bench, lies down on it, or stands next to it with one foot elevated. These setup frames are gold — a frame showing the user placing their rear foot on a bench is a near-certain indicator of a Bulgarian split squat about to happen.
+
+4. **Mirror check / environment scan:** Users often check their form in the mirror before starting. The head-mounted camera catches this mirror view, which gives a brief **third-person glimpse** of the user's body position. This is a unique advantage of head-mounted over chest-mounted — the mirror reflection effectively provides pose information that is otherwise unavailable in egocentric video.
+
+**Prompt strategy for setup frames:** *"The following frames show the user setting up for an exercise. They are wearing a head-mounted camera (baseball cap). Observe: (1) What equipment did they pick up or adjust? (2) What bench position is visible (flat, incline, decline, or none)? (3) What body position are they assuming (standing, seated, lying down, bent over, one foot elevated)? (4) If a mirror is visible, describe the user's posture in the reflection."*
+
+#### Signal 5: Exercise Transition Patterns (Temporal Context)
+
+Workout structure provides Bayesian priors. Users typically group exercises by muscle group:
+
+- If the previous two exercises were shoulder press and lateral raises, the next exercise is more likely to be another shoulder exercise (front raises, rear delt flyes) than a squat.
+- If the user just finished a set of Bulgarian split squats on the left leg, the next set is almost certainly Bulgarian split squats on the right leg.
+
+The system should maintain a **session-level exercise context** and feed it to the LLM: *"The user has performed the following exercises so far in this session: [list]. Based on typical workout programming, the next exercise is likely in the same or related muscle group."*
+
+### Combined Recognition Pipeline
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    HEAD-MOUNTED CAMERA FEED                         │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │  Setup Phase Detect  │ ◄── IMU stillness + scene
+                    │  (user approaching   │     stability detection
+                    │   equipment/bench)   │
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              ▼                ▼                 ▼
+   ┌──────────────┐  ┌────────────────┐  ┌──────────────┐
+   │ IMU Orientation│  │ Setup Frames   │  │ Mirror Check │
+   │ Classification │  │ to LLM        │  │ Detection    │
+   │               │  │ (bench angle,  │  │ (3rd-person  │
+   │ → upright     │  │  equipment,    │  │  pose from   │
+   │ → supine      │  │  foot on bench)│  │  reflection) │
+   │ → bent-over   │  │               │  │              │
+   └──────┬───────┘  └───────┬────────┘  └──────┬───────┘
+          │                  │                   │
+          └──────────┬───────┴───────────────────┘
+                     ▼
+          ┌─────────────────────┐
+          │  Candidate Exercise │ ◄── Session context (prior exercises)
+          │  Narrowing          │     reduces candidate list further
+          │  (e.g., supine +   │
+          │   bench + dumbbell │
+          │   = 3 candidates)  │
+          └─────────┬───────────┘
+                    │
+                    ▼
+          ┌─────────────────────┐
+          │  Rep-Phase Frame    │  Extract ~10-15 frames during the set
+          │  Sequence Analysis  │  Analyze motion trajectory to
+          │  (LLM + IMU)       │  distinguish between remaining
+          │                     │  candidates (e.g., press vs. fly
+          │                     │  vs. pullover in supine position)
+          └─────────┬───────────┘
+                    │
+                    ▼
+          ┌─────────────────────┐
+          │  Final Exercise     │  Confidence score + fallback to
+          │  Classification     │  user confirmation if < threshold
+          └─────────────────────┘
+```
+
+### LLM Prompt Strategy for Dumbbell Exercise Recognition
+
+The LLM call for these exercises should be structured as a **two-stage chain-of-thought prompt**:
+
+**Stage 1 — Setup analysis (3-5 setup frames):**
+
+> *You are analyzing video from a camera mounted on the user's head (baseball cap brim) in a gym. These frames show the user setting up for an exercise.*
+>
+> *Sensor data: body orientation = [upright / supine / bent-over / inclined at ~N°]*
+>
+> *Previous exercises this session: [list]*
+>
+> *Analyze these setup frames and answer:*
+> 1. *What equipment is visible? (dumbbells, barbell, bench, cable, none)*
+> 2. *If a bench is visible, what angle is it set to? (flat, incline ~30°, incline ~45°, decline, N/A)*
+> 3. *Describe the user's body setup: are they standing, seated on a bench, lying on a bench, bent over, or in a split stance with one foot elevated behind them?*
+> 4. *If a gym mirror is visible, describe what you see in the reflection about the user's posture.*
+> 5. *Based on all evidence, list the 3 most likely exercises about to be performed, ranked by probability.*
+
+**Stage 2 — Rep analysis (10-15 frames from the set):**
+
+> *The user is now performing the exercise. Body orientation = [same]. Your top candidates from setup analysis were: [list from stage 1].*
+>
+> *Analyze the motion pattern in these sequential frames:*
+> 1. *Describe how the dumbbells move relative to the frame (up/down, toward/away from camera, laterally, in an arc).*
+> 2. *Describe how the overall scene shifts (vertical oscillation, stable, rotational).*
+> 3. *Determine the exercise. Explain your reasoning.*
+
+### Expected Accuracy Improvements with Head-Mounted + Multi-Signal Fusion
+
+| Exercise | Current Estimate (Section 1, general egocentric) | Estimated with Head-Mounted + Multi-Signal Strategy |
+|---|---|---|
+| **Bulgarian split squat** | ~55-65% (bodyweight-like, weak cues) | **~80-90%** (elevated rear foot on bench is highly distinctive in setup frames; large vertical oscillation; upright IMU) |
+| **Shoulder press (dumbbells)** | ~65-75% (dumbbell category) | **~80-85%** (overhead dumbbell trajectory + upright/seated IMU; setup shows user seated with dumbbells at shoulders) |
+| **Lateral raises / shoulder flyes** | ~60-70% (dumbbell category) | **~75-85%** (lateral arm trajectory is distinctive; stable scene; upright IMU; mirror may show arm abduction) |
+| **Triceps pullover** | ~55-65% (dumbbell + bench) | **~80-90%** (supine IMU immediately narrows to 3 candidates; overhead arc motion from chest to behind head is unique among supine exercises) |
+| **Dumbbell row** | ~60-70% (dumbbell category) | **~80-85%** (bent-over IMU + downward camera angle + asymmetric single-arm motion; bench surface visible) |
+| **Dumbbell bicep curl** | ~65-75% (dumbbell category) | **~80-85%** (dumbbells approach camera cyclically; upright IMU; forearms visible in lower frame) |
+| **Lunges with dumbbells** | ~55-65% (similar to bodyweight) | **~75-85%** (large vertical oscillation + forward stepping; IMU shows alternating weight shift pattern) |
+| **Dumbbell chest press (lying)** | ~60-70% | **~80-85%** (supine IMU; two dumbbells pressing straight up; ceiling view) |
+| **Dumbbell chest flyes (lying)** | ~60-70% | **~75-85%** (supine IMU; lateral hugging arc distinguishable from vertical press; harder to distinguish from press in some frames) |
+
+### Remaining Hard Cases & Mitigations
+
+Some exercise pairs remain difficult to distinguish even with multi-signal fusion:
+
+| Confusable Pair | Why They're Hard to Distinguish | Mitigation |
+|---|---|---|
+| **Chest press vs. chest flyes (supine)** | Both supine, both with dumbbells, similar scene. Difference is subtle: vertical vs. lateral arc. | Analyze arm trajectory carefully in rep frames; prompt LLM to focus on dumbbell separation distance at bottom of rep (wide = fly, narrow = press). Mirror reflection during setup may show arm angle. |
+| **Lateral raises vs. front raises** | Both standing with dumbbells, both raise dumbbells from sides. Difference: lateral vs. frontal plane. | Head-mounted camera captures direction of raise relative to camera (forward into frame = front raise; sideways out of frame = lateral). IMU lateral vs. frontal acceleration axis differs. |
+| **Shoulder press vs. Arnold press** | Nearly identical trajectory. Arnold press adds a rotation. | Very hard to distinguish visually. Accept "shoulder press (dumbbell)" as the category and allow user to specify variant. This level of granularity may not be necessary for the workout log. |
+| **Triceps pullover vs. skull crusher** | Both supine, both with dumbbell(s) overhead. Difference: pullover is full arc behind head; skull crusher is forearm-only hinge at elbow. | Analyze range of motion — pullover has much larger displacement in the frame. IMU may detect different acceleration patterns. If ambiguous, prompt user. |
+| **Bulgarian split squat vs. regular lunge** | Both involve a split stance with vertical oscillation. | Key cue: Bulgarian split squat setup shows the rear foot elevated on a bench (visible in setup frames). Regular lunges involve stepping forward from a standing start. Setup phase detection is critical here. |
+
+### Head-Mounted Camera: Practical Considerations
+
+**Headband style:**
+- Elastic headband with a small front-facing camera module sewn or clipped in.
+- Looks like a standard workout headband — socially acceptable in a gym.
+- Camera sits at forehead level, ~5-10° above direct eye line.
+- Stays in place well during dynamic movements (squats, lunges, rows).
+- Absorbs sweat (dual-purpose).
+
+**Baseball cap style:**
+- Small camera clipped to the brim of a standard baseball cap, facing forward.
+- Many gymgoers already wear caps — zero additional social friction.
+- Camera sits slightly higher than headband style, angled slightly downward by the brim curve.
+- May shift during supine exercises (lying on bench with a cap is awkward). User may need to remove the cap and place it nearby, or switch to headband for bench work.
+- Brim provides a natural sun/light visor that reduces glare on the camera lens.
+
+**Recommendation:** Offer both mounting options. Headband for users who do a lot of bench/supine work. Baseball cap for users who primarily do standing/seated exercises. Both are inexpensive (~$5-10 for the mount clip or sewn pocket).
+
+---
+
 ## 2. Weight Detection
 
 ### How the Challenge Changes with Body-Mounted Camera

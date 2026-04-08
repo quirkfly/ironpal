@@ -194,3 +194,16 @@ The execution plan should outline the specific steps required to launch the Kick
 I must be checkbox like to track the progress of each task and ensure that all necessary steps are completed in a timely manner. The plan should also include a strategy for promoting the campaign to reach a wider audience and maximize backer support. I am a solo founder, so I will need to manage all aspects of the campaign launch, from content creation to promotion and backer engagement. The execution plan should be comprehensive and actionable, providing a clear roadmap for successfully launching the Kickstarter campaign for IRONPAL.
 
 save the plan as docs/kickstarter-launch-execution-plan.md
+
+the plan MUST also include:
+- ironpal.co domain registration with cloudflare registrar
+- web site development for the campaign landing page, including design, content creation, and integration with the Kickstarter campaign page
+   = early bird email capture form - see ../handlr/handlr-web for reference
+- web site deployment - same host as handlr-web (see above)
+
+
+---
+
+modify /home/quirkfly/job_stuff/prj/ironpal/docs/Challenges_and_Solutions_BodyMounted.md to come up with a stratecy / proposal how to identify exercises such as
+
+bulgarian split squat, shoulder press with dumbbells, shoulder flyes with dumbbells, triceps pullovers with dumbbells, and other similar exercises using the video footage from the body-mounted camera (headband or baseball cap style) solely. The strategy should consider the unique challenges of recognizing these exercises from a first-person perspective and propose potential solutions to accurately identify the exercises being performed based on the video footage

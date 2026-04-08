@@ -17,12 +17,13 @@
 | Phase 1: Marketing Asset Generation | 5-7 days | Week 1-2 | Not started |
 | Phase 2: Video Production | 18 days | Week 2-5 | Not started |
 | Phase 3: Kickstarter Page Build | 5-7 days | Week 5-6 | Not started |
+| Phase 3.5: Domain, Website & Deployment | 5-7 days | Week 3-5 (overlaps Phase 2) | Not started |
 | Phase 4: Pre-Launch & Audience Building | 10-14 days | Week 4-7 (overlaps Phase 2-3) | Not started |
 | Phase 5: Launch Week | 7 days | Week 8 | Not started |
 | Phase 6: Campaign Management | 30 days | Week 8-12 | Not started |
 | Phase 7: Post-Campaign & Fulfillment Planning | Ongoing | Week 12+ | Not started |
 
-**Total pre-launch effort:** ~6-7 weeks of focused work, then 4-5 weeks of active campaign management.
+**Total pre-launch effort:** ~7-8 weeks of focused work, then 4-5 weeks of active campaign management.
 
 ---
 
@@ -392,25 +393,317 @@ Before starting, confirm you have these completed deliverables ready to use:
 
 ---
 
+## Phase 3.5: Domain, Website & Deployment (Days 15-22)
+
+> **Goal:** Register the ironpal.co domain, build a campaign landing page with early-bird email capture, and deploy it to the same DigitalOcean infrastructure as handlr-web. Start this phase during Phase 2 (video production) — it runs in parallel. The website must be live before Phase 4 audience building begins.
+
+### Domain Registration
+
+- [ ] **Register `ironpal.co` via Cloudflare Registrar:**
+  - [ ] Log into Cloudflare dashboard → Registrar → Register Domain
+  - [ ] Search for `ironpal.co` and purchase (~$10-12/yr)
+  - [ ] DNS is automatically managed by Cloudflare — no external nameserver setup needed
+- [ ] **Configure DNS records:**
+  - [ ] `A @` → `45.55.36.33` (same DigitalOcean droplet as handlr-web) — Proxied (orange cloud)
+  - [ ] `A www` → `45.55.36.33` — Proxied (orange cloud)
+  - [ ] CNAME `www` → `ironpal.co` (alternative to A record for www)
+- [ ] **Configure Cloudflare SSL/TLS:**
+  - [ ] Set SSL/TLS mode to **Full (strict)**
+  - [ ] Enable "Always Use HTTPS"
+  - [ ] Enable "Automatic HTTPS Rewrites"
+  - [ ] Generate a Cloudflare Origin Certificate (15-year RSA) for `ironpal.co` and `*.ironpal.co`
+  - [ ] Save cert to server: `/etc/ssl/certs/ironpal-origin.pem`
+  - [ ] Save key to server: `/etc/ssl/private/ironpal-origin.key`
+
+### Website Development
+
+> **Tech stack:** React 18 + Vite + Express + SQLite — same as `../handlr/handlr-web`. Reference that project for architecture patterns, email capture implementation, and deployment scripts.
+
+#### Project Setup
+
+- [ ] **Initialize the project:**
+  - [ ] Create project directory (e.g., `ironpal-web/` or within the ironpal repo)
+  - [ ] `npm create vite@latest` — select React template
+  - [ ] Install dependencies:
+    ```
+    npm install react react-dom lucide-react
+    npm install express better-sqlite3
+    npm install -D concurrently @vitejs/plugin-react
+    ```
+  - [ ] Configure `vite.config.js` with API proxy to `localhost:3002` (use different port than handlr-web's 3001 since they share the same server)
+  - [ ] Set up `package.json` scripts:
+    ```json
+    "dev": "vite",
+    "build": "vite build",
+    "server": "node server/index.js",
+    "dev:full": "concurrently \"npm run server\" \"npm run dev\"",
+    "dump-emails": "node server/dump-emails.js"
+    ```
+
+#### Backend — Email Capture API
+
+- [ ] **Create `server/index.js`** — Express API server (reference: `../handlr/handlr-web/server/index.js`):
+  - [ ] `POST /api/collect-email` — collect email signups
+    - [ ] Request body: `{ email: string, source: "landing_page" | "social" | "referral" }`
+    - [ ] Validate email format server-side (regex)
+    - [ ] Store in SQLite with deduplication (UNIQUE constraint on email)
+    - [ ] Return `{ message: "...", duplicate?: boolean }`
+  - [ ] `GET /api/emails` — list all collected emails (add basic auth or API key protection)
+  - [ ] `GET /api/health` — health check endpoint
+  - [ ] `GET /api/stats` — return total signups count (for displaying social proof on the page)
+- [ ] **Create `server/db.js`** — SQLite database setup:
+  ```sql
+  CREATE TABLE IF NOT EXISTS emails (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT UNIQUE NOT NULL,
+      source TEXT DEFAULT 'landing_page',
+      referrer TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+  ```
+- [ ] **Create `server/dump-emails.js`** — CLI tool to export emails (reference: handlr-web's `dump-emails.js`)
+  - [ ] Formatted table output: ID | Email | Source | Date
+  - [ ] CSV export option for importing into email marketing tools later
+
+#### Frontend — Landing Page
+
+> **Design:** Stealth Teal color scheme as primary (`#1A1A2E` background, `#00E5CC` teal accents, `#F0F4F8` text). Reference `docs/color-schemes.md` for the full palette.
+
+- [ ] **Hero Section:**
+  - [ ] Iron Ring logo (horizontal lockup) — use vector SVG from Phase 0
+  - [ ] Headline: "Your Workout, Logged Automatically."
+  - [ ] Subheadline: "IronPal is a body-mounted AI camera that tracks your exercises, weights, and reps — so you never have to log manually again."
+  - [ ] **Email capture form** — prominent, above the fold:
+    - [ ] Input field: "Enter your email"
+    - [ ] CTA button: "Get Early Bird Access" (Electric Teal `#00E5CC` background, dark text)
+    - [ ] Subtitle under form: "Be first to know when we launch on Kickstarter. Early supporters get exclusive pricing."
+  - [ ] Hero image: best product shot from Phase 1 (Prompt 1 or 2 hero shot)
+  - [ ] Optional: embedded teaser video clip (30s social cutdown from Video #2, once available)
+- [ ] **Email Capture Modal** (reference: `../handlr/handlr-web/src/components/EmailModal.jsx`):
+  - [ ] Triggered by hero CTA button click (or inline form — choose one)
+  - [ ] Client-side email validation: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
+  - [ ] States: idle → submitting (spinner) → success ("You're on the list!") → error (retry)
+  - [ ] On success: show confirmation message + social share buttons ("Share with a gym buddy")
+  - [ ] POST to `/api/collect-email` with `{ email, source: "landing_page" }`
+- [ ] **Problem Section:**
+  - [ ] "Manual workout logging is broken" — 2-3 pain points with icons
+  - [ ] Optional: left half of Prompt 11 (before/after) image
+- [ ] **Solution / Product Section:**
+  - [ ] "Meet IronPal" — Prompt 3 (both products side by side)
+  - [ ] 3 key benefits: "Wear it. Work out. Done." — with supporting icons
+- [ ] **How It Works Section:**
+  - [ ] 3-step visual: Prompt 14 triptych or simplified icon steps
+  - [ ] Step 1: Clip on the camera → Step 2: Work out normally → Step 3: Review your auto-logged workout
+- [ ] **In-Action Preview Section:**
+  - [ ] 2-3 exercise shots from Phase 1 (Prompts 4-5 or 6)
+  - [ ] Brief caption per image showing AI detection capability
+- [ ] **Social Proof / Counter Section (optional):**
+  - [ ] "Join X early supporters" — fetch count from `GET /api/stats`
+  - [ ] Display dynamically to create FOMO as signups grow
+- [ ] **Second Email CTA:**
+  - [ ] Repeat the email capture form at the bottom of the page
+  - [ ] "Don't miss Early Bird pricing — join the waitlist."
+- [ ] **Footer:**
+  - [ ] Iron Ring logo (icon only, small)
+  - [ ] Links: Kickstarter pre-launch page (once active), social media profiles
+  - [ ] "IronPal &copy; 2026" — minimal legal text
+  - [ ] Privacy note: "We'll only email you about the IronPal launch. No spam."
+
+#### Responsive Design
+
+- [ ] Mobile-first design (most traffic will be mobile from social media)
+- [ ] Test at 375px (iPhone), 768px (tablet), 1440px (desktop)
+- [ ] Email form must be easy to tap and fill on mobile
+- [ ] Images lazy-loaded for fast mobile performance
+- [ ] Target: Lighthouse score > 90 for performance
+
+#### SEO & Meta Tags
+
+- [ ] Page title: "IronPal — AI Body Camera That Logs Your Gym Workouts Automatically"
+- [ ] Meta description: "Stop manually logging every rep. IronPal is a tiny camera you wear that uses AI to track exercises, weights, and reps. Join the early bird waitlist."
+- [ ] Open Graph tags (for social sharing):
+  - [ ] `og:title`, `og:description`, `og:image` (hero product shot)
+  - [ ] `og:url`: `https://ironpal.co`
+  - [ ] `twitter:card`: `summary_large_image`
+- [ ] Favicon: Iron Ring icon-only mark (from Phase 0 exports)
+- [ ] `robots.txt` — allow all
+- [ ] `sitemap.xml` — single page, simple
+
+### Website Deployment
+
+> **Target server:** Same DigitalOcean droplet as handlr-web (`45.55.36.33`). Reference `../handlr/handlr-web/deployment/DEPLOYMENT_PRODUCTION_DIGITAL_OCEAN_PLAN.md` for the full deployment guide pattern.
+
+#### Server Configuration
+
+- [ ] **SSH into the droplet:** `ssh root@45.55.36.33`
+- [ ] **Create directory structure on server:**
+  ```
+  /var/www/ironpal.co/         # Frontend static files (Vite dist/)
+  /opt/ironpal-api/            # Backend Express app + SQLite DB
+  ```
+- [ ] **Install/verify Node.js** on server (should already be present from handlr-web deployment)
+- [ ] **Create nginx virtual host** for `ironpal.co`:
+  - [ ] Create `/etc/nginx/sites-available/ironpal.co`:
+    ```nginx
+    server {
+        listen 443 ssl http2;
+        server_name ironpal.co www.ironpal.co;
+
+        ssl_certificate /etc/ssl/certs/ironpal-origin.pem;
+        ssl_certificate_key /etc/ssl/private/ironpal-origin.key;
+
+        root /var/www/ironpal.co;
+        index index.html;
+
+        # API proxy
+        location /api/ {
+            proxy_pass http://127.0.0.1:3002;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Static assets — long cache
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+
+        # SPA fallback
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+
+        # Gzip
+        gzip on;
+        gzip_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript image/svg+xml;
+    }
+
+    server {
+        listen 80;
+        server_name ironpal.co www.ironpal.co;
+        return 301 https://$server_name$request_uri;
+    }
+    ```
+  - [ ] Symlink to sites-enabled: `ln -s /etc/nginx/sites-available/ironpal.co /etc/nginx/sites-enabled/`
+  - [ ] Test nginx config: `nginx -t`
+  - [ ] Reload nginx: `systemctl reload nginx`
+- [ ] **Create systemd service** for the IronPal API (`/etc/systemd/system/ironpal-api.service`):
+  ```ini
+  [Unit]
+  Description=IronPal Email Collection API
+  After=network.target
+
+  [Service]
+  Type=simple
+  User=www-data
+  WorkingDirectory=/opt/ironpal-api
+  ExecStart=/usr/bin/node server/index.js
+  Restart=on-failure
+  Environment=PORT=3002
+  Environment=NODE_ENV=production
+
+  [Install]
+  WantedBy=multi-user.target
+  ```
+  - [ ] `systemctl daemon-reload`
+  - [ ] `systemctl enable ironpal-api`
+  - [ ] `systemctl start ironpal-api`
+
+#### Deploy Script
+
+- [ ] **Create `deployment/deploy.sh`** (reference: `../handlr/handlr-web/deployment/deploy.sh`):
+  ```bash
+  #!/bin/bash
+  set -e
+
+  SERVER="root@45.55.36.33"
+  FRONTEND_DEST="/var/www/ironpal.co"
+  BACKEND_DEST="/opt/ironpal-api"
+
+  echo "Building frontend..."
+  npm run build
+
+  echo "Syncing frontend to server..."
+  rsync -avz --delete dist/ $SERVER:$FRONTEND_DEST/
+
+  echo "Syncing backend to server..."
+  rsync -avz --delete server/ $SERVER:$BACKEND_DEST/server/
+  rsync -avz package.json package-lock.json $SERVER:$BACKEND_DEST/
+
+  echo "Installing backend dependencies on server..."
+  ssh $SERVER "cd $BACKEND_DEST && npm install --omit=dev"
+
+  echo "Restarting API service..."
+  ssh $SERVER "systemctl restart ironpal-api"
+
+  echo "Running health checks..."
+  sleep 2
+  curl -sf https://ironpal.co/api/health && echo " ✓ Health check passed"
+  curl -sf https://ironpal.co && echo " ✓ Frontend loaded"
+
+  echo "Deploy complete!"
+  ```
+  - [ ] `chmod +x deployment/deploy.sh`
+
+#### Deployment Execution
+
+- [ ] Run `npm run build` locally — verify the `dist/` folder looks correct
+- [ ] Run `./deployment/deploy.sh` to deploy
+- [ ] **Verify deployment:**
+  - [ ] `https://ironpal.co` loads correctly (HTTPS, no cert warnings)
+  - [ ] `https://www.ironpal.co` redirects to `https://ironpal.co` (or vice versa)
+  - [ ] `https://ironpal.co/api/health` returns OK
+  - [ ] Submit a test email via the form — verify it appears in SQLite:
+    ```bash
+    ssh root@45.55.36.33 "cd /opt/ironpal-api && node server/dump-emails.js"
+    ```
+  - [ ] Test on mobile (real phone) — form works, images load, no horizontal scroll
+  - [ ] Check Lighthouse score (target > 90 performance)
+  - [ ] Verify Open Graph tags work: paste `https://ironpal.co` into Twitter/Facebook/LinkedIn share preview tools
+
+#### Ongoing Maintenance
+
+- [ ] **Set up basic monitoring:**
+  - [ ] Cloudflare Analytics — check traffic weekly
+  - [ ] Optionally add a simple uptime check (e.g., UptimeRobot free tier — pings `/api/health` every 5 min)
+- [ ] **Email export workflow:**
+  - [ ] Periodically export emails: `ssh root@45.55.36.33 "cd /opt/ironpal-api && node server/dump-emails.js"`
+  - [ ] Before launch day: export full list for the launch announcement email (can import to Mailchimp free tier for the 3-email sequence, or send manually)
+- [ ] **Post-Kickstarter-launch update:**
+  - [ ] Add a "We're live on Kickstarter!" banner to the top of the page with a direct link to the campaign
+  - [ ] Keep the email form active for visitors who don't back immediately — capture for follow-up
+
+**Estimated time:** 5-7 days (domain setup: 1 day, frontend dev: 3-4 days, backend + deployment: 1-2 days)
+**Tools needed:** Cloudflare account (free + ~$10-12/yr domain), existing DigitalOcean droplet ($6/mo — shared with handlr-web, no additional cost), Node.js
+**Output:** Live landing page at `https://ironpal.co` with email capture, branded with Iron Ring logo and Stealth Teal design
+
+---
+
 ## Phase 4: Pre-Launch & Audience Building (Days 15-40)
 
 > **Goal:** Build an email list and community before launch to have Day 1 backers ready. Start this phase during Phase 2 (video production) — it runs in parallel.
 
 ### Landing Page & Email Collection
 
-- [ ] **Set up a pre-launch landing page** (Carrd.co $9/yr, or Kickstarter's pre-launch page):
-  - [ ] Hero image (best product shot from Phase 1)
-  - [ ] Iron Ring logo + headline
-  - [ ] 1-paragraph value prop
-  - [ ] Email signup form: "Get notified on launch day + exclusive Early Bird pricing"
-  - [ ] Social proof element if available (any early testimonials, advisor quotes, or beta stats)
-- [ ] **Set up email collection:**
-  - [ ] Mailchimp (free up to 500 contacts) or ConvertKit
-  - [ ] Create welcome email autoresponder: thank subscriber, share 1 image or GIF from campaign assets, "Reply and tell me about your current workout logging method"
-  - [ ] Plan 3-email pre-launch sequence:
-    - [ ] Email 1: Welcome + problem story (Day 0 — on signup)
-    - [ ] Email 2: Behind the scenes — show camera module close-up (Prompt 13) + tech story (Day 3-5 after signup)
-    - [ ] Email 3: Launch announcement — "We're live! Back us in the first 48 hours for Early Bird pricing" (Launch Day)
+> **The ironpal.co landing page (Phase 3.5) must be live before starting audience building.** All social media, ads, and outreach will drive traffic to `https://ironpal.co` for email capture.
+
+- [ ] **Verify ironpal.co is live and functional:**
+  - [ ] Email capture form works (submit a test email, verify in DB)
+  - [ ] All marketing images are loaded and optimized
+  - [ ] Page loads fast on mobile (Lighthouse > 90)
+  - [ ] Open Graph preview looks good when sharing the URL
+- [ ] **Share the ironpal.co URL** as the primary link across all channels (social bios, outreach emails, Reddit posts, etc.)
+- [ ] **Monitor email signups daily:**
+  - [ ] Run `ssh root@45.55.36.33 "cd /opt/ironpal-api && node server/dump-emails.js"` to check progress
+  - [ ] Track daily signup rate to measure which channels drive the most signups
+- [ ] **Plan 3-email launch sequence** (export emails from SQLite → import to Mailchimp free tier for sending):
+  - [ ] Email 1: Welcome + problem story (manual send to current list at campaign midpoint or 1 week before launch)
+  - [ ] Email 2: Behind the scenes — show camera module close-up (Prompt 13) + tech story (3-5 days before launch)
+  - [ ] Email 3: Launch announcement — "We're live! Back us in the first 48 hours for Early Bird pricing" (Launch Day)
+- [ ] **Post-launch: update ironpal.co** with a "We're live on Kickstarter!" banner linking directly to the campaign page
 
 ### Social Media Presence
 
@@ -472,8 +765,8 @@ Before starting, confirm you have these completed deliverables ready to use:
 - [ ] **Goal: 200+ Kickstarter followers before launch** (each follower gets notified on launch day)
 
 **Estimated time:** 10-14 days of active work, spread across 3-4 weeks (parallel with Phase 2)
-**Tools needed:** Carrd.co ($9/yr), Mailchimp (free), Canva (free, for quick social crops), social media accounts
-**Output:** Email list (target: 200-500 signups), social media presence, press kit, 200+ Kickstarter followers
+**Tools needed:** ironpal.co (live from Phase 3.5), Mailchimp free tier (for launch email sequence only), Canva (free, for quick social crops), social media accounts
+**Output:** Email list via ironpal.co (target: 200-500 signups), social media presence, press kit, 200+ Kickstarter followers
 
 ---
 
@@ -491,7 +784,8 @@ Before starting, confirm you have these completed deliverables ready to use:
   - [ ] Verify shipping costs are configured for all target regions
 - [ ] **Launch the campaign** (recommended: Tuesday or Wednesday, 8-10am EST)
 - [ ] **Immediately after launch:**
-  - [ ] Send Email 3 (launch announcement) to entire email list
+  - [ ] Export emails from ironpal.co SQLite DB → import to Mailchimp → send launch announcement to entire list
+  - [ ] Update ironpal.co with "We're live on Kickstarter!" banner + direct campaign link
   - [ ] Post on all social media accounts with direct campaign link
   - [ ] Post on Reddit: r/kickstarter (project launch thread), r/fitness, r/homegym
   - [ ] Post in Facebook groups
@@ -655,9 +949,9 @@ Repeat this weekly cycle for weeks 2-4 of the campaign:
 | Adobe After Effects | $23/mo | 1-2 months |
 | Figma | Free | — |
 | DaVinci Resolve | Free | — |
-| Carrd.co landing page | $9/yr | 1 year |
-| Mailchimp | Free (up to 500) | — |
-| Domain name (ironpal.com or similar) | ~$12/yr | 1 year |
+| ironpal.co domain (Cloudflare Registrar) | ~$10-12/yr | 1 year |
+| DigitalOcean droplet (shared with handlr-web) | $0 additional | Already running |
+| Mailchimp (for launch email sequence) | Free (up to 500) | Launch week only |
 | **Total pre-launch tools** | **~$200-350** | |
 
 ### Campaign Costs
@@ -678,7 +972,7 @@ Repeat this weekly cycle for weeks 2-4 of the campaign:
 | Packaging | TBD | Design + print |
 | Shipping | TBD | Regional pricing |
 
-**Total estimated out-of-pocket before launch: $300-850**
+**Total estimated out-of-pocket before launch: $300-850** (ironpal.co hosting uses existing DigitalOcean droplet — no additional server cost)
 
 ---
 
@@ -696,7 +990,9 @@ Fill in actual dates as you begin execution:
 | Video #2 final | _______ | _______ | Not started |
 | Video #3 final | _______ | _______ | Not started |
 | Video #6 final | _______ | _______ | Not started |
-| Pre-launch landing page live | _______ | _______ | Not started |
+| ironpal.co domain registered | _______ | _______ | Not started |
+| ironpal.co website deployed & live | _______ | _______ | Not started |
+| Email capture form verified working | _______ | _______ | Not started |
 | Email list hits 200 signups | _______ | _______ | Not started |
 | Kickstarter pre-launch page active | _______ | _______ | Not started |
 | Kickstarter page content complete | _______ | _______ | Not started |
@@ -724,3 +1020,8 @@ Fill in actual dates as you begin execution:
 | `docs/video-production-execution-plan.md` | Detailed 18-day video production workflow — Phase 2 |
 | `docs/Challenges_and_Solutions_BodyMounted.md` | Technical specs for campaign page — Phase 3, FAQ, feasibility questions |
 | `input/images/logo/v4/` | Logo reference images for Leonardo AI Style Reference and post-production compositing |
+| `../handlr/handlr-web/` | Reference implementation for website tech stack (React + Vite + Express + SQLite), email capture API, and deployment scripts |
+| `../handlr/handlr-web/deployment/DEPLOYMENT_PRODUCTION_DIGITAL_OCEAN_PLAN.md` | Deployment guide pattern — adapt for ironpal.co on the same DigitalOcean droplet |
+| `../handlr/handlr-web/server/index.js` | Reference for email capture Express API implementation |
+| `../handlr/handlr-web/src/components/EmailModal.jsx` | Reference for email capture form UI component |
+| `../handlr/handlr-web/deployment/deploy.sh` | Reference for automated deployment script |
