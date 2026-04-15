@@ -50,6 +50,37 @@ This execution plan covers the production of the three selected Kickstarter camp
 
 This is the top-ranked video and receives the most detailed breakdown.
 
+## Competitor Reference: Fitbod
+
+The "Old way" section of Video #2 specifically features **Fitbod** ([Google Play](https://play.google.com/store/apps/details?id=com.fitbod.fitbod)) as the representative competitor app that requires manual workout logging. Fitbod is a popular AI-powered workout planner (5M+ downloads, 4.5★) that still requires users to **manually input exercises, weights (lb/kg), and reps for every set**. This manual data entry creates friction during workouts — the exact problem IronPal solves.
+
+**Key Fitbod pain points to emphasize in the "Old way" beat:**
+- User must select each exercise from a list (or search for it)
+- User must type in reps and weight for each set manually
+- User must tap "Add Set" for additional sets
+- User must configure equipment availability ahead of time
+- App interrupts the workout flow — phone out between every set
+
+**Reference screenshots:** `input/competition/fitbod/`
+- `app_screenshot1.png` — Equipment customization screen (demonstrates setup complexity)
+- `app_screenshot2.png` — Back Squat manual entry screen showing per-set reps/weight input fields (primary "Old way" reference)
+
+> **Legal note:** Do not show the Fitbod logo, app icon, or brand name directly in the video. Do **NOT** use Fitbod screenshots (`input/competition/fitbod/`) as Leonardo AI reference images — this produces near-identical UI reproductions that constitute copyright infringement. The Fitbod screenshots serve as **internal design reference only** (for the Figma mockup designer). All AI image generation prompts must describe a **generic, visually distinct** competitor app with deliberate design differences (see "Leonardo AI Prompt Guidelines" below).
+
+### Leonardo AI Prompt Guidelines for "Old Way" Competitor App
+
+When generating images of the competitor workout app for shots S1, S2a-S2c, follow these rules:
+
+1. **Do NOT use `input/competition/fitbod/app_screenshot2.png` as a Leonardo AI reference image.** It produces near-copies of Fitbod's UI.
+2. **Do NOT mention "Fitbod" in any AI generation prompt.** Use "generic workout tracking app" or "manual workout log app" instead.
+3. **Specify a distinct color scheme:** Use a muted burgundy/wine-red accent color on a dark charcoal (#1A1A2E) background — visually distinct from Fitbod's dark purple/navy palette.
+4. **Specify a distinct layout:** Use a single-column card-based layout with slider inputs (not Fitbod's table-style numbered rows). Each exercise should appear as a separate card with "Reps" and "Weight" sliders or steppers.
+5. **Specify distinct typography:** Use a rounded sans-serif font (not Fitbod's geometric sans-serif). Exercise names in lowercase, not bold italic.
+6. **Add distinguishing UI elements:** Include a circular progress ring at the top (workout completion %), a bottom navigation bar with 4 generic icons, and a floating "+" button for adding exercises.
+7. **No reference images needed:** Generate purely from text prompts. The AI should invent a plausible but generic workout app — not reproduce any existing one.
+
+---
+
 ## Step 1: Scriptwriting & Voiceover Text
 
 **Owner:** SCW  
@@ -59,7 +90,7 @@ This is the top-ranked video and receives the most detailed breakdown.
 
 1. **Voiceover script (final):**
 
-   > "You go to the gym to train. Not to type. IronPal sees every exercise, reads every weight, counts every rep — so you never have to. Your workout is logged before you leave the gym."
+   > "You go to the gym to train. Not to type in every rep, every weight, every set. IronPal sees every exercise, reads every weight, counts every rep — automatically. Your workout is logged before you leave the gym."
 
    This is 12 seconds of narration. Placement: begins at the transition beat [0:15] and runs through the IronPal montage. Alternative: split into two chunks — the first sentence at [0:15] during transition, the rest at [0:50] over the app reveal.
 
@@ -69,7 +100,7 @@ This is the top-ranked video and receives the most detailed breakdown.
    - End card: "Your workout, logged before you leave." / "Back us on Kickstarter" / IronPal logo
 
 3. **Music brief:**
-   - 0:00-0:15 ("old way"): Slightly off-beat, muted, lo-fi electronic. A sense of drudgery and interruption.
+   - 0:00-0:15 ("old way" — Fitbod-style manual logging): Slightly off-beat, muted, lo-fi electronic. A sense of drudgery and interruption. Emphasize the stop-start rhythm of workout → phone → type → workout.
    - 0:15-0:20 (transition): A beat drop / silence / tonal shift.
    - 0:20-0:55 ("IronPal way" + payoff): Confident, rising electronic beat. Clean, motivational, no lyrics. Builds to a crescendo at app reveal [0:40-0:55].
    - 0:55-0:80 (social proof + end card): Beat sustains, then fades to a final hit with the logo.
@@ -98,10 +129,10 @@ Generate **key frame reference images** using Midjourney or FLUX to establish th
 
 | Shot | Description | Image Prompt (Midjourney/FLUX) | Notes |
 |---|---|---|---|
-| S1 | Phone with cluttered workout app, thumb hovering | "Close-up of a smartphone screen showing a messy spreadsheet workout log app, a male thumb hovering over the screen mid-typing, gym bench blurred in background, cool desaturated lighting, photorealistic" | Establish frustration |
-| S2a | Athlete pausing bench press for phone | "Athletic male pausing mid-bench-press to pick up phone from floor, annoyed expression, commercial gym interior, cool blue-gray color grading, cinematic shallow DOF" | "Old way" beat |
-| S2b | Athlete at cable machine confused | "Athletic female at cable machine looking confused trying to remember rep count, commercial gym, cool desaturated tones, photorealistic cinematic" | "Old way" beat |
-| S2c | Phone with half-filled log | "Smartphone screen close-up showing half-filled workout log with question marks and empty fields, gym floor blurred behind, cool lighting" | "Old way" beat |
+| S1 | Phone showing generic workout tracking app manual input screen | "Close-up of a smartphone screen showing a generic dark-mode workout tracking app with a charcoal background and muted burgundy accent color, card-based layout with exercise cards showing slider inputs for reps and weight, a circular progress ring at the top, a male thumb hovering over a weight stepper control, gym bench blurred in background, cool desaturated lighting, photorealistic" | Establish frustration — generic competitor app requires manual logging. **No reference image** — generate from text prompt only to avoid reproducing any existing app. |
+| S2a | Athlete pausing bench press to log in workout app | "Athletic male sitting up on bench press, annoyed, holding phone showing a dark-mode workout tracking app with burgundy accents and card-based exercise layout, manually tapping reps and weight inputs between sets, commercial gym interior, cool blue-gray color grading, cinematic shallow DOF" | "Old way" beat — the tedium of manual data entry mid-workout |
+| S2b | Athlete at cable machine scrolling through exercise list on app | "Athletic female at cable machine, paused mid-workout, scrolling through a long exercise selection list on her phone showing a generic dark charcoal workout app with burgundy accents, looking frustrated, commercial gym, cool desaturated tones, photorealistic cinematic" | "Old way" beat — finding and selecting the right exercise is tedious |
+| S2c | Generic workout app with multiple manual input fields | "Smartphone screen close-up showing a generic dark-mode workout tracking app on charcoal background with muted burgundy accents, card-based layout with three exercise cards each showing empty stepper fields for reps and weight, a circular progress ring at 40% at the top, rounded sans-serif font, a floating '+' button at bottom right, gym floor blurred behind, cool lighting" | "Old way" beat — visual evidence that every rep, weight, and set must be typed in by hand. **No reference image** — generate from text prompt only. |
 | S3 | Athlete picks up IronPal headband from gym bag | "Athlete's hand reaching into a black gym bag pulling out a matte black headband with a tiny camera module and teal 'IronPal' text on the side, warm golden gym lighting, cinematic close-up, shallow DOF" | Transition moment — color shift to warm |
 | S4a | Bench press with headband, focused | "Athletic male performing bench press wearing a matte black headband with small camera module and glowing teal LED on forehead, warm vibrant gym lighting, cinematic, no phone in sight, focused expression" | IronPal montage |
 | S4b | Cable machine, smooth set | "Athletic female performing cable fly in a modern gym, wearing matte black headband with teal LED glowing, warm cinematic lighting, smooth motion, focused and confident" | IronPal montage |
@@ -137,10 +168,10 @@ Use approved key frame images as **image-to-video** inputs in Luma AI Dream Mach
 
 | Shot | Duration | AI Tool | Generation Method | Expected Attempts |
 |---|---|---|---|---|
-| S1 — Phone/app close-up | 4-5s | Runway Gen-4 | Image-to-video (close-up, minimal motion) | 3-5 |
-| S2a — Bench press pause | 3-4s | Luma Dream Machine | Image-to-video (athlete reaches for phone) | 5-8 |
-| S2b — Cable machine confusion | 3-4s | Luma Dream Machine | Image-to-video (athlete looks confused) | 5-8 |
-| S2c — Half-filled phone log | 3s | Screen recording + composite | Record actual app mockup screen + composite | 1 |
+| S1 — Generic workout app manual input close-up | 4-5s | Runway Gen-4 + composite | Image-to-video (close-up of phone with generic dark workout app UI, thumb tapping weight stepper). **Do NOT use Fitbod screenshots as reference.** Generate from text prompt describing charcoal/burgundy card-based app. Composite the Figma-designed generic competitor app screen onto the phone in post. | 3-5 |
+| S2a — Bench press pause to log in app | 3-4s | Luma Dream Machine | Image-to-video (athlete sits up, grabs phone, starts typing reps/weight) | 5-8 |
+| S2b — Cable machine exercise search | 3-4s | Luma Dream Machine | Image-to-video (athlete scrolling through exercise list on phone, frustrated) | 5-8 |
+| S2c — Manual set-by-set entry screen | 3s | Screen recording + composite | Record the Figma-designed generic competitor app mockup (charcoal/burgundy, card-based, slider/stepper inputs). **Do NOT use Fitbod screenshots as Leonardo AI reference.** The Figma mockup is designed from scratch to be visually distinct. | 1 |
 | S3 — Headband from gym bag | 5s | Luma Dream Machine | Image-to-video (hand pulls headband, teal LED lights) | 5-8 |
 | S4a — Bench press w/ headband | 5-6s | Luma Dream Machine | Image-to-video (athlete pressing, headband visible) | 5-8 |
 | S4b — Cable fly w/ headband | 4-5s | Runway Gen-4 | Image-to-video (smooth cable motion) | 5-8 |
@@ -190,7 +221,16 @@ Use approved key frame images as **image-to-video** inputs in Luma AI Dream Mach
 
 ### Deliverables
 
-1. **IronPal App UI Mockup** — A realistic phone app interface showing:
+1. **Competitor App UI Mockup ("Old Way" Screen)** — A generic dark-mode workout tracking UI for the "old way" shots (S1, S2c). Design in Figma using `input/competition/fitbod/app_screenshot2.png` as *internal UX reference only* (understand the manual entry paradigm) but with deliberately distinct visual design:
+   - Charcoal (#1A1A2E) background with muted burgundy/wine-red accents (not Fitbod's dark purple/navy)
+   - Card-based exercise layout with slider/stepper inputs for reps and weight (not Fitbod's numbered table rows)
+   - Rounded sans-serif font, exercise names in lowercase (not Fitbod's bold italic)
+   - Circular workout progress ring at top
+   - Floating "+" button for adding exercises
+   - Bottom navigation bar with 4 generic icons
+   - **Must NOT resemble Fitbod's UI when used as Leonardo AI reference image**
+
+2. **IronPal App UI Mockup** — A realistic phone app interface showing:
    - Workout log with exercise cards (teal accents, checkmarks)
    - Live card population animation (cards sliding in one by one)
    - Workout summary screen (total volume, exercise count, duration)
@@ -208,12 +248,14 @@ Use approved key frame images as **image-to-video** inputs in Luma AI Dream Mach
 
 | # | Task | Owner | Output |
 |---|---|---|---|
-| 4.1 | Design IronPal app UI mockup in Figma (workout log + summary) | MGD | Figma file |
-| 4.2 | Animate app UI — cards populating, summary appearing | MGD | Screen recording (MP4) |
-| 4.3 | Create teal LED glow composite element | MGD | PNG sequence / AE preset |
-| 4.4 | Create IronPal logo reveal animation | MGD | AE project / MP4 |
-| 4.5 | Create end card template | MGD | AE project / PNG |
-| 4.6 | Export all motion graphics assets at 1080p or 4K | MGD | Asset package |
+| 4.1 | Design generic competitor app UI mockup in Figma — **must be visually distinct from Fitbod**: use charcoal (#1A1A2E) background with muted burgundy/wine-red accents, card-based exercise layout with slider/stepper inputs (not table rows), rounded sans-serif font, circular progress ring, floating "+" button. Use `input/competition/fitbod/app_screenshot2.png` as *internal reference only* (understand the UX paradigm of manual entry) but deliberately diverge on colors, typography, and layout | MGD | Figma file |
+| 4.2 | Design IronPal app UI mockup in Figma (workout log + summary) | MGD | Figma file |
+| 4.3 | Animate competitor app UI — thumb typing reps and weight (for S2c composite) | MGD | Screen recording (MP4) |
+| 4.4 | Animate IronPal app UI — cards populating, summary appearing | MGD | Screen recording (MP4) |
+| 4.5 | Create teal LED glow composite element | MGD | PNG sequence / AE preset |
+| 4.6 | Create IronPal logo reveal animation | MGD | AE project / MP4 |
+| 4.7 | Create end card template | MGD | AE project / PNG |
+| 4.8 | Export all motion graphics assets at 1080p or 4K | MGD | Asset package |
 
 ---
 
@@ -298,7 +340,7 @@ Generate AI music using Suno AI or Udio, guided by the music brief from Step 1.
 
 #### 7.2 — Color Grading (Day 9-10)
 
-1. **"Old way" section (0:00-0:15):** Apply a cool, desaturated LUT. Lower saturation by 20-30%. Add subtle blue tint. The mood should feel dull and frustrating.
+1. **"Old way" / Fitbod-style manual logging section (0:00-0:15):** Apply a cool, desaturated LUT. Lower saturation by 20-30%. Add subtle blue tint. The mood should feel dull and frustrating — the tedious cycle of workout-then-type. The phone screen should be the brightest element in frame, pulling attention to the manual input UI.
 2. **Transition (0:15-0:20):** Grade the headband close-up warm — shift color temperature toward golden/amber. The teal LED should pop against the warm background.
 3. **"IronPal way" section (0:20-0:55):** Warm, vibrant grading. Slightly lifted shadows, rich skin tones, teal accents preserved. The mood should feel alive and exciting.
 4. **Social proof montage (0:55-0:70):** Consistent warm grading across the three athlete shots. Teal LED glow normalized.
@@ -315,7 +357,7 @@ Generate AI music using Suno AI or Udio, guided by the music brief from Step 1.
 #### 7.4 — Sound Design (Day 11)
 
 1. Add subtle sound effects:
-   - Typing/tapping sounds during the "old way" phone shots
+   - Typing/tapping sounds during the "old way" phone shots (emphasize the repetitive tap-tap-tap of manual data entry into the Fitbod-style app — reps, weight, confirm, reps, weight, confirm)
    - A clean "click" for the headband snap-in (S3)
    - A soft electronic "activation" chime for the teal LED lighting up
    - UI swoosh sounds for the app cards populating
@@ -547,10 +589,11 @@ This video is primarily a **motion graphics piece**. The kinetic typography segm
 
 ## 8. App UI Realism
 
-**Challenge:** The IronPal app doesn't exist yet. The UI mockup must look like a real, polished app — fake-looking UI would undermine the product's credibility.
+**Challenge:** Neither the IronPal app nor the competitor "old way" app actually exist. Both UI mockups must look like real, polished apps — fake-looking UI would undermine the video's credibility. The competitor app must resemble Fitbod's manual input paradigm without using Fitbod's brand assets.
 
 **Mitigation:**
-- Design the mockup in Figma using established mobile UI patterns (card-based layout, standard iOS/Android navigation, system fonts). Don't over-design — simpler looks more real.
+- **Competitor app (generic "old way" app):** Use `input/competition/fitbod/app_screenshot2.png` as *internal UX reference only* — understand the paradigm of manual reps/weight entry. **Do NOT reproduce Fitbod's visual design.** The generic competitor app must use a deliberately different design language: charcoal (#1A1A2E) background with muted burgundy/wine-red accents (not Fitbod's dark purple/navy), card-based exercise layout with slider/stepper inputs (not Fitbod's numbered table rows), rounded sans-serif typography (not Fitbod's geometric sans-serif), circular progress ring, and floating "+" button. Avoid teal (reserved for IronPal).
+- **IronPal app:** Design the mockup in Figma using established mobile UI patterns (card-based layout, standard iOS/Android navigation, system fonts). Don't over-design — simpler looks more real.
 - Animate the prototype in Figma or After Effects with natural easing curves and timing. Show only 2-3 screens (workout log populating, summary view). Less is more.
 - Apply a slight screen reflection and off-angle perspective when compositing onto the phone in the video — a perfectly flat, full-brightness screen looks composited.
 

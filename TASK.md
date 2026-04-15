@@ -207,3 +207,29 @@ the plan MUST also include:
 modify /home/quirkfly/job_stuff/prj/ironpal/docs/Challenges_and_Solutions_BodyMounted.md to come up with a stratecy / proposal how to identify exercises such as
 
 bulgarian split squat, shoulder press with dumbbells, shoulder flyes with dumbbells, triceps pullovers with dumbbells, and other similar exercises using the video footage from the body-mounted camera (headband or baseball cap style) solely. The strategy should consider the unique challenges of recognizing these exercises from a first-person perspective and propose potential solutions to accurately identify the exercises being performed based on the video footage
+
+---
+
+modify /home/quirkfly/job_stuff/prj/ironpal/docs/video-production-execution-plan.md as follows:
+
+VIDEO #2
+
+Establish frustration and "Old way" beat should feature fitbod mobile app (effectively a competitor) that requires manual input of exercises, weights, and reps.
+
+refs:
+
+https://play.google.com/store/apps/details?id=com.fitbod.fitbod
+input/competition/fitbod
+
+rework the document accordingly
+
+---
+
+modify /home/quirkfly/job_stuff/prj/ironpal/docs/video-production-execution-plan.md as follows:
+
+when i type below prompt to leonardo.ai and add use Reference: input/competition/fitbod/app_screenshot2.png
+
+Close-up of a smartphone screen showing the Fitbod workout app manual input UI — dark mode with reps and weight input fields, numbered set rows, a male thumb hovering mid-typing on the weight field, gym bench blurred in background, cool desaturated lighting, photorealistic
+
+
+it produce almost exactyl looking screenshot of the Fitbod app, which is a copyright infringement risk. I need to modify the prompt to produce a generic workout tracking app UI that resembles Fitbod's manual input paradigm but is visually distinct enough to avoid legal issues. The prompt should specify changes in color scheme, typography, and UI layout while maintaining the overall structure of a workout log with exercise headers, set rows, and input fields for reps and weight.
