@@ -26,7 +26,7 @@ cartoon, illustration, painting, drawing, anime, 3d render, CGI, watermark, text
 
 ### Logo Handling — Critical Note
 
-**Leonardo AI cannot reliably generate readable text or precise logo marks.** Do not expect the Iron Ring logo or "IRONPAL" wordmark to render correctly in AI output. Instead:
+**Leonardo AI cannot reliably generate readable text or precise logo marks.** Do not expect the Iron Ring logo or "IronPal" wordmark to render correctly in AI output. Instead:
 
 1. **Generate the scene without worrying about logo accuracy** — let the AI place a teal accent/shape where the logo should be
 2. **Composite the real logo in post-production** (Photoshop, Figma, or Canva) using the source files from `input/images/logo/v4/`
@@ -36,9 +36,9 @@ cartoon, illustration, painting, drawing, anime, 3d render, CGI, watermark, text
 
 | File | Use as reference for |
 |---|---|
-| `input/images/logo/v4/Minimalist IRONPAL logo design.png` | **Style Reference** — horizontal lockup, brand color palette, overall teal-on-navy aesthetic. Upload as Style Reference (strength 0.2-0.3) to maintain brand color consistency across all generations. |
-| `input/images/logo/v4/Geometric teal circle on navy.png` | Icon-only mark — use when compositing the standalone ring icon onto product close-ups or app UI mockups in post. |
-| `input/images/logo/v4/Minimalist iron-inspired logo design.png` | Stacked lockup — use for compositing onto vertical-format placements (app splash screens, stacked layouts). |
+| `input/images/logo/v4/Geometric teal circle on navy.png` | **Style Reference (icon-only)** — the canonical Iron Ring mark (teal ring with bottom gap and top lens dot, on navy). Upload as Style Reference at strength 0.2–0.3 to carry brand color palette and ring geometry across all generations. This is the **only safe visual reference** in `v4/` — it has no wordmark, so it cannot leak incorrect casing. Also use when compositing the standalone ring icon in post. |
+
+> **⚠️ DO NOT use as reference:** `Minimalist IRONPAL logo design.png` and `Minimalist iron-inspired logo design.png` both render the wordmark as `"IRONPAL"` in all caps. The correct brand wordmark is camelCase **"IronPal"** (capital I, capital P, lowercase everywhere else). Feeding these files into Leonardo as Style Reference or Image-to-Image will bias the model toward the wrong casing and cause generated headbands/caps to display `"IRONPAL"` instead of `"IronPal"`. The correct-case wordmark must come from the prompt text, not from a reference image. (When those source files are regenerated with camelCase, this warning can be removed and they can be reintroduced as references.)
 
 ### Brand Color Reference
 
@@ -65,27 +65,26 @@ cartoon, illustration, painting, drawing, anime, 3d render, CGI, watermark, text
 | Aspect Ratio | 16:9 (web banner) or 3:2 (versatile) |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 8 |
-| Image Guidance | **Style Reference**: upload `input/images/logo/v4/Minimalist IRONPAL logo design.png` at strength 0.2 for brand color consistency |
+| Image Guidance | **Style Reference**: upload `input/images/logo/v4/Geometric teal circle on navy.png` at strength 0.2 for brand color consistency |
 
-**Reference Image Needed:** Yes — use the horizontal lockup logo (`Minimalist IRONPAL logo design.png`) as a **Style Reference** (NOT Image-to-Image). This ensures the teal/navy color palette carries through without forcing the composition.
+**Reference Image Needed:** Yes — use the horizontal lockup logo (`Geometric teal circle on navy.png`) as a **Style Reference** (NOT Image-to-Image). This ensures the teal/navy color palette carries through without forcing the composition.
 
 **Prompt:**
 
 ```
-Professional product photography of a sleek matte black athletic fitness headband with a tiny embedded camera module, displayed on a clean white-to-light-gray gradient studio background. The headband has a thin electric teal accent stripe, made from moisture-wicking athletic fabric. A small flush-mounted camera lens centered on the forehead area, roughly 8mm diameter, with a soft teal LED glow beside it. A teal brand marking on the right side of the headband, subtle and precise like premium athletic branding.
+A photorealistic product marketing hero image of a sleek, modern fitness headband with a tiny embedded camera module. The headband is matte black with a thin accent stripe in electric teal, made from moisture-wicking athletic fabric. On the right side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (representing the camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal — the full logo lockup approximately 30mm wide, centered on the side panel, subtle but clearly legible, like premium Apple or Garmin athletic branding. The camera module is barely visible — a small flush-mounted lens roughly 8mm diameter centered on the forehead area, with no protruding parts. A micro LED next to the lens glows soft teal.
 
-Shot from a slight three-quarter angle showing both the front lens area and the side branding. Next to it, the same headband worn by an athletic male model with short hair, mid-laugh, in a modern well-lit gym — showing the headband is comfortable and natural. He wears a fitted black tank top.
+The headband is displayed on a clean white-to-light-gray gradient background, shot from a slight three-quarter angle to show both the front (lens) and the side (fabric, fit, branding). Next to it, a second headband is shown being worn by an athletic male model with short hair, mid-laugh, in a modern gym setting — conveying that it's comfortable and forgettable during a workout. He wears a fitted black tank top and the headband sits naturally, looking like any premium athletic headband.
 
-Include a floating zoomed-in inset panel with soft drop shadow showing the camera module close-up — the tiny lens, the teal LED, and the side branding detail. Premium product detail shot style.
+Include a subtle zoomed-in inset (floating, with soft drop shadow) showing the camera module close-up — the tiny lens, the LED, and the Iron Ring logo printed on the side: the teal ring icon with its distinctive bottom gap and top lens dot, plus the "IronPal" wordmark. The inset should feel like a premium product detail shot, similar to Apple or Garmin marketing.
 
-Studio lighting on the standalone headband, warm ambient gym lighting on the model. Clean, minimal, premium. Shot on 85mm lens, shallow depth of field, f/2.8. 8K, ultra-detailed, commercial product photography.
+Style: Photorealistic product photography with studio lighting on the standalone headband, warm gym ambient lighting on the model shot. Clean, minimal, premium feel. Suitable for a Kickstarter hero banner or product landing page above-the-fold image. No text overlays.
 ```
 
 **Post-Production Steps:**
-1. Composite the Iron Ring horizontal lockup logo onto the headband side using `Minimalist IRONPAL logo design.png` as source — scale to ~3cm width, match the teal accent color
-2. Add the Iron Ring logo into the floating inset detail panel
-3. Adjust teal accents to match `#00E5CC` if the AI drifted toward cyan/mint
-4. Optional: use Leonardo's **Inpainting** tool on the headband side area if the AI-generated teal accent doesn't leave clean space for logo compositing
+1. If the Iron Ring logo (ring icon + "IronPal" wordmark) misfires on a particular generation, use Leonardo's **Inpainting** on just the headband side patch and the inset to regenerate a clean legible version — do NOT rewrite the whole prompt.
+2. Reference `input/images/logo/v4/Geometric teal circle on navy.png` (icon-only) and `Geometric teal circle on navy.png` (full horizontal lockup) when touching up — match the canonical geometry if fine-tuning in Photoshop.
+3. Adjust teal accents to match `#00E5CC` exactly if the AI drifted toward cyan/mint.
 
 ---
 
@@ -99,7 +98,7 @@ Studio lighting on the standalone headband, warm ambient gym lighting on the mod
 | Aspect Ratio | 16:9 or 3:2 |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 8 |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.2 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.2 |
 
 **Reference Image Needed:** Style Reference only (same as Prompt 1). No structural reference needed — Phoenix handles cap product shots well with descriptive prompting.
 
@@ -116,7 +115,7 @@ Studio-quality lighting, warm and aspirational. Shot on 70mm lens, f/2.8, shallo
 ```
 
 **Post-Production Steps:**
-1. Composite the Iron Ring horizontal lockup logo onto the cap's side panel embroidery area using `Minimalist IRONPAL logo design.png` — apply a thread/embroidery texture overlay for realism
+1. Composite the Iron Ring horizontal lockup logo onto the cap's side panel embroidery area using `Geometric teal circle on navy.png` — apply a thread/embroidery texture overlay for realism
 2. Add the Iron Ring logo into the floating side panel inset
 3. Use Leonardo's **Inpainting** on the side panel area if the generated teal embroidery shape conflicts with logo placement
 4. Color-correct all teal elements to `#00E5CC`
@@ -133,7 +132,7 @@ Studio-quality lighting, warm and aspirational. Shot on 70mm lens, f/2.8, shallo
 | Aspect Ratio | 16:9 (comparison layout) |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 7 |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.25 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.25 |
 
 **Reference Image Needed:** Style Reference for brand palette. Consider also generating the smartphone app screen separately and compositing it in.
 
@@ -171,7 +170,7 @@ Flat-lay meets lifestyle hybrid composition. Premium, modern, fitness-forward mo
 | Aspect Ratio | **Main scene**: 3:2 (landscape). **POV panel**: 4:3 or 3:2 |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 7 |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.15 (subtle — this is a gym scene, not a product shot) |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.15 (subtle — this is a gym scene, not a product shot) |
 
 **Reference Image Needed:** Style Reference at low strength for color consistency only. No structural reference.
 
@@ -209,7 +208,7 @@ First-person egocentric POV photograph from a person performing a barbell back s
 | Aspect Ratio | **Main**: 3:2. **POV panel**: 4:3 |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 7 |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.15 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.15 |
 
 **Reference Image Needed:** Style Reference only at low strength.
 
@@ -246,7 +245,7 @@ First-person egocentric POV photograph looking down and forward from head height
 | Aspect Ratio | **Main**: 4:3. **POV panel**: 4:3 |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 8 (higher — need clear weight stack numbers) |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.15 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.15 |
 
 **Reference Image Needed:** Style Reference only. For the weight stack numbers to be legible, you may need to **Inpaint** the weight stack area in the POV panel and increase guidance scale.
 
@@ -283,7 +282,7 @@ First-person egocentric POV from someone seated at a lat pulldown machine, looki
 | Aspect Ratio | **Main**: 16:9 (wide to show full machine). **POV panel**: 4:3 |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 7 |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.15 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.15 |
 
 **Reference Image Needed:** Style Reference only. If Phoenix doesn't render a hack squat machine accurately, consider uploading a reference photo of a hack squat machine as **Image-to-Image** at low strength (0.15-0.25) to guide the machine's shape.
 
@@ -320,7 +319,7 @@ First-person egocentric POV from someone using a hack squat machine, looking for
 | Aspect Ratio | **Main**: 3:4 (portrait, tight upper-body crop). **POV panel**: 4:3 |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 8 (need readable dumbbell label) |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.15 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.15 |
 
 **Reference Image Needed:** Style Reference only. The dumbbell label ("16 KG") will likely need post-production enhancement — AI generators rarely produce clean readable text on objects.
 
@@ -358,7 +357,7 @@ First-person egocentric POV looking slightly down and forward during a dumbbell 
 | Aspect Ratio | **Main**: 3:2. **POV panel**: 4:3 |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 8 |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.15 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.15 |
 
 **Reference Image Needed:** Style Reference only. Like Prompt 7, if Phoenix doesn't accurately render a standing calf raise machine, consider a reference photo as Image-to-Image at low strength (0.15-0.25).
 
@@ -399,7 +398,7 @@ First-person egocentric POV from someone standing at a calf raise machine, looki
 | Aspect Ratio | 3:2 or 4:3 (lifestyle framing) |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 7 |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.2 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.2 |
 
 **Reference Image Needed:** Style Reference for warm brand palette. The phone app screen should be **designed separately in Figma** and composited onto the phone — AI will not generate a clean, realistic app interface.
 
@@ -432,7 +431,7 @@ Warm, intimate locker room lighting with soft overhead glow. Candid, relaxed moo
 | Aspect Ratio | 16:9 (pitch deck slide format) |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 7 |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.15 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.15 |
 
 **Reference Image Needed:** Style Reference at low strength. **Recommended approach:** Generate the "before" (left) and "after" (right) halves as **two separate images** for maximum control over the lighting contrast, then composite them together.
 
@@ -470,7 +469,7 @@ Photorealistic marketing photo of a confident athlete mid-rep on a bench press i
 | Aspect Ratio | 16:9 (wide establishing shot) |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 6 (lower — allow natural scene variation) |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.15 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.15 |
 
 **Reference Image Needed:** Style Reference only at low strength. This is a wide shot — logo details will be small, so precision is less critical during generation. Logos will be composited in post.
 
@@ -517,7 +516,7 @@ Dark, dramatic mood. Shot on 100mm macro lens, f/2.8. 8K, ultra-detailed, premiu
 ```
 
 **Post-Production Steps:**
-1. Composite the full Iron Ring horizontal lockup logo (from `Minimalist IRONPAL logo design.png`) as a laser-engraving on the module's top face — apply a subtle engraving effect (slight depth/shadow, matching the aluminum surface texture)
+1. Composite the full Iron Ring horizontal lockup logo (from `Geometric teal circle on navy.png`) as a laser-engraving on the module's top face — apply a subtle engraving effect (slight depth/shadow, matching the aluminum surface texture)
 2. Alternatively, use the icon-only mark (from `Geometric teal circle on navy.png`) if the full lockup is too large for the module surface at this scale
 3. Ensure the teal LED and laser engraving match `#00E5CC`
 4. Fine-tune the macro lighting and shallow DOF if needed — this shot should feel like a premium electronics design award submission
@@ -534,7 +533,7 @@ Dark, dramatic mood. Shot on 100mm macro lens, f/2.8. 8K, ultra-detailed, premiu
 | Aspect Ratio | **Each panel**: 3:4 (portrait). Final composite: ~3:1 (ultra-wide triptych) |
 | PhotoReal | ON — Cinematic |
 | Guidance Scale | 7 |
-| Image Guidance | **Style Reference**: `Minimalist IRONPAL logo design.png` at strength 0.2 |
+| Image Guidance | **Style Reference**: `Geometric teal circle on navy.png` at strength 0.2 |
 
 **Reference Image Needed:** Style Reference for consistent brand palette across all three panels. **Generate each panel as a separate image** — this is essential for maintaining consistent model appearance and lighting across the triptych.
 
@@ -570,12 +569,206 @@ Photorealistic lifestyle photo of an athletic woman sitting on a gym bench after
 
 ---
 
+## Video Key Frame Prompts (for `docs/video-production-execution-plan.md` Step 2)
+
+These prompts produce photorealistic key frame still images for the Kickstarter campaign video. Each frame is later used as the **image-to-video input** for Luma Dream Machine / Runway Gen-4 / Kling AI (see video-production-execution-plan.md §3 Step 2 and §3 Step 3).
+
+All of these shots feature the IronPal product, so the **IronPal wordmark** must be visible on the headband / cap. Empirically (see hero-headband prompt in `docs/body-mounted-image-prompts.md`), Leonardo renders a legible teal `"IronPal"` sans-serif wordmark on a matte black headband when the prompt asks for it directly in **premium product-marketing tone** (Apple/Garmin style). The overly technical "cinematic spec-sheet" phrasing (lens mm, f-stop, "reserved brand-mark area for post") produces murky low-quality results — avoid it.
+
+**Style rules for all video key-frame prompts below:**
+1. Ask directly for the full **IronPal Iron Ring logo lockup** — the ring icon plus the "IronPal" wordmark — using the canonical snippet below. Leonardo renders this reliably on matte black fabric when asked in premium product-marketing tone (reference: `input/images/logo/v4/Geometric teal circle on navy.png` for the icon shape; `input/images/logo/v4/Geometric teal circle on navy.png` for the full horizontal lockup).
+2. Frame each shot as **premium product marketing photography**, not cinematic gym footage — even when the shot is action-oriented. Think Apple / Garmin / Peloton brand imagery.
+3. Drop the "reserved brand-mark area, composited in post" language. Let Leonardo render the logo directly. If it misfires on a given generation, use Inpainting on just that patch — don't rewrite the whole prompt.
+4. Keep warm studio/gym lighting language; avoid over-specifying lens/aperture (it narrows Leonardo's search and hurts composition).
+5. Post-production is still needed for **color correction of teal to `#00E5CC`**, LED glow enhancement, any app-UI screen compositing, and crisp logo touch-ups (Inpainting) — but the base logo placement should come from Leonardo directly.
+
+**Canonical IronPal Iron Ring logo snippet (paste into every prompt in this section):**
+
+- **Headband (printed):** `On the right side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (representing the camera lens), followed by the word "IronPal" in clean modern sans-serif lettering in teal. The full logo lockup is approximately 30mm wide, centered on the side panel of the headband — subtle but clearly legible, like premium Apple or Garmin athletic branding.`
+- **Cap (embroidered):** same as above but `embroidered in teal thread on the left side panel of the cap, approximately 25mm wide, clean precise thread work.`
+- **Camera module (laser-engraved):** `The icon-only Iron Ring mark — the teal circular ring with its bottom gap and top lens dot — is laser-engraved on the top face of the aluminum camera module, approximately 8mm across, precise and crisp.`
+
+### Global Settings (apply to all Video Key Frame prompts unless overridden)
+
+| Setting | Value |
+|---|---|
+| Model | Phoenix |
+| PhotoReal | ON — Cinematic |
+| Alchemy | ON |
+| Aspect Ratio | 16:9 (video frame) |
+| Image Guidance | **Style Reference**: `input/images/logo/v4/Geometric teal circle on navy.png` at strength 0.2 (holds the teal/charcoal palette across the set) |
+| Generation count | 4–8 per prompt — select best execution for image-to-video handoff |
+
+Apply the same negative prompt defined at the top of this document.
+
+---
+
+### S3 — Headband Reveal from Gym Bag
+
+**Intent (from video plan):** Transition moment from "Old Way" (cool/desaturated) to "IronPal Way" (warm). Athlete's hand pulls the headband from a black gym bag; teal LED lights up.
+
+**Prompt:**
+
+```
+A photorealistic premium product marketing hero image of an athletic male hand reaching into an open matte black nylon gym bag and lifting out a sleek modern fitness headband. The headband is matte black with a thin accent stripe in electric teal, made from moisture-wicking athletic fabric. On the right side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (representing the camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal. The full logo lockup is approximately 30mm wide, centered on the side panel — subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens, roughly 8mm diameter, is centered on the forehead area of the headband, with a micro LED beside it glowing soft teal, just beginning to light up as the headband is lifted into the warm gym light. Shot from a slight three-quarter angle showing both the front lens and the side branding. Warm golden hour gym lighting spilling across the fabric, clean soft bokeh from the gym background. Style: Photorealistic product photography with premium studio control — clean, minimal, premium feel, similar to Apple or Garmin marketing. Suitable for a Kickstarter campaign hero moment. No text overlays.
+```
+
+**Post-Production Steps:**
+1. If "IronPal" wordmark misfires on a particular generation, use Leonardo **Inpainting** on just the headband side to regenerate it — do NOT rewrite the whole prompt.
+2. Intensify the teal LED glow with a radial glow layer; color-correct all teal to `#00E5CC`.
+3. Apply warm color grade (shift highlights toward amber/gold) to mark the transition from "Old Way" cool grading.
+
+---
+
+### S4a — Bench Press with Headband (IronPal Montage)
+
+**Prompt:**
+
+```
+A photorealistic premium fitness marketing image of an athletic male performing a barbell bench press in a modern commercial gym. He wears a sleek matte black fitness headband made from moisture-wicking athletic fabric, with a thin accent stripe in electric teal. On the right side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (representing the camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal. The full logo lockup is approximately 30mm wide, centered on the side panel — subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens, roughly 8mm diameter, is centered on the forehead, with a micro LED next to it glowing soft teal. Focused confident expression, bar at chest level, elbows tucked, no phone anywhere in frame. Warm vibrant gym lighting with soft atmospheric dust. Three-quarter angle from the athlete's right. Style: Photorealistic premium fitness photography, clean and aspirational, similar to Apple Fitness or Garmin brand imagery. Warm, minimal, high-end. No text overlays.
+```
+
+**Post-Production Steps:**
+1. If the "IronPal" wordmark misfires on a particular generation, use **Inpainting** on the headband side to regenerate.
+2. Enhance the teal LED glow; ensure `#00E5CC` across all teal elements.
+3. Warm-grade for consistency with the rest of the IronPal montage.
+
+---
+
+### S4b — Cable Fly with Headband (IronPal Montage)
+
+**Prompt:**
+
+```
+A photorealistic premium fitness marketing image of an athletic female performing a standing cable fly at a dual cable crossover machine in a modern gym. She wears a sleek matte black fitness headband made from moisture-wicking athletic fabric, with a thin accent stripe in electric teal. The word "IronPal" is printed in clean, modern sans-serif lettering in teal on the side of the headband — subtle but clearly legible, like premium athletic branding. A small flush-mounted camera lens, roughly 8mm diameter, sits centered on the forehead with a micro LED beside it glowing soft teal. Mid-rep, arms smoothly arcing inward in front of the chest, focused and confident expression, no phone in frame. Warm vibrant gym lighting, side three-quarter angle. Style: Photorealistic premium fitness photography, clean and aspirational, similar to Apple Fitness or Garmin brand imagery. Warm, minimal, high-end. No text overlays.
+```
+
+**Post-Production Steps:**
+1. If the "IronPal" wordmark misfires, use **Inpainting** on the headband side.
+2. Enhance teal LED glow; color-correct teal to `#00E5CC`.
+3. Match warm grading of S4a for montage continuity.
+
+---
+
+### S4c — Dumbbell Curls (IronPal Montage, Weight Label Visible)
+
+**Prompt:**
+
+```
+A photorealistic premium fitness marketing close-up of an athletic male performing a standing dumbbell bicep curl in a modern gym. He wears a sleek matte black fitness headband made from moisture-wicking athletic fabric, with a thin accent stripe in electric teal. The word "IronPal" is printed in clean, modern sans-serif lettering in teal on the side of the headband — subtle but clearly legible, like premium athletic branding. A small flush-mounted camera lens sits centered on the forehead with a micro LED glowing soft teal. Right arm at peak contraction, dumbbell at shoulder height, the round end-cap of the dumbbell facing the camera with a flat circular label area. Tight upper-body composition. Warm vibrant gym lighting. Style: Photorealistic premium fitness photography, similar to Apple Fitness or Garmin brand imagery. No text overlays.
+```
+
+**Post-Production Steps:**
+1. If the "IronPal" wordmark misfires, use **Inpainting** on the headband side.
+2. Composite "16 KG" text onto the dumbbell end-cap label area using an embossed/debossed style (AI will not render this cleanly).
+3. Enhance teal LED glow; color-correct teal to `#00E5CC`.
+
+---
+
+### S4d — Weight Stack POV (Simulated Body-Mounted Camera View)
+
+**Intent:** Simulated first-person view from the IronPal camera — demonstrates what the device sees. Frame is POV, so the logo does NOT appear in the scene; instead a small semi-transparent IronPal icon watermark is added in post as a viewfinder cue.
+
+**Prompt:**
+
+```
+First-person egocentric POV photograph looking at a gym weight stack at eye-level, the selector pin being inserted into the 50 slot by a human hand entering from the lower right of the frame. Numbered metal plates stacked vertically, numbers 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 clearly legible and sharp, the 50 row especially crisp. A yellow or teal selector pin in the hand, being slid into the 50 hole. Warm cinematic gym lighting, slight natural wide-angle distortion consistent with a body-mounted camera, 24mm equivalent. 8K ultra-detailed, photorealistic, sharp focus on weight stack numbers.
+```
+
+**Post-Production Steps:**
+1. If the "50" number isn't crisp, use Leonardo's **Inpainting** on the weight stack area at guidance 9, or overlay clean number labels in post.
+2. Add a small semi-transparent IronPal icon watermark (from `input/images/logo/v4/Geometric teal circle on navy.png`) in the top-left corner of the frame, plus a thin teal "REC" dot — communicates that this is a body-mounted camera view.
+3. Optional: thin rounded-rectangle teal vignette at the edges to reinforce viewfinder framing.
+
+---
+
+### S5 — App Reveal: Athlete on Bench Looking at Phone
+
+**Intent:** Payoff moment — the IronPal app populates automatically with the workout log. The phone screen must show the teal-accented app UI with the IronPal logo in the app header.
+
+**Prompt:**
+
+```
+A photorealistic premium fitness marketing lifestyle image of an athletic male sitting on a gym bench after a set. He wears a sleek matte black fitness headband pushed down around his neck, made from moisture-wicking athletic fabric with a thin accent stripe in electric teal; the word "IronPal" is printed in clean modern sans-serif lettering in teal on the side of the headband — subtle but clearly legible, like premium athletic branding. He holds a modern smartphone with an edge-to-edge display in both hands, looking at the screen with a subtle impressed smile. Keep the phone screen as a simple clean dark interface with a charcoal background and a soft teal glow — do not render detailed UI elements, icons, or typography on the screen (the app UI will be composited in post). Warm amber gym lighting, relaxed accomplished mood, three-quarter angle. Style: Photorealistic premium fitness lifestyle photography, similar to Apple Fitness or Peloton brand imagery. Warm, minimal, high-end. No text overlays.
+```
+
+**Post-Production Steps:**
+1. Design the IronPal app workout-log screen separately in Figma — exercise cards populating with weight/reps/sets, circular teal confidence indicators, IronPal icon as the app logo in the top-left header. Use brand colors (teal `#00E5CC` on charcoal navy `#1A1A2E`).
+2. Composite the Figma app screen onto the phone with perspective transform and a subtle screen glow.
+3. If the "IronPal" wordmark on the headband misfires, use **Inpainting** on that patch.
+4. Color-correct all teal to `#00E5CC`, preserve the warm amber grade.
+
+---
+
+### S6a–c — Social Proof Montage (Diverse Athletes)
+
+**Intent:** Quick three-variant montage showing diversity in body type, gender, gym setting. Each shot 1–2 seconds on screen. All three wear IronPal (headband or cap) with logo visible.
+
+**Shared style rules for all three variants:**
+- Sleek matte black IronPal headband or structured cap, moisture-wicking athletic fabric, thin electric teal accent stripe.
+- The **IronPal Iron Ring logo lockup** — a small bold teal circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed by the "IronPal" wordmark in clean modern sans-serif — is placed on the side of the headband or cap, ~30mm wide (headband, printed) / ~25mm wide (cap, embroidered in teal thread), subtle but clearly legible, like premium Apple or Garmin athletic branding.
+- Small flush-mounted camera lens on forehead/front panel, micro LED beside it glowing soft teal.
+- No phone in frame. Warm premium grading. Same teal `#00E5CC`.
+- Style: Photorealistic premium fitness marketing photography, similar to Apple Fitness / Garmin / Peloton brand imagery. No text overlays.
+
+**S6a Prompt — Female athlete, headband, modern gym:**
+
+```
+A photorealistic premium fitness marketing image of an athletic female mid-kettlebell swing in a modern bright commercial gym with polished concrete floors and large windows. She wears a sleek matte black IronPal fitness headband with a thin electric teal accent stripe. On the side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal — approximately 30mm wide total, subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens on the forehead, micro LED beside it glowing soft teal. Focused powerful expression, kettlebell swinging at hip height. No phone in frame. Warm premium lighting, three-quarter angle. Style: Photorealistic premium fitness photography, Apple Fitness / Garmin brand feel. No text overlays.
+```
+
+**S6b Prompt — Male athlete, cap, gritty industrial gym:**
+
+```
+A photorealistic premium fitness marketing image of a muscular male athlete performing a barbell row in a gritty industrial-style gym with exposed brick walls, rubber flooring, and dramatic overhead lighting. He wears a structured matte black IronPal baseball cap with a thin electric teal accent piping. On the left side panel of the cap, the IronPal Iron Ring logo is embroidered in teal thread (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal — approximately 25mm wide total, clean precise thread work, subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens on the front panel with a micro LED glowing soft teal. Fully focused, no phone in frame. Warm premium grading, low three-quarter angle. Style: Photorealistic premium fitness photography, Apple Fitness / Garmin brand feel. No text overlays.
+```
+
+**S6c Prompt — Older female athlete, headband, boutique studio:**
+
+```
+A photorealistic premium fitness marketing image of an athletic woman in her 50s performing a goblet squat with a dumbbell in a bright clean boutique training studio with white walls and warm wood accents. She wears a sleek matte black IronPal fitness headband with a thin electric teal accent stripe. On the side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal — approximately 30mm wide total, subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens on the forehead, micro LED beside it glowing soft teal. Confident focused expression, strong form. No phone in frame. Warm premium lighting, three-quarter angle. Style: Photorealistic premium inclusive fitness photography, Apple Fitness / Peloton brand feel. No text overlays.
+```
+
+**Post-Production Steps (all three):**
+1. If the "IronPal" wordmark misfires on any variant, use **Inpainting** on just that patch.
+2. Enhance teal LED glows; color-correct all teal to `#00E5CC`.
+3. Consistent warm color grade across all three variants so the montage reads as one campaign.
+
+---
+
+### S7 — End Card Product Beauty Shot
+
+**Intent:** Final beauty shot — both products (headband + cap) plus the camera module laid on a dark slate surface, dramatically lit. Wordmarks must be crisp and readable.
+
+**Prompt:**
+
+```
+A photorealistic premium product hero beauty shot of a sleek matte black IronPal fitness headband and a structured matte black IronPal baseball cap laid side by side on a dark slate surface, with a tiny matte black aluminum camera module placed between them. Both the headband and the cap are made of premium athletic fabric with a thin accent stripe in electric teal. On the side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed by the word "IronPal" in clean modern sans-serif lettering in teal — approximately 30mm wide. The same Iron Ring logo is embroidered in teal thread (#00E5CC) on the side panel of the cap, approximately 25mm wide, clean precise thread work — subtle but clearly legible on both, like premium Apple or Garmin athletic branding. The aluminum camera module has a small flush glass lens, a micro teal LED glowing on its face, and the icon-only Iron Ring mark (teal ring with bottom gap and top lens dot, no wordmark) laser-engraved on its top face, approximately 8mm across. The headband is laid in a natural curve with its branded side facing camera; the cap is placed upright brim angled slightly toward camera. Dramatic single-source rim lighting from the upper left, dark moody background fading to black, soft teal underglow from the LEDs. Style: Photorealistic premium product photography, clean and minimal, similar to Apple hardware launch imagery. No text overlays. Leave clean negative space on the right side of the frame for end-card typography to be added later in post.
+```
+
+**Post-Production Steps:**
+1. If the "IronPal" wordmark on headband or cap misfires, use **Inpainting** on just that patch.
+2. All teal elements color-corrected to `#00E5CC`.
+3. Add a subtle teal underglow from each LED to reinforce the "always ready" feel.
+4. Add end-card tagline + CTA typography in the negative space (handled in the video editor, not in Leonardo).
+
+---
+
+### Cross-Cutting Notes for Video Key Frames
+
+- **Character consistency across S4a, S4c, S5:** use Leonardo's **Character Reference** feature. Lock the male athlete's face in S4a, then reuse as Character Reference (strength ~0.4) for S4c and S5. Per the video plan, minor variation is acceptable in the montage but preferred to be consistent in the payoff shot (S5).
+- **Character consistency across S4b, S6a, S6c:** similarly lock the female athlete's face across shots where she appears. For S6a vs. S4b, if the character must differ (to read as "different user"), generate without Character Reference.
+- **Image-to-video handoff:** once a key frame is approved, upload directly to Luma Dream Machine / Runway Gen-4 / Kling AI as the image-to-video starting frame. Expected generation attempts per shot: 3–8 (see video-production-execution-plan.md §3 Step 3).
+- **Logo compositing pipeline:** batch all post-production logo compositing in a single Photoshop session per shot family — ensures consistent logo size, perspective, color, and fabric/embroidery texture treatment across the entire video.
+
+---
+
 ## Generation Workflow Summary
 
 ### Step-by-step process for the full set:
 
 1. **Set up Leonardo AI defaults:** Phoenix model, PhotoReal ON (Cinematic), Alchemy ON, negative prompt loaded
-2. **Upload Style Reference:** `input/images/logo/v4/Minimalist IRONPAL logo design.png` — keep this loaded as the Style Reference for all generations at the strengths noted per prompt
+2. **Upload Style Reference:** `input/images/logo/v4/Geometric teal circle on navy.png` — keep this loaded as the Style Reference for all generations at the strengths noted per prompt
 3. **Generate Product Showcase images first** (Prompts 1-3) — these are simpler single-scene compositions
 4. **Generate In-Action scenes** (Prompts 4-9) — remember to generate main scene + POV as separate images per the two-image workflow
 5. **Generate Lifestyle scenes** (Prompts 10-14) — generate split-frame and triptych elements separately
