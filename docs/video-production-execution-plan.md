@@ -90,26 +90,45 @@ When generating images of the competitor workout app for shots S1, S2a-S2c, foll
 
 1. **Voiceover script (final):**
 
-   > "You go to the gym to train. Not to type in every rep, every weight, every set. IronPal sees every exercise, reads every weight, counts every rep — automatically. Your workout is logged before you leave the gym."
+   The video is 75-90 seconds. The voiceover is broken into **5 narration blocks** placed throughout, totaling ~35-40 seconds of narration. The remaining ~40-50 seconds are music + visuals + sound design only, giving the video breathing room and letting the imagery speak.
 
-   This is 12 seconds of narration. Placement: begins at the transition beat [0:15] and runs through the IronPal montage. Alternative: split into two chunks — the first sentence at [0:15] during transition, the rest at [0:50] over the app reveal.
+   | Block | Timecode | Duration | Section | Script | Notes |
+   |---|---|---|---|---|---|
+   | VO-1 | 0:00-0:08 | ~8s | "Old way" opening | *"Every set. Every rep. Every weight. You stop training… to start typing."* | Delivered deadpan/flat over the frustration montage. Short punchy sentences synced with typing SFX. Sets up the problem. |
+   | VO-2 | 0:15-0:22 | ~7s | Transition + IronPal intro | *"What if you never had to log another workout? This is IronPal."* | Tone shifts — warmer, confident. Lands on the headband reveal (S3). "This is IronPal" syncs with teal LED activation. |
+   | VO-3 | 0:30-0:42 | ~12s | IronPal montage (how it works) | *"A camera you wear. It sees every exercise. Reads every weight. Counts every rep — automatically."* | Narrates over S4a-S4d. Each claim aligns with a visual: exercise recognition → weight label → rep counting. Calm, confident cadence. |
+   | VO-4 | 0:48-0:56 | ~8s | App reveal + payoff | *"When you're done, your workout is already logged. Every detail. Zero effort."* | Lands over S5 (athlete looking at phone with completed workout). Emotional payoff moment. |
+   | VO-5 | 0:62-0:72 | ~10s | Social proof + CTA | *"Join thousands of athletes who train without typing. Back IronPal on Kickstarter — and never log a workout again."* | Delivered over S6a-c social proof montage into end card. Rising energy, clear call to action. |
+
+   **Total narration:** ~45 seconds across 5 blocks.  
+   **Silent/music-only gaps:** 0:08-0:15 (7s, frustration visuals breathe), 0:22-0:30 (8s, IronPal montage builds with music), 0:42-0:48 (6s, weight stack POV + transition to app), 0:56-0:62 (6s, music crescendo before social proof), 0:72-0:80 (8s, end card holds with logo + music).
+
+   > **Pacing principle:** Never more than 12 seconds of continuous narration. Never more than 8 seconds of silence. The VO and music trade off — when VO is present, music dips; when VO is absent, music carries the energy.
 
 2. **On-screen text cards:**
-   - App workout log entries: "Bench Press / 80 kg / 3×10 ✓", "Cable Fly / 25 kg / 3×12 ✓", "Dumbbell Curl / 16 kg / 3×15 ✓"
-   - Workout summary stats: "Total Volume: 4,260 kg · 3 Exercises · 9 Sets · 38 min"
-   - End card: "Your workout, logged before you leave." / "Back us on Kickstarter" / IronPal logo
+   - *0:00-0:08 (with VO-1):* No on-screen text — VO carries the message. Visuals of app typing are self-explanatory.
+   - *0:30-0:42 (with VO-3):* Subtle teal text labels appear as VO names each capability: "SEES EXERCISES" → "READS WEIGHTS" → "COUNTS REPS" — each appearing for ~3 seconds, timed to the VO line.
+   - *0:48-0:56 (with VO-4):* App workout log entries populate on the phone screen: "Bench Press / 80 kg / 3×10 ✓", "Cable Fly / 25 kg / 3×12 ✓", "Dumbbell Curl / 16 kg / 3×15 ✓"
+   - *0:56-0:62 (music crescendo):* Workout summary stats float up: "Total Volume: 4,260 kg · 3 Exercises · 9 Sets · 38 min"
+   - *0:72-0:80 (end card):* "Your workout, logged before you leave." / "Back us on Kickstarter" / IronPal logo
 
 3. **Music brief:**
-   - 0:00-0:15 ("old way" — Fitbod-style manual logging): Slightly off-beat, muted, lo-fi electronic. A sense of drudgery and interruption. Emphasize the stop-start rhythm of workout → phone → type → workout.
-   - 0:15-0:20 (transition): A beat drop / silence / tonal shift.
-   - 0:20-0:55 ("IronPal way" + payoff): Confident, rising electronic beat. Clean, motivational, no lyrics. Builds to a crescendo at app reveal [0:40-0:55].
-   - 0:55-0:80 (social proof + end card): Beat sustains, then fades to a final hit with the logo.
+   - 0:00-0:08 (VO-1 over "old way"): Music low and muted, underscore only — VO is the focus. Lo-fi electronic, muted, drudgery mood.
+   - 0:08-0:15 ("old way" visuals, no VO): Music comes up slightly — still muted lo-fi but carrying the energy. Frustration montage builds.
+   - 0:15-0:20 (transition, VO-2 starts): Beat drop / silence / tonal shift. Music pulls back for the VO reveal.
+   - 0:20-0:30 (IronPal montage, no VO): Music rises — confident, warm electronic beat builds. This is a visual-only energy ramp.
+   - 0:30-0:42 (VO-3 over montage): Music dips to bed level, VO narrates how it works.
+   - 0:42-0:48 (weight stack POV + transition, no VO): Music swells — building toward the payoff.
+   - 0:48-0:56 (VO-4 over app reveal): Music drops to emotional bed — the payoff moment. VO delivers the "zero effort" line.
+   - 0:56-0:62 (music crescendo, no VO): Music builds to a peak — transition into social proof.
+   - 0:62-0:72 (VO-5 over social proof + CTA): Music sustains energy, VO delivers CTA.
+   - 0:72-0:80 (end card): Music resolves to a final hit with the logo. No VO.
 
 ### Tasks
 
 | # | Task | Owner | Output |
 |---|---|---|---|
-| 1.1 | Write voiceover script (2 variants: single-block and split) | SCW | Script document |
+| 1.1 | Write voiceover script — 5 narration blocks with timecodes (VO-1 through VO-5) | SCW | Script document |
 | 1.2 | Write all on-screen text strings (app UI, end card) | SCW | Text sheet |
 | 1.3 | Write music brief for AI music generation or stock search | SCW + CD | Music brief |
 | 1.4 | CD reviews and approves all copy | CD | Approved script |
@@ -268,8 +287,8 @@ Use approved key frame images as **image-to-video** inputs in Luma AI Dream Mach
 
 - Hire a voice actor via Fiverr, Voices.com, or similar platform.
 - Brief: Male or female voice, age 25-35, warm and confident tone, slight conversational feel — not "radio announcer" or "movie trailer." Think: tech product launch narration (Apple keynote energy but slightly more personal).
-- Deliver the approved script. Request 2-3 takes with slight variation in pacing.
-- Budget: $50-150 for a 15-second read.
+- Deliver the approved script (5 blocks: VO-1 through VO-5, ~45 seconds total). Request 2-3 takes per block with slight variation in pacing.
+- Budget: $100-250 for a 45-second multi-block read.
 
 ### Option B: AI Voiceover (Fallback)
 
@@ -284,7 +303,7 @@ Use approved key frame images as **image-to-video** inputs in Luma AI Dream Mach
 |---|---|---|---|
 | 5.1 | Post voice actor brief on Fiverr/Voices.com (or generate via ElevenLabs) | SCW | Job listing / ElevenLabs output |
 | 5.2 | Select voice actor and send approved script | SCW | VO contract |
-| 5.3 | Receive and review VO recordings (or iterate on AI VO) | SCW + CD | 2-3 VO takes |
+| 5.3 | Receive and review VO recordings (or iterate on AI VO) — review each of the 5 blocks independently | SCW + CD | 2-3 VO takes per block |
 | 5.4 | Select final VO take, export clean WAV | SCW | Final voiceover file |
 
 ---
@@ -335,16 +354,21 @@ Generate AI music using Suno AI or Udio, guided by the music brief from Step 1.
 2. Assemble shots in sequence order following the shot list:
    - S1 → S2a → S2b → S2c → S3 (transition) → S4a → S4b → S4c → S4d → S5 → S6a-c → S7 → End card
 3. Rough-time each shot to the music beats. The transition at [0:15-0:20] must align with the music shift.
-4. Place voiceover at the planned timecodes.
+4. Place voiceover blocks (VO-1 through VO-5) at planned timecodes. Verify each block syncs with its target visuals:
+   - VO-1 (0:00-0:08) over S1/S2a frustration shots
+   - VO-2 (0:15-0:22) over S3 headband reveal
+   - VO-3 (0:30-0:42) over S4a-S4d IronPal montage
+   - VO-4 (0:48-0:56) over S5 app reveal
+   - VO-5 (0:62-0:72) over S6a-c social proof into end card
 5. Export rough cut for CD review.
 
 #### 7.2 — Color Grading (Day 9-10)
 
-1. **"Old way" / Fitbod-style manual logging section (0:00-0:15):** Apply a cool, desaturated LUT. Lower saturation by 20-30%. Add subtle blue tint. The mood should feel dull and frustrating — the tedious cycle of workout-then-type. The phone screen should be the brightest element in frame, pulling attention to the manual input UI.
-2. **Transition (0:15-0:20):** Grade the headband close-up warm — shift color temperature toward golden/amber. The teal LED should pop against the warm background.
-3. **"IronPal way" section (0:20-0:55):** Warm, vibrant grading. Slightly lifted shadows, rich skin tones, teal accents preserved. The mood should feel alive and exciting.
-4. **Social proof montage (0:55-0:70):** Consistent warm grading across the three athlete shots. Teal LED glow normalized.
-5. **End card (0:70-0:80):** Dark, product-photography look. Clean blacks, teal logo crisp.
+1. **\"Old way\" / manual logging section (0:00-0:15, VO-1 at 0:00-0:08 then music-only 0:08-0:15):** Apply a cool, desaturated LUT. Lower saturation by 20-30%. Add subtle blue tint. The mood should feel dull and frustrating — the tedious cycle of workout-then-type. The phone screen should be the brightest element in frame, pulling attention to the manual input UI.
+2. **Transition (0:15-0:22, VO-2 delivers \"This is IronPal\"):** Grade the headband close-up warm — shift color temperature toward golden/amber. The teal LED should pop against the warm background.
+3. **\"IronPal way\" section (0:22-0:56, VO-3 at 0:30-0:42, VO-4 at 0:48-0:56):** Warm, vibrant grading. Slightly lifted shadows, rich skin tones, teal accents preserved. The mood should feel alive and exciting.
+4. **Social proof montage (0:56-0:72, VO-5 at 0:62-0:72):** Consistent warm grading across the three athlete shots. Teal LED glow normalized.
+5. **End card (0:72-0:80, music-only):** Dark, product-photography look. Clean blacks, teal logo crisp.
 
 #### 7.3 — Compositing & Overlay (Day 10-11)
 
@@ -362,7 +386,7 @@ Generate AI music using Suno AI or Udio, guided by the music brief from Step 1.
    - A soft electronic "activation" chime for the teal LED lighting up
    - UI swoosh sounds for the app cards populating
    - Ambient gym sounds (low-level, mixed under the music)
-2. Balance voiceover, music, and sound effects. VO sits on top, music bed underneath, SFX as accents.
+2. Balance voiceover, music, and sound effects. VO sits on top during narration blocks (VO-1 through VO-5); music ducks -6dB under VO. During VO-free gaps (0:08-0:15, 0:22-0:30, 0:42-0:48, 0:56-0:62, 0:72-0:80), music comes to full level. SFX as accents throughout.
 
 #### 7.5 — Final Cut & Export (Day 12)
 
@@ -570,12 +594,13 @@ This video is primarily a **motion graphics piece**. The kinetic typography segm
 
 ## 6. Voiceover Tone Mismatch
 
-**Challenge:** The VO must sound confident and aspirational but not salesy or corporate. AI voices can sound robotic; cheap human VO can sound like a commercial.
+**Challenge:** The VO spans 5 blocks with different emotional registers — VO-1 (deadpan/flat frustration), VO-2 (warm reveal), VO-3 (calm/confident explanation), VO-4 (emotional payoff), VO-5 (energetic CTA). The voice actor must modulate tone across blocks while maintaining a cohesive voice. AI voices may struggle with this range.
 
 **Mitigation:**
-- For human VO: Request audition clips before hiring. Brief the actor with reference examples (Apple keynote narration style, but warmer and slightly conversational).
-- For AI VO (ElevenLabs): Test 5-6 different voices. Adjust speed to 0.9x for a more deliberate, confident cadence. Add manual pauses in the script with "..." for natural breathing.
+- For human VO: Request audition clips before hiring. Brief the actor with reference examples (Apple keynote narration style, but warmer and slightly conversational). Provide tone notes per block (deadpan → warm → confident → emotional → energetic). Record each block separately to allow different energy levels.
+- For AI VO (ElevenLabs): Generate each block independently with adjusted settings — slower/flatter for VO-1, warmer for VO-2/3, more emphatic for VO-4/5. Adjust speed to 0.9x for a more deliberate cadence. Add manual pauses in the script with \"...\" for natural breathing.
 - Record both options (AI and human) and compare in context against the rough cut. Pick the one that fits the edit's energy.
+- **Test each block in isolation and in sequence** — a block may sound fine alone but feel jarring in context.
 
 ## 7. Timeline Slippage (AI Generation Bottlenecks)
 
