@@ -239,3 +239,9 @@ it produce almost exactyl looking screenshot of the Fitbod app, which is a copyr
 modify /home/quirkfly/job_stuff/prj/ironpal/docs/video-production-execution-plan.md as follows:
 
 the document completely lacks AI tools recommended to be used for voiceover generation. I need to add a section that recommends specific AI tools (such as ElevenLabs) for generating high-quality voiceovers for the video content. The section should include details on how to use the chosen AI tool, including tips for selecting the right voice, adjusting parameters for tone and pacing, and ensuring that the generated voiceover aligns with the desired emotional register for each block of the video.
+
+---
+
+modify /home/quirkfly/job_stuff/prj/ironpal/docs/video-production-execution-plan.md
+
+
