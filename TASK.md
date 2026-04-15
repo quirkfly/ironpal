@@ -238,14 +238,4 @@ it produce almost exactyl looking screenshot of the Fitbod app, which is a copyr
 
 modify /home/quirkfly/job_stuff/prj/ironpal/docs/video-production-execution-plan.md as follows:
 
-Target output:
-
-Video #2: 75-90 seconds, hero campaign video
-
-Step 1: Scriptwriting & Voiceover Text
-
-Voiceover script (final): This is 12 seconds of narration. Placement: begins at the transition beat [0:15] and runs through the IronPal montage.
-
-Step 3: AI Video Generation
-
-PROBLEM: If the voiceover starts of 0:15 and its duration is 12 seconds, it will end at 0:27. However, the whole video is 75-90 seconds long, so the voiceover will only cover a small portion of the video. To ensure that the voiceover effectively supports the entire video, we need to either extend the duration of the voiceover or strategically place additional narration throughout the video to maintain engagement and provide context for the visuals.
+the document completely lacks AI tools recommended to be used for voiceover generation. I need to add a section that recommends specific AI tools (such as ElevenLabs) for generating high-quality voiceovers for the video content. The section should include details on how to use the chosen AI tool, including tips for selecting the right voice, adjusting parameters for tone and pacing, and ensuring that the generated voiceover aligns with the desired emotional register for each block of the video.

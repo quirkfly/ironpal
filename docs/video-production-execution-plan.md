@@ -290,21 +290,140 @@ Use approved key frame images as **image-to-video** inputs in Luma AI Dream Mach
 - Deliver the approved script (5 blocks: VO-1 through VO-5, ~45 seconds total). Request 2-3 takes per block with slight variation in pacing.
 - Budget: $100-250 for a 45-second multi-block read.
 
-### Option B: AI Voiceover (Fallback)
+### Option B: AI Voiceover (Recommended for MVP / Solo Founder)
 
-- Use ElevenLabs with a professional-sounding preset voice.
-- Generate the script with natural pacing. Review for robotic artifacts.
-- Iterate on speed, emphasis, and pauses until natural.
-- Budget: Included in subscription (~$22/mo).
+For a solo founder on a tight budget and timeline, AI voiceover is the practical first choice. Generate all 5 blocks in-house, iterate rapidly, and only hire a human VO artist if the AI output isn't good enough after tuning.
+
+#### Recommended AI Voiceover Tools
+
+| Tool | Tier / Cost | Best For | Key Features |
+|---|---|---|---|
+| **ElevenLabs** (Primary) | Creator plan ~$22/mo (100K chars/mo) | Primary VO generation — best-in-class naturalness, emotional range, and fine-grained control | Voice cloning, voice design, per-sentence emotion tags, speed/stability/similarity sliders, Projects mode for long-form with per-block settings |
+| **PlayHT 2.0** (Alternative) | Creator plan ~$30/mo | Fallback if ElevenLabs voices don't fit the brand tone | Ultra-realistic voices, emotion presets (happy, sad, angry, calm), SSML support for fine pacing control |
+| **Speechify Studio** (Alternative) | ~$10-29/mo | Quick drafts and A/B testing of different voice styles | 200+ voices, simple UI, good for rapid prototyping before committing to a voice |
+
+**Primary recommendation: ElevenLabs.** It offers the best combination of voice quality, emotional control, and per-block parameter tuning needed for this project.
+
+#### ElevenLabs Workflow — Step by Step
+
+**1. Voice Selection**
+
+Browse ElevenLabs' Voice Library (community voices) or use Voice Design to create a custom voice. Filters to apply:
+
+| Criterion | Recommended Setting |
+|---|---|
+| Gender | Male or female — test both. Male tends to register as "tech product," female as "approachable/warm." Either works for IronPal. |
+| Age | 25-35 — young adult, energetic but not juvenile |
+| Accent | Neutral American English or light British — avoid strong regional accents |
+| Use case | "Narration" or "Marketing" |
+| Style | Conversational, confident, warm — NOT corporate/announcer/dramatic |
+
+**Recommended starting voices (ElevenLabs library):**
+- **"Josh"** — Male, warm, conversational, tech-product narration feel
+- **"Rachel"** — Female, clear, confident, slight warmth
+- **"Adam"** — Male, deep, authoritative but approachable
+- **"Aria"** — Female, modern, energetic, good for CTA delivery
+
+Generate all 5 blocks with 2-3 different voices and compare them against the rough cut before committing.
+
+**2. Per-Block Parameter Settings**
+
+Each VO block has a different emotional register. Adjust ElevenLabs' sliders per block:
+
+| Block | Emotional Register | Stability | Similarity Boost | Style Exaggeration | Speed | Notes |
+|---|---|---|---|---|---|---|
+| **VO-1** (0:00-0:08) — Frustration opener | Deadpan, flat, slightly weary | 0.70 | 0.80 | 0.20 (low) | 0.90x (slower) | Deliberately understated. Short sentences. Add "..." pauses between phrases in the script: *"Every set... Every rep... Every weight... You stop training… to start typing."* |
+| **VO-2** (0:15-0:22) — Warm reveal | Warm, confident, slight wonder | 0.50 | 0.75 | 0.45 (medium) | 1.00x (normal) | Tone shift is critical — must feel like a new chapter. "This is IronPal" should land with quiet conviction, not hype. |
+| **VO-3** (0:30-0:42) — How it works | Calm, explanatory, steady confidence | 0.60 | 0.80 | 0.30 (low-medium) | 0.95x (slightly slow) | Measured cadence. Each feature claim gets its own breath: *"It sees every exercise. [pause] Reads every weight. [pause] Counts every rep — automatically."* |
+| **VO-4** (0:48-0:56) — Emotional payoff | Warm pride, satisfaction | 0.45 | 0.75 | 0.50 (medium-high) | 0.90x (slower) | The most emotionally resonant block. "Zero effort" should land with emphasis. Allow the voice to soften slightly — this is the "aha" moment. |
+| **VO-5** (0:62-0:72) — CTA | Energetic, forward-leaning, direct | 0.55 | 0.80 | 0.55 (medium-high) | 1.05x (slightly fast) | Rising energy. "Back IronPal on Kickstarter" must sound like an invitation, not a sales pitch. "Never log a workout again" is the final hook — let it ring. |
+
+> **Stability slider:** Lower = more expressive/emotional variation. Higher = more consistent/flat. For VO-1 (deadpan), keep higher. For VO-4/5 (emotional), keep lower.
+>
+> **Style Exaggeration slider:** Controls how much the voice leans into emotional coloring. Keep low for informational blocks (VO-1, VO-3), push higher for emotional/CTA blocks (VO-4, VO-5).
+
+**3. Script Formatting for Natural Delivery**
+
+Format the script with explicit pacing cues before pasting into ElevenLabs:
+
+```
+VO-1:
+Every set... Every rep... Every weight...
+You stop training — to start typing.
+
+VO-2:
+What if... you never had to log another workout?
+This is IronPal.
+
+VO-3:
+A camera you wear.
+It sees every exercise.
+Reads every weight.
+Counts every rep — automatically.
+
+VO-4:
+When you're done...
+your workout is already logged.
+Every detail. Zero effort.
+
+VO-5:
+Join thousands of athletes who train without typing.
+Back IronPal on Kickstarter —
+and never log a workout again.
+```
+
+**Tips:**
+- Put each sentence on its own line — ElevenLabs treats line breaks as natural pause points.
+- Use "..." for longer pauses (0.3-0.5s) and "—" for shorter dramatic pauses.
+- Use ElevenLabs' **Projects** mode (not the simple text-to-speech box) — it lets you regenerate individual sentences without re-generating the entire block.
+- Generate each block as a **separate project** to apply different voice settings per block.
+
+**4. Quality Checklist**
+
+Before approving an AI-generated VO take, check:
+
+- [ ] No robotic artifacts — no metallic buzz, clipping, or unnatural vowel stretching
+- [ ] Pacing feels human — no rushed words, no unnaturally long pauses
+- [ ] Emphasis lands on the right words: "IronPal" (VO-2), "automatically" (VO-3), "Zero effort" (VO-4), "never" (VO-5)
+- [ ] Tone shifts between blocks are audible but not jarring — VO-1→VO-2 should feel like sunrise, not a jump cut
+- [ ] Total narration duration is within target: ~45 seconds (±3s)
+- [ ] Each block fits its timecode window when placed against the rough cut
+- [ ] No awkward word pronunciations (test: "IronPal" — should be "EYE-run-pal," not "EYE-ron-pal")
+
+**5. Custom Pronunciation**
+
+Add pronunciation overrides in ElevenLabs for brand terms:
+- **IronPal** → `<phoneme alphabet="ipa" ph="aɪɹənpæl">IronPal</phoneme>` (or simply spell it as "Iron Pal" with a space if the model mispronounces)
+- **Kickstarter** → usually fine, but verify
+- **kg** → generate as "kilograms" or "kg" depending on which sounds more natural at speed
+
+**6. Export Settings**
+
+- Export each block as a separate WAV file (48kHz, 24-bit) for maximum editing flexibility
+- Naming convention: `vo-1-frustration-v3.wav`, `vo-2-reveal-v2.wav`, etc.
+- Keep 0.5s of silence at the head and tail of each file for clean editing in the timeline
+
+#### Cost Estimate (AI Voiceover)
+
+| Item | Cost |
+|---|---|
+| ElevenLabs Creator plan (1 month) | $22 |
+| Estimated character usage: ~45s of narration × ~150 words × 5 chars/word × 5-10 iterations = 18,750-37,500 chars | Well within 100K/mo limit |
+| **Total** | **$22** |
+
+> If the AI voiceover quality is acceptable after tuning, this saves $80-230 compared to hiring a human voice actor. If not, the AI generations serve as an excellent reference/temp track for briefing a human VO artist.
 
 ### Tasks
 
 | # | Task | Owner | Output |
 |---|---|---|---|
-| 5.1 | Post voice actor brief on Fiverr/Voices.com (or generate via ElevenLabs) | SCW | Job listing / ElevenLabs output |
-| 5.2 | Select voice actor and send approved script | SCW | VO contract |
-| 5.3 | Receive and review VO recordings (or iterate on AI VO) — review each of the 5 blocks independently | SCW + CD | 2-3 VO takes per block |
-| 5.4 | Select final VO take, export clean WAV | SCW | Final voiceover file |
+| 5.1 | Set up ElevenLabs account (Creator plan), test 3-4 voices with VO-2 script ("This is IronPal") as audition line | SCW | Shortlisted voices |
+| 5.2 | Generate all 5 blocks with top 2 voice candidates, adjust per-block parameters per the settings table above | SCW | 10 VO drafts (2 voices × 5 blocks) |
+| 5.3 | Place draft VO blocks against rough cut, evaluate sync and tone — select winning voice | SCW + CD | Voice selection |
+| 5.4 | Iterate on winning voice: re-generate weak blocks, fine-tune stability/speed/style per block | SCW | Refined VO blocks |
+| 5.5 | Run quality checklist on all 5 final blocks (artifacts, pacing, emphasis, pronunciation) | SCW + CD | QC pass |
+| 5.6 | If AI VO quality is insufficient: post human voice actor brief on Fiverr/Voices.com using AI drafts as reference/temp track | SCW | Job listing (fallback) |
+| 5.7 | Export final VO blocks as separate WAV files (48kHz, 24-bit) | SCW | 5 WAV files |
 
 ---
 
