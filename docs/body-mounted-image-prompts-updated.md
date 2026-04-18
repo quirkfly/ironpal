@@ -601,16 +601,65 @@ All of these shots feature the IronPal product, so the **IronPal wordmark** must
 
 Apply the same negative prompt defined at the top of this document.
 
+### Locked Product Description (paste into every shot prompt below)
+
+**Lessons learned from earlier batches:**
+- The original verbose prose prompts (S3 first batch) produced *high quality* but *inconsistent* products across shots.
+- A heavily compressed spec-sheet rewrite (`ONE 8mm lens / ONE LED / NO ® NO ™ / letters exactly I-r-o-n-P-a-l`) crashed image quality — Leonardo responds badly to constraint-stacked, capitalized rule lists. The marketing-prose tone is what makes the wordmark render cleanly in the first place.
+
+**The right approach is a two-layer consistency strategy:**
+
+1. **Prompt layer — prose, not spec.** Use the short prose product description below. It bakes the critical constraints (camelCase wordmark, single lower-edge stripe, open ring with gap-bottom dot-top, center-front lens) into natural marketing language so Leonardo stays in the mode that produces clean fabric, lighting, and typography.
+2. **Reference layer — Image-to-Image.** Cross-shot product consistency is enforced by the canonical reference image (`_canonical/headband_reference.jpg` from the best S3 generation), used as Image-to-Image input for every downstream shot at strength 0.35. This is what actually locks the geometry. The prompt can't carry that load.
+
+Do not try to enforce consistency by adding more rules to the prompt. Add references instead.
+
+**HEADBAND PRODUCT DESCRIPTION (paste verbatim, ~700 chars):**
+
+```
+A sleek matte black athletic headband made of moisture-wicking fitness fabric, with a single thin electric teal accent stripe running horizontally along the lower edge of the headband. A small flush-mounted camera lens, roughly 8mm in diameter, sits centered on the front of the headband, with one tiny teal LED glowing softly just to the right of the lens. On the right side of the headband, the IronPal logo is printed in electric teal: a small open circular ring with a clean gap at the bottom and a solid teal dot at the top (the camera lens mark), followed by the wordmark "IronPal" in clean modern sans-serif lettering in teal — written in camelCase exactly as IronPal, never in all capitals. Subtle but clearly legible, like premium Apple or Garmin athletic branding.
+```
+
+**CAP PRODUCT DESCRIPTION (paste verbatim, ~700 chars):**
+
+```
+A structured matte black baseball cap with a curved brim and athletic fit. A small flush-mounted camera lens, roughly 8mm in diameter, sits centered on the front panel, with one tiny teal LED glowing softly just to the right of the lens. On the left side panel of the cap, the IronPal logo is embroidered in electric teal thread: a small open circular ring with a clean gap at the bottom and a solid teal dot at the top (the camera lens mark), followed by the wordmark "IronPal" in clean modern sans-serif lettering in teal — written in camelCase exactly as IronPal, never in all capitals. Clean precise thread work, subtle but clearly legible, like premium Apple or Garmin athletic branding.
+```
+
+> The phrase `written in camelCase exactly as IronPal, never in all capitals` is doing the heavy lifting on casing without breaking the prose tone. Combined with the Style Reference (icon-only ring, no wordmark) and Image-to-Image canonical reference, this reliably produces the correct wordmark.
+
+### Cross-Shot Product Consistency Workflow (mandatory)
+
+Independent text-prompt generations will never produce a consistent product across S3, S4a, S4b, S4c, S5, S6a–c, S7. Lock the product appearance once and reuse:
+
+1. **Generate S3 first** with the locked spec above. Generate 4–8 variations and pick the **single best frame** where the headband matches the spec exactly (open ring with lens dot, single lower stripe, clean camelCase "IronPal" with no `®`).
+2. **Save that frame as `input/kickstarter/storyboarding/_canonical/headband_reference.jpg`** — this becomes the locked product reference.
+3. **For every subsequent headband shot (S4a, S4b, S4c, S5, S6a, S6c)**, upload the canonical reference to Leonardo as **Image-to-Image** at strength `0.30–0.40` (low enough to allow new pose/scene composition, high enough to anchor the headband geometry, stripe position, logo placement, and material). Keep the `Geometric teal circle on navy.png` Style Reference at 0.2 in addition.
+4. **For the cap shots (S6b, S7)**, do the same with a separately-locked `cap_reference.jpg` once a clean cap generation is approved.
+5. **For S7 (both products on slate)**, upload BOTH canonical references — Leonardo Image-to-Image accepts multiple. Strength 0.25 each.
+6. **Inpainting recovery**: if a downstream generation drifts (wordmark misfires, ring goes filled-style, extra stripe appears), run Leonardo Inpainting on just the offending patch using the canonical reference as Image-to-Image input — do not regenerate the whole frame, do not rewrite the prompt.
+
+This is the single most important workflow change for product consistency. Skipping it will produce a video where the headband visibly mutates between shots.
+
 ---
 
 ### S3 — Headband Reveal from Gym Bag
 
 **Intent (from video plan):** Transition moment from "Old Way" (cool/desaturated) to "IronPal Way" (warm). Athlete's hand pulls the headband from a black gym bag; teal LED lights up.
 
-**Prompt:**
+**S3 is the *anchor shot* for the entire video** — the canonical headband reference comes from this generation. Generate first, pick the cleanest frame, save as `_canonical/headband_reference.jpg`, then use as Image-to-Image input for all downstream headband shots.
+
+**Generation Setup:**
+- Style Reference: `Geometric teal circle on navy.png` at strength 0.2
+- Image-to-Image: none (S3 is the anchor — no upstream reference exists yet)
+- Generations: 8 (need a strong winner)
+
+**Prompt — paste the HEADBAND PRODUCT DESCRIPTION (above) verbatim, then this scene block:**
 
 ```
-A photorealistic premium product marketing hero image of an athletic male hand reaching into an open matte black nylon gym bag and lifting out a sleek modern fitness headband. The headband is matte black with a thin accent stripe in electric teal, made from moisture-wicking athletic fabric. On the right side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (representing the camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal. The full logo lockup is approximately 30mm wide, centered on the side panel — subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens, roughly 8mm diameter, is centered on the forehead area of the headband, with a micro LED beside it glowing soft teal, just beginning to light up as the headband is lifted into the warm gym light. Shot from a slight three-quarter angle showing both the front lens and the side branding. Warm golden hour gym lighting spilling across the fabric, clean soft bokeh from the gym background. Style: Photorealistic product photography with premium studio control — clean, minimal, premium feel, similar to Apple or Garmin marketing. Suitable for a Kickstarter campaign hero moment. No text overlays.
+[PASTE HEADBAND PRODUCT DESCRIPTION VERBATIM HERE]
+
+Scene: A photorealistic premium product marketing hero image of an athletic male hand reaching into an open matte black nylon gym bag and lifting out the headband described above. The micro LED beside the camera lens is just beginning to glow soft teal as the headband is lifted into the warm gym light. Shot from a slight three-quarter angle showing both the front lens and the right side panel with its logo. Warm golden hour gym lighting spilling across the fabric, clean soft bokeh from the gym background. Style: Photorealistic product photography with premium studio control — clean, minimal, premium feel, similar to Apple or Garmin marketing. Suitable for a Kickstarter campaign hero moment. No text overlays.
 ```
 
 **Post-Production Steps:**
@@ -622,10 +671,17 @@ A photorealistic premium product marketing hero image of an athletic male hand r
 
 ### S4a — Bench Press with Headband (IronPal Montage)
 
-**Prompt:**
+**Generation Setup:**
+- Style Reference: `Geometric teal circle on navy.png` at strength 0.2
+- **Image-to-Image: `_canonical/headband_reference.jpg` at strength 0.35** (locks the headband geometry, stripe placement, and logo treatment from the approved S3 frame)
+- Generations: 5–8
+
+**Prompt — paste the HEADBAND PRODUCT DESCRIPTION verbatim, then this scene block:**
 
 ```
-A photorealistic premium fitness marketing image of an athletic male performing a barbell bench press in a modern commercial gym. He wears a sleek matte black fitness headband made from moisture-wicking athletic fabric, with a thin accent stripe in electric teal. On the right side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (representing the camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal. The full logo lockup is approximately 30mm wide, centered on the side panel — subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens, roughly 8mm diameter, is centered on the forehead, with a micro LED next to it glowing soft teal. Focused confident expression, bar at chest level, elbows tucked, no phone anywhere in frame. Warm vibrant gym lighting with soft atmospheric dust. Three-quarter angle from the athlete's right. Style: Photorealistic premium fitness photography, clean and aspirational, similar to Apple Fitness or Garmin brand imagery. Warm, minimal, high-end. No text overlays.
+[PASTE HEADBAND PRODUCT DESCRIPTION VERBATIM HERE]
+
+Scene: A photorealistic premium fitness marketing image of an athletic male performing a barbell bench press in a modern commercial gym. He wears the IronPal headband described above. Focused confident expression, bar at chest level, elbows tucked, no phone anywhere in frame. The micro teal LED beside the camera lens is glowing softly. Warm vibrant gym lighting with soft atmospheric dust. Three-quarter angle from the athlete's right showing the right side panel of the headband and its logo. Style: Photorealistic premium fitness photography, clean and aspirational, similar to Apple Fitness or Garmin brand imagery. Warm, minimal, high-end. No text overlays.
 ```
 
 **Post-Production Steps:**
@@ -637,10 +693,17 @@ A photorealistic premium fitness marketing image of an athletic male performing 
 
 ### S4b — Cable Fly with Headband (IronPal Montage)
 
-**Prompt:**
+**Generation Setup:**
+- Style Reference: `Geometric teal circle on navy.png` at strength 0.2
+- **Image-to-Image: `_canonical/headband_reference.jpg` at strength 0.35**
+- Generations: 5–8
+
+**Prompt — paste the HEADBAND PRODUCT DESCRIPTION verbatim, then this scene block:**
 
 ```
-A photorealistic premium fitness marketing image of an athletic female performing a standing cable fly at a dual cable crossover machine in a modern gym. She wears a sleek matte black fitness headband made from moisture-wicking athletic fabric, with a thin accent stripe in electric teal. The word "IronPal" is printed in clean, modern sans-serif lettering in teal on the side of the headband — subtle but clearly legible, like premium athletic branding. A small flush-mounted camera lens, roughly 8mm diameter, sits centered on the forehead with a micro LED beside it glowing soft teal. Mid-rep, arms smoothly arcing inward in front of the chest, focused and confident expression, no phone in frame. Warm vibrant gym lighting, side three-quarter angle. Style: Photorealistic premium fitness photography, clean and aspirational, similar to Apple Fitness or Garmin brand imagery. Warm, minimal, high-end. No text overlays.
+[PASTE HEADBAND PRODUCT DESCRIPTION VERBATIM HERE]
+
+Scene: A photorealistic premium fitness marketing image of an athletic female performing a standing cable fly at a dual cable crossover machine in a modern gym. She wears the IronPal headband described above. Mid-rep, arms smoothly arcing inward in front of the chest, focused and confident expression, no phone in frame. The micro teal LED beside the camera lens glows softly. Warm vibrant gym lighting, side three-quarter angle showing the side panel of the headband and its logo. Style: Photorealistic premium fitness photography, clean and aspirational, similar to Apple Fitness or Garmin brand imagery. Warm, minimal, high-end. No text overlays.
 ```
 
 **Post-Production Steps:**
@@ -652,10 +715,17 @@ A photorealistic premium fitness marketing image of an athletic female performin
 
 ### S4c — Dumbbell Curls (IronPal Montage, Weight Label Visible)
 
-**Prompt:**
+**Generation Setup:**
+- Style Reference: `Geometric teal circle on navy.png` at strength 0.2
+- **Image-to-Image: `_canonical/headband_reference.jpg` at strength 0.35**
+- Generations: 5–8
+
+**Prompt — paste the HEADBAND PRODUCT DESCRIPTION verbatim, then this scene block:**
 
 ```
-A photorealistic premium fitness marketing close-up of an athletic male performing a standing dumbbell bicep curl in a modern gym. He wears a sleek matte black fitness headband made from moisture-wicking athletic fabric, with a thin accent stripe in electric teal. The word "IronPal" is printed in clean, modern sans-serif lettering in teal on the side of the headband — subtle but clearly legible, like premium athletic branding. A small flush-mounted camera lens sits centered on the forehead with a micro LED glowing soft teal. Right arm at peak contraction, dumbbell at shoulder height, the round end-cap of the dumbbell facing the camera with a flat circular label area. Tight upper-body composition. Warm vibrant gym lighting. Style: Photorealistic premium fitness photography, similar to Apple Fitness or Garmin brand imagery. No text overlays.
+[PASTE HEADBAND PRODUCT DESCRIPTION VERBATIM HERE]
+
+Scene: A photorealistic premium fitness marketing close-up of an athletic male performing a standing dumbbell bicep curl in a modern gym. He wears the IronPal headband described above; the micro teal LED beside the camera lens glows softly. Right arm at peak contraction, dumbbell at shoulder height, the round end-cap of the dumbbell facing the camera with a flat circular label area. Tight upper-body composition showing the side panel of the headband and its logo. Warm vibrant gym lighting. Style: Photorealistic premium fitness photography, similar to Apple Fitness or Garmin brand imagery. No text overlays.
 ```
 
 **Post-Production Steps:**
@@ -686,10 +756,17 @@ First-person egocentric POV photograph looking at a gym weight stack at eye-leve
 
 **Intent:** Payoff moment — the IronPal app populates automatically with the workout log. The phone screen must show the teal-accented app UI with the IronPal logo in the app header.
 
-**Prompt:**
+**Generation Setup:**
+- Style Reference: `Geometric teal circle on navy.png` at strength 0.2
+- **Image-to-Image: `_canonical/headband_reference.jpg` at strength 0.35**
+- Generations: 5–8
+
+**Prompt — paste the HEADBAND PRODUCT DESCRIPTION verbatim, then this scene block:**
 
 ```
-A photorealistic premium fitness marketing lifestyle image of an athletic male sitting on a gym bench after a set. He wears a sleek matte black fitness headband pushed down around his neck, made from moisture-wicking athletic fabric with a thin accent stripe in electric teal; the word "IronPal" is printed in clean modern sans-serif lettering in teal on the side of the headband — subtle but clearly legible, like premium athletic branding. He holds a modern smartphone with an edge-to-edge display in both hands, looking at the screen with a subtle impressed smile. Keep the phone screen as a simple clean dark interface with a charcoal background and a soft teal glow — do not render detailed UI elements, icons, or typography on the screen (the app UI will be composited in post). Warm amber gym lighting, relaxed accomplished mood, three-quarter angle. Style: Photorealistic premium fitness lifestyle photography, similar to Apple Fitness or Peloton brand imagery. Warm, minimal, high-end. No text overlays.
+[PASTE HEADBAND PRODUCT DESCRIPTION VERBATIM HERE]
+
+Scene: A photorealistic premium fitness marketing lifestyle image of an athletic male sitting on a gym bench after a set. He wears the IronPal headband described above, pushed down around his neck so its side panel and logo are clearly visible. He holds a modern smartphone with an edge-to-edge display in both hands, looking at the screen with a subtle impressed smile. Keep the phone screen as a simple clean dark interface with a charcoal background and a soft teal glow — do not render detailed UI elements, icons, or typography on the screen (the app UI will be composited in post). Warm amber gym lighting, relaxed accomplished mood, three-quarter angle. Style: Photorealistic premium fitness lifestyle photography, similar to Apple Fitness or Peloton brand imagery. Warm, minimal, high-end. No text overlays.
 ```
 
 **Post-Production Steps:**
@@ -704,29 +781,35 @@ A photorealistic premium fitness marketing lifestyle image of an athletic male s
 
 **Intent:** Quick three-variant montage showing diversity in body type, gender, gym setting. Each shot 1–2 seconds on screen. All three wear IronPal (headband or cap) with logo visible.
 
-**Shared style rules for all three variants:**
-- Sleek matte black IronPal headband or structured cap, moisture-wicking athletic fabric, thin electric teal accent stripe.
-- The **IronPal Iron Ring logo lockup** — a small bold teal circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed by the "IronPal" wordmark in clean modern sans-serif — is placed on the side of the headband or cap, ~30mm wide (headband, printed) / ~25mm wide (cap, embroidered in teal thread), subtle but clearly legible, like premium Apple or Garmin athletic branding.
-- Small flush-mounted camera lens on forehead/front panel, micro LED beside it glowing soft teal.
-- No phone in frame. Warm premium grading. Same teal `#00E5CC`.
-- Style: Photorealistic premium fitness marketing photography, similar to Apple Fitness / Garmin / Peloton brand imagery. No text overlays.
+**Shared Generation Setup (all three variants):**
+- Style Reference: `Geometric teal circle on navy.png` at strength 0.2
+- **Image-to-Image (S6a, S6c — headband variants): `_canonical/headband_reference.jpg` at strength 0.35**
+- **Image-to-Image (S6b — cap variant): `_canonical/cap_reference.jpg` at strength 0.35**
+- Generations: 4–6 per variant
+- All three must paste the HEADBAND or CAP PRODUCT DESCRIPTION verbatim before the scene block
 
 **S6a Prompt — Female athlete, headband, modern gym:**
 
 ```
-A photorealistic premium fitness marketing image of an athletic female mid-kettlebell swing in a modern bright commercial gym with polished concrete floors and large windows. She wears a sleek matte black IronPal fitness headband with a thin electric teal accent stripe. On the side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal — approximately 30mm wide total, subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens on the forehead, micro LED beside it glowing soft teal. Focused powerful expression, kettlebell swinging at hip height. No phone in frame. Warm premium lighting, three-quarter angle. Style: Photorealistic premium fitness photography, Apple Fitness / Garmin brand feel. No text overlays.
+[PASTE HEADBAND PRODUCT DESCRIPTION VERBATIM HERE]
+
+Scene: A photorealistic premium fitness marketing image of an athletic female mid-kettlebell swing in a modern bright commercial gym with polished concrete floors and large windows. She wears the IronPal headband described above; the micro teal LED beside the camera lens glows softly. Focused powerful expression, kettlebell swinging at hip height. No phone in frame. Warm premium lighting, three-quarter angle showing the side panel of the headband and its logo. Style: Photorealistic premium fitness photography, Apple Fitness / Garmin brand feel. No text overlays.
 ```
 
 **S6b Prompt — Male athlete, cap, gritty industrial gym:**
 
 ```
-A photorealistic premium fitness marketing image of a muscular male athlete performing a barbell row in a gritty industrial-style gym with exposed brick walls, rubber flooring, and dramatic overhead lighting. He wears a structured matte black IronPal baseball cap with a thin electric teal accent piping. On the left side panel of the cap, the IronPal Iron Ring logo is embroidered in teal thread (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal — approximately 25mm wide total, clean precise thread work, subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens on the front panel with a micro LED glowing soft teal. Fully focused, no phone in frame. Warm premium grading, low three-quarter angle. Style: Photorealistic premium fitness photography, Apple Fitness / Garmin brand feel. No text overlays.
+[PASTE CAP PRODUCT DESCRIPTION VERBATIM HERE]
+
+Scene: A photorealistic premium fitness marketing image of a muscular male athlete performing a barbell row in a gritty industrial-style gym with exposed brick walls, rubber flooring, and dramatic overhead lighting. He wears the IronPal cap described above; the micro teal LED beside the camera lens glows softly. Fully focused, no phone in frame. Warm premium grading, low three-quarter angle showing the left side panel of the cap and its embroidered logo. Style: Photorealistic premium fitness photography, Apple Fitness / Garmin brand feel. No text overlays.
 ```
 
 **S6c Prompt — Older female athlete, headband, boutique studio:**
 
 ```
-A photorealistic premium fitness marketing image of an athletic woman in her 50s performing a goblet squat with a dumbbell in a bright clean boutique training studio with white walls and warm wood accents. She wears a sleek matte black IronPal fitness headband with a thin electric teal accent stripe. On the side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed immediately by the word "IronPal" in clean modern sans-serif lettering in teal — approximately 30mm wide total, subtle but clearly legible, like premium Apple or Garmin athletic branding. A small flush-mounted camera lens on the forehead, micro LED beside it glowing soft teal. Confident focused expression, strong form. No phone in frame. Warm premium lighting, three-quarter angle. Style: Photorealistic premium inclusive fitness photography, Apple Fitness / Peloton brand feel. No text overlays.
+[PASTE HEADBAND PRODUCT DESCRIPTION VERBATIM HERE]
+
+Scene: A photorealistic premium fitness marketing image of an athletic woman in her 50s performing a goblet squat with a dumbbell in a bright clean boutique training studio with white walls and warm wood accents. She wears the IronPal headband described above; the micro teal LED beside the camera lens glows softly. Confident focused expression, strong form. No phone in frame. Warm premium lighting, three-quarter angle showing the side panel of the headband and its logo. Style: Photorealistic premium inclusive fitness photography, Apple Fitness / Peloton brand feel. No text overlays.
 ```
 
 **Post-Production Steps (all three):**
@@ -738,12 +821,22 @@ A photorealistic premium fitness marketing image of an athletic woman in her 50s
 
 ### S7 — End Card Product Beauty Shot
 
-**Intent:** Final beauty shot — both products (headband + cap) plus the camera module laid on a dark slate surface, dramatically lit. Wordmarks must be crisp and readable.
+**Intent:** Final beauty shot — both products (headband + cap) plus the camera module laid on a dark slate surface, dramatically lit. Wordmarks must be crisp and readable AND geometrically identical to the products shown throughout the rest of the video.
 
-**Prompt:**
+**Generation Setup:**
+- Style Reference: `Geometric teal circle on navy.png` at strength 0.2
+- **Image-to-Image: BOTH `_canonical/headband_reference.jpg` AND `_canonical/cap_reference.jpg` at strength 0.25 each** (Leonardo Image-to-Image accepts multiple references — this anchors both products to their canonical appearance)
+- Generations: 6–8
+
+**Prompt — paste BOTH the HEADBAND and CAP PRODUCT DESCRIPTIONS verbatim, then this compressed scene block (total stays under 1500 chars):**
 
 ```
-A photorealistic premium product hero beauty shot of a sleek matte black IronPal fitness headband and a structured matte black IronPal baseball cap laid side by side on a dark slate surface, with a tiny matte black aluminum camera module placed between them. Both the headband and the cap are made of premium athletic fabric with a thin accent stripe in electric teal. On the side of the headband, the IronPal Iron Ring logo is printed in electric teal (#00E5CC): a small bold circular ring with a clean gap at the 6 o'clock position and a solid teal dot at the 12 o'clock position (camera lens), followed by the word "IronPal" in clean modern sans-serif lettering in teal — approximately 30mm wide. The same Iron Ring logo is embroidered in teal thread (#00E5CC) on the side panel of the cap, approximately 25mm wide, clean precise thread work — subtle but clearly legible on both, like premium Apple or Garmin athletic branding. The aluminum camera module has a small flush glass lens, a micro teal LED glowing on its face, and the icon-only Iron Ring mark (teal ring with bottom gap and top lens dot, no wordmark) laser-engraved on its top face, approximately 8mm across. The headband is laid in a natural curve with its branded side facing camera; the cap is placed upright brim angled slightly toward camera. Dramatic single-source rim lighting from the upper left, dark moody background fading to black, soft teal underglow from the LEDs. Style: Photorealistic premium product photography, clean and minimal, similar to Apple hardware launch imagery. No text overlays. Leave clean negative space on the right side of the frame for end-card typography to be added later in post.
+[PASTE HEADBAND PRODUCT DESCRIPTION VERBATIM HERE]
+[PASTE CAP PRODUCT DESCRIPTION VERBATIM HERE]
+
+CAMERA MODULE: tiny matte black aluminum rectangular unit, flush glass lens, teal LED, icon-only open teal ring laser-engraved on top face (8mm).
+
+SCENE: Premium product hero beauty shot — IronPal headband (laid in natural curve, right side panel + logo facing camera) and IronPal cap (upright, brim slightly toward camera, left side panel + embroidered logo facing camera) on a dark slate surface, camera module placed between them. Dramatic single-source rim lighting upper left, dark moody background fading to black, soft teal underglow from LEDs. Apple hardware launch style. Leave clean negative space right side for end-card typography. No text overlays.
 ```
 
 **Post-Production Steps:**
