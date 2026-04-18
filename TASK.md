@@ -242,6 +242,60 @@ the document completely lacks AI tools recommended to be used for voiceover gene
 
 ---
 
-modify /home/quirkfly/job_stuff/prj/ironpal/docs/video-production-execution-plan.md
+review  of /home/quirkfly/job_stuff/prj/ironpal/docs/video-production-execution-plan.md
+
+I am stucked at Step 2. S3 prompt as I dont have IronPal product illustrations with logo.
 
 
+revisit /home/quirkfly/job_stuff/prj/ironpal/docs/body-mounted-image-prompts-updated.md and create missing leonardo.ai prompts for the product illustrations that include the IronPal logo as in input/images/logo/v4/Minimalist IRONPAL logo design.png. The prompts should produce photorealistic illustrations as referenced in /home/quirkfly/job_stuff/prj/ironpal/docs/video-production-execution-plan.md (specifically for Step 2)
+
+
+----
+
+this prompt as in /home/quirkfly/job_stuff/prj/ironpal/docs/video-production-execution-plan.md produces very poor quality images
+
+Photorealistic cinematic close-up of an athletic male hand reaching into an open mattePhotorealistic cinematic close-up of an athletic male hand reaching into an open matte black nylon gym bag, fingers lifting out a sleek matte black athletic headband. The headband is made of moisture-wicking athletic fabric with a thin electric teal accent stripe along its length and a tiny flush-mounted camera module, 8mm diameter, embedded on the front center panel, with a small pinhole teal LED beside it that is just beginning to glow. A clean rectangular teal brand-mark area is visible on the right side of the headband where the IronPal wordmark will be placed in post — keep this area simple, unobstructed, centered on the side panel, approximately 30mm wide. Warm golden hour gym lighting, soft bokeh, shallow depth of field, 85mm lens, f/2.0. 8K ultra-detailed, commercial product cinematography. black nylon gym bag, fingers lifting out a sleek matte black athletic headband. The headband is made of moisture-wicking athletic fabric with a thin electric teal accent stripe along its length and a tiny flush-mounted camera module, 8mm diameter, embedded on the front center panel, with a small pinhole teal LED beside it that is just beginning to glow. A clean rectangular teal brand-mark area is visible on the right side of the headband where the IronPal wordmark will be placed in post — keep this area simple, unobstructed, centered on the side panel, approximately 30mm wide. Warm golden hour gym
+
+
+
+on the contrary this prompt prompt from /home/quirkfly/job_stuff/prj/ironpal/docs/body-mounted-image-prompts.md produces a much better quality image 
+
+A photorealistic product marketing hero image of a sleek, modern fitness headband with a tiny embedded camera module. The headband is matte black with a thin accent stripe in electric teal, made from moisture-wicking athletic fabric. The word "IronPal" is printed in clean, modern sans-serif lettering in teal on the right side of the headband — subtle but clearly legible, like premium athletic branding. The camera module is barely visible — a small, flush-mounted lens (roughly 8mm diameter) centered on the forehead area, with no protruding parts. A micro LED next to the lens glows soft teal. The headband is displayed on a clean white-to-light-gray gradient background, shot from a slight three-quarter angle to show both the front (lens) and the side (fabric, fit). Next to it, a second headband is shown being worn by an athletic male model with short hair, mid-laugh, in a modern gym setting — conveying that it's comfortable and forgettable during a workout. The model wears a fitted tank top and the headband sits naturally, looking like any premium athletic headband. Include a subtle zoomed-in inset (floating, with soft shadow) showing the camera module close-up — the tiny lens, the LED, the teal "IronPal" branding, and the clean industrial design. The inset should feel like a premium product detail shot, similar to Apple or Garmin marketing. Style: Photorealistic product photography with studio lighting on the standalone headband, warm gym ambient lighting on the model shot. Clean, minimal, premium feel. Suitable for a Kickstarter hero banner or product landing page above-the-fold image. No text overlays.
+
+modify the first prompt accordingly to produce a higher quality image 
+
+
+----
+
+actually looking at the prompt again and image result this one 
+
+
+A photorealistic product marketing hero image of a sleek, modern fitness headband with a tiny embedded camera module. The headband is matte black with a thin accent stripe in electric teal, made from moisture-wicking athletic fabric. The word "IronPal" is printed in clean, modern sans-serif lettering in teal on the right side of the headband — subtle but clearly legible, like premium athletic branding. The camera module is barely visible — a small, flush-mounted lens (roughly 8mm diameter) centered on the forehead area, with no protruding parts. A micro LED next to the lens glows soft teal. The headband is displayed on a clean white-to-light-gray gradient background, shot from a slight three-quarter angle to show both the front (lens) and the side (fabric, fit). Next to it, a second headband is shown being worn by an athletic male model with short hair, mid-laugh, in a modern gym setting — conveying that it's comfortable and forgettable during a workout. The model wears a fitted tank top and the headband sits naturally, looking like any premium athletic headband. Include a subtle zoomed-in inset (floating, with soft shadow) showing the camera module close-up — the tiny lens, the LED, the teal "IronPal" branding, and the clean industrial design. The inset should feel like a premium product detail shot, similar to Apple or Garmin marketing. Style: Photorealistic product photography with studio lighting on the standalone headband, warm gym ambient lighting on the model shot. Clean, minimal, premium feel. Suitable for a Kickstarter hero banner or product landing page above-the-fold image. No text overlays.
+
+
+produces perfect result including IronPal text placement. Only lacking the actual logo design as the time of generation the logo was not ready yet. So I need to modify the prompt to include the text "IronPal logo" and logo design as in /home/quirkfly/job_stuff/prj/ironpal/input/images/logo/v4/Geometric teal circle on navy.png as a reference for the logo placement in the illustrations. The prompt should specify that the logo should be placed on the right side of the headband, centered on the side panel, approximately 30mm wide, and should be clearly legible while maintaining a subtle and premium appearance. 
+
+---
+
+
+images in input/kickstarter/storyboarding/S3 and input/kickstarter/storyboarding/S4a do not feature a consistent product design headband with the logo as specified in the image prompts.
+
+
+--
+
+based on /home/quirkfly/job_stuff/prj/ironpal/docs/body-mounted-image-prompts-updated.md 
+create a new document called docs/body-mounted-product-prompts.md that includes the modified prompts tailored for Leonardo AI
+
+i need two leonardo.ai prompts
+
+prompt #1
+
+a photorealistic product illustration that features the body-mounted camera (headband-style) as a standalone product with logo from input/images/logo/v4/Geometric teal circle on navy.png as text "IronPal" as follows
+
+<logo> IronPal
+
+the headband is matte black with a thin accent stripe in electric teal, made from moisture-wicking athletic fabric. The camera module is a small, flush-mounted lens (roughly 8mm diameter) embedded on the front center panel of the headband, with a small pinhole teal LED beside it that is just beginning to glow. The headband is displayed on a clean white-to-light-gray gradient background, shot from a slight three-quarter angle to show both the front (lens) and the side (fabric, fit). Style: Photorealistic product photography with studio lighting, clean and minimal background to emphasize the product's design and features. Suitable for use in marketing materials such as a product landing page or investor pitch deck.
+
+prompt #2
+
+same as prompt #1 but instead of headband it is a baseball cap-style camera, with the same logo placement and design as in prompt #1. The cap is made from moisture-wicking athletic fabric, with a thin accent stripe in electric teal along the brim. The camera module is a small, flush-mounted lens (roughly 8mm diameter) embedded on the front center panel of the cap, with a small pinhole teal LED beside it that is just beginning to glow. The cap is displayed on a clean white-to-light-gray gradient background, shot from a slight three-quarter angle to show both the front (lens) and the side (fabric, fit). Style: Photorealistic product photography with studio lighting, clean and minimal background to emphasize the product's design and features. Suitable for use in marketing materials such as a product landing page or investor pitch deck.
