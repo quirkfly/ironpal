@@ -303,3 +303,31 @@ same as prompt #1 but instead of headband it is a baseball cap-style camera, wit
 ---
 
 modify S4 prompt in /home/peterd/job_stuff/ironpal/docs/video-production-execution-plan.md to also include logo and text "IronPal" see S3 prompt for reference. The prompt should specify that the logo and text should be clearly visible and integrated into the scene in a way that enhances brand recognition while maintaining a natural and unobtrusive appearance. The logo should be placed in a prominent location within the frame, such as on the gym equipment or in the background, while the text "IronPal" should be displayed in a clean and modern font that complements the overall aesthetic of the video. The prompt should also emphasize the importance of maintaining a consistent visual style across all video content to reinforce brand identity and create a cohesive marketing campaign.
+
+---
+
+ensure prompts S5, S6a-c (provide detailed prompts for each that is S6a, S6b, S6c) and S7 are modified accordingly too
+
+---
+
+modify S5 prompt in /home/peterd/job_stuff/ironpal/docs/video-production-execution-plan.md as currently it produces ilogical image see /home/peterd/Pictures/Screenshot from 2026-04-18 23-20-12.png
+
+---
+
+based on /home/peterd/job_stuff/ironpal/docs/video-production-execution-plan.md
+
+assume the roles of AVP (Artistic Visual Producer) and CD (Creative Director) 
+
+these two tasks are done 
+
+2.1	Write image prompts for all 12-14 key frames	AVP	Prompt sheet
+2.2	Generate key frames in Midjourney/FLUX (3-5 variants per shot)	AVP	~50-70 images
+
+results are stored in /home/peterd/job_stuff/ironpal/input/kickstarter/storyboarding
+
+complete the remaining tasks as follows:
+
+2.3	Select best variant per shot, arrange into storyboard sequence	AVP + CD	Visual storyboard (PDF/slide deck)
+2.4	Identify which shots need character/face consistency (same athlete)	AVP	Consistency plan
+2.5	Generate additional angle/variation images for any rejected shots	AVP	Revised images
+2.6	CD approves final storyboard	CD	Approved storyboard
