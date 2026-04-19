@@ -348,3 +348,22 @@ make sure to claculate approoxiamte costs for the AI video generation platforms 
 based on docs/ai-video-generation-options.md create a detailed execution plan for automating the AI video generation process using the recommended platform. This plan should outline the specific steps required to set up the API integration, including any necessary technical configurations, testing phases, and timelines for completion. Additionally, identify any potential challenges that may arise during implementation and propose strategies to address them effectively. The execution plan should also include a monitoring and evaluation framework to assess the performance of the automated video generation process and ensure that it meets the desired quality standards for the Kickstarter campaign.
 
 save the execution plan as docs/ai-video-generation-execution-plan.md and share it with the team for feedback and further development.
+
+
+---
+
+implement the AI video generation process based on the execution plan outlined in docs/ai-video-generation-execution-plan.md. 
+see .env for API keys
+
+---
+
+execute the pipeline as per the execution plan for automating the AI video generation process, ensuring that all steps are followed according to the outlined timelines and responsibilities. This includes setting up the API integration, generating the video content, and conducting quality checks to ensure that the videos meet the desired standards for the Kickstarter campaign. Additionally, monitor the performance of the automated video generation process and make any necessary adjustments to optimize results. Document any challenges encountered during implementation and how they were addressed, as well as any insights gained from the process that could inform future video production efforts.
+
+--- 
+
+i have added credit to runaway..run batch 2 to generate 
+  the 28 Runway clips (S4a, S4b, S4c, S5, S7). These are the character-consistency-critical shots.
+
+---
+
+consult kling.ai documentation and support resources to find out how to add credit to API calls for video generation.

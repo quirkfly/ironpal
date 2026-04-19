@@ -54,18 +54,97 @@ echo ".env" >> ../../.gitignore
 
 ### 1.3 Image Hosting Setup
 
-All three APIs require source images at publicly accessible URLs. Options:
+All three APIs require source images at publicly accessible URLs. We use a **Cloudflare Quick Tunnel** to serve the storyboard images from localhost — the same approach used in the [handlr-backend](../../handlr-test/handlr-backend) project (see `scripts/start_cloudflared.sh` and `docs/simulator/CLOUDFLARED_SETUP.md`).
 
-| Option | Setup Time | Cost | Recommended |
-|---|---|---|---|
-| **AWS S3 bucket + pre-signed URLs** | 15 min | ~$0 (free tier) | Yes — most reliable |
-| Cloudflare R2 | 15 min | $0 (10GB free) | Alternative |
-| GitHub raw URLs (public repo) | 0 min | $0 | Only if images aren't sensitive |
-| Base64 inline (Runway SDK) | 0 min | $0 | Runway only, not cross-platform |
+**How it works:**
 
-**Recommended:** Create a private S3 bucket `ironpal-storyboard-assets`, upload the 13 selected key frame images, generate pre-signed URLs with 24-hour expiry.
+```
+AI Video API (Runway/Luma/Kling)
+    ↓ fetches image from
+https://<random-words>.trycloudflare.com/images/S4a_selected.jpg
+    ↓ tunneled to
+localhost:8080
+    ↓ served by
+Python http.server (or nginx) from local storyboard directory
+```
 
-**Acceptance criteria:** All 13 selected storyboard images are accessible via URL and return HTTP 200.
+**Setup steps:**
+
+1. **Install cloudflared** (if not already installed):
+   ```bash
+   # Check if already installed (should be, from handlr-backend)
+   which cloudflared
+
+   # If not installed:
+   curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+   sudo dpkg -i cloudflared.deb
+   ```
+
+2. **Start a local file server** for the storyboard images:
+   ```bash
+   # Serve the storyboarding directory on localhost:8080
+   cd /home/peterd/job_stuff/ironpal/input/kickstarter/storyboarding
+   python3 -m http.server 8080 &
+   FILE_SERVER_PID=$!
+   ```
+
+3. **Start the Cloudflare tunnel:**
+   ```bash
+   cloudflared tunnel --url http://localhost:8080 &> /tmp/cloudflared_images.log &
+   TUNNEL_PID=$!
+
+   # Wait for tunnel URL to appear in logs
+   sleep 5
+   TUNNEL_URL=$(grep -oP 'https://[a-z0-9-]+\.trycloudflare\.com' /tmp/cloudflared_images.log | head -1)
+   echo "Tunnel URL: $TUNNEL_URL"
+
+   # Save PID for cleanup
+   echo $TUNNEL_PID > /tmp/cloudflared_images.pid
+   echo $FILE_SERVER_PID > /tmp/fileserver_images.pid
+   ```
+
+4. **Update config.yaml** with the tunnel URL:
+   ```bash
+   # Images are now accessible at:
+   # $TUNNEL_URL/S4a/selected.jpg
+   # $TUNNEL_URL/S7/selected.jpg
+   # etc.
+   ```
+
+5. **Verify accessibility:**
+   ```bash
+   # Test that an image is reachable from the internet
+   curl -s -o /dev/null -w "%{http_code}" "$TUNNEL_URL/S7/selected.jpg"
+   # Should return 200
+   ```
+
+6. **Cleanup** (after generation is complete):
+   ```bash
+   kill $(cat /tmp/cloudflared_images.pid) 2>/dev/null
+   kill $(cat /tmp/fileserver_images.pid) 2>/dev/null
+   rm -f /tmp/cloudflared_images.pid /tmp/fileserver_images.pid /tmp/cloudflared_images.log
+   ```
+
+**Advantages over S3/R2:**
+
+| Factor | Cloudflare Tunnel | AWS S3 |
+|---|---|---|
+| **Setup time** | ~2 min | ~15 min |
+| **Cost** | $0 (free, no account needed) | ~$0 (free tier) |
+| **AWS account required** | No | Yes |
+| **Images stay local** | Yes — never uploaded to cloud | No — uploaded to S3 |
+| **Already proven** | Used in handlr-backend | New setup |
+| **Persistence** | Only while tunnel is running | Permanent until deleted |
+| **URL format** | `*.trycloudflare.com` (random) | `s3.amazonaws.com/bucket/key` |
+
+**Note:** The tunnel URL changes each time you restart it. The pipeline's `config.yaml` uses relative image paths (e.g., `S4a/selected.jpg`), and the tunnel base URL is passed as a CLI argument or environment variable:
+
+```bash
+export IMAGE_BASE_URL="$TUNNEL_URL"
+python generate.py --config config.yaml
+```
+
+**Acceptance criteria:** All 13 selected storyboard images are accessible via `$TUNNEL_URL/{shot}/selected.jpg` and return HTTP 200.
 
 ---
 
@@ -101,6 +180,7 @@ scripts/video-gen/
 settings:
   output_dir: "./output"
   log_dir: "./logs"
+  image_base_url: "${IMAGE_BASE_URL}"  # Cloudflare tunnel URL, set via env var
   max_concurrent_jobs: 10      # Luma allows 10, others less
   poll_interval_seconds: 15
   poll_timeout_seconds: 600    # 10 minute timeout per job
@@ -109,12 +189,15 @@ settings:
   aspect_ratio: "16:9"
 
 # Shot definitions
+# source_image paths are relative to the Cloudflare tunnel root
+# (which serves the storyboarding directory)
+# Full URL = ${IMAGE_BASE_URL}/{source_image}
 shots:
   S1:
     platform: kling
     model: "kling-v2"
     mode: "pro"
-    source_image: "input/kickstarter/storyboarding/S1/selected.jpg"
+    source_image: "S1/selected.jpg"
     prompt: >
       Close-up of smartphone screen, thumb slowly tapping a weight
       stepper control, slight finger movement, gym bench blurred in
@@ -126,7 +209,7 @@ shots:
   S2a:
     platform: luma
     model: "ray-2"
-    source_image: "input/kickstarter/storyboarding/S2a/selected.jpg"
+    source_image: "S2a/selected.jpg"
     prompt: >
       Athletic male sitting on bench, looking down at phone with
       frustrated expression, slight head movement, cool blue-gray gym
@@ -138,7 +221,7 @@ shots:
   S2b:
     platform: luma
     model: "ray-2"
-    source_image: "input/kickstarter/storyboarding/S2b/selected.jpg"
+    source_image: "S2b/selected.jpg"
     prompt: >
       Athletic female standing beside cable machine, looking down at
       phone with impatient expression, free hand on hip, scrolling
@@ -150,7 +233,7 @@ shots:
   S3:
     platform: luma
     model: "ray-2"
-    source_image: "input/kickstarter/storyboarding/S3/selected.jpg"
+    source_image: "S3/selected.jpg"
     prompt: >
       Hand reaching into black gym bag, pulling out matte black
       headband, teal LED lights up with subtle glow, warm golden gym
@@ -162,7 +245,7 @@ shots:
   S4a:
     platform: runway
     model: "gen4_turbo"
-    source_image: "input/kickstarter/storyboarding/S4a/selected.jpg"
+    source_image: "S4a/selected.jpg"
     prompt: >
       Athletic male performing bench press, smooth controlled pressing
       motion, matte black headband with teal IronPal text visible, warm
@@ -175,7 +258,7 @@ shots:
   S4b:
     platform: runway
     model: "gen4_turbo"
-    source_image: "input/kickstarter/storyboarding/S4b/selected.jpg"
+    source_image: "S4b/selected.jpg"
     prompt: >
       Athletic female performing cable fly, smooth pulling motion,
       matte black headband with teal IronPal text visible, warm
@@ -187,7 +270,7 @@ shots:
   S4c:
     platform: runway
     model: "gen4_turbo"
-    source_image: "input/kickstarter/storyboarding/S4c/selected.jpg"
+    source_image: "S4c/selected.jpg"
     prompt: >
       Close-up of athlete performing dumbbell curl, smooth controlled
       curling motion, matte black headband with teal IronPal text
@@ -202,7 +285,7 @@ shots:
     platform: kling
     model: "kling-v2"
     mode: "pro"
-    source_image: "input/kickstarter/storyboarding/S4d/selected.jpg"
+    source_image: "S4d/selected.jpg"
     prompt: >
       First-person POV, hand reaching toward weight stack, fingers
       gripping yellow pin, sliding it into the 50 slot, slight hand
@@ -214,7 +297,7 @@ shots:
   S5:
     platform: runway
     model: "gen4_turbo"
-    source_image: "input/kickstarter/storyboarding/S5/selected.jpg"
+    source_image: "S5/selected.jpg"
     prompt: >
       Athletic male sitting on gym bench, looking at phone with relaxed
       impressed smile, slight head nod, headband with teal IronPal text
@@ -227,7 +310,7 @@ shots:
   S6a:
     platform: luma
     model: "ray-2"
-    source_image: "input/kickstarter/storyboarding/S6a/selected.jpg"
+    source_image: "S6a/selected.jpg"
     prompt: >
       Athletic female performing kettlebell swing, explosive upward
       motion, matte black headband with IronPal text visible, modern
@@ -239,7 +322,7 @@ shots:
   S6b:
     platform: luma
     model: "ray-2"
-    source_image: "input/kickstarter/storyboarding/S6b/selected.jpg"
+    source_image: "S6b/selected.jpg"
     prompt: >
       Athletic male performing pull-up, upward pulling motion, matte
       black baseball cap with teal IronPal text and camera module,
@@ -251,7 +334,7 @@ shots:
   S6c:
     platform: luma
     model: "ray-2"
-    source_image: "input/kickstarter/storyboarding/S6c/selected.jpg"
+    source_image: "S6c/selected.jpg"
     prompt: >
       Athletic female performing box jump, explosive upward motion,
       landing on plyo box, matte black headband with IronPal text
@@ -263,7 +346,7 @@ shots:
   S7:
     platform: runway
     model: "gen4_turbo"
-    source_image: "input/kickstarter/storyboarding/S7/selected.jpg"
+    source_image: "S7/selected.jpg"
     prompt: >
       Slow dramatic lighting sweep across IronPal headband and baseball
       cap on dark slate surface, teal LED glowing, camera module
@@ -338,12 +421,27 @@ class Pipeline:
             self.config = yaml.safe_load(f)
         self.settings = self.config["settings"]
         self.shots = self.config["shots"]
+        # Resolve image base URL from env var (Cloudflare tunnel URL)
+        self.image_base_url = os.environ.get(
+            "IMAGE_BASE_URL",
+            self.settings.get("image_base_url", "")
+        ).rstrip("/")
+        if not self.image_base_url:
+            raise ValueError(
+                "IMAGE_BASE_URL not set. Start the Cloudflare tunnel first:\n"
+                "  cloudflared tunnel --url http://localhost:8080"
+            )
         self.run_log = {
             "started_at": datetime.utcnow().isoformat(),
+            "image_base_url": self.image_base_url,
             "shots": {},
             "total_cost": 0.0,
             "total_clips": 0
         }
+
+    def _get_image_url(self, relative_path: str) -> str:
+        """Construct full image URL from Cloudflare tunnel base + relative path."""
+        return f"{self.image_base_url}/{relative_path}"
 
     def run(self, shot_filter=None):
         """Run generation for all shots (or filtered subset)."""

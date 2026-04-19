@@ -1,1 +1,7 @@
 
+.env
+.venv/
+__pycache__/
+scripts/video-gen/.venv/
+scripts/video-gen/output/
+scripts/video-gen/logs/

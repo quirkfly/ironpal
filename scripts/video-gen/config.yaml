@@ -1,0 +1,177 @@
+# IronPal Kickstarter Video — AI Video Generation Config
+# See docs/ai-video-generation-execution-plan.md for full context
+
+settings:
+  output_dir: "./output"
+  log_dir: "./logs"
+  image_base_url: "${IMAGE_BASE_URL}"  # Cloudflare tunnel URL, set via env var
+  max_concurrent_jobs: 10
+  poll_interval_seconds: 15
+  poll_timeout_seconds: 600
+  retry_max: 2
+  resolution: "1080p"
+  aspect_ratio: "16:9"
+
+shots:
+  S1:
+    platform: kling
+    model: "kling-v1-6"
+    mode: "pro"
+    source_image: "S1/selected.jpg"
+    prompt: >
+      Close-up of smartphone screen, thumb slowly tapping a weight
+      stepper control, slight finger movement, gym bench blurred in
+      background, cool desaturated lighting, photorealistic
+    duration: 5
+    attempts: 4
+    notes: "Phone close-up. Composite Figma app screen in post."
+
+  S2a:
+    platform: luma
+    model: "ray-2"
+    source_image: "S2a/selected.jpg"
+    prompt: >
+      Athletic male sitting on bench, looking down at phone with
+      frustrated expression, slight head movement, cool blue-gray gym
+      lighting, cinematic slow motion
+    duration: 4
+    attempts: 6
+    notes: "Old way beat. Different athlete from S4a-S5 is fine."
+
+  S2b:
+    platform: luma
+    model: "ray-2"
+    source_image: "S2b/selected.jpg"
+    prompt: >
+      Athletic female standing beside cable machine, looking down at
+      phone with impatient expression, free hand on hip, scrolling
+      motion, cool desaturated gym lighting, cinematic
+    duration: 4
+    attempts: 6
+    notes: "Old way beat. Cable handle hanging unused."
+
+  S3:
+    platform: luma
+    model: "ray-2"
+    source_image: "S3/selected.jpg"
+    prompt: >
+      Hand reaching into black gym bag, pulling out matte black
+      headband, teal LED lights up with subtle glow, warm golden gym
+      lighting, cinematic close-up, slow deliberate motion
+    duration: 5
+    attempts: 6
+    notes: "Transition moment. Color shift from cool to warm."
+
+  S4a:
+    platform: runway
+    model: "gen4_turbo"
+    source_image: "S4a/selected.jpg"
+    prompt: >
+      Athletic male performing bench press, smooth controlled pressing
+      motion, matte black headband with teal IronPal text visible, warm
+      vibrant gym lighting, cinematic, focused expression
+    duration: 5
+    attempts: 6
+    character_ref: true
+    notes: "Character consistency group C. Same athlete as S4c, S5."
+
+  S4b:
+    platform: runway
+    model: "gen4_turbo"
+    source_image: "S4b/selected.jpg"
+    prompt: >
+      Athletic female performing cable fly, smooth pulling motion,
+      matte black headband with teal IronPal text visible, warm
+      cinematic lighting, focused and confident
+    duration: 5
+    attempts: 6
+    notes: "IronPal montage. Cable motion should be smooth."
+
+  S4c:
+    platform: runway
+    model: "gen4_turbo"
+    source_image: "S4c/selected.jpg"
+    prompt: >
+      Close-up of athlete performing dumbbell curl, smooth controlled
+      curling motion, matte black headband with teal IronPal text
+      visible, 16 KG label visible on dumbbell, warm vibrant gym
+      lighting, cinematic
+    duration: 5
+    attempts: 6
+    character_ref: true
+    notes: "Character consistency group C. Weight label must stay readable."
+
+  S4d:
+    platform: kling
+    model: "kling-v1-6"
+    mode: "pro"
+    source_image: "S4d/selected.jpg"
+    prompt: >
+      First-person POV, hand reaching toward weight stack, fingers
+      gripping yellow pin, sliding it into the 50 slot, slight hand
+      tremor, warm lighting on metal plates, numbers clearly visible
+    duration: 4
+    attempts: 4
+    notes: "Simulated camera POV. Kling for motion control."
+
+  S5:
+    platform: runway
+    model: "gen4_turbo"
+    source_image: "S5/selected.jpg"
+    prompt: >
+      Athletic male sitting on gym bench, looking at phone with relaxed
+      impressed smile, slight head nod, headband with teal IronPal text
+      around neck, towel on shoulder, warm amber gym lighting, cinematic
+    duration: 7
+    attempts: 6
+    character_ref: true
+    notes: "Payoff moment. Character consistency group C. Phone screen composited in post."
+
+  S6a:
+    platform: luma
+    model: "ray-2"
+    source_image: "S6a/selected.jpg"
+    prompt: >
+      Athletic female performing kettlebell swing, explosive upward
+      motion, matte black headband with IronPal text visible, modern
+      bright gym, warm lighting, cinematic, powerful and focused
+    duration: 3
+    attempts: 5
+    notes: "Social proof montage. Quick cut."
+
+  S6b:
+    platform: luma
+    model: "ray-2"
+    source_image: "S6b/selected.jpg"
+    prompt: >
+      Athletic male performing pull-up, upward pulling motion, matte
+      black baseball cap with teal IronPal text and camera module,
+      gritty industrial gym, warm lighting, cinematic, intense expression
+    duration: 3
+    attempts: 5
+    notes: "Social proof montage. Cap variant for product diversity."
+
+  S6c:
+    platform: luma
+    model: "ray-2"
+    source_image: "S6c/selected.jpg"
+    prompt: >
+      Athletic female performing box jump, explosive upward motion,
+      landing on plyo box, matte black headband with IronPal text
+      visible, bright CrossFit gym, warm lighting, cinematic, dynamic
+    duration: 3
+    attempts: 5
+    notes: "Social proof montage. Most dynamic motion."
+
+  S7:
+    platform: runway
+    model: "gen4_turbo"
+    source_image: "S7/selected.jpg"
+    prompt: >
+      Slow dramatic lighting sweep across IronPal headband and baseball
+      cap on dark slate surface, teal LED glowing, camera module
+      between products, subtle light movement, product photography,
+      cinematic
+    duration: 5
+    attempts: 4
+    notes: "End card beauty shot. Slow, controlled lighting sweep."
