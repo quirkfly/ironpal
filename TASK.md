@@ -367,3 +367,39 @@ i have added credit to runaway..run batch 2 to generate
 ---
 
 consult kling.ai documentation and support resources to find out how to add credit to API calls for video generation.
+
+
+---
+
+adopt the role of a video content producer and expert in AI video generation to evaluate the results of the generated video clips for the Kickstarter campaign.
+
+Review the 66 clips and select the best variant per shot for post-production. The clips are organized at
+  scripts/video-gen/output/{S1..S7}/.
+
+and see HOW BAD AND AWEFULTHE RESULTS ARE. I need to evaluate the quality of the generated video clips based on factors such as visual appeal, relevance to the script, and overall production value. 
+Give me a detailed analysis of the issues with the generated clips, including specific examples of what went wrong (e.g., poor character consistency, low video quality, irrelevant visuals) and how these issues impact the effectiveness of the video content for the Kickstarter campaign. Additionally, provide recommendations for how to improve the video generation process in future iterations, such as adjusting the prompts, exploring different AI platforms, or incorporating more human oversight in the selection and editing of the generated clips. Save this analysis in a document for use in refining the video production strategy moving forward.
+
+save the document as docs/video-generation-analysis.md and share it with the team for feedback and further development.
+
+--
+
+adopt the role of a video content producer and expert in AI video generation to review /home/peterd/job_stuff/ironpal/docs/video-generation-v2-strategy.md
+
+i have just evaluated S3 clips..there are pure garbarge..they are completely unsable, headband is floating in the air, no logo, no text, it is complete nonsense. I need to analyze the issues with the generated S3 clips in detail, providing specific examples of what went wrong and how these issues impact the effectiveness of the video content for the Kickstarter campaign. Additionally, I need to provide recommendations for how to improve the video generation process for S3 in future iterations, such as adjusting the prompts, exploring different AI platforms, or incorporating more human oversight in the selection and editing of the generated clips. This analysis should be documented for use in refining the video production strategy moving forward.
+
+
+---
+
+what if the the prompt is modified to contain detailed compond action that forces the AI to simultaneously:
+
+Maintain the hand's grip pose while moving it upward
+Preserve the headband's thin, curved shape while changing its spatial position
+Reveal more of the headband as it emerges (partial occlusion -> full visibility)
+Keep text legible across changing angles and distances
+Maintain physically plausible interaction between hand, object, and bag
+
+---
+
+let's go with Option C: Video-to-Video with Stock Reference
+
+come up with an approach where to find stock reference..it must be free..$0 costs
