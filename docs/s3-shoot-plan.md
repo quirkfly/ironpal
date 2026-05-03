@@ -158,12 +158,124 @@ The hand is the actor. Most failed takes fail here, not in the camera. Coach the
 
 1. **Start position:** Fingers loosely curled, hovering 5–10 cm above the bag opening, frame-bottom.
 2. **Reach:** Smooth descent into the bag — no hesitation, no searching. The hand should *know* where the headband is. Pre-place the prop so the grip point is consistent every take.
-3. **Grip:** Pinch the headband by its side panel (the panel that will face camera at apex). Do not bunch it up. Fingers should not cover the area where the IronPal wordmark will be composited — keep the side panel **clear and flat-facing**.
+3. **Grip:** Pinch the headband **by one end** between thumb (on the matte black exterior) and forefinger (on the inner lining), so when lifted the band hangs as a flat vertical strip with the matte black exterior facing camera. **Do NOT hold it as a coiled loop** — see § 6.1 for full grip diagrams and the reason. Fingers must not cover the area where the IronPal wordmark will be composited.
 4. **Lift:** Single continuous arc, ~1.5–2s, ending with the headband fully clear of the bag at chest/face height. No re-grips, no rotations beyond a gentle ~10° tilt to present the side panel.
 5. **Hold:** ~1s static at the apex with the side panel facing camera. This is the frame post will track the logo onto.
 6. **Exit:** Slow drift out of the top or right of frame. Don't snap out — the editor wants smooth tail handles.
 
 Practice the move 3–4 times without rolling. Then start filming. Reset the headband's orientation in the bag between every take.
+
+---
+
+## 6.1 Prop Preparation & Grip (the fix from the 2026-05-03 session)
+
+The first in-house session (review at `docs/s3-take-review-20260503-112515.md`) captured a clean lift in every take, but the prop was held as a **closed oval loop** rather than a flat strip. This breaks the post pipeline because the wordmark composite (§ 9, step 5) needs a flat rectangular surface to track onto. Fix this **before** the next session.
+
+### What post needs at the apex
+
+- A **flat surface** of the matte black exterior facing camera, **square to the lens** (no curve, no bend).
+- That surface must be **at least ~30 mm wide × ~50 mm tall** in the prop frame.
+- Stable for **≥15 frames in a row** (~0.5 s at 30 fps) so After Effects' planar tracker can lock onto it without warping.
+- The **inner lining must not be visible** anywhere in frame at the apex — the real product is uniformly matte black on the outside; visible lining reads as "wrong product".
+
+### What went wrong on 2026-05-03
+
+The actor lifted the prop out as a closed ring, with the lining visible inside the loop:
+
+```
+   Actor's hand pinches HERE
+            │
+            ▼
+       ╭─────────╮      ◄── outside of loop = matte black exterior
+       │         │
+       │  white  │      ◄── inside of loop = pale fabric lining
+       │  inner  │           (wrong colour for composite)
+       │ visible │
+       │         │
+       ╰─────────╯
+```
+
+Two failures with this orientation:
+1. The "side panel" surface curves *away* from the camera at every point on the loop — no flat rectangle anywhere.
+2. The pale inner lining is visible inside the ring — would have to be rotoscoped frame-by-frame.
+
+### How to hold it instead
+
+#### Option A — Single-hand pinch + vertical drape (RECOMMENDED)
+
+```
+        Hand pinches the LEFT END of the band
+        (thumb on top, forefinger underneath,
+        ~15 mm from the edge)
+            │
+            ▼
+        ┌──┐
+        │██│←── matte black exterior facing camera
+        │██│   (the entire visible face is the
+        │██│    "wordmark side panel")
+        │██│
+        │██│
+        │██│   gravity stretches the band straight down
+        │██│
+        │██│
+        └──┘
+```
+
+- Pinch the band between thumb and forefinger of the right hand near one end.
+- Let the rest of the band hang **straight down** under its own weight.
+- Rotate your wrist so the **matte black exterior faces the camera** (the lining faces the actor).
+- Lift to chest height. Hold steady ~2 s.
+
+The band reads as a thin vertical strip, ~30 mm wide × ~150 mm tall. The whole visible face is wordmark territory — the editor picks any clean section. Easiest grip to hold steady, cleanest to track. **Use this unless you have a specific reason not to.**
+
+#### Option B — Two-hand horizontal stretch
+
+```
+   Left hand          Right hand
+      │                   │
+      ▼                   ▼
+     ┌──────────────────────┐
+     │██████████████████████│  ◄── matte black exterior facing camera
+     └──────────────────────┘
+                 ▲
+        wordmark composite goes here
+        (right ~30 mm of the band)
+```
+
+- Grip both ends, one hand each.
+- Stretch the band horizontally at chest height, gentle tension only (don't pull taut — flatten naturally).
+- Matte black exterior facing camera. Hold ~2 s.
+
+More cinematic — reads as "presenting the product" — but harder to keep both hands steady, and the cut needs both hands to enter and exit. Use only if Option A reads as too static after the first session is reviewed.
+
+#### Option C — One-hand mid-grip drape (AVOID)
+
+Same as Option A but holding the band higher up (mid-band rather than at one end), letting both halves drape down in a "U". Looks fine in stills but:
+- The band can swing/twist on the lift.
+- The grip point itself sits in the middle of the would-be wordmark surface.
+
+### Pre-shoot prop prep (do this once at the start of the session)
+
+1. **Identify the band's two faces.** Lay the band flat on a table. The matte black side is the *exterior* (this faces camera). The lighter / textured side is the *lining* (this faces the actor).
+2. **Pre-fold the band into a "fan-fold" packet** — like an accordion fold:
+   - Fold it in half once (lining-to-lining, exterior facing out on both sides).
+   - Then fold it again accordion-style into an ~80 mm packet.
+   - Place the packet in the bag with the **exterior side up** and the pinch end (the end the right hand will grip) on top.
+3. **Mark the inside of the bag** with a small piece of gaffer tape on the lining where the packet sits, so between takes the prop resets to the same place and orientation in 2 seconds.
+4. **Rehearse the lift 3 times** before rolling: reach in → pinch the top edge of the packet → lift in a smooth arc → as the band clears the rim, **let gravity unfold it into the vertical strip** → hold at chest height ~2 s with the matte black face square to camera → return to bag.
+
+The pre-fold matters because the band comes out of the bag *already oriented correctly* — the actor doesn't have to fiddle mid-lift, and the lining never gets exposed to camera.
+
+### Acceptance check (at the apex frame)
+
+- [ ] No part of the band is curved into a ring or loop in the visible frame.
+- [ ] No pale / lining surface is visible anywhere on the band.
+- [ ] The wordmark surface (whichever option) is **square to the lens** within ±15°.
+- [ ] At least ~30 × 50 mm of clean flat exterior surface is visible.
+- [ ] Hand grip occupies less than 25 % of the visible band area.
+- [ ] Band is held stable (no swing, no rotation) for the full ~1 s hold.
+
+If any of these fails on review, reset and re-shoot before tearing down the set.
 
 ---
 
