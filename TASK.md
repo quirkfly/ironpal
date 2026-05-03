@@ -496,3 +496,33 @@ ok, i will go with path A no background replacement..the issue is that prop is b
 ---
 
 save takes 1,2, and 8 
+
+---
+
+create a detailed document describing 9. Post-Production Pipeline for the S3 shoot, outlining the specific steps required to edit the footage captured during the shoot to create a polished and professional video for the Kickstarter campaign. The document should include guidance on how to select the best clips from the footage, how to color correct and enhance the visuals, and how to integrate any necessary graphics or text overlays. Additionally, the document should provide recommendations for software tools that can be used for post-production editing, as well as tips for maintaining a consistent visual style across all video content for the campaign. The goal is to ensure that the final edited video effectively showcases the product's features and benefits in a visually appealing way that resonates with the target audience.
+
+refs:
+
+
+--
+
+modify /home/peterd/job_stuff/ironpal/docs/s3-post-production-pipeline.md to address the following points:
+
+- the actor in s3 shoot is me..the actor must be replaced by the actual athlete that will be featured in the video content for the Kickstarter campaign
+- s3 shoot was done in my kitchen..the scene must be replaced with a gym setting that better reflects the environment where the product will be used. This can be achieved through post-production editing by replacing the background with footage or images of a gym setting, ensuring that the final video content effectively showcases the product in its intended context for the Kickstarter campaign. Please confirm if this approach is feasible and provide guidance on how to execute the background replacement effectively in post-production.
+
+---
+
+i am genuinly dissapinted with the state of generative AI. I was hoping that replacing a kitchen scene with a gym setting and replace me with a consistent athelete would be a simple task for the AI to handle in post-production.
+
+---
+
+Anonymous hand pulling headband out of bag is such a cheap and crappy idea that will kill the video instantly. 
+
+---
+
+I was planning to shoot remaining scenes in the gym myself and then use AI to replace me with the actual synthetic athlete. But as I understand there is no way to achieve this :/
+
+--
+
+That I can just shoot the whole fricking video without AI completely but the it will look really cheap and amateurish. Noone will fund such a low-quality video. I need to find a way to use AI to enhance the footage and create a polished final product that effectively showcases the product's features and resonates with the target audience for the Kickstarter campaign.
