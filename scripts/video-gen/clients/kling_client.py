@@ -78,8 +78,16 @@ class KlingClient(BaseVideoClient):
             "image": image_url,
             "prompt": prompt,
             "aspect_ratio": kwargs.get("aspect_ratio", "16:9"),
-            "cfg_scale": 0.5,
+            "cfg_scale": kwargs.get("cfg_scale", 0.5),
         }
+
+        image_tail_url = kwargs.get("image_tail")
+        if image_tail_url:
+            body["image_tail"] = image_tail_url
+
+        negative_prompt = kwargs.get("negative_prompt")
+        if negative_prompt:
+            body["negative_prompt"] = negative_prompt
 
         resp = requests.post(
             f"{API_BASE}/videos/image2video",

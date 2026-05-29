@@ -175,3 +175,45 @@ shots:
     duration: 5
     attempts: 4
     notes: "End card beauty shot. Slow, controlled lighting sweep."
+
+  # ---------------------------------------------------------------
+  # S3_kling — exploratory Kling 2.1 Pro path per docs/s3-kling-plan.md
+  # Start + End frame keyframing using stills extracted from the
+  # Runway Aleph reference. Default deliverable for S3 remains the
+  # Runway Aleph clip; this is a vendor-comparison A/B.
+  # ---------------------------------------------------------------
+  S3_kling:
+    platform: kling
+    model: "kling-v2-1"
+    mode: "pro"
+    source_image: "S3/kling-input/S3_kling_start.png"
+    source_image_tail: "S3/kling-input/S3_kling_end.png"
+    cfg_scale: 0.7  # adherence-leaning; tighter keyframe + prompt fidelity
+    prompt: >
+      A realistic athletic male hand smoothly lifts a sleek matte black
+      IronPal fitness headband out of a black gym bag, following a
+      continuous upward motion from the bag to chest height. The headband
+      is a thin flat strip with a subtle electric teal accent stripe along
+      its length and a small front-center camera lens module beside a soft
+      glowing teal LED. The background is a premium modern gym with
+      blurred barbell racks and folded gray towels in soft bokeh, warm
+      golden-hour key light from camera-left at 45 degrees, natural deep
+      shadows, no people in frame, no kitchen elements. The headband keeps
+      its original shape and proportions throughout the lift, no warping.
+      Photorealistic, stable shapes, premium athletic technology commercial
+      style, Kodak Vision3 250D film stock feel, 24 fps cinematic motion
+      cadence.
+    negative_prompt: >
+      distorted hands, extra fingers, missing fingers, deformed wrist,
+      warped headband, morphing object, flickering, unstable shapes,
+      plastic look, kitchen, cabinets, kitchen countertop, domestic
+      clutter, fluorescent lighting, cool blue light, harsh shadows,
+      branded sportswear logos other than IronPal, watermark, text
+      overlays, cartoon, illustration, 3D render, slow-motion ramp,
+      camera shake, dolly zoom, additional people in background
+    duration: 5
+    attempts: 5
+    notes: >
+      Image-to-Video Start+End keyframing. Hard cap 8 attempts per
+      docs/s3-kling-plan.md §6.1. If nothing matches the Aleph reference
+      after 8, ship the Runway clip per docs/s3-runway-post-production-polish.md.

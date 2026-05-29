@@ -5,3 +5,7 @@ __pycache__/
 scripts/video-gen/.venv/
 scripts/video-gen/output/
 scripts/video-gen/logs/
+
+# S3 editorial intermediates (regeneratable from runway-output + Resolve workflow; too large for GitHub)
+post/proxies/*.mov
+post/proxies/*.bak

@@ -119,6 +119,16 @@ class Pipeline:
             attempt_num = i + 1
             logger.info(f"{shot_id} attempt {attempt_num}/{attempts}")
             try:
+                extra_kwargs: dict = {}
+                if config.get("source_image_tail"):
+                    extra_kwargs["image_tail"] = self._get_image_url(
+                        config["source_image_tail"]
+                    )
+                if config.get("negative_prompt"):
+                    extra_kwargs["negative_prompt"] = config["negative_prompt"]
+                if config.get("cfg_scale") is not None:
+                    extra_kwargs["cfg_scale"] = config["cfg_scale"]
+
                 result = client.generate(
                     image_url=self._get_image_url(config["source_image"]),
                     prompt=config["prompt"],
@@ -128,6 +138,7 @@ class Pipeline:
                     model=config.get("model"),
                     mode=config.get("mode"),
                     aspect_ratio=self.settings.get("aspect_ratio", "16:9"),
+                    **extra_kwargs,
                 )
                 # Download video
                 video_path = output_dir / f"{shot_id}_v{attempt_num}.mp4"
