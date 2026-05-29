@@ -9,3 +9,4 @@ scripts/video-gen/logs/
 # S3 editorial intermediates (regeneratable from runway-output + Resolve workflow; too large for GitHub)
 post/proxies/*.mov
 post/proxies/*.bak
+.sudo_passwd

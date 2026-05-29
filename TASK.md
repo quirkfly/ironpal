@@ -763,3 +763,39 @@ create a detailed plan how to produce identical video in kling.ai and save the d
 ---
 
 implement the S3 video generation process using kling.ai based on the plan outlined in docs/s3-kling-plan.md. using existing scripting.
+
+---
+
+doing /home/peterd/job_stuff/ironpal/docs/s3-runway-post-production-polish.md
+
+
+at step 4. Import `post/proxies/S3_aleph_4k_v01.mov` (the ProRes 422 LT clean source) into a media bin called `S3_aleph_master`.
+
+got below error
+
+Your GPU memory is full.
+Try reducing the timeline resolution 
+or the number of correctors.
+
+
+---
+
+i managed to tweak the settings and mov file is imported
+
+i am not sure how to perform this step thoufh
+
+4. Step 3 — Color Grade with Dehancer
+
+how do i invoke dehancer?!
+
+---
+
+create a claude skill that opens and visually anaylysis the latest image from ~/Pictures
+
+save the skill to ~/.claude/skills
+
+---
+
+come up with a detailed UI automation plan to execture all steps as outlined in /home/peterd/job_stuff/ironpal/docs/s3-runway-post-production-polish.md
+
+save the plan as docs/s3-runway-post-production-automation-plan.md and include specific instructions for automating each step of the post-production process using UI automation tools. The plan should outline the necessary software and tools required for automation, as well as any potential challenges that may arise during implementation and strategies to address them effectively. Additionally, the plan should emphasize the importance of maintaining a consistent visual style across all video content for the Kickstarter campaign while ensuring that the final edited video effectively showcases the product's features and benefits in a visually appealing way.
