@@ -799,3 +799,19 @@ save the skill to ~/.claude/skills
 come up with a detailed UI automation plan to execture all steps as outlined in /home/peterd/job_stuff/ironpal/docs/s3-runway-post-production-polish.md
 
 save the plan as docs/s3-runway-post-production-automation-plan.md and include specific instructions for automating each step of the post-production process using UI automation tools. The plan should outline the necessary software and tools required for automation, as well as any potential challenges that may arise during implementation and strategies to address them effectively. Additionally, the plan should emphasize the importance of maintaining a consistent visual style across all video content for the Kickstarter campaign while ensuring that the final edited video effectively showcases the product's features and benefits in a visually appealing way.
+
+---
+
+run the S3 video generation process using kling.ai based on the plan outlined in docs/s3-kling-plan.md
+
+---
+
+the clips look quite decent..but what i need to add product icon and brand name on the headband to make it look more like the actual product. it must be done by kling.ai not by post-production to ensure that the logo and text are integrated into the scene in a natural and realistic way that enhances brand recognition. 
+
+refs /home/quirkfly/job_stuff/prj/ironpal/docs/s3-runway-post-production-polish.md
+
+come up with detailed plan how to achieve it and save it as docs/s3-kling-logo-plan.md
+
+---
+
+the branded kling AI clips are completely useless..the icon is floating in the air it looks pathetic,  grotesque and completely unrealistic. 
