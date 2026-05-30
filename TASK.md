@@ -815,3 +815,21 @@ come up with detailed plan how to achieve it and save it as docs/s3-kling-logo-p
 ---
 
 the branded kling AI clips are completely useless..the icon is floating in the air it looks pathetic,  grotesque and completely unrealistic. 
+
+
+---
+
+you are a senior graphic designer and video content producer with expertise in AI video generation. I need you to analyze /home/quirkfly/job_stuff/prj/ironpal/docs/s3-runway-post-production-polish.md and explain how on earth is it going to place the logo and text on the headband in a natural and realistic way achieving professional quality results for the Kickstarter campaign.
+
+
+---
+
+prepare me all the assets and art as documented in /home/quirkfly/job_stuff/prj/ironpal/docs/s3-physical-prop-branding-plan.md 
+
+---
+
+make sure to add The teal accent stripe there too
+
+---
+
+the orientation of the logo is WRONG /home/quirkfly/job_stuff/prj/ironpal/post/assets/IronPal_band_face_preview_v01.png .. it must be rotated 180 degrees clockwise so that it is oriented along the headband correctly

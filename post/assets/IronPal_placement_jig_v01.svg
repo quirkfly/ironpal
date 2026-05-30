@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IronPal S3 prop placement jig (along-band, lockup rotated as a unit) — print 100%/Actual size, no scaling. Ref §4. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="140.0mm" height="200.0mm" viewBox="0 0 140.0 200.0">
+<rect width="140.0" height="200.0" fill="#fff"/>
+<style>.t{font-family:'DejaVu Sans',sans-serif;fill:#111}.lbl{font-family:'DejaVu Sans',sans-serif;fill:#555}.r{fill:#d63;font-family:'DejaVu Sans',sans-serif}</style>
+<text x="6" y="10" class="t" font-size="4.0" font-weight="bold">IronPal — S3 headband placement jig (1:1)</text>
+<text x="6" y="16" class="lbl" font-size="2.8">Print Actual size / 100%, no scaling. 30 mm strip = the band face. Whole lockup runs ALONG the band length.</text>
+<rect x="22.0" y="24.0" width="30" height="120.0" fill="none" stroke="#222" stroke-width="0.3" stroke-dasharray="2 1.4"/>
+<rect x="22.25" y="24.0" width="2.5" height="120.0" fill="#00E5CC" fill-opacity="0.35" stroke="#00E5CC" stroke-width="0.1"/>
+<text x="22.2" y="152.5" class="lbl" font-size="2.5">accent stripe — 2.5 mm, lower long edge (full length)</text>
+<line x1="37.0" y1="24.0" x2="37.0" y2="144.0" stroke="#bbb" stroke-width="0.2" stroke-dasharray="1 1"/>
+<text x="22.0" y="148.5" class="lbl" font-size="2.6">30 mm face width  ·  dashed = cut / edge guide</text>
+<rect x="22.0" y="24.0" width="30" height="30.0" fill="#00E5CC" fill-opacity="0.06" stroke="#d63" stroke-width="0.25" stroke-dasharray="1.5 1.2"/>
+<line x1="22.0" y1="39.0" x2="52.0" y2="39.0" stroke="#d63" stroke-width="0.25"/>
+<text x="54.0" y="39.8" class="r" font-size="2.5">pinch grip ~15 mm from top</text>
+<text x="23.4" y="51.8" class="r" font-size="2.7" font-weight="bold">KEEP CLEAR (top 30 mm)</text>
+<g transform="translate(37.0 62.0) rotate(90)" fill="#00E5CC" fill-opacity="0.20" stroke="#00E5CC" stroke-width="0.12"><path d="M -2.248 5.563 A 6.0 6.0 0 1 1 2.248 5.563 L 1.573 3.894 A 4.2 4.2 0 1 0 -1.573 3.894 Z"/><circle cx="0.000" cy="-2.900" r="1.15"/><g transform="translate(7.4272 2.7780) scale(0.007160 -0.007160)"><path d="M80 693H236V0H80ZM703 394Q683 399 656.0 404.5Q629 410 598 410Q584 410 564.5 407.5Q545 405 535 402V0H386V498Q426 512 480.5 524.5Q535 537 602 537Q614 537 631.0 535.5Q648 534 665.0 531.5Q682 529 699.0 525.5Q716 522 728 517ZM1300 264Q1300 202 1282.0 150.5Q1264 99 1230.0 62.5Q1196 26 1148.5 6.0Q1101 -14 1042 -14Q984 -14 936.5 6.0Q889 26 855.0 62.5Q821 99 802.0 150.5Q783 202 783 264Q783 326 802.5 377.0Q822 428 856.5 464.0Q891 500 938.5 520.0Q986 540 1042 540Q1099 540 1146.5 520.0Q1194 500 1228.0 464.0Q1262 428 1281.0 377.0Q1300 326 1300 264ZM1148 264Q1148 333 1120.5 372.5Q1093 412 1042 412Q991 412 963.0 372.5Q935 333 935 264Q935 195 963.0 154.5Q991 114 1042 114Q1093 114 1120.5 154.5Q1148 195 1148 264ZM1415 508Q1453 519 1513.0 528.5Q1573 538 1639 538Q1706 538 1750.5 520.5Q1795 503 1821.0 471.0Q1847 439 1858.0 395.0Q1869 351 1869 297V0H1720V279Q1720 351 1701.0 381.0Q1682 411 1630 411Q1614 411 1596.0 409.5Q1578 408 1564 406V0H1415ZM2222 701Q2377 701 2460.0 646.5Q2543 592 2543 468Q2543 343 2459.0 287.5Q2375 232 2219 232H2170V0H2014V683Q2065 693 2122.0 697.0Q2179 701 2222 701ZM2232 568Q2215 568 2198.5 567.0Q2182 566 2170 565V365H2219Q2300 365 2341.0 387.0Q2382 409 2382 469Q2382 498 2371.5 517.0Q2361 536 2341.5 547.5Q2322 559 2294.0 563.5Q2266 568 2232 568ZM2849 104Q2871 104 2891.0 105.0Q2911 106 2923 108V221Q2914 223 2896.0 225.0Q2878 227 2863 227Q2842 227 2823.5 224.5Q2805 222 2791.0 215.0Q2777 208 2769.0 196.0Q2761 184 2761 166Q2761 131 2784.5 117.5Q2808 104 2849 104ZM2837 540Q2903 540 2947.0 525.0Q2991 510 3017.5 482.0Q3044 454 3055.0 414.0Q3066 374 3066 325V15Q3034 8 2977.0 -1.5Q2920 -11 2839 -11Q2788 -11 2746.5 -2.0Q2705 7 2675.0 27.5Q2645 48 2629.0 81.0Q2613 114 2613 162Q2613 208 2631.5 240.0Q2650 272 2681.0 291.0Q2712 310 2752.0 318.5Q2792 327 2835 327Q2864 327 2886.5 324.5Q2909 322 2923 318V332Q2923 370 2900.0 393.0Q2877 416 2820 416Q2782 416 2745.0 410.5Q2708 405 2681 395L2662 515Q2675 519 2694.5 523.5Q2714 528 2737.0 531.5Q2760 535 2785.5 537.5Q2811 540 2837 540ZM3411 -10Q3346 -9 3305.5 4.0Q3265 17 3241.5 40.5Q3218 64 3209.5 97.5Q3201 131 3201 173V752L3350 776V203Q3350 183 3353.0 167.0Q3356 151 3364.5 140.0Q3373 129 3389.0 122.0Q3405 115 3432 113Z"/></g></g>
+<line x1="28.0" y1="62.0" x2="46.0" y2="62.0" stroke="#d63" stroke-width="0.18"/>
+<line x1="37.0" y1="53.0" x2="37.0" y2="71.0" stroke="#d63" stroke-width="0.18"/>
+<text x="54.0" y="62.8" class="r" font-size="2.5">icon center — Ø 12 mm (icon rotated with lockup)</text>
+<line x1="30.0" y1="70.0" x2="44.0" y2="70.0" stroke="#d63" stroke-width="0.18" stroke-dasharray="1 0.8"/>
+<text x="54.0" y="70.8" class="r" font-size="2.5">wordmark start (2 mm below icon)</text>
+<line x1="30.0" y1="94.0" x2="44.0" y2="94.0" stroke="#d63" stroke-width="0.15" stroke-dasharray="1 0.8"/>
+<text x="54.0" y="94.8" class="r" font-size="2.5">wordmark end (24 mm down the length)</text>
+<text x="6" y="157.0" class="t" font-size="3.2" font-weight="bold">How to use</text>
+<text x="6" y="162.5" class="lbl" font-size="2.7">1. Lay the strip over the band face, top edges aligned, square to the band.</text>
+<text x="6" y="167.0" class="lbl" font-size="2.7">2. Mark icon-center (+) and the wordmark start/end ticks with tailor's chalk.</text>
+<text x="6" y="171.5" class="lbl" font-size="2.7">3. Rotate the WHOLE transfer 90 deg CW so "IronPal" + icon read down the band, icon nearest the pinch.</text>
+<text x="6" y="176.0" class="lbl" font-size="2.7">4. Press per the locked recipe (prop-branding-recipe_v01.md). Stripe runs the lower long edge.</text>
+<line x1="15" y1="191.0" x2="65" y2="191.0" stroke="#111" stroke-width="0.4"/>
+<line x1="15" y1="189.0" x2="15" y2="193.0" stroke="#111" stroke-width="0.4"/>
+<line x1="65" y1="189.0" x2="65" y2="193.0" stroke="#111" stroke-width="0.4"/>
+<text x="15" y="196.0" class="t" font-size="2.8" font-weight="bold">VERIFY: this bar = exactly 50.0 mm. If not, reprint at 100% (no scaling).</text>
+</svg>

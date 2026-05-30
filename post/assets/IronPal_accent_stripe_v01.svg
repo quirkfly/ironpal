@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IronPal teal accent stripe cut file — s3-physical-prop-branding-plan.md §7.1.
+     Width 2.5 mm, electric teal #00E5CC. Cut to length = band face length + ~10 mm; runs the band's lower long edge. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="200.0mm" height="34.0mm" viewBox="0 0 200.0 34.0">
+<rect width="200.0" height="34.0" fill="#fff"/>
+<style>.t{font-family:'DejaVu Sans',sans-serif}</style>
+<text x="10.0" y="8" class="t" font-size="3.6" font-weight="bold" fill="#111">IronPal accent stripe (1:1) — 2.5 mm wide, cut to band length</text>
+<rect x="10.0" y="14.0" width="180.0" height="2.5" fill="#00E5CC"/>
+<line x1="10.0" y1="12.0" x2="10.0" y2="18.5" stroke="#888" stroke-width="0.2"/><text x="10.0" y="11.0" font-size="2.2" fill="#666" font-family="DejaVu Sans" text-anchor="middle">0</text><line x1="60.0" y1="12.0" x2="60.0" y2="18.5" stroke="#888" stroke-width="0.2"/><text x="60.0" y="11.0" font-size="2.2" fill="#666" font-family="DejaVu Sans" text-anchor="middle">50</text><line x1="110.0" y1="12.0" x2="110.0" y2="18.5" stroke="#888" stroke-width="0.2"/><text x="110.0" y="11.0" font-size="2.2" fill="#666" font-family="DejaVu Sans" text-anchor="middle">100</text><line x1="160.0" y1="12.0" x2="160.0" y2="18.5" stroke="#888" stroke-width="0.2"/><text x="160.0" y="11.0" font-size="2.2" fill="#666" font-family="DejaVu Sans" text-anchor="middle">150</text>
+<line x1="10.0" y1="21.5" x2="10.0" y2="24.5" stroke="#d63" stroke-width="0.3"/>
+<line x1="190.0" y1="21.5" x2="190.0" y2="24.5" stroke="#d63" stroke-width="0.3"/>
+<text x="10.0" y="28.5" class="t" font-size="2.5" fill="#444">Trim between the red end ticks to length L = band face length + ~10 mm (typical visible drape ≈ 120 mm). Ticks above = 50 mm grid (verify 0–50 = 50.0 mm at 100%).</text>
+</svg>
