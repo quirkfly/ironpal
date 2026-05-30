@@ -204,3 +204,9 @@ Branding the prop means re-capturing S3 with the now-branded band. **The shoot i
 **Prepared by:** Producer (solo founder)
 **Date:** 2026-05-30
 **Status:** Ready to execute. Decision gate: pick method by timeline — DTF (safe crisp default, few days) / silicone patch (premium, few days + small budget) / matte HTV (today, DIY). Buy a test-mule band first.
+
+
+refs:
+
+
+https://www.tricka.sk/vlastne-nazehlovacky

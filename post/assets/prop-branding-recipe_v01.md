@@ -12,9 +12,10 @@
 
 | Item | Value |
 |---|---|
-| Master vector | `post/assets/IronPal_mark_vector_v01.svg` (and `.pdf`) — horizontal lockup |
-| Icon | Open ring + top dot, **Ø 12 mm** |
-| Wordmark | "IronPal", **24 mm long × ~5.5 mm tall**, 2 mm from the icon, outlined paths (Ubuntu Bold) |
+| Master vector | `post/assets/IronPal_mark_vector_v01.svg` (and `.pdf`) — horizontal lockup, **63 × 24 mm artboard** (visible mark ~56 × 18 mm) |
+| Icon | Open ring + top dot, **Ø 18 mm** (Medium size, ~60 % of the 30 mm face) |
+| Wordmark | "IronPal", **36 mm long × ~8.3 mm tall**, 3 mm from the icon, outlined paths (Ubuntu Bold) |
+| DTF order size | **Rozmer 5.6 × 1.8 cm**, Počet ks 4–6 (test mule + hero + backup), file = the mark SVG. Print at 100% / no auto-scale. |
 | Lockup | Horizontal **"◯ IronPal"** (ring, then wordmark). **Applied ALONG the band length** — the **whole lockup is rotated 90° clockwise as one unit** (icon rotates too: the dot points toward the wordmark / reading direction). On the vertical-drape band the icon sits at the top (nearest the pinch) and the wordmark reads *down* the band. See `IronPal_band_face_preview_v01.png` and the jig. *(This supersedes the plan §4 "icon-stacked-over-wordmark across the face" — the mark must run along the headband.)* |
 | Accent stripe (optional, §7.1) | **2.5 mm** wide teal stripe, runs the band's **lower long edge** full length, inset ~0.25 mm from the edge so it clears the centered logo. Cut file: `post/assets/IronPal_accent_stripe_v01.svg`/`.pdf`. Full-face look: `IronPal_band_face_preview_v01.png` |
 | Color (screen) | electric teal **`#00E5CC`** ("Stealth Teal", `docs/color-schemes.md`) |
@@ -58,7 +59,7 @@ Use `post/assets/IronPal_placement_jig_v01.pdf`, printed **Actual size / 100 %**
 - **Face:** matte-black exterior only (the face that points at camera at apex). Lining stays blank.
 - **Orientation:** the lockup runs **along the band length** — rotate the **whole transfer 90° clockwise as one unit** (icon and wordmark together; the icon's dot ends up pointing toward the wordmark) so **"IronPal" reads down the band**, with the **icon at the top, nearest the pinch**. (Not across the width.)
 - **Across the face:** icon and wordmark both dead-center on the 30 mm width.
-- **Along the length:** icon center **≥ 30 mm below the top edge** (clear of the ~15 mm pinch + margin); wordmark starts 2 mm below the icon and runs ~24 mm down.
+- **Along the length:** icon center **≥ 30 mm below the top edge** (clear of the ~15 mm pinch + margin); wordmark starts 3 mm below the icon and runs ~36 mm down (whole lockup ~56 mm along the length).
 - **Squareness:** apply flat and square (band held within ±15° of square to lens at apex).
 - **Jig:** mark icon-center (+) and the wordmark start/end ticks with tailor's chalk; position the rotated transfer to the marks.
 

@@ -833,3 +833,7 @@ make sure to add The teal accent stripe there too
 ---
 
 the orientation of the logo is WRONG /home/quirkfly/job_stuff/prj/ironpal/post/assets/IronPal_band_face_preview_v01.png .. it must be rotated 180 degrees clockwise so that it is oriented along the headband correctly
+
+---
+
+i am about to order DFT transfer..i need to know dimensions of /home/quirkfly/job_stuff/prj/ironpal/post/assets/IronPal_band_face_preview_v01.png
