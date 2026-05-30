@@ -10,3 +10,6 @@ scripts/video-gen/logs/
 post/proxies/*.mov
 post/proxies/*.bak
 .sudo_passwd
+
+# secrets
+credentials/

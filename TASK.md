@@ -837,3 +837,80 @@ the orientation of the logo is WRONG /home/quirkfly/job_stuff/prj/ironpal/post/a
 ---
 
 i am about to order DFT transfer..i need to know dimensions of /home/quirkfly/job_stuff/prj/ironpal/post/assets/IronPal_band_face_preview_v01.png
+
+---
+
+i am about to start working on ironpal POC v1. It will be essentially a mobile app running on an android device monuted on a headband. The app will use the camera to capture the user's surroundings and display workout metrics on the screen. v1 should be able to capture the following metrics:
+
+- name of the exercise being performed
+- number of repetitions
+- weight being lifted (if applicable)
+
+
+v1 will be tested on two exercises:
+
+1. bulgarian split squat
+
+name of the exercise being performed:
+
+  A1. app will use building sensor to capture data while performing the exercise
+  A2. the data will be saved together with the name of the exercise and will serve as a fingerprint for the exercise
+  A3. doing so app will be able to recognize the exercise being performed in real-time by comparing the live sensor data with the saved fingerprint data for the bulgarian split squat
+
+- number of repetitions
+ - use mobile device's accelerometer and gyroscope to detect the motion patterns associated with each repetition of the bulgarian split squat. The app will analyze the sensor data to count the number of repetitions performed by the user, providing real-time feedback on their workout progress.
+
+- weight being lifted
+  A1. app will use the camera to capture the user's movements and consult an AI vision model to recognize the weight plates being lifted during the exercise. The app will analyze the visual data to identify the weight being lifted and provide real-time feedback to the user on their workout performance.
+
+  
+2. triceps cable pushdown
+  
+  name of the exercise being performed:
+  
+  A1. i am not sure if sensor data alone will be sufficient to capture the exercise being performed for this one
+  A2. app will also use the camera to capture the user's movements and consult an AI vision model to recognize the exercise being performed in real-time. The app will save the sensor data and video footage together with the name of the exercise to create a comprehensive fingerprint for the triceps cable pushdown, allowing for accurate recognition in future sessions.
+
+- number of repetitions
+ - use mobile device's accelerometer and gyroscope to detect the motion patterns associated with each repetition of the bulgarian split squat. The app will analyze the sensor data to count the number of repetitions performed by the user, providing real-time feedback on their workout progress.
+
+- weight being lifted
+  A1. app will use the camera to capture the user's movements and consult an AI vision model to recognize the weight plates being lifted during the exercise. The app will analyze the visual data to identify the weight being lifted and provide real-time feedback to the user on their workout performance.
+
+create POC document and save it as docs/ironpal-poc-v1.md. The document should include a detailed outline of the features and functionality of the POC, as well as the specific metrics that will be captured for each exercise. Additionally, the document should provide guidance on how to test the POC effectively, including any necessary equipment or resources required for testing. The goal is to create a comprehensive plan for developing and testing the IronPal POC v1 to ensure that it meets the desired functionality and provides valuable insights for future iterations of the product.
+
+---
+
+Enrollment will be done by me (the founder) and saved in a db. The system will use it when processing the live data during workouts to recognize the exercises being performed and provide accurate feedback to the user. 
+
+---
+
+for POC i will use a phone mounted on the headband..for MVP i will use a dedicated mini-camera integrated into the headband itself to capture the user's movements and provide real-time feedback on their workout performance. the mini-camera will be connected to the mobile app via Bluetooth or Wi-Fi
+
+---
+
+come up with a detailed design plan for the IronPal POC v1 based on POC and save it as docs/ironpal-poc-v1-design.md.
+
+techstack for the POC will include:
+
+frontend: React Native for mobile app development
+backend: python fastAPI for server-side processing and API development
+database: PostgreSQL for storing user data and exercise fingerprints
+AI models: chat-gpt 5 nano for exercise recognition and weight identification
+
+---
+
+now implement the IronPal POC v1 based on the design plan outlined in docs/ironpal-poc-v1-design.md. Implement it in an autonomous / agentic manner, ensuring that all features and functionality are developed according to the specifications outlined in the design document. This will involve setting up the development environment, coding the frontend and backend components, integrating the AI models for exercise recognition and weight identification, and testing the POC to ensure that it meets the desired functionality. 
+
+see credentials/openai.key for accessing the OpenAI API for the AI model integration
+
+refs:
+
+../coolteen - for RN app and FastAPI backend boilerplate code
+
+
+IMPORTANT: implement the POC without any human intervention, ensuring that the development process is fully autonomous and agentic
+
+---
+
+create a claude skill that plots sensor data captured for a specific exercise session in a visually appealing way

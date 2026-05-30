@@ -1,0 +1,33 @@
+# Android/IntelliJ
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+.kotlin/
+
+# node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment variables (secrets — use .env.example as template)
+.env
+.env.local
+.env.production
+
+# Bundle artifacts
+*.jsbundle
+android/app/src/main/assets/index.android.bundle
+
+# Metro health-check temp files
+.metro-health-check*
+
+# testing
+/coverage
+
+keystore.properties

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">IronPal POC</string>
+    <integer name="react_native_dev_server_port">8800</integer>
+</resources>
