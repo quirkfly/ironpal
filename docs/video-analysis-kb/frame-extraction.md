@@ -3,6 +3,25 @@
 How we turn a clip into frames that are actually legible enough to answer the three questions.
 Tuned by experience — update the defaults below whenever a clip teaches us a better setting.
 
+## STEP 0 — UN-ROTATE FIRST (Galaxy A52 headband rig)
+
+This rig's frames come out **rotated 90°**; ffmpeg extracts them sideways. **Un-rotate before
+analysing** — `-vf "transpose=2"` (counter-clockwise) makes content upright for this rig. Single
+biggest legibility win found so far: rotated frames made a horizontal deadlift barbell look
+"vertical" and drove two wrong reads on case 002 (called it "assembly", then couldn't track it). Once
+un-rotated, the bar's floor→hip trajectory (deadlift) was obvious. Prepend transpose to every extract:
+`ffmpeg ... -vf "transpose=2,scale=...,tile=..."`. Verify direction on one frame first (feet/floor at
+the bottom, standing torso toward the top).
+
+### Orientation check — NOT mirrored (corrected). transpose=2 is right; do NOT hflip.
+Ground truth: with `transpose=2` the **mat text reads forward (readable)** AND the **watch appears on
+the LEFT wrist** (where the lifter wears it). Both correct ⇒ the footage is **NOT mirrored**; left/
+right is **correct** in `transpose=2`. (I briefly thought it was mirrored — that was my own left/right
+**mislabel** of the watch side; adding `hflip` actually *reversed* the mat text, proving hflip is
+wrong.) **Orientation verification rule:** un-rotate with `transpose=2`, then confirm BOTH (a) mat
+text reads forward and (b) the watch is on the LEFT wrist. If text reads backward, you've added a
+spurious mirror — remove it. Do **not** hflip this rig.
+
 ## Current defaults
 
 - **Sampling rate:** 2 fps for normal-tempo lifts (squats, presses, pushdowns). This gives ~2–4

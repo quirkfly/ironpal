@@ -71,6 +71,19 @@ Case 001 plate read was CORRECT (DOMYOS 2.5kg ×2 = 5kg); my error was **adding 
 model, ask the user to confirm, or target commercial gyms first (painted pin stacks / fixed
 dumbbells OCR cleanly). Home cast dumbbells ≈ the hardest weight case the product will hit.
 
+## Judging whether a bar is loaded (two rules — case 002 errors)
+
+**Rule 1 — A bare bar CENTER is NOT an empty bar.** Plates sit at the bar **ENDS**, never the center
+(the center is the grip). "No plates in the visible middle" is exactly what a *loaded* bar looks like
+too → it is **zero evidence of an empty bar**, especially in egocentric close-ups where the ends fall
+off-frame. To assess load, find a frame that actually shows a **bar END**; don't infer "empty" from a
+bare middle.
+
+**Rule 2 — Equipment state PERSISTS across frames; don't re-judge load per frame.** If nearby frames
+show the bar loaded (case 002: plates clearly on at t18/t30/t70), it is loaded in the in-between
+frames too, even when the plates aren't in view — barring an actual plate-removal you can see. Carry
+the loaded-state forward from the staging/load frame rather than resetting the judgment each frame.
+
 ## Reporting
 
 Give value + unit + the frame you read it from + the unit-inference basis + confidence. For

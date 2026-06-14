@@ -1011,3 +1011,80 @@ show me all the frame s used for reading the weight lifted in the video clip..i 
 ---
 
 Now explain in details why did you ignore this frame in earlier analysis of the video clip when reading the weight lifted. Please provide a detailed explanation of the specific reasons for excluding this frame from the analysis, including any challenges or ambiguities that were encountered during the process. Additionally, describe how this exclusion may have impacted the overall accuracy of the weight lifted determination and any steps that were taken to mitigate any potential errors or discrepancies in the analysis. Finally, provide any insights or observations on how this experience may inform future analyses of similar video clips for exercise recognition and weight identification.
+
+---
+
+create a claude skill that does the following:
+
+let's focus first on analyzing to name of the exercise being performed. Run me through the detailed process you applied to accurately identify the exercise being performed in the video clip. Please explain the specific techniques and methods you used to analyze the footage, including any AI models or algorithms that were employed to recognize the movements and patterns associated with different exercises. Additionally, describe how you handled the large number of frames in the 4K, 30fps footage, and how you ensured that your analysis was both efficient and accurate. Finally, provide any insights or observations you made during the analysis process that helped you determine the name of the exercise being performed in the clip.
+
+
+save the skill to project folder as exercise-recognition-skill.claude and share it with the team for feedback and further development. The skill should be designed to assist in the analysis of video clips for exercise recognition, providing detailed explanations of the techniques and methods used, as well as insights and observations that can inform future analyses. Additionally, the skill should be able to handle large amounts of footage efficiently and accurately, ensuring that the analysis process is streamlined and effective.
+
+----
+
+Here is my approach how to identify the exercise being performed in the video clip:
+
+1. identify the equipment being used in the exercise (e.g. dumbbells, barbells, resistance bands, etc.)
+2. identify the moment the person starts using the equipment
+3. track the movement of the equipment throughout the exercise
+4. analyze the movement patterns and trajectories of the equipment to determine the type of exercise being performed
+
+Explain in details what approach did you use to identify the exercise being performed in the video clip, 
+
+---
+
+now apply my approach and re-analyze the video clip to accurately identify the exercise being performed. Please provide a detailed report on the results of your analysis, including the name of the exercise and any relevant observations or insights that were gained during the process. Additionally, describe any challenges or ambiguities that were encountered during the analysis and how they were resolved to ensure an accurate identification of the exercise being performed in the clip. Finally, provide any recommendations for improving the exercise recognition process in future analyses of similar video clips.
+
+---
+
+explain in details how do you define "tracking the movement of the equipment throughout the exercise"? 
+
+---
+
+Locating the equipment in each frame — find the bar/dumbbell and note its position, orientation, and state (on the floor / in hand / at hip /
+  overhead) is precisely what you need to do in order to accurately identify the exercise being performed.
+
+Compare the equipment movement of a candidate exercise with what you actually see in the video clip and than decide it you are correctly identifying the exercise being performed or not.
+
+---
+
+why do you jump to a conclusion that that bar is not loaded? Is it bacause possible the weights are not visible in the frame? If so do you have a previous evidence that the bar was loaded in the previous frames? Look one more time very carefully to the frame at the device. Does it resemple the exercise you claid the person is performing?
+
+---
+
+Now, give me a detailed description how does perform the deadlift exercise.
+
+----
+
+Ok, now do have one more and this time really detailed look at the frame at the device. Pay extra attention to how the hands are gripping the bar, the position of the FOREARMS. Once you have done that, explain in detail how can a person holding the hands in that position perform a deadlift exercise.
+
+---
+
+here is a BULLETPROOF sequence a person uses a barbell:
+
+1. he loads the barbell with weights
+2. he GRAPS the barbell with both hands
+3. he use the barbell to perform the exercise -> he performs the SAME movement pattern with the barbell throughout the exercise, which is determined by the type of exercise being performed
+
+Now, equipped with this knowledge, go ahead and re-analyze the video clip to identify the exercise being performed.
+
+---
+
+Now, do analyze the frames belonging to phase 3 AGAIN. Focus especially on the barbell position along the movement trajectory a pay extract attantion to the forearms. Once carelly analyzed, explain in detail if the movement pattern of the barbell and the position of the forearms in those frames resemble the movement pattern and forearm position typically associated with a deadlift exercise. Provide a detailed explanation of your analysis process and how you arrived at your conclusion regarding the identification of the exercise being performed in the video clip. Additionally, describe any challenges or ambiguities that were encountered during this analysis and how they were resolved to ensure an accurate identification of the exercise. Finally, provide any insights or observations on how this experience may inform future analyses of similar video clips for exercise recognition.
+
+---
+
+disambiguate between selected candidates by analyzing the movement pattern of the barbell and the position of the forearms in the frames belonging to phase 3.
+
+---
+
+describe how does a person perform a barbell upright row exercise.
+
+---
+
+analyze carefully the grip from phase 3 frames and explain what grip does the person use to hold the barbell.
+
+---
+
+/screeshot-device have you seen this frame? What grip does the person use to hold the barbell in this frame? At what positions are his forearms? Does the forearm position allow to perform the your candidate exercise?

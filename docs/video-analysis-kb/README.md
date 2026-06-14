@@ -47,6 +47,24 @@ because the eccentric looks like a second rep — count only the top lockout" is
 
 ---
 
+## Foundational principle: equipment exercises = SET UP → GRASP → PERFORM
+
+Any equipment-based exercise follows a fixed sequence, and **only the last phase is the exercise**:
+
+1. **Set up / load** — fetch the dumbbell, load plates on the bar, set the pin. (Not the exercise.)
+2. **Grasp / get into position** — pick up / grip the implement, take the stance. (Not the exercise.)
+3. **Perform** — the **same movement pattern repeated**; its path names the exercise and its cycles
+   are the reps. **This is the exercise. Analyse only this phase.**
+
+This is the structural fix from case 002, where **loading was ~⅔ of the clip** and analysing it (the
+implement being carried, threaded, repositioned) produced wrong reads ("not an exercise", endless
+"handling"). **First locate the set-up→grasp→perform boundaries; ignore phases 1–2; read the repeated
+movement in phase 3.** The set-up/grasp frames are also where weight is most readable (staging) — see
+`weight-reading.md` — but they are *not* where the exercise is named. Barbell specifics:
+`exercise-identification.md`.
+
+---
+
 ## Standard report format
 
 ```
