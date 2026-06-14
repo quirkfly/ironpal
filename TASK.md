@@ -914,3 +914,100 @@ IMPORTANT: implement the POC without any human intervention, ensuring that the d
 ---
 
 create a claude skill that plots sensor data captured for a specific exercise session in a visually appealing way
+
+---
+
+here is the plan:
+
+i want you to use collaborative and iterative approach to build up a knowledge base allowing you to analyse an arbitrary video clip and produce a detailed report that includes:
+
+- name of the exercise being performed
+- number of repetitions
+- weight being lifted (if applicable)
+
+---
+
+Clip is 1:40 long, 4K, 30fps. That's ~200 frames at 2fps — too many to read carefully one-by-one, and 4K each. Let me fix the script's
+  header bug, then use an efficient two-tier approach: contact-sheet montages for structure, then full-res frames for the key moments (rep
+  turnarounds + weight glance).
+
+Explain in details how are you going to accurately analyze the video clip to extract the required information if the footage is 4K, 30fps and you find ~200 frames at 2fps too many to read carefully one-by-one.
+
+---
+
+let's focus first on analyzing to name of the exercise being performed. Run me through the detailed process you applied to accurately identify the exercise being performed in the video clip. Please explain the specific techniques and methods you used to analyze the footage, including any AI models or algorithms that were employed to recognize the movements and patterns associated with different exercises. Additionally, describe how you handled the large number of frames in the 4K, 30fps footage, and how you ensured that your analysis was both efficient and accurate. Finally, provide any insights or observations you made during the analysis process that helped you determine the name of the exercise being performed in the clip.
+
+---
+
+The real product will have a dedicated mini-camera integrated into the headband itself hence we will be still getting only the video feed from the camera mounted on the headband. However,  the camera will have a full set of sensors (accelerometer, gyroscope, magnetometer) and will be able to capture the user's movements in real-time. 
+Given these information, how can you accurately resolve exercise recognition ambiguity you run into when analyzing the video clip? 
+
+---
+
+When i perform biceps curl or shoulder raise my head stays still in both exercises - that's the whole point. Explain in detail how you will use the sensor data from the mini-camera integrated into the headband to accurately distinguish between exercises that have similar head movements, such as biceps curls and shoulder raises. Please describe the specific techniques and methods you will employ to analyze the sensor data, including any AI models or algorithms that will be used to recognize the unique movement patterns associated with each exercise. Additionally, explain how you will integrate the sensor data with the video feed from the camera to enhance the accuracy of exercise recognition and resolve any ambiguities that may arise during the analysis process. Finally, provide any insights or observations on how this approach will improve the overall effectiveness of the IronPal POC v1 in providing real-time feedback on workout performance.
+
+---
+
+ok, now apply all this additional KB to exercise recognition and re-analyze the video clip to accurately identify the exercise being performed. Please provide a detailed report on the results of your analysis, including the name of the exercise and any relevant observations or insights that were gained during the process.
+
+---
+
+reagarding biceps curl vs shoulder raise ambiguity. Explain in detail how does one perform a biceps curl and a shoulder raise, highlighting the key differences in movement patterns, muscle engagement, and body positioning that can be used to distinguish between the two exercises. 
+
+---
+
+explain in details what would a head-mounted camera see if a person person performs a shoulder raise vs a biceps curl?
+
+---
+
+let's focus next on analyzing number of repetitions of the exercise being performed. Run me through the detailed process you applied to accurately count the repetitions in the video clip. Please explain the specific techniques and methods you used to analyze the footage, including any AI models or algorithms that were employed to recognize the movements and patterns associated with different exercises. Additionally, describe how you handled the large number of frames in the 4K, 30fps footage, and how you ensured that your analysis was both efficient and accurate. Finally, provide any insights or observations you made during the analysis process that helped you determine the number of repetitions performed in the clip.
+
+---
+
+show me all the frames used for counting the repetitions in the video clip..i want to examine them myself
+
+---
+
+Two things: I'll point you to the exact montages I counted from, and — since those montages were too small for even me to count cleanly — I'll also
+  generate a readable, per-frame set you can actually scrub and count yourself, with filenames mapped to real timestamps.
+
+Explain in details if the montages you used were tool small for you to accurately count the repetitions in the video clip why did not you stop there? Er even better why did not you generate a bigger and therefore readable montage for yourself to count the repetitions accurately?
+
+---
+
+Explain in details below source of count error
+
+Simultaneous vs. alternating (2× / ÷2)
+
+I believe it is rather elementary to distinguish between simultaneous and alternating reps based on how many hands are moving at the same time or am i missing something? Please explain in detail how you determined whether the repetitions were simultaneous or alternating, and how this affected your overall count of the repetitions in the video clip. Additionally, describe any challenges or ambiguities you encountered during this process and how you resolved them to ensure an accurate count of the repetitions performed in the exercise. Finally, provide any insights or observations on how this distinction between simultaneous and alternating reps may impact the analysis of other exercises in future video clips.
+
+---
+
+ok, now apply all this additional KB to repetition counting and re-analyze the video clip to accurately count number of repetions of the performed exercise. Please provide a detailed report on the results of your analysis, including the total number of repetitions counted and any relevant observations or insights that were gained during the process.
+
+---
+
+This the approach i would choose to accurately count the number of repetitions in the video clip. Given that the exercise is alternating biceps curl i would first focus only on the right hand and count the number of repetitions performed by that hand. 
+Than i would focus on the left hand and count the number of repetitions performed by that hand. Doing the second counting serves as a cross-check to ensure that the total number of repetitions is accurate. By analyzing each hand separately, I can account for any discrepancies or missed movements that may occur when counting both hands simultaneously.
+
+Here is the actual counting process i would use:
+
+1. select all the frames where right hand is visible and clearly performing the biceps curl movement
+2. count only those frames where the right hand is at HIGHEST point of the curl (i.e. when the hand is closest to the shoulder)
+3. repeat the same process for the left hand
+
+---
+
+it is actually 6 repetitions..make sure to update KB about using IMU to increase accuracy of repetition counting and to resolve any ambiguities that may arise during the analysis process. 
+
+---
+
+let's focus finally on analyzing weight lifted. Run me through the detailed process you applied to accurately read the weight lifted in the video clip. Please explain the specific techniques and methods you used to analyze the footage, including any AI models or algorithms that were employed to recognize the movements and patterns associated with different exercises. Additionally, describe how you handled the large number of frames in the 4K, 30fps footage, and how you ensured that your analysis was both efficient and accurate. Finally, provide any insights or observations you made during the analysis process that helped you determine the weight lifted in the clip.
+
+---
+
+show me all the frame s used for reading the weight lifted in the video clip..i want to examine them myself
+
+---
+
+Now explain in details why did you ignore this frame in earlier analysis of the video clip when reading the weight lifted. Please provide a detailed explanation of the specific reasons for excluding this frame from the analysis, including any challenges or ambiguities that were encountered during the process. Additionally, describe how this exclusion may have impacted the overall accuracy of the weight lifted determination and any steps that were taken to mitigate any potential errors or discrepancies in the analysis. Finally, provide any insights or observations on how this experience may inform future analyses of similar video clips for exercise recognition and weight identification.

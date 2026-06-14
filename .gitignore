@@ -13,3 +13,6 @@ post/proxies/*.bak
 
 # secrets
 credentials/
+
+# IronPal KB: large pulled workout clips (keep frames, not source video)
+input/kb/clips/
