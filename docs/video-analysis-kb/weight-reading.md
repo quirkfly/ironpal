@@ -42,6 +42,21 @@ Gives a bounded estimate. BUT first try to actually READ the label (below) — i
 inference. Case 001: diameter guess said ~5kg/plate; the **label said 2.5kg** — size inference was
 2× off. Read > estimate.
 
+## BARBELL plates are harder to read than a DUMBBELL (case 002)
+Equipment geometry decides readability from a head cam:
+- **Dumbbell:** the **head faces UP** when the dumbbell lies flat → a staging frame reads the number
+  cleanly (case 001: DOMYOS 2.5kg read at t=9s).
+- **Barbell:** the **plate faces point SIDEWAYS** during both the lift (bar horizontal across the
+  body) and floor-loading (bar lying flat) → the number rarely faces the camera. Case 002: edge-on at
+  loading, motion-blurred at set-down → denomination **unreadable** → fell back to plate-count + bar.
+So for a barbell, expect to **count plates + add the bar**, not read a face. And remember the
+arithmetic split: **barbell total = Σ plates + BAR; loadable DUMBBELL = Σ plates, NO handle.**
+BUT — the lifter often holds a plate **face-on while loading it**; that brief glance is readable.
+Case 002: t40 showed the plate face-on → embossing read **"4.4 LB" = 2 kg**. **SAMPLE THE LOADING
+WINDOW DENSELY** (not sparse points) — the face-on moment is brief and easy to skip (I missed t40
+sampling t10–48). Also: cheap plates may be **LB-marked** (4.4 LB = 2 kg, 5.5 LB = 2.5 kg, 11 LB =
+5 kg) — convert.
+
 ## FIRST scan for a STAGING frame (the lesson that keeps repeating)
 
 Before concluding "unreadable", scan the **whole clip** for a moment the equipment is **at rest and

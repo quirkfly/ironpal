@@ -1104,3 +1104,20 @@ walk me through the detailed process you applied to accurately count the repetit
 ---
 
 i want you to analayze the perform phase more carefully focus on - isolate in details every rep turnaround and tell me exact number of reps
+
+
+---
+
+create a claude skill that does the following:
+
+let's focus finally on analyzing weight lifted. Run me through the detailed process you applied to accurately read the weight lifted in the video clip. Please explain the specific techniques and methods you used to analyze the footage, including any AI models or algorithms that were employed to recognize the movements and patterns associated with different exercises. Additionally, describe how you handled the large number of frames in the 4K, 30fps footage, and how you ensured that your analysis was both efficient and accurate. Finally, provide any insights or observations you made during the analysis process that helped you determine the weight lifted in the clip.
+
+save the skill to project folder as weight-lifted-analysis-skill.claude and share it with the team for feedback and further development. The skill should be designed to assist in the analysis of video clips for determining the weight lifted, providing detailed explanations of the techniques and methods used, as well as insights and observations that can inform future analyses. Additionally, the skill should be able to handle large amounts of footage efficiently and accurately, ensuring that the analysis process is streamlined and effective.
+
+---
+
+let's break it down:
+
+1. how many plate do are loaded on the barbell?
+2. what is the weight of each plate?
+3. what is the weight of the barbell itself?
