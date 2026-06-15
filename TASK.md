@@ -1121,3 +1121,52 @@ let's break it down:
 1. how many plate do are loaded on the barbell?
 2. what is the weight of each plate?
 3. what is the weight of the barbell itself?
+
+---
+
+what equipment if any does the person use in the video clip? Please provide a detailed description of the equipment being used, including any weights, bars, or other accessories that are present in the footage. Additionally, explain how the equipment is being utilized during the exercise and how it may impact the overall analysis of the exercise being performed. Finally, provide any relevant observations or insights regarding the equipment and its role in the exercise being analyzed.
+
+---
+
+show me all the frames from phase 3 of the exercise in the video clip 003..i want to examine them myself
+
+---
+
+ok, now, based on the frames from phase 3 of the exercise in the video clip, please provide a detailed analysis of the equipment being used
+
+---
+
+what equipment do you see on the c003 montage frames?
+
+---
+
+Which of these equipment does the person actually hold in his hands during the exercise? Please provide a detailed description of the equipment being held, including its position, orientation, and any relevant details regarding how it is being utilized during the exercise. Additionally, explain how the equipment being held may impact the overall analysis of the exercise being performed and any insights or observations that can be drawn from this information.
+
+---
+
+have a really carefull look at /home/quirkfly/job_stuff/prj/ironpal/out/rec_20260615_122213/phase3/c003_montage_3_t74-86.jpg and tell me what exercise the person is likely performing?
+
+---
+
+what does the person hold in that montage frame? Describe it in details, including its position, orientation, and any relevant characteristics that can help identify the exercise being performed. Additionally, explain how the equipment being held may impact the overall analysis of the exercise and any insights or observations that can be drawn from this information.
+
+---
+
+What else is attached to that bar?
+
+---
+
+update the KB to ensure held equipment is carrefully examined in future analyses of video clips for exercise recognition!!!
+
+---
+
+re-analyze clipp 003 loading phase using 5-7fps and tell what equipement does the person load?
+
+---
+
+Given rather painflul experience with the previous exercise recognition attempts, here are the honest options:
+
+1. i will keep grilling you about the exercise recognition until you get it right
+2. i will tell you the correct answer and you will update your KB accordingly
+
+what is your choice?

@@ -76,9 +76,28 @@ a "vertical" bar (rotation!), or hands together low are NOT proof of setup. Only
 strong positive evidence (plates actively coming on/off, no load path over the WHOLE clip); else name
 the most likely exercise at low confidence.
 
+### Step 3b — EXAMINE THE HELD IMPLEMENT FIRST — and everything attached to it (case 003 MISS)
+**Ask "what is actually in the HANDS?" before anything on the floor.** Case 003 was a real instrumented
+barbell lift I dismissed as "setup" for many turns because a **cluttered floor** (mats, ab-wheel, foam
+rollers, adjustable-DB blocks, EMG pads, wobble board) read as "prepping multiple things." Only ONE
+thing was ever *held* — a loaded barbell. **Equipment count ≠ exercise count; ambient clutter must NOT
+lower the prior toward "no exercise."**
+1. **Isolate the held implement** — find what each hand grips; ignore anything not touched by a hand. A
+   long bar foreshortened in a head-down egocentric view *looks* short/central — trace its full extent.
+2. **ZOOM IN on everything ATTACHED to it.** Decisive tells live here:
+   - A **thin cable/wire from the implement to a small fixed FLOOR ANCHOR** = a **draw-wire /
+     string-potentiometer displacement tether**. You only rig that on a bar you lift **up & down** →
+     **hard proof of a repeated vertical stroke = a real exercise**, and a signature of an
+     **instrumented ground-truth capture** (often with EMG pads / the headband on the floor). In case
+     003 this tether was the smoking gun the "handling" was a lift.
+   - **Chains** at the bar end = accommodating resistance / collar-snap; note, don't over-read.
+   - **Exposed collar threading** = possibly a loading instant; weigh it.
+**Rule:** a loaded implement **held in both hands** ⇒ default *an exercise is happening* — rule IN a
+load path and check attachments before ever calling "no exercise." Don't let the floor decide.
+
 ### Step 4 — Name it via the four signals (in order of discriminating power)
 1. **Equipment** — barbell / dumbbell / machine / cable / kettlebell / bodyweight (strongest; visible
-   even in bad frames).
+   even in bad frames). **Read the HELD one (Step 3b), not the floor clutter.**
 2. **Posture / stance** — standing / seated / split / hinged / squat (bent knees, thighs up = squat;
    straighter legs, hips back = hinge).
 3. **Motion arc & plane** — the load's path and which joints drive it.

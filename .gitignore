@@ -16,3 +16,6 @@ credentials/
 
 # IronPal KB: large pulled workout clips (keep frames, not source video)
 input/kb/clips/
+
+# IronPal KB: scratch analysis frames (contact sheets/montages/zooms) — regenerable from clips
+out/

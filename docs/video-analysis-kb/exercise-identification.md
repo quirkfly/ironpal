@@ -30,6 +30,35 @@ off across frames**, no load path over the WHOLE clip — and even then prefer "
 loaded long bar worked from the floor with a bent posture is almost always a **deadlift / bent-over
 row**, not setup. When unsure, name the most likely exercise with low confidence; don't dismiss it.
 
+## Examine the HELD implement FIRST — and everything ATTACHED to it (case 003)
+
+**The first question is always "what is actually in the hands?" — not "what's on the floor."** Case 003
+was a real **instrumented barbell lift** I dismissed as "setup/no exercise" across many turns because I
+let a **cluttered floor** (mats, ab-wheel, foam rollers, adjustable-DB blocks, EMG pads, wobble board)
+read as "multiple things being prepped." Only one thing was ever **held** — a loaded barbell — and the
+held implement + grip + trajectory names the lift. **Equipment count ≠ exercise count: one loaded bar
+in the hands amid a messy room is a *lift in a messy room*, not staging.** Ambient clutter is noise and
+must NEVER lower the prior toward "no exercise."
+
+Procedure:
+1. **Isolate the held implement.** In each working-window frame, find what the hands grip; ignore
+   everything not in contact with a hand. Resolve its full extent (a foreshortened long bar in an
+   egocentric head-down view *looks* short/central — trace it).
+2. **Read grip + forearm on the held thing** (pronation/knuckles, elbow flex — see below).
+3. **EXAMINE EVERYTHING ATTACHED to it — zoom in.** Collars, plates, **chains**, and especially
+   **tethers/cables**. Attachments carry decisive information:
+   - A **thin cable/wire running from the implement to a small fixed FLOOR ANCHOR** is a **draw-wire /
+     string-potentiometer displacement tether** — you only rig that on a bar you are going to lift
+     **up and down**. It is **hard physical proof of a repeated vertical stroke = a real exercise**,
+     and a signature of an **instrumented ground-truth capture** (often paired with EMG pads / the
+     headband on the floor). Case 003: this tether was the smoking gun that the "handling" was a lift.
+   - **Chains** at the bar end = accommodating resistance or just a collar/snap — note but don't
+     over-read.
+   - **Exposed collar threading** can mean a collar mid-thread → possibly a loading instant; weigh it.
+**Banked rule:** when a loaded implement is **held in both hands**, the default is *an exercise is
+happening* — rule **in** a load path (and check attachments for instrumentation) before ever calling
+"no exercise." Don't let the floor decide.
+
 ## Camera perspective changes everything
 
 - **Egocentric (headband / first-person)** — the IronPal product perspective. You rarely see the

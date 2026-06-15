@@ -8,12 +8,19 @@ Every clip analysed, predicted vs. actual. Running accuracy is how we know the K
 
 | 002 | 20260614_202314.mp4 | egocentric | flip-flopped → final upright row ✗ / **barbell CURL** 🔴 MISS | ~5 (3–6) / **4** 🟡 (range ok, over by 1; need ≥3fps) | 2kg/plate (4.4 LB) ×2 + bar → ~9–10kg / **✅ plate read CONFIRMED ("spot on")** | [002](002-20260614_202314.md) |
 
+| 003 | 20260615_122213.mp4 | egocentric | NO EXERCISE — setup/staging (conf 0.8) / **DEADLIFT SET** 🔴 MISS (false negative, user-revealed) | n/a / *pending* | n/a / *pending* | [003](003-20260615_122213.md) |
+
 **Running accuracy:** Exercise **1/2** (✅ case001 biceps curl; 🔴 case002 called upright row, was a
 barbell curl — grip mis-read) · Reps **0/2 exact, 2/2 within ±1** 🟡 (both estimates over by 1; fix:
 ≥3fps in PERFORM phase) · Weight **case002 plate read EXACT ✅** (2kg/4.4LB, lifter-confirmed; bar still estimated); case001 within ±2.5kg 🟡.
 Validated weight method: sample the loading window densely for the brief face-on plate glance; convert LB→kg.
 Case002 lesson: a grip drives the whole ID (supinated=curl vs pronated=upright row) — resolve
 palm-vs-knuckles directly; don't infer from a watch or claim knuckles you can't see.
+Case003 lesson (REPEAT false-negative): examine the HELD implement FIRST, not floor clutter —
+equipment count ≠ exercise count. ZOOM on what's ATTACHED to the bar: a thin wire to a fixed floor
+anchor = a draw-wire displacement tether = hard proof of a vertical lift + an instrumented capture.
+A loaded bar held in both hands ⇒ default "an exercise is happening"; rule IN a load path before ever
+calling "no exercise." (Banked in exercise-identification.md "Examine the HELD implement FIRST" + skill Step 3b.)
 
 ## Scoring
 
