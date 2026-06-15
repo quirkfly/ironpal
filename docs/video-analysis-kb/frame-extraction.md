@@ -24,8 +24,9 @@ spurious mirror — remove it. Do **not** hflip this rig.
 
 ## Current defaults
 
-- **Sampling rate:** 2 fps for normal-tempo lifts (squats, presses, pushdowns). This gives ~2–4
-  frames per rep, enough to see the eccentric→concentric turnaround that defines a rep.
+- **Sampling rate:** 1–2 fps to find structure/phases; **≥3 fps for the actual rep count in the
+  PERFORM phase** (case 002: a 2 fps montage overcounted 4 reps as ~5 — 2 fps under-resolves
+  turnarounds and lets head-bob read as an extra rep). Read ≥3 fps in small readable chunks.
 - **Fast/ballistic lifts** (kettlebell swing, snatch, clean, fast cable work): 4–6 fps — at 2 fps
   the turnaround is aliased away and reps get miscounted.
 - **Weight reading:** the number is usually legible for only a brief window (a glance, or rack

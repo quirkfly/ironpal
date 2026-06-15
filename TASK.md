@@ -1088,3 +1088,19 @@ analyze carefully the grip from phase 3 frames and explain what grip does the pe
 ---
 
 /screeshot-device have you seen this frame? What grip does the person use to hold the barbell in this frame? At what positions are his forearms? Does the forearm position allow to perform the your candidate exercise?
+
+---
+
+create a claude skill that does the following:
+
+let's focus next on analyzing number of repetitions of the exercise being performed. Run me through the detailed process you applied to accurately count the repetitions in the video clip. Please explain the specific techniques and methods you used to analyze the footage, including any AI models or algorithms that were employed to recognize the movements and patterns associated with different exercises. Additionally, describe how you handled the large number of frames in the 4K, 30fps footage, and how you ensured that your analysis was both efficient and accurate. Finally, provide any insights or observations you made during the analysis process that helped you determine the number of repetitions performed in the clip.
+
+save the skill to project folder as repetition-counting-skill.claude and share it with the team for feedback and further development. The skill should be designed to assist in the analysis of video clips for counting repetitions, providing detailed explanations of the techniques and methods used, as well as insights and observations that can inform future analyses. Additionally, the skill should be able to handle large amounts of footage efficiently and accurately, ensuring that the analysis process is streamlined and effective.
+
+---
+
+walk me through the detailed process you applied to accurately count the repetitions in the video clip. Please explain the specific techniques and methods you used to analyze the footage, including any AI models or algorithms that were employed to recognize the movements and patterns associated with different exercises. Additionally, describe how you handled the large number of frames in the 4K, 30fps footage, and how you ensured that your analysis was both efficient and accurate. Finally, provide any insights or observations you made during the analysis process that helped you determine the number of repetitions performed in the clip.
+
+---
+
+i want you to analayze the perform phase more carefully focus on - isolate in details every rep turnaround and tell me exact number of reps

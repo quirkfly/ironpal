@@ -16,6 +16,22 @@ A rep = one full cycle of the movement's defining motion. Count cycles, not fram
 There's no body in frame, so count the **implement**: one rep = one *looming* cycle (weight rises
 close to the lens at the top, drops out of frame at the bottom). Count looming events.
 
+## Sampling rate: the PERFORM phase needs ≥3 fps (case 002 — 2fps overcounted)
+Use 1–2 fps only to find structure/phase boundaries. For the **actual rep count in the PERFORM
+phase, sample at ≥3 fps** (denser for fast tempo). 2 fps under-resolves turnarounds and lets a
+head-bob blip read as an extra rep. **Case 002: actual = 4 reps; my 2 fps montage gave ~5 (over by
+1).** Mandate ≥3 fps, read in small readable chunks, before committing a count.
+
+## Head-tilt confound defeats exact turnaround isolation (case 002 curl)
+Going finer (3fps, readable chunks) to isolate every turnaround does NOT yield an exact count: the
+implement's **apparent height in frame** is driven by the bar's real motion AND **where the head is
+pointing**. If the lifter's gaze drifts/tracks the bar (common on head-still arm work), the head
+follows the implement → it stays framed at the chest while actually cycling → individual reps become
+invisible. Case 002: t53–55.5 showed one clean top→bottom; t56–68 the framing shifted (head tilted
+up) and the bar stayed chest-framed, so reps couldn't be isolated. **Don't promise an exact integer
+from egocentric video** — the head-tilt confound is not fixable with more fps; needs the IMU (and for
+head-still curls, a WRIST IMU).
+
 ## The aliasing-vs-legibility bind (case 001) — counting is hard from video
 
 A fundamental tradeoff when tiling frames to count: dense enough to not alias fast turnarounds
