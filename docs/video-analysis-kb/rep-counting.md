@@ -32,6 +32,24 @@ up) and the bar stayed chest-framed, so reps couldn't be isolated. **Don't promi
 from egocentric video** — the head-tilt confound is not fixable with more fps; needs the IMU (and for
 head-still curls, a WRIST IMU).
 
+## AXIAL / depth-stroke reps are nearly INVISIBLE to egocentric vision (case 003 — missed 5 reps)
+**Case 003: actual = 5 triceps cable pushdown reps; I counted 0 ("static/setup").** The worst-case
+combination for a head-cam: a rep whose stroke runs **along the camera's optical axis** (a pushdown
+pushes the bar **down/away** from a head-down camera) **+ gaze-tracking** (head follows the bar) **+
+head-still** (no body translation → no parallax). Depth/toward-away motion produces **little
+image-plane displacement** to begin with, and gaze-tracking cancels what's left, so the bar looks
+**static in-frame across 5 real reps**. I read the perform window as handling/setup. Lessons:
+- **Anchor to the FLOOR/feet, not the image** — the bar's image position is meaningless when the head
+  tracks it. Even so, an axial stroke barely moves the bar vs. the floor in a head-down view → may
+  still be unreadable.
+- **Read the DEFINING JOINT, not the implement:** for a pushdown, elbow EXTENSION/flexion of the
+  forearm — but this too is foreshortened when the camera looks down the arm.
+- **Don't infer "no reps / setup" from an in-frame-static implement.** A held bar that isn't visibly
+  oscillating may be mid-set with an axial stroke. Absence of visible oscillation ≠ absence of reps.
+- **This is a hard NON-vision case:** head-still + axial stroke ⇒ the **cable-displacement / weight-
+  stack motion sensor (or a wrist IMU)** must supply the rep clock; the headband IMU and vision both
+  fail. (Pushdown/cable-row/pressdown all share this geometry.)
+
 ## The aliasing-vs-legibility bind (case 001) — counting is hard from video
 
 A fundamental tradeoff when tiling frames to count: dense enough to not alias fast turnarounds

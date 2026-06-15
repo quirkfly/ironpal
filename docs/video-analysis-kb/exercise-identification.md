@@ -33,31 +33,32 @@ row**, not setup. When unsure, name the most likely exercise with low confidence
 ## Examine the HELD implement FIRST — and everything ATTACHED to it (case 003)
 
 **The first question is always "what is actually in the hands?" — not "what's on the floor."** Case 003
-was a real **instrumented barbell lift** I dismissed as "setup/no exercise" across many turns because I
-let a **cluttered floor** (mats, ab-wheel, foam rollers, adjustable-DB blocks, EMG pads, wobble board)
-read as "multiple things being prepped." Only one thing was ever **held** — a loaded barbell — and the
-held implement + grip + trajectory names the lift. **Equipment count ≠ exercise count: one loaded bar
-in the hands amid a messy room is a *lift in a messy room*, not staging.** Ambient clutter is noise and
-must NEVER lower the prior toward "no exercise."
+was a real exercise I first dismissed as "setup/no exercise" (false negative) because I let a **cluttered
+floor** (mats, ab-wheel, foam rollers, adjustable-DB blocks, EMG pads, wobble board) read as "multiple
+things being prepped." **Equipment count ≠ exercise count.** Ambient clutter is noise and must NEVER
+lower the prior toward "no exercise."
 
 Procedure:
 1. **Isolate the held implement.** In each working-window frame, find what the hands grip; ignore
-   everything not in contact with a hand. Resolve its full extent (a foreshortened long bar in an
-   egocentric head-down view *looks* short/central — trace it).
-2. **Read grip + forearm on the held thing** (pronation/knuckles, elbow flex — see below).
-3. **EXAMINE EVERYTHING ATTACHED to it — zoom in.** Collars, plates, **chains**, and especially
-   **tethers/cables**. Attachments carry decisive information:
-   - A **thin cable/wire running from the implement to a small fixed FLOOR ANCHOR** is a **draw-wire /
-     string-potentiometer displacement tether** — you only rig that on a bar you are going to lift
-     **up and down**. It is **hard physical proof of a repeated vertical stroke = a real exercise**,
-     and a signature of an **instrumented ground-truth capture** (often paired with EMG pads / the
-     headband on the floor). Case 003: this tether was the smoking gun that the "handling" was a lift.
-   - **Chains** at the bar end = accommodating resistance or just a collar/snap — note but don't
-     over-read.
-   - **Exposed collar threading** can mean a collar mid-thread → possibly a loading instant; weigh it.
-**Banked rule:** when a loaded implement is **held in both hands**, the default is *an exercise is
-happening* — rule **in** a load path (and check attachments for instrumentation) before ever calling
-"no exercise." Don't let the floor decide.
+   everything not in contact with a hand. Resolve its full extent (a foreshortened bar in an egocentric
+   head-down view *looks* short/central — trace it).
+2. **TRACE WHAT THE IMPLEMENT CONNECTS TO — this names the equipment class (case 003 MISS).** Before
+   reading grip or trajectory, follow what comes off the held bar/handle:
+   - **A flexible CABLE or CHAIN running from the held bar/handle to a weight stack / loading pin /
+     pulley ⇒ a CABLE-MACHINE exercise** (triceps pushdown, cable row, lat pulldown, cable curl) —
+     **NOT a barbell/dumbbell lift.** The cable is the **#1 identifier** and must be checked FIRST.
+     *Case 003: actual = triceps cable pushdown. I saw the cable/chain three times and mislabelled it
+     "accommodating-resistance chain" and a "draw-wire displacement tether / instrumentation," then
+     called the straight-bar cable attachment a "barbell" and the pin-loaded plates a "loaded bar" →
+     wrongly concluded deadlift. A flexible line to a weight is a cable machine, full stop.*
+   - **Rigid bar with fixed loaded ends and NO cable/chain to a load ⇒ free weight** (barbell/dumbbell).
+   - A **rope/strap with handles to a stack** = cable too; a **band to a fixed anchor** = resistance band.
+3. **Read grip + forearm on the held thing** (pronation/knuckles, elbow flex — see below).
+4. **Examine remaining attachments** — collars, plates (on a bar *or* on a cable pin), exposed threading.
+**Banked rule:** when a loaded implement is **held in both hands**, default to *an exercise is happening*
+— but **name the equipment class from what the implement connects to (cable vs free weight) BEFORE
+naming the lift.** Don't let the floor decide, and don't assume "barbell" just because a straight bar
+is held — a cable straight-bar attachment looks identical until you trace the cable.
 
 ## Camera perspective changes everything
 
