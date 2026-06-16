@@ -80,6 +80,22 @@ Case 001 plate read was CORRECT (DOMYOS 2.5kg ×2 = 5kg); my error was **adding 
 - **DOMYOS cast spinlock plate (Decathlon):** grey cast iron, embossed `DOMYOS` + denomination
   (`2.5 kg` etc.). 2.5kg plate ≈ 18cm dia. Typical loading **1 per end = 2/dumbbell**. So a pair of
   2.5kg plates ⇒ **5 kg/dumbbell** (NOT 7 — no handle added).
+- **DOMYOS 1.25 kg thin cast plate (case 003, confirmed):** grey cast iron, ~14cm dia, **thin** —
+  stacks several to a side. Number is **dark-on-dark embossed → effectively unreadable** on a head cam;
+  identify by the thin profile + small dia and **count plates**. Case 003 rig = **4 × 1.25kg/side =
+  10 kg** total plate mass. (My count estimate ~5/side was over by 1; denomination 1.25 was in range.)
+
+## CABLE / LEVER rigs: loaded plate mass ≠ resistance at the handle (case 003)
+A plate-loaded **cable or lever rig** (home pushdown/row station, DIY lever) **decouples the load from
+the working weight**: the resistance felt at the handle = plate mass × the **lever-arm / pulley ratio**,
+which is **not determinable from video**. So even a *perfect* plate read (case 003: 10 kg of plates,
+later confirmed) does **NOT** give the working weight. Report the **loaded plate mass** if you can read
+it, but explicitly flag that the **handle resistance is unknown** (ratio) — don't present plate mass as
+the working weight. Compounding problem: plates loaded **edge-on on a lever axle** never face the cam,
+so even the denomination usually needs the brief face-on loading glance (or the user). Reliable source
+on the product = a **cable-tension / load-cell** reading, not vision. (Contrast: barbell = Σplates+bar;
+pin stack = read the pin; loadable dumbbell = Σplates — those map mass→working weight directly; a lever
+rig does not.)
 
 **Product implication:** the POC "glance-at-the-weight" OCR UX assumes a *printed/painted* number
 (`vision.py` WEIGHT_SYSTEM) and **cannot work on unpainted cast plates**. Mitigations: plate-counting

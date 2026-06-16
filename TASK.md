@@ -1182,3 +1182,7 @@ now, having the KB updated, please re-analyze the video clip to accurately count
 ---
 
 5 repetitions were performed during the triceps cable pushdown exercise. The analysis involved carefully examining the video clip, focusing on the movement patterns and trajectories of the equipment being used. By isolating each repetition and counting the number of times the individual completed the full range of motion, I was able to accurately determine the total number of repetitions performed.
+
+---
+
+each side is loaded with 4 plates of 1.25kg each
