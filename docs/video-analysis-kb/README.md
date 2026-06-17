@@ -102,6 +102,8 @@ movement in phase 3.** The set-up/grasp frames are also where weight is most rea
 | `exercises/<slug>.md` | Per-exercise visual signature, rep definition, weight-reading notes. One file per exercise we've seen. |
 | `rep-counting.md` | Accumulated rep-counting heuristics and failure modes (over/undercount). |
 | `weight-reading.md` | Accumulated weight-reading heuristics by equipment type and unit inference. |
+| `sensor-fusion.md` | Product path: IMU + vision division of labor and the fusion pipeline. |
+| `analysis-pipeline-strategy.md` | Going-forward strategy: enrollment-based, sensor-first, IMU-gated, abstain-and-ask — scaling beyond manual vision-only analysis. |
 | `cases/INDEX.md` | Ledger of every clip analysed: predicted vs actual, running accuracy. |
 | `cases/<id>.md` | One page per analysed clip: the report, the ground truth, the diagnosis, the rule added. |
 
