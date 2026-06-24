@@ -1,0 +1,29 @@
+---
+const steps = [
+  { n: '1', h: 'Wear it', body: 'Slip on the band like any other. Camera and motion sensors wake up with you.' },
+  { n: '2', h: 'Lift', body: 'Just train. IronPal watches the set from your point of view — no buttons, no pauses.' },
+  { n: '3', h: "It's logged", body: 'Exercise, reps, and weight land in your log automatically. Nothing to type.' },
+];
+---
+<section class="section howto" id="how">
+  <div class="wrap">
+    <div class="reveal section__head">
+      <span class="kicker">How it works</span>
+      <h2>Wear it. Lift. It's logged.</h2>
+    </div>
+    <ol class="steps">
+      {steps.map((s) => (
+        <li class="step reveal"><span class="step__no">{s.n}</span><h3>{s.h}</h3><p>{s.body}</p></li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .step { background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 30px 26px; }
+  .step__no { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--accent); color: var(--accent); font-family: var(--font-display); font-weight: 800; margin-bottom: 16px; }
+  .step h3 { font-size: 20px; margin-bottom: 8px; }
+  .step p { font-size: 15.5px; }
+  @media (max-width: 900px) { .steps { grid-template-columns: 1fr; } }
+</style>

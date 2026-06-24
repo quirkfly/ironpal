@@ -1,0 +1,30 @@
+---
+const faqs = [
+  { q: 'Does it really read the weight?', a: 'Reading arbitrary free weights from a first-person camera is the hard problem we\'re building — no shipping product does it today. It\'s our core bet, not a finished, guaranteed feature yet. Reps and exercise recognition are further along.' },
+  { q: 'Does it work on machines and cables?', a: 'That\'s the goal — free weights and machines, with no equipment instrumentation and no per-machine calibration. We\'re validating exercise by exercise.' },
+  { q: 'What gets sent to the cloud, and what\'s kept?', a: 'Reps and exercise are detected on the band, offline. Only weight-reading sends a single frame off-device; it\'s processed in seconds and deleted immediately. Your footage isn\'t stored.' },
+  { q: 'When does it ship?', a: 'We\'re pre-launch. Reserve your spot and you\'ll be first to hear the date — and first in line at the early-bird price.' },
+  { q: 'What does reserving commit me to?', a: 'Nothing today. It locks your early-bird price and a 48-hour head start. You decide whether to back when we launch.' },
+];
+---
+<section class="section faq">
+  <div class="wrap narrow">
+    <div class="reveal section__head section__head--left">
+      <span class="kicker">FAQ</span>
+      <h2>Straight answers.</h2>
+    </div>
+    <div class="reveal accordion">
+      {faqs.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .accordion { display: grid; gap: 12px; }
+  .accordion details { background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .accordion summary { cursor: pointer; list-style: none; padding: 18px 22px; font-family: var(--font-display); font-weight: 600; color: var(--heading); font-size: 17px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .accordion summary::-webkit-details-marker { display: none; }
+  .accordion summary::after { content: "+"; color: var(--accent); font-size: 22px; font-weight: 400; transition: transform .25s var(--ease); line-height: 1; }
+  .accordion details[open] summary::after { transform: rotate(45deg); }
+  .accordion p { padding: 0 22px 20px; font-size: 15.5px; max-width: 65ch; }
+</style>

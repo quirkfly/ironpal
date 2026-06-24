@@ -1,0 +1,30 @@
+/* IronPal design tokens — "Stealth Teal" scheme (docs/color-schemes.md).
+   Matte-black + a single electric-teal accent, matching the product. */
+
+:root {
+  /* ── Color ───────────────────────────────────────────────── */
+  --bg:        #1A1A2E;   /* Charcoal Black */
+  --bg-2:      #16162a;   /* deeper panel   */
+  --panel:     #2D2D3A;   /* Gunmetal       */
+  --accent:    #00E5CC;   /* Electric Teal  */
+  --accent-dim:#0fb6a6;
+  --heading:   #F0F4F8;   /* Ice White      */
+  --body:      #9aa0b4;   /* Slate Gray     */
+  --line:      rgba(240, 244, 248, 0.08);
+  --line-2:    rgba(240, 244, 248, 0.14);
+  --danger:    #ff6b6b;
+
+  /* ── Type ────────────────────────────────────────────────── */
+  --font-display: 'Montserrat Variable', 'Montserrat', system-ui, sans-serif;
+  --font-body:    'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* ── Layout ──────────────────────────────────────────────── */
+  --maxw:   1140px;
+  --gutter: clamp(20px, 5vw, 56px);
+  --radius: 16px;
+  --ease:   cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* breakpoints (for grepability; CSS can't deref vars in @media) */
+  --bp-sm: 540px;
+  --bp-md: 900px;
+}

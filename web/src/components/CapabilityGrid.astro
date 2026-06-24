@@ -1,0 +1,41 @@
+---
+// WHOOP-style "complete picture" modular grid — capability cards.
+const caps = [
+  { t: 'Auto exercise ID', d: 'Recognizes the movement from motion + camera. No menu.', icon: 'M3 12h4l3-8 4 16 3-8h4' },
+  { t: 'Sensor-fusion reps', d: 'Motion and vision together — counts the heavy reps too.', icon: 'M4 18V9M9 18V5M14 18v-6M19 18V8' },
+  { t: 'Reads any weight', d: 'Off the bar or the stack. No proprietary plates.', icon: 'M6 8v8M18 8v8M3 12h18M6 6h0M18 6h0' },
+  { t: 'On-device & private', d: 'Reps/exercise stay on the band; weight frame is deleted after.', icon: 'M12 3l8 3v6c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V6z' },
+  { t: 'Free weights + machines', d: 'No per-machine calibration, no equipment instrumentation.', icon: 'M2 12h3M19 12h3M7 7v10M17 7v10M7 12h10' },
+  { t: 'Zero taps, ever', d: 'Just train. The log fills itself in, set after set.', icon: 'M5 12l5 5L20 7' },
+];
+---
+<section class="section capgrid">
+  <div class="wrap">
+    <div class="reveal section__head">
+      <span class="kicker">The full picture</span>
+      <h2>Everything it does, while you do nothing.</h2>
+    </div>
+    <div class="caps">
+      {caps.map((c) => (
+        <article class="cap reveal">
+          <svg class="cap__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d={c.icon}></path>
+          </svg>
+          <h3>{c.t}</h3>
+          <p>{c.d}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .capgrid { background: var(--bg-2); }
+  .caps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cap { background: linear-gradient(180deg, var(--panel), #23232e); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 24px; transition: border-color .25s, transform .25s var(--ease); }
+  .cap:hover { border-color: rgba(0,229,204,.4); transform: translateY(-3px); }
+  .cap__icon { width: 30px; height: 30px; color: var(--accent); margin-bottom: 16px; }
+  .cap h3 { font-size: 19px; margin-bottom: 8px; }
+  .cap p { font-size: 14.5px; }
+  @media (max-width: 900px) { .caps { grid-template-columns: 1fr; } }
+</style>

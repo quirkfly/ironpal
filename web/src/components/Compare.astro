@@ -1,0 +1,35 @@
+<section class="section compare">
+  <div class="wrap">
+    <div class="reveal section__head">
+      <span class="kicker">Why nobody else does this</span>
+      <h2>The whole market makes you type the weight.</h2>
+    </div>
+    <div class="reveal table-scroll">
+      <table class="cmp">
+        <thead><tr><th>Device</th><th>Picks the exercise?</th><th>Counts reps?</th><th>Reads the weight?</th></tr></thead>
+        <tbody>
+          <tr><td>Wrist trackers <span class="sub">(Garmin / WHOOP)</span></td><td>auto, often wrong</td><td>unreliable / none</td><td class="no">✕ estimates from body mass</td></tr>
+          <tr><td>Bar IMU sensors <span class="sub">(Enode / GymAware)</span></td><td>manual / learned</td><td>drops heavy reps</td><td class="no">✕ manual entry</td></tr>
+          <tr><td>Camera appliances <span class="sub">(Tempo)</span></td><td>in-class only</td><td>yes, in class</td><td class="no">✕ only their own plates</td></tr>
+          <tr class="cmp__us"><td>IronPal</td><td>automatic</td><td>sensor-fusion</td><td class="yes">✓ any free weight</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="reveal fineprint">Automatic free-weight reading is an open gap across the entire market. It's the hard problem we're building — and the reason IronPal exists.</p>
+  </div>
+</section>
+
+<style>
+  .compare { background: var(--bg-2); }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius); border: 1px solid var(--line); }
+  .cmp { width: 100%; border-collapse: collapse; min-width: 640px; }
+  .cmp th, .cmp td { text-align: left; padding: 16px 20px; font-size: 15px; border-bottom: 1px solid var(--line); }
+  .cmp thead th { font-weight: 600; color: var(--body); text-transform: uppercase; letter-spacing: .08em; font-size: 12px; background: rgba(255,255,255,.02); }
+  .cmp td:first-child { color: var(--heading); font-weight: 500; }
+  .cmp .sub { display: block; color: var(--body); font-weight: 400; font-size: 12.5px; }
+  .cmp .no { color: #ff8a8a; }
+  .cmp .yes { color: var(--accent); font-weight: 600; }
+  .cmp__us td { background: rgba(0,229,204,.07); border-bottom: 0; }
+  .cmp__us td:first-child { color: var(--accent); font-family: var(--font-display); font-weight: 800; }
+  .compare .fineprint { text-align: center; margin-inline: auto; }
+</style>

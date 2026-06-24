@@ -1,0 +1,18 @@
+---
+const shots = [
+  { img: '/assets/worn-headband.jpg', alt: 'Athletic woman wearing the IronPal headband, teal LED glowing.' },
+  { img: '/assets/worn-headband-male.jpg', alt: 'Athletic man bench-pressing while wearing the IronPal headband.' },
+  { img: '/assets/wide-athlete.jpg', alt: 'Athlete resting between sets with the IronPal band on, teal logo and LED visible, checking his phone.' },
+];
+---
+<section class="gallery reveal" aria-label="Athletes wearing IronPal">
+  {shots.map((s) => (<figure><img src={s.img} alt={s.alt} loading="lazy" /></figure>))}
+</section>
+
+<style>
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .gallery figure { position: relative; overflow: hidden; aspect-ratio: 1/1; }
+  .gallery img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85); transition: transform .8s var(--ease), filter .5s; }
+  .gallery figure:hover img { transform: scale(1.05); filter: saturate(1); }
+  @media (max-width: 540px) { .gallery { grid-template-columns: 1fr 1fr; } }
+</style>

@@ -1,0 +1,28 @@
+<section class="section pricing" id="pricing">
+  <div class="wrap narrow reveal">
+    <span class="kicker">Early-bird offer</span>
+    <h2>Be first — and pay the least.</h2>
+    <div class="offer">
+      <div class="offer__lead"><span class="offer__big">~50%</span><span class="offer__sub">off the launch price</span></div>
+      <ul class="ticks">
+        <li>First <strong>200 spots</strong> only</li>
+        <li><strong>48-hour</strong> head start before public launch</li>
+        <li>The band + premium app, bundled</li>
+      </ul>
+    </div>
+    <a href="#top" class="btn btn--lg js-focus-email">Reserve your spot</a>
+    <p class="fineprint">Reserving costs nothing today — it locks your place and your price.</p>
+  </div>
+</section>
+
+<style>
+  .pricing { text-align: center; }
+  .pricing .narrow { display: flex; flex-direction: column; align-items: center; }
+  .offer { display: flex; gap: clamp(24px,5vw,52px); align-items: center; flex-wrap: wrap; justify-content: center; background: linear-gradient(180deg, var(--panel), #24242e); border: 1px solid var(--line-2); border-radius: var(--radius); padding: 34px clamp(26px,5vw,48px); margin-top: 30px; text-align: left; }
+  .offer__lead { text-align: center; }
+  .offer__big { display: block; font-family: var(--font-display); font-weight: 800; font-size: clamp(52px,9vw,84px); color: var(--accent); line-height: 1; }
+  .offer__sub { color: var(--body); font-size: 15px; }
+  .pricing .ticks { text-align: left; }
+  .pricing .fineprint { text-align: center; }
+  @media (max-width: 540px) { .offer { flex-direction: column; gap: 18px; text-align: center; } .pricing .ticks { text-align: center; } }
+</style>

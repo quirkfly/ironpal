@@ -1,0 +1,32 @@
+---
+import Brand from './Brand.astro';
+---
+<header class="nav" id="nav">
+  <div class="wrap nav__inner">
+    <Brand />
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#tech">The tech</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#reserve" class="btn btn--sm">Reserve</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    border-bottom: 1px solid transparent;
+    transition: background .3s var(--ease), border-color .3s, backdrop-filter .3s;
+  }
+  .nav.is-stuck {
+    background: rgba(20, 20, 38, .72);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-bottom-color: var(--line);
+  }
+  .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .nav__links { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 30px); }
+  .nav__links a:not(.btn) { font-size: 15px; color: var(--body); transition: color .2s; }
+  .nav__links a:not(.btn):hover { color: var(--heading); }
+  @media (max-width: 900px) { .nav__links a:not(.btn) { display: none; } }
+</style>

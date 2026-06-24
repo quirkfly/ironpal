@@ -1,0 +1,32 @@
+---
+// Single-product spotlight (headband only — the cap version is not shipping).
+// Editorial split layout (design ref: WHOOP / Oura calm product-as-jewel).
+---
+<section class="section spotlight">
+  <div class="wrap spot">
+    <div class="spot__media reveal">
+      <div class="spot__glow"></div>
+      <img src="/assets/headband-hero.jpg"
+           alt="IronPal headband — matte black with electric-teal stripe, flush camera lens, teal LED and wordmark." loading="lazy" />
+    </div>
+    <div class="spot__copy reveal">
+      <span class="kicker">The hardware</span>
+      <h2>One band.<br />Everything logged.</h2>
+      <p class="muted">Moisture-wicking fabric, an 8&nbsp;mm flush camera, a single teal LED. No screen, nothing to clip to the bar. Forgettable on your head — that's the point.</p>
+      <ul class="ticks">
+        <li>Works on free weights <em>and</em> machines</li>
+        <li>No equipment instrumentation, no per-machine setup</li>
+        <li>First-person view — it sees what you see</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .spot { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px,5vw,72px); align-items: center; }
+  .spot__media { position: relative; }
+  .spot__media img { position: relative; z-index: 1; width: 100%; border-radius: var(--radius); }
+  .spot__glow { position: absolute; inset: -10% -8% -6% -8%; background: radial-gradient(circle at 50% 50%, rgba(0,229,204,.24), transparent 60%); filter: blur(10px); z-index: 0; }
+  .spot__copy h2 { font-size: clamp(30px,4.6vw,56px); margin-bottom: 18px; }
+  @media (max-width: 900px) { .spot { grid-template-columns: 1fr; } .spot__copy { order: 2; } }
+</style>
