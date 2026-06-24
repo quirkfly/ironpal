@@ -5,8 +5,8 @@ const ORIGIN = 'https://ironpal.co';
 const {
   title       = 'IronPal — Stop logging. Just lift.',
   description = 'A headband that watches your set and logs the exercise, your reps, and the weight on the bar — automatically. You type nothing.',
-  ogImage     = '/assets/hero-bench.jpg',
-  ogImageAlt  = 'An athlete bench-pressing while wearing the IronPal headband.',
+  ogImage     = '/og.jpg',
+  ogImageAlt  = 'IronPal — the headband that logs your exercise, reps and weight automatically.',
   pathname    = '/',
 } = Astro.props;
 
@@ -29,8 +29,12 @@ const absoluteImage = ogImage.startsWith('http') ? ogImage : `${ORIGIN}${ogImage
     <meta property="og:url"         content={absoluteUrl} />
     <meta property="og:title"       content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image"       content={absoluteImage} />
-    <meta property="og:image:alt"   content={ogImageAlt} />
+    <meta property="og:image"            content={absoluteImage} />
+    <meta property="og:image:secure_url" content={absoluteImage} />
+    <meta property="og:image:type"       content="image/jpeg" />
+    <meta property="og:image:width"      content="1200" />
+    <meta property="og:image:height"     content="630" />
+    <meta property="og:image:alt"        content={ogImageAlt} />
     <meta property="og:locale"      content="en_US" />
 
     <meta name="twitter:card"        content="summary_large_image" />
