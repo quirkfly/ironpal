@@ -33,6 +33,13 @@ LLM (Claude) reading extracted JPEG frames + the accumulated heuristics in
 Match the frames to the question. Naming an exercise is about **motion + equipment**, which read
 *better* in a low-res montage than by scrolling 200 stills. ~1:15 @30fps ≈ 2000 frames — look at ~10.
 
+### Step 0 — AUTONOMOUS ROUTING (do this first — never wait to be pointed at a frame)
+Sweep the WHOLE clip yourself before judging anything: run `scripts/kb/motion_profile.sh <clip>`. Its
+model-free motion-energy profile auto-segments the clip and prints the **PERFORM window** (the
+above-median motion plateau) — that is where you read the exercise, no human seed required. Then run
+the structure pass below across the whole timeline. See
+`docs/video-analysis-kb/autonomous-frame-selection.md` for the full protocol and its limits.
+
 ### Step 1 — Structure pass (cheap, wide; ~3–5 reads)
 Contact sheets at 1 fps, downscaled, tiled:
 ```

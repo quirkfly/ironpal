@@ -31,6 +31,14 @@ reliable rep counter. Report `~N (range a–b), confidence X`, and say the integ
 
 ## Method
 
+### Step 0 — AUTONOMOUS ROUTING (do this first — find the PERFORM window yourself)
+Run `scripts/kb/motion_profile.sh <clip>` on the whole clip before counting. Its motion-energy profile
+auto-locates the **PERFORM window** (above-median plateau) so you don't need a human to point at the
+set, and its **abstain-on-reps check** flags axial/head-still lifts (flat plateau, no periodicity —
+e.g. cable pushdown, case 003) where video *cannot* certify reps → report the honest abstention, not a
+count. The peak motion score also picks your fps (Step 3). Full protocol:
+`docs/video-analysis-kb/autonomous-frame-selection.md`.
+
 ### Step 1 — Isolate the working set (count only the PERFORM phase)
 Equipment clips = **LOAD → GRASP → PERFORM**; only phase 3 has reps. Loading can eat most of a clip
 (case 002: ~⅔ was loading). Find the load→grasp boundary, mark **set start and end** (exclude

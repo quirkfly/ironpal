@@ -32,8 +32,11 @@ Each iteration analyses one clip and leaves the KB smarter than it found it.
 
 1. **Drop a clip.** Put the clip in `input/kb/clips/` (any name). Do **not** reveal ground truth yet
    (blind protocol). Default perspective is egocentric; flag it if a clip is third-person.
-2. **Extract frames.** Claude runs `scripts/kb/extract_frames.sh <clip>` using the current
-   sampling recipe (see `frame-extraction.md`) and reads the frames.
+2. **Route, then extract frames.** Claude first sweeps the whole clip with
+   `scripts/kb/motion_profile.sh <clip>` to auto-locate the perform/staging windows with **no human
+   pointing at timestamps** (`autonomous-frame-selection.md`), then runs
+   `scripts/kb/extract_frames.sh <clip>` on those windows using the current sampling recipe (see
+   `frame-extraction.md`) and reads the frames.
 3. **Report.** Claude produces a report in the standard format (below), citing the specific frame
    evidence behind each of the three answers and a confidence for each.
 4. **Confirm / correct.** You give ground truth or corrections.

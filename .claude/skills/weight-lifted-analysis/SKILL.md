@@ -28,6 +28,13 @@ face-on frame**. So: find the single best frame, pull it at native 4K, crop+upsc
 
 ## Method
 
+### Step 0 — AUTONOMOUS ROUTING (do this first — let motion find the still frames)
+Run `scripts/kb/motion_profile.sh <clip>` on the whole clip. Its motion-energy profile auto-lists the
+**STILL windows** (below-median troughs) — exactly the staging glances where a plate is face-on and
+legible — so you scan those high-res instead of waiting to be told "look at t=9s". This automates the
+whole-clip re-scan Step 1 demands. Full protocol:
+`docs/video-analysis-kb/autonomous-frame-selection.md`.
+
 ### Step 1 — Scan the WHOLE clip for a STAGING frame (don't anchor to the lift)
 The number is legible only when the equipment is **still and face-on** — usually a **staging moment**:
 pre-pickup (weight at rest on the floor/rack) or post-set-down, and the brief **glance** when the
