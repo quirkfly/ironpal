@@ -6,8 +6,10 @@ Read the **working weight** lifted, or say it's not applicable / unreadable. Nev
 
 - **Dumbbell** — number printed/embossed on the end head. Often only one head faces the camera;
   catch the frame where it does. Fixed dumbbells show the total; the number *is* the weight.
-- **Pin-loaded stack (machine/cable)** — read the number on the plate where the **pin** is inserted.
-  The selected weight is the printed number at the pin, not the top plate.
+- **Pin-loaded stack (machine/cable)** — the selected weight is the number on the plate the **pin**
+  is inserted into, not the top plate. **Do NOT eyeball the pin's column against the label strip** —
+  that is what produced four wrong answers in a row on case 005. Read it by **COUNTING EMPTY HOLES
+  FROM THE TOP** instead (see the dedicated section below).
 - **Plate-loaded (barbell / machine)** — sum the visible plates per side × 2, **plus the bar**
   (Olympic bar = 20 kg / 45 lb unless clearly otherwise). Read the number on each plate face;
   colour-coded plates (IWF) are a cross-check: red 25, blue 20, yellow 15, green 10, white 5.
@@ -141,6 +143,34 @@ so even the denomination usually needs the brief face-on loading glance (or the 
 on the product = a **cable-tension / load-cell** reading, not vision. (Contrast: barbell = Σplates+bar;
 pin stack = read the pin; loadable dumbbell = Σplates — those map mass→working weight directly; a lever
 rig does not.)
+
+## PIN-LOADED STACK: COUNT EMPTY HOLES FROM THE TOP — do not eyeball the pin column (case 005)
+A selectorized stack is a **clean painted OCR target** — and yet I gave **four wrong answers**
+(45 → 53 → 61 → 69 kg, all too high) on one sharp gallery photo before the lifter told me the method:
+**"just zoom the original and count the empty holes from the top."** Actual = **37 kg**. Why I kept
+missing, and the rule that fixes it:
+- **NEVER read a pin stack by eyeballing which label the knob lines up with.** The selector **knob is a
+  wide domed body**, offset and perspective-shifted from the thin plate it actually plugs into; anchoring
+  on the knob's bulk lands you several plates too heavy (my 45–69 kg were all knob-body guesses). The
+  label strip and the hole row are also at **different heights**, so a photographed-at-an-angle stack
+  shears the two apart — a label is never directly above "its" hole.
+- **DO count the EMPTY (open, dark) holes from the TOP** (lightest plate) down to the pin. Every plate
+  above the selected one is lifted clear, leaving its hole **open**; the pin sits in the first
+  **filled** hole. `selected plate index = (empty holes from top) + 1`.
+- **Convert index → weight from the printed scale.** This stack: top plate `13 KG`, **+8 kg per plate**
+  (13, 21, 29, 37, 45, 53 … 165). So **weight = 13 + 8 × (empty holes from top)**. Case 005: **3** empty
+  holes (13, 21, 29 open) → pin in the 4th plate → **37 kg**. Always read the actual first-plate value
+  and step off the label ladder; don't assume 13/+8.
+- **To count reliably, put labels and holes in ONE aligned crop** and trace each plate's vertical strip
+  from its number down to its hole. Counting holes on a hole-only crop risks losing which plate hole #1
+  belongs to (is the first open hole the 13 or the 21?). The combined crop anchors the count.
+- **The rounded-rectangle border around each number is the STICKER outline, not a selector highlight.**
+  Every label has one. I briefly "read" 29 kg because I mistook that box for a selection indicator — it
+  is not; it is on all of them.
+- **Tooling gotcha (this rig):** `convert -auto-orient` rotated this Samsung JPEG to **portrait**, so
+  crop offsets tuned to the landscape view I was actually looking at pointed at the wrong region. Crop
+  **without `-auto-orient`** to match the as-displayed orientation (photos, unlike the rotated video,
+  render correctly already), or recompute offsets for the rotated frame.
 
 **Product implication:** the POC "glance-at-the-weight" OCR UX assumes a *printed/painted* number
 (`vision.py` WEIGHT_SYSTEM) and **cannot work on unpainted cast plates**. Mitigations: plate-counting

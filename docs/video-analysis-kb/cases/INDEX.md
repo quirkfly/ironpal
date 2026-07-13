@@ -10,6 +10,7 @@ Every clip analysed, predicted vs. actual. Running accuracy is how we know the K
 
 | 003 | 20260615_122213.mp4 | egocentric | no-exercise → deadlift (both wrong) / **TRICEPS CABLE PUSHDOWN** 🔴 MISS (cable misread as free-weight) | 0 ("setup") / **5** 🔴 MISS (axial stroke invisible) | unreadable / **4×1.25kg/side = 10kg plates** 🟡 (denom unread; count est 5/side vs 4; lever rig: mass≠handle resistance) | [003](003-20260615_122213.md) |
 | 004 | 20260713_115428.mp4 | egocentric | (weight-only task) | — | wavered 8→6-8→8→8kg / **6kg (2kg+1kg per end, MIXED)** 🔴 MISS (denoms read ✓; called two different-size plates "same"; answer wavered) | [004](004-20260713_115428.md) |
+| 005 | 20260713_182249.jpg | gallery photo | (weight-only task, pin-loaded stack) | — | 45→53→61→69kg (all too high) / **37kg** 🔴 MISS ×4 (eyeballed knob-vs-label column on a clean painted stack; fixed by COUNTING EMPTY HOLES FROM TOP: 3 open → 13+8×3=37) | [005](005-20260713_182249.md) |
 
 **Running accuracy:** Exercise **1/3** (✅ case001 biceps curl; 🔴 case002 upright row→was barbell curl,
 grip mis-read; 🔴 case003 no-exercise/deadlift→was triceps cable pushdown, cable misread as free-weight)
@@ -36,6 +37,17 @@ loading frame** where the size gap is obvious; (4) anchored on "2×2 kg = 8 kg" 
 1 kg read. Rules banked to weight-reading.md / weight-tally-pipeline.md / skill: never force a trace;
 compare inner-vs-outer within one end; use the offset loading frame; believe your own reads; commit once
 (abstain, don't waver).
+Case005 lesson (WEIGHT — 🔴 miss ×4 on the *easiest* target): a sharp, well-lit gallery photo of a
+**painted pin-loaded stack** — and I still gave four wrong answers (45→53→61→69 kg, all too high) plus a
+stray 29. Actual **37 kg**. Root cause: I **eyeballed which label the selector KNOB lined up with**. The
+domed knob is a wide, offset, perspective-sheared body that overhangs plates several steps heavier than
+the thin plate its stem actually enters; and the label strip sits at a different height than the hole
+row, so "the number above the knob" is not the pinned plate. Also mistook the per-label **sticker border**
+for a selection highlight. Fix (banked to weight-reading.md + skill): **COUNT EMPTY (open) HOLES FROM THE
+TOP** down to the pin → `plate index = empty + 1`, `weight = first-plate value + increment × empty`
+(this stack 13 kg +8/plate: 3 open holes → 37 kg). Crop labels+holes into ONE aligned frame; trace each
+plate's strip; never eyeball the knob column. Tooling note: `-auto-orient` rotates this rig's photos to
+portrait and breaks landscape crop offsets — crop without it.
 
 ## Scoring
 

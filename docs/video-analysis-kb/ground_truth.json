@@ -1,0 +1,71 @@
+{
+  "_comment": "Machine-readable ground truth for weight-reading regression. Only lifter-CONFIRMED entries. scorable=true means the TOTAL working weight is confirmed and the scorer grades it. tolerance_kg = one plate/slot increment for that rig. Human doc: ground-truth.md. Scorer: scripts/kb/score_weights.py.",
+  "cases": [
+    {
+      "id": "001",
+      "source": "20260614_125114.mp4",
+      "equipment": "spinlock dumbbell (DOMYOS 2.5kg cast)",
+      "actual_kg": 5.0,
+      "unit": "kg",
+      "tolerance_kg": 2.5,
+      "confirmed": "total",
+      "scorable": true,
+      "notes": "2 x 2.5kg plates/dumbbell, NO handle added. Blind miss was 7kg (added handle)."
+    },
+    {
+      "id": "004",
+      "source": "20260713_115428.mp4",
+      "equipment": "spinlock dumbbell (DOMYOS, MIXED 2kg+1kg per end)",
+      "actual_kg": 6.0,
+      "unit": "kg",
+      "tolerance_kg": 2.5,
+      "confirmed": "total",
+      "scorable": true,
+      "notes": "Each end = 2kg outer + 1kg inner = 3kg/end. Blind miss wavered 8->6-8->8kg (called mixed plates uniform)."
+    },
+    {
+      "id": "005",
+      "source": "20260713_182249.jpg",
+      "equipment": "pin-loaded stack (painted, base 13kg +8/plate)",
+      "actual_kg": 37.0,
+      "unit": "kg",
+      "tolerance_kg": 0.0,
+      "confirmed": "total",
+      "scorable": true,
+      "notes": "3 empty holes from top (13,21,29 open) -> pin in plate 4 = 37kg. EXACT required (painted stack). Blind miss x4: 45/53/61/69 (eyeballed knob column)."
+    },
+    {
+      "id": "006",
+      "source": "20260713_182833.jpg",
+      "equipment": "pin-loaded stack (painted, base 13kg +8/plate)",
+      "actual_kg": 53.0,
+      "unit": "kg",
+      "tolerance_kg": 0.0,
+      "confirmed": "total",
+      "scorable": true,
+      "notes": "5 empty holes from top (13,21,29,37,45 open) -> pin in plate 6 = 53kg. EXACT required. Independently confirmed; count-holes method reproduces it."
+    },
+    {
+      "id": "002",
+      "source": "20260614_202314.mp4",
+      "equipment": "barbell (spinlock, 2kg/4.4LB plates + bar)",
+      "actual_kg": null,
+      "unit": "kg",
+      "tolerance_kg": 2.5,
+      "confirmed": "denomination",
+      "scorable": false,
+      "notes": "Plate denom 2kg (4.4LB) lifter-confirmed 'spot on'; TOTAL (with bar) never cleanly confirmed -> not scored on total. Denomination read is a separate confirmed fact."
+    },
+    {
+      "id": "003",
+      "source": "20260615_122213.mp4",
+      "equipment": "cable/lever rig (DOMYOS 1.25kg plates, pin-loaded)",
+      "actual_kg": 10.0,
+      "unit": "kg",
+      "tolerance_kg": 2.5,
+      "confirmed": "plate-mass",
+      "scorable": false,
+      "notes": "10kg PLATE MASS confirmed, but LEVER rig -> working resistance != mass (unknown ratio). Not scored as working weight. Plate mass recorded for reference only."
+    }
+  ]
+}

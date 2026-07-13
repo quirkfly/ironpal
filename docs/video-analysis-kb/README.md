@@ -108,6 +108,7 @@ movement in phase 3.** The set-up/grasp frames are also where weight is most rea
 | `weight-tally-pipeline.md` | Robust weight pipeline: **tally at presentation, never count the assembled stack, abstain→confirm**. Post-mortem of the 20260713 counting failure; the automatable/scalable approach. |
 | `sensor-fusion.md` | Product path: IMU + vision division of labor and the fusion pipeline. |
 | `analysis-pipeline-strategy.md` | Going-forward strategy: enrollment-based, sensor-first, IMU-gated, abstain-and-ask — scaling beyond manual vision-only analysis. |
+| `ground-truth.md` + `ground_truth.json` / `predictions.json` | Weight-reading accuracy harness: lifter-confirmed answers + the current run's predictions. Scored by `scripts/kb/score_weights.py`, which gates **confident-wrong reads to zero** (abstain-first). Takes the human out of the correction loop. |
 | `cases/INDEX.md` | Ledger of every clip analysed: predicted vs actual, running accuracy. |
 | `cases/<id>.md` | One page per analysed clip: the report, the ground truth, the diagnosis, the rule added. |
 

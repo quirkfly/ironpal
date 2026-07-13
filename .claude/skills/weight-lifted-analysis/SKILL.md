@@ -65,7 +65,16 @@ face.
 
 ### Step 2 — Find where the number lives, by equipment
 - **Dumbbell:** number on the **end head** (catch the frame where a head faces the camera).
-- **Pin-loaded stack:** number at the **PIN**, not the top plate.
+- **Pin-loaded stack:** the weight is the plate the **PIN** plugs into, not the top plate. **Do NOT
+  eyeball which label the knob lines up with** — the domed knob body is wide, offset, and perspective-
+  sheared from its thin plate, and the label strip sits at a different height than the hole row
+  (case 005: eyeballing the knob column gave 45/53/61/69 — all wrong; actual 37). Instead **count the
+  EMPTY (open) holes from the TOP** down to the pin: `plate index = empty holes + 1`, then read the
+  weight off the printed ladder (`weight = first-plate value + increment × empty-holes`; the case-005
+  stack was 13 kg + 8/plate → 3 empty holes = 37 kg). Crop labels+holes into ONE aligned frame and
+  trace each plate's column so you know which plate hole #1 is. The rounded box around each number is
+  the sticker outline, NOT a selection highlight. (Crop **without** `-auto-orient` on this rig's photos
+  — it rotates them to portrait and breaks landscape crop offsets.)
 - **Plate-loaded barbell/machine:** read each plate face; **total = Σ plates + the BAR** (Olympic =
   20kg/45lb). IWF colour cross-check: red25 blue20 yellow15 green10 white5.
 - **Loadable / spinlock dumbbell:** **weight = Σ plate denominations — do NOT add the handle**
@@ -122,6 +131,24 @@ When a loadable might be MIXED, resist confirming "uniform." Case 004: I called 
 - **Believe your own reads.** If you READ two different denominations face-on (e.g. a 2 kg AND a 1 kg),
   the loadout is MIXED — do not invent "the small one was shown but not loaded" to save a round number.
 
+### Step 4d — SELF-CONSISTENCY GATE (BLOCKING — never emit a confident wrong number)
+This is the rule that takes the human out of the correction loop. **Before reporting any number,
+corroborate it a SECOND independent way. Commit only if the two agree; otherwise ABSTAIN.** A
+confident-wrong read is the one failure that costs the founder time — an abstention never does.
+- **Pin stack:** (a) count EMPTY holes from the top → `first-plate + increment×empty`; (b) OCR the
+  label at the pin. Agree → commit. Disagree → abstain. (Case 005: eyeballing the knob gave 4 confident-
+  wrong answers; the two-method agreement would have caught every one.)
+- **Loadable dumbbell:** (a) read each plate's flat face; (b) inner-vs-outer size check within ONE end
+  for a mix. Consistent → commit. Ambiguous → abstain (case 004).
+- **Plate barbell:** (a) tally plates at presentation; (b) cross-check against any visible face read.
+- **Confidence discipline:** only attach confidence ≥0.7 when two methods AGREE. If they don't, set
+  `abstained` and output *"weight unverified — needs confirmation"* — do NOT emit a number. On the
+  product this is the 1-tap end-user confirm (cached per user/machine thereafter).
+- **Log the run to the harness.** Write the result into `docs/video-analysis-kb/predictions.json`
+  (`predicted_kg`/`unit`/`confidence`/`abstained`) and run `python3 scripts/kb/score_weights.py`.
+  Ground truth + scoring: `docs/video-analysis-kb/ground-truth.md`. The scorer exits non-zero on any
+  confident-wrong read — accuracy is measured by the harness, never by the founder hand-checking clips.
+
 ### Step 5 — Unit inference (kg vs lb)
 Read an explicit kg/lb/# mark if present. Else infer from context (EU gym / IWF colours → kg; US
 45/35/25 plates, "#" → lb) and **state the inference + lower confidence**.
@@ -159,3 +186,10 @@ frame shows it legibly, say "unreadable" and (if loadable) give the plate-count 
 ("weight unverified — needs confirmation"), not a total that shifts across passes. A wavering answer is
 the worst outcome: it signals the method is uncalibrated. Tally at presentation, never count the
 assembled stack, and abstain cleanly. Full approach: `docs/video-analysis-kb/weight-tally-pipeline.md`.
+
+**Abstention is the DEFAULT, not the fallback (Step 4d gate).** The founder has no time to correct
+confident-wrong reads, so the bar to commit a number is HIGH: two independent methods must agree
+(Step 4d). If they don't, you ABSTAIN — that is a success, not a failure. Coverage is grown by
+resolving abstentions with a better second read, never by lowering the bar and guessing. A confident
+wrong number is the only truly bad outcome; the harness (`scripts/kb/score_weights.py`) gates it to
+zero.

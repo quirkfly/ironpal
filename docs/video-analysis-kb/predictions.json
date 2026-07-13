@@ -1,0 +1,53 @@
+{
+  "_comment": "Current system predictions, one per case id in ground_truth.json. OVERWRITE this each analysis run, then run scripts/kb/score_weights.py. Fields: predicted_kg (number, or null if abstained), unit, confidence (0..1), abstained (bool), method. Rule: if the self-consistency gate fails you MUST set abstained=true and predicted_kg=null -- never emit a confident number you are not sure of. Seeded with the corrected final reads (post-learning baseline = should score 100% on scorable cases with 0 confident-wrong).",
+  "predictions": [
+    {
+      "id": "001",
+      "predicted_kg": 5.0,
+      "unit": "kg",
+      "confidence": 0.9,
+      "abstained": false,
+      "method": "read DOMYOS 2.5kg flat face x2, no handle"
+    },
+    {
+      "id": "004",
+      "predicted_kg": 6.0,
+      "unit": "kg",
+      "confidence": 0.85,
+      "abstained": false,
+      "method": "offset loading frame; inner-vs-outer per end -> 2kg+1kg mixed x2 ends"
+    },
+    {
+      "id": "005",
+      "predicted_kg": 37.0,
+      "unit": "kg",
+      "confidence": 0.95,
+      "abstained": false,
+      "method": "count empty holes from top = 3 (13,21,29) -> pin plate 4; 13+8x3"
+    },
+    {
+      "id": "006",
+      "predicted_kg": 53.0,
+      "unit": "kg",
+      "confidence": 0.95,
+      "abstained": false,
+      "method": "count empty holes from top = 5 (13,21,29,37,45) -> pin plate 6; 13+8x5"
+    },
+    {
+      "id": "002",
+      "predicted_kg": null,
+      "unit": "kg",
+      "confidence": 0.4,
+      "abstained": true,
+      "method": "plate denom 2kg read; bar weight unverified -> abstain on total"
+    },
+    {
+      "id": "003",
+      "predicted_kg": null,
+      "unit": "kg",
+      "confidence": 0.3,
+      "abstained": true,
+      "method": "lever rig: 10kg plate mass read but working resistance ratio unknown -> abstain"
+    }
+  ]
+}
