@@ -106,6 +106,22 @@ Reading a denomination ≠ knowing the total, and these are **different algorith
   wavering number is worse than a clean "confirm required." On the product this is the 1-tap user-confirm
   (then cached per-user, since a plate set is stable).
 
+### Step 4c — Are the stacked plates the SAME size? Don't fool yourself (case 004)
+When a loadable might be MIXED, resist confirming "uniform." Case 004: I called a **2 kg + 1 kg** stack
+"2×2 kg" and reported the wrong total. Guard rails:
+- **Never force a trace to your hypothesis.** If you overlay circles/measure diameters, trace the
+  ACTUAL rim and let the numbers fall where they are. Drawing two equal ellipses and reading it back as
+  "equal" is manufactured evidence, not verification.
+- **Compare INNER vs OUTER within ONE end** — never end-vs-end. Two ends whose *outer* plates match
+  says nothing about a smaller *inner* plate; that comparison is structurally blind to a mix.
+- **Use the OFFSET loading frame, not the flush/assembled stack.** Once plates are pushed together, a
+  smaller inner plate hides recessed directly behind the larger outer one (same silhouette). During
+  loading the plates are separated and the size gap is measurable (case 004: obvious at the mid-load
+  frame, invisible in the assembled shot). A diameter ratio ~0.72 (1kg vs 2kg) / ~0.78 (1.25 vs 2.5)
+  ⇒ MIXED.
+- **Believe your own reads.** If you READ two different denominations face-on (e.g. a 2 kg AND a 1 kg),
+  the loadout is MIXED — do not invent "the small one was shown but not loaded" to save a round number.
+
 ### Step 5 — Unit inference (kg vs lb)
 Read an explicit kg/lb/# mark if present. Else infer from context (EU gym / IWF colours → kg; US
 45/35/25 plates, "#" → lb) and **state the inference + lower confidence**.
