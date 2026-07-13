@@ -67,6 +67,23 @@ lying face-up on the floor, pre-pickup) read cleanly: **DOMYOS, 2.5 kg** embosse
 - Don't anchor the weight search to the lift; the best weight frame is usually the staging moment.
 Case 001 final (ground-truth corrected): 2× DOMYOS 2.5kg plates/dumbbell = **5 kg/dumbbell.**
 
+### Read the FLAT embossed face, not the DOMED back — and don't relapse to diameter (case 20260711)
+Same DOMYOS plates as case 001, yet I called them "unreadable." Post-mortem — three self-inflicted misses to avoid:
+1. **Wrong face.** Once a plate is **loaded on the bar**, the camera sees its **smooth domed/convex
+   BACK**; the embossed `DOMYOS + kg` is on the **flat INNER face**, hidden against the collar. The
+   number is legible ONLY on an **at-rest, face-UP** plate (like a dumbbell head laid flat, case 001) —
+   NOT on a loaded bar-end. So read the staging/at-rest plate, not the loaded end.
+2. **Diameter relapse.** I fell back to "~14cm → ~1.25kg" — the exact size-inference that was **2× off
+   in case 001** (size said 5kg, label said 2.5kg). Read the LABEL first; use diameter only as a last
+   resort and flag it.
+3. **Quit too early.** Case 001 took THREE "unreadable→readable" reversals before the t9 staging read.
+   Sweep the whole at-rest window (several timestamps) for the sharpest face-up glance before declaring
+   unreadable. **A device-GALLERY screenshot (paused = full sharpness) beats any `ffmpeg -ss`
+   extraction** for dark-on-dark embossing — how case 001 was actually solved.
+4. **1.25 vs 2.5 kg fork.** DOMYOS 2.5kg ≈18cm (readable, case 001); DOMYOS **1.25kg thin ≈14cm**
+   (dark-on-dark, **effectively unreadable → COUNT plates**, case 003). If the plate reads small/thin,
+   expect to count, not OCR — that's a correct outcome, not a failure.
+
 ## Loadable dumbbell weight = PLATE SUM. Do NOT add a handle estimate (case 001 correction)
 
 Case 001 plate read was CORRECT (DOMYOS 2.5kg ×2 = 5kg); my error was **adding a ~1.5–2kg handle**
@@ -84,6 +101,34 @@ Case 001 plate read was CORRECT (DOMYOS 2.5kg ×2 = 5kg); my error was **adding 
   stacks several to a side. Number is **dark-on-dark embossed → effectively unreadable** on a head cam;
   identify by the thin profile + small dia and **count plates**. Case 003 rig = **4 × 1.25kg/side =
   10 kg** total plate mass. (My count estimate ~5/side was over by 1; denomination 1.25 was in range.)
+- **DOMYOS 1 kg cast plate (case 20260711, READ):** black cast iron, small ~13cm dia, domed. Face is
+  **dual-marked `1 KG` + `2.2 LBS`** around a central `DOMYOS` wordmark — READABLE when held **face-on
+  during loading** (t24.3), NOT on the loaded bar-end (domed back only). The dual kg/lb stamp
+  self-confirms the denomination (1 kg = 2.2 lb). Reinforces: **hunt the face-on loading glance** and
+  read the flat face; don't judge these off the domed back or by diameter.
+- **DOMYOS 2 kg cast plate (case 20260713, READ):** black cast iron, ~18cm dia (clearly larger than
+  the 1/1.25kg). Face **dual-marked `2 KG` + `4.4 LBS`** around `DOMYOS`. Read cleanly face-on during
+  loading (t12, t31). NB the DOMYOS home set spans **1, 1.25, 2, 2.5 kg** — **same brand, MANY
+  denominations**; always read the number, never assume one.
+
+## COUNT/SIZE the LOADOUT from the load ORDER, not the assembled edge-on stack (case 20260713)
+Reading a *denomination* is solved (face-on loading glance). The unsolved-by-a-single-frame part is the
+**total** — how many plates of which size are on each end. Hard-won rules:
+- **An edge-on assembled stack is NOT reliably countable or sizable.** Overlapping domed discs hide how
+  many there are and whether an inner plate is smaller — a 2kg and a 1.25kg disc look identical stacked
+  behind each other. Do **not** claim "uniform" (or a total) from the final stack. (Case 20260713: I
+  wrongly called "2×2kg = 8kg uniform" from the assembled ends.)
+- **LOADED ≠ INVENTORY.** Plates lying on the mat/floor are *available stock*, not necessarily *loaded*.
+  Case 20260713: the inventory was mixed (2kg **and** 1kg DOMYOS), but tracing the load showed only the
+  **2kg** plates were threaded on — the 1kg plates **stayed on the mat**. Reading the mat as "mixed
+  loadout" is as wrong as assuming uniform. **Watch what actually goes ON the handle.**
+- **Method:** trace the load ORDER on a dense montage (~1.3–2fps, un-rotated, big tiles) from bare
+  handle → locked collar. Count each plate as it's **threaded on** and read its face at the moment it's
+  presented (they usually show it face-on first). The total = Σ of the plates you watched go on — not a
+  guess from the end stack, and not a tally of everything on the floor.
+- Still can't resolve count/mix after tracing (head-cam looks away, hands occlude) → report the
+  **confirmed denominations + a bounded total** and say the exact per-end count is unverified; 1-tap
+  user-confirm on the product.
 
 ## CABLE / LEVER rigs: loaded plate mass ≠ resistance at the handle (case 003)
 A plate-loaded **cable or lever rig** (home pushdown/row station, DIY lever) **decouples the load from

@@ -105,6 +105,7 @@ movement in phase 3.** The set-up/grasp frames are also where weight is most rea
 | `exercises/<slug>.md` | Per-exercise visual signature, rep definition, weight-reading notes. One file per exercise we've seen. |
 | `rep-counting.md` | Accumulated rep-counting heuristics and failure modes (over/undercount). |
 | `weight-reading.md` | Accumulated weight-reading heuristics by equipment type and unit inference. |
+| `weight-tally-pipeline.md` | Robust weight pipeline: **tally at presentation, never count the assembled stack, abstain→confirm**. Post-mortem of the 20260713 counting failure; the automatable/scalable approach. |
 | `sensor-fusion.md` | Product path: IMU + vision division of labor and the fusion pipeline. |
 | `analysis-pipeline-strategy.md` | Going-forward strategy: enrollment-based, sensor-first, IMU-gated, abstain-and-ask — scaling beyond manual vision-only analysis. |
 | `cases/INDEX.md` | Ledger of every clip analysed: predicted vs actual, running accuracy. |
