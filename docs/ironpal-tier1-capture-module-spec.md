@@ -1,6 +1,7 @@
 # IronPal Tier-1 Capture Module — Hardware Spec
 
 **Status:** draft v0.1 · **Owner:** founder (solo) · **Feeds:** `docs/video-analysis-kb/` analysis pipeline + `scripts/kb/score_weights.py` harness.
+**Why these choices (rejected options, market survey, selected part):** `ironpal-capture-hardware-decision-log.md`.
 
 ## 0. What this is (and isn't)
 
