@@ -79,6 +79,9 @@ problem, not a two-independent-clocks problem. (See §7.)
 
 ## 5. Bill of Materials (one POC unit)
 
+> Quick view below; the **complete sourced shopping list** (exact MPNs, EU suppliers, quantities,
+> tools, and alternatives) is in **Appendix D**.
+
 | Item | Part | ~Cost |
 |------|------|-------|
 | MCU + BLE | ESP32-C3 Super Mini | €3–5 |
@@ -266,27 +269,25 @@ charge + over-discharge/over-current protection.
 > (do not float or ground blindly). **Avoid ESP32-C3 strapping pins (GPIO2/8/9)** and the USB pins
 > (GPIO18/19) for these nets — the assignment above already does.
 
-## A.4 Block schematic (ASCII)
+## A.4 Schematic drawing
 
-```
-        ┌───────── USB-C (J1) ─────────┐
-        │  VBUS(5V)            D+/D-    │
-        ▼                        │(prog)│
-   ┌─────────┐                   ▼      ▼
-   │ TP4056  │            ┌───────────────────┐
-   │ +DW01/  │  BAT+      │   U1 ESP32-C3     │
-   │ FS8205  ├──┬──SW1────┤ 5V   GPIO4 SCLK ──┼──► U2 SCLK
-   └────┬────┘  │         │      GPIO6 MOSI ──┼──► U2 SDI
-        │       │         │      GPIO5 MISO ◄─┼─── U2 SDO
-     [BT1 LiPo] │         │      GPIO7 CS   ──┼──► U2 CS (10k↑)
-      3.7V400mAh│         │      GPIO3 INT1 ◄─┼─── U2 INT1
-                │         │      GPIO10 ──R1──┼──► D1 LED
-                └──►U4 LDO┤ 3V3 ──────────────┼──► U2 VDD/VDDIO
-                  3.3V    │      GND ──────────┼──► U2 GND / BT1−
-                  Cin/Cout└───────────────────┘   (100nF/1µF/10µF decouple)
-```
+Full labelled circuit diagram (colour-coded rails, pin configs, voltage ratings, annotations):
+
+![IronPal IMU module — circuit schematic](assets/imu-poc-schematic.svg)
+
+> Source: [`assets/imu-poc-schematic.svg`](assets/imu-poc-schematic.svg) (vector — open in a browser
+> to zoom). Nets: red = +5 V, amber = VBAT 3.0–4.2 V, orange = +3.3 V, dark = GND, blue = SPI,
+> purple = INT1 data-ready. This drawing supersedes the earlier text netlist in §A.3 (kept as a
+> quick reference table).
 
 # Appendix B — PCB layout (POC-B, 2-layer)
+
+Component-placement drawing (top view — antenna keepout, IMU stress-free zone, ground pour, routing):
+
+![IronPal IMU module — PCB placement](assets/imu-poc-pcb-layout.svg)
+
+> Source: [`assets/imu-poc-pcb-layout.svg`](assets/imu-poc-pcb-layout.svg). Red hatch = antenna
+> keepout (no copper); green hatch = bottom-layer GND pour.
 
 - **Stackup:** 2-layer, **top = signals + parts, bottom = solid ground pour**. Target ~20×28 mm so it
   clips beside the camera under ~25 g total.
@@ -341,3 +342,108 @@ charge + over-discharge/over-current protection.
 **Control/robustness**
 - Control characteristic: start/stop, set ODR/FSR, fire the LED sync-flash at a returned `device_ts`.
 - Watchdog + reconnect logic; persist config in NVS.
+
+---
+
+# Appendix D — Shopping list, BOM & tooling
+
+Two paths, buy in this order: **POC-A** (dev boards + breakouts, jumpered — build it *this week*, no
+PCB, no reflow) then **POC-B** (the custom board from Appendix A/B, fab+assembled). Prices are 2026
+indicative EUR incl. typical EU retail markup; MPN = manufacturer part number. Founder is in Slovakia,
+so EU-stocking suppliers (TME/Berrybase/Botland/Mouser-EU) are prioritised to dodge customs friction.
+
+## D.1 POC-A shopping list — buy this now (dev-board build)
+
+| # | Item | MPN / SKU | Qty | Supplier (EU-first) | ~Unit € | Notes |
+|---|------|-----------|-----|---------------------|---------|-------|
+| 1 | **Seeed XIAO ESP32-C3** (MCU+BLE, **on-board LiPo charging** + U.FL) | Seeed 113991054 | 1 | Berrybase / Botland / Seeed | 6–8 | Preferred: built-in charge IC → **skips the TP4056**. Comes with antenna. |
+| 1-alt | ESP32-C3 **Super Mini** | generic | 1 | AliExpress / Amazon.de | 3–5 | Cheaper but **no onboard charging** → add item 4. |
+| 2 | **ICM-42688-P breakout** (pre-soldered — avoids LGA reflow) | Adafruit **4759** (STEMMA QT) | 1 | Berrybase / Pimoroni / Mouser | 13–16 | The reason to breakout: the bare LGA is not hand-solderable. |
+| 2-alt | ICM-42688 breakout (cheap) | Waveshare / generic | 1 | AliExpress / Waveshare | 5–8 | Verify it's **42688-P**, not a BMI/MPU clone. |
+| 3 | **LiPo 3.7 V 400–500 mAh**, JST-PH 2.0, **with protection** | Adafruit 2750 (500 mAh) / generic | 1 | Berrybase / TME | 6–9 | Protected cell only. Match connector polarity to the board! |
+| 4 | TP4056 **USB-C charger + protection** module (only if 1-alt) | generic (DW01+FS8205) | 0–1 | AliExpress / Amazon.de | 1–2 | Not needed with the XIAO (item 1). |
+| 5 | SPDT **slide switch** | generic | 1 | TME / Botland | 0.5 | Battery cutoff. |
+| 6 | **LED** 3 mm green + 330 Ω resistor | generic | 1 | (from kit) | 0.2 | Status + optical sync marker (§7). XIAO's onboard LED can stand in for POC-A. |
+| 7 | **Dupont jumper wires** (F-F) + mini breadboard/perfboard | generic | 1 set | Amazon.de / TME | 5–8 | Prototype wiring; perfboard for a sturdier build. |
+| 8 | Pin headers (2.54 mm) | generic | 1 strip | TME | 0.5 | If boards ship without headers. |
+| 9 | **3D-printed bracket** (headband clip) | print PETG/ABS | 1 | own printer / JLCPCB 3D / local | 2–4 | PETG for durability; align + mark IMU axes. |
+| | **POC-A subtotal** | | | | **≈ €40–55** | one working unit (excl. tools) |
+
+## D.2 POC-B additional BOM — custom PCB (from Appendix A)
+
+Order these only after POC-A validates. Bare passives/ICs are cheapest at **LCSC** (pairs with JLCPCB
+assembly). Quantities include modest spares (SMT parts are lost/tombstoned easily).
+
+| Ref | MPN | Supplier | Qty/unit | Buy qty | ~€ (buy qty) |
+|-----|-----|----------|----------|---------|--------------|
+| U1 | ESP32-C3-MINI-1-N4 (Espressif) | LCSC / Mouser | 1 | 5 | 12–18 |
+| U2 | ICM-42688-P (TDK InvenSense) | Mouser / DigiKey / LCSC | 1 | 5 | 30–45 |
+| U3 | MCP73831T-2ACI/OT charger *(cleaner than TP4056 for a custom board)* | Mouser / LCSC | 1 | 5 | 4–7 |
+| U4 | AP2112K-3.3TRG1 (Diodes) LDO | LCSC / Mouser | 1 | 10 | 3–5 |
+| — | Caps 100 nF/1 µF/10 µF (0402/0805) X7R/X5R | LCSC | ~8 | 1 reel ea | 3–6 |
+| R1/R2 | 330 Ω / 10 kΩ 0402 | LCSC | 2 | 1 reel ea | 1–2 |
+| J1 | USB-C receptacle (16-pin, e.g. GCT USB4085) | LCSC / Mouser | 1 | 5 | 4–8 |
+| J2 | JST-PH 2.0 SMD (battery) | LCSC | 1 | 10 | 2–4 |
+| SW1 | SPDT slide switch SMD | LCSC | 1 | 10 | 2–4 |
+| PCB | 2-layer, ~20×28 mm | **JLCPCB** | — | 5 pcs | 4–6 + ship |
+| PCBA | JLCPCB SMT assembly (**let them place the LGA IMU**) | JLCPCB | — | 5 pcs | 15–40 setup |
+| | **POC-B build (5-unit run)** | | | | **≈ €90–160 total** → per-unit drops fast |
+
+> Strong recommendation: use **JLCPCB PCBA** to place U1/U2 — hand-placing the ICM-42688-P LGA and the
+> MINI-1 module by hand is error-prone. Solder only the through-hole/large parts (JST, switch) yourself.
+
+## D.3 Tools & equipment (assembly + test)
+
+One-time; skip anything you already own.
+
+| Tool | Suggested | ~€ | Why |
+|------|-----------|----|-----|
+| Temp-controlled soldering iron | Pinecil V2 / Hakko FX-series | 40–60 | fine-pitch headers, breakout pins |
+| Solder + flux + wick | leaded 0.5 mm + no-clean flux pen | 10–15 | leaded is easier for POC |
+| Fine tweezers + flush cutters | ESD tweezers | 8–12 | SMT + wire work |
+| **Multimeter** | any (continuity + DC V) | 15–30 | verify 3V3 rail, shorts, polarity **before** connecting LiPo |
+| **USB-C data cable** | quality data cable | 5 | program/charge (not charge-only!) |
+| Logic analyzer (8-ch) | generic "Saleae-clone" | 8–12 | debug SPI/INT if the IMU is silent — very worth it |
+| ESD strap/mat | wrist strap | 8 | IMU + ESP are ESD-sensitive |
+| LiPo safety bag | fireproof bag | 6–10 | charge/store cells safely |
+| Magnifier / USB microscope | 10–200× | 15–30 | inspect breakout joints / LGA (POC-B) |
+| Helping-hands / PCB vise | generic | 8–15 | hold boards while soldering |
+| 3D printer *or* print service | PETG/ABS | — | the bracket (item 9); JLCPCB/local if no printer |
+| *(POC-B only)* hot-air rework | 858D-class | 30–50 | **only if** you self-assemble SMT instead of JLCPCB PCBA |
+
+## D.4 Sourcing recommendations & alternatives
+
+**Where to buy (Slovakia-friendly):**
+- **TME (PL)** & **Botland (PL)** — EU warehouses, cheap fast shipping to SK, no customs surprise. Best
+  for passives, switches, LiPo, tools.
+- **Berrybase (DE)** — XIAO/ESP boards, breakouts, LiPos; fast EU delivery.
+- **Mouser / DigiKey (EU)** — genuine TDK/Espressif silicon for POC-B; higher small-order shipping.
+- **LCSC + JLCPCB (CN)** — cheapest bare components + fab + assembly for POC-B (accept ~1–2 wk shipping
+  and prepaid import, like the camera).
+- **AliExpress / Amazon.de** — cheapest dev boards & generic breakouts for POC-A; verify the IMU is a
+  real ICM-42688-P.
+
+**Component alternatives (all drop-in for the plan):**
+- **IMU:** ICM-42688-P (primary, low noise) → **BMI270** (cheapest, very common in wearables) →
+  **BNO085/086** (on-chip sensor fusion → quaternions, least firmware) → **LSM6DSV16X** (ST, ML core).
+  Any 6-axis with SPI + FIFO + data-ready INT works; re-check register map in firmware.
+- **MCU:** XIAO ESP32-C3 (charging built in) → ESP32-C3 Super Mini → **Seeed XIAO nRF52840** (lower BLE
+  power, if battery life dominates) → ESP32-S3 (more RAM/compute for on-device DSP).
+- **Charger:** XIAO onboard → TP4056 module (POC-A) → MCP73831 (POC-B custom).
+- **Battery:** any protected 3.7 V LiPo 300–500 mAh with JST-PH 2.0; larger = longer runtime vs mass.
+
+**Quality guidance:** buy the **IMU and ESP from reputable channels** (Adafruit/Mouser/Seeed/Berrybase)
+— counterfeit/relabelled IMUs are common on the cheapest AliExpress listings and will waste days of
+"why is my gyro noisy" debugging. Passives, switches, wires, LiPo: generic EU stock is fine.
+
+## D.5 Cost summary
+
+| Line | ~€ |
+|------|----|
+| **POC-A unit** (D.1) | 40–55 |
+| **Tools** you don't already own (D.2, one-time) | 60–150 |
+| **POC-B** custom-board 5-unit run (D.2, later) | 90–160 |
+
+**Bottom line:** ~**€40–55 in parts** (plus tools) puts a working, jumpered ESP32-C3 + ICM-42688-P BLE
+IMU on the bench this week — matching the ELP camera's arrival — with **no PCB and no reflow required**.
+Defer POC-B until POC-A + the camera's weight-reading gate both pass.

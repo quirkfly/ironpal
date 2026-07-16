@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 820" font-family="'Segoe UI',Arial,sans-serif">
+  <defs>
+    <marker id="arrB" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2c7be5"/></marker>
+    <marker id="arrP" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8e44ad"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="820" fill="#ffffff"/>
+  <rect x="4" y="4" width="1172" height="812" fill="none" stroke="#cccccc" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="590" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#1a1a1a">IronPal IMU Module — Circuit Schematic</text>
+  <text x="590" y="56" text-anchor="middle" font-size="13" fill="#666">ESP32-C3 (BLE 5.0) + TDK ICM-42688-P 6-axis IMU · POC · v0.1</text>
+
+  <!-- ===== Power rails ===== -->
+  <line x1="470" y1="120" x2="1120" y2="120" stroke="#e67e22" stroke-width="4"/>
+  <text x="470" y="112" font-size="13" font-weight="700" fill="#e67e22">+3.3 V rail</text>
+  <line x1="150" y1="560" x2="1120" y2="560" stroke="#34495e" stroke-width="4"/>
+  <text x="150" y="552" font-size="13" font-weight="700" fill="#34495e">GND</text>
+
+  <!-- ===== J1 USB-C ===== -->
+  <rect x="40" y="150" width="95" height="72" rx="6" fill="#f4f6f8" stroke="#333" stroke-width="1.5"/>
+  <text x="52" y="172" font-size="14" font-weight="700" fill="#222">J1</text>
+  <text x="52" y="190" font-size="12" fill="#333">USB-C</text>
+  <text x="52" y="208" font-size="11" fill="#666">5 V · D± (prog)</text>
+
+  <!-- ===== U3 TP4056 charger ===== -->
+  <rect x="185" y="150" width="150" height="98" rx="6" fill="#f4f6f8" stroke="#333" stroke-width="1.5"/>
+  <text x="197" y="171" font-size="14" font-weight="700" fill="#222">U3  TP4056</text>
+  <text x="197" y="189" font-size="11.5" fill="#333">Li-ion charger</text>
+  <text x="197" y="205" font-size="11.5" fill="#333">+ DW01A/FS8205</text>
+  <text x="197" y="221" font-size="11.5" fill="#333">protection</text>
+  <text x="197" y="239" font-size="11" fill="#666">5 V → 4.2 V, 1 A</text>
+
+  <!-- ===== BT1 battery ===== -->
+  <rect x="185" y="300" width="150" height="58" rx="6" fill="#fff9e6" stroke="#333" stroke-width="1.5"/>
+  <text x="197" y="323" font-size="14" font-weight="700" fill="#222">BT1  LiPo 3.7 V</text>
+  <text x="197" y="343" font-size="11.5" fill="#333">400 mAh · JST-PH · protected</text>
+  <text x="205" y="296" font-size="12" font-weight="700" fill="#c0392b">+</text>
+  <text x="300" y="296" font-size="13" font-weight="700" fill="#34495e">–</text>
+
+  <!-- ===== SW1 ===== -->
+  <rect x="360" y="168" width="48" height="34" rx="4" fill="#f4f6f8" stroke="#333" stroke-width="1.5"/>
+  <text x="384" y="189" font-size="12" font-weight="700" fill="#222" text-anchor="middle">SW1</text>
+
+  <!-- ===== U4 LDO ===== -->
+  <rect x="440" y="150" width="130" height="98" rx="6" fill="#f4f6f8" stroke="#333" stroke-width="1.5"/>
+  <text x="452" y="171" font-size="14" font-weight="700" fill="#222">U4  AP2112K-3.3</text>
+  <text x="452" y="189" font-size="11.5" fill="#333">LDO · 600 mA</text>
+  <text x="452" y="205" font-size="11" fill="#666">dropout ~250 mV</text>
+  <text x="452" y="223" font-size="12" font-weight="600" fill="#e67e22">Vout = 3.3 V</text>
+
+  <!-- ===== Power wires ===== -->
+  <!-- 5V -->
+  <line x1="135" y1="186" x2="185" y2="186" stroke="#d9534f" stroke-width="2.5"/>
+  <text x="140" y="178" font-size="11" fill="#d9534f">+5 V</text>
+  <!-- VBAT: U3 OUT -> SW1 -> LDO Vin -->
+  <line x1="335" y1="186" x2="360" y2="186" stroke="#f0ad4e" stroke-width="2.5"/>
+  <line x1="408" y1="186" x2="440" y2="186" stroke="#f0ad4e" stroke-width="2.5"/>
+  <text x="330" y="150" font-size="11" fill="#c8891f">VBAT 3.0–4.2 V</text>
+  <!-- U3 BAT -> battery + -->
+  <line x1="255" y1="248" x2="255" y2="300" stroke="#f0ad4e" stroke-width="2.5"/>
+  <circle cx="255" cy="248" r="3" fill="#f0ad4e"/>
+  <!-- battery - -> GND -->
+  <line x1="305" y1="300" x2="305" y2="560" stroke="#34495e" stroke-width="2.5"/>
+  <circle cx="305" cy="560" r="3.5" fill="#34495e"/>
+  <!-- LDO Vout -> 3V3 bus -->
+  <line x1="505" y1="150" x2="505" y2="120" stroke="#e67e22" stroke-width="2.5"/>
+  <circle cx="505" cy="120" r="3.5" fill="#e67e22"/>
+  <!-- LDO GND -> GND bus -->
+  <line x1="505" y1="248" x2="505" y2="560" stroke="#34495e" stroke-width="2.5"/>
+  <circle cx="505" cy="560" r="3.5" fill="#34495e"/>
+
+  <!-- decoupling cap glyph near LDO in (Cin) -->
+  <g stroke="#333" stroke-width="1.6">
+    <line x1="425" y1="186" x2="425" y2="470"/><line x1="415" y1="470" x2="435" y2="470"/><line x1="417" y1="476" x2="433" y2="476"/>
+  </g>
+  <line x1="425" y1="476" x2="425" y2="560" stroke="#34495e" stroke-width="2"/>
+  <circle cx="425" cy="186" r="3" fill="#333"/>
+  <text x="368" y="474" font-size="10.5" fill="#555">Cin 1µF</text>
+
+  <!-- ===== U1 ESP32-C3 ===== -->
+  <rect x="610" y="205" width="200" height="290" rx="8" fill="#eaf2fb" stroke="#2c3e50" stroke-width="1.8"/>
+  <text x="622" y="232" font-size="15" font-weight="700" fill="#1a3a5c">U1  ESP32-C3-MINI-1</text>
+  <text x="622" y="250" font-size="12" fill="#555">MCU + BLE 5.0 (RISC-V)</text>
+  <text x="622" y="267" font-size="11" fill="#777">3.0–3.6 V</text>
+
+  <!-- U1 left power pins -->
+  <line x1="590" y1="300" x2="610" y2="300" stroke="#e67e22" stroke-width="2.5"/>
+  <text x="616" y="304" font-size="11" fill="#333">3V3</text>
+  <line x1="590" y1="470" x2="610" y2="470" stroke="#34495e" stroke-width="2.5"/>
+  <text x="616" y="474" font-size="11" fill="#333">GND</text>
+  <!-- 3V3 to U1 -->
+  <path d="M590,300 L560,300 L560,120" fill="none" stroke="#e67e22" stroke-width="2.5"/>
+  <circle cx="560" cy="120" r="3.5" fill="#e67e22"/>
+  <!-- GND from U1 -->
+  <line x1="590" y1="470" x2="560" y2="470" stroke="#34495e" stroke-width="2.5"/>
+  <line x1="560" y1="470" x2="560" y2="560" stroke="#34495e" stroke-width="2.5"/>
+  <circle cx="560" cy="560" r="3.5" fill="#34495e"/>
+
+  <!-- U1 right SPI/INT pins (labels inside, anchored end) -->
+  <g font-size="11" fill="#1a3a5c" text-anchor="end">
+    <text x="802" y="304">SCLK · GPIO4</text>
+    <text x="802" y="334">MOSI · GPIO6</text>
+    <text x="802" y="364">MISO · GPIO5</text>
+    <text x="802" y="394">CS · GPIO7</text>
+    <text x="802" y="424">INT1 · GPIO3</text>
+  </g>
+  <line x1="810" y1="300" x2="825" y2="300" stroke="#2c7be5" stroke-width="2"/>
+  <line x1="810" y1="330" x2="825" y2="330" stroke="#2c7be5" stroke-width="2"/>
+  <line x1="810" y1="360" x2="825" y2="360" stroke="#2c7be5" stroke-width="2"/>
+  <line x1="810" y1="390" x2="825" y2="390" stroke="#2c7be5" stroke-width="2"/>
+  <line x1="810" y1="420" x2="825" y2="420" stroke="#8e44ad" stroke-width="2"/>
+  <!-- LED pin bottom -->
+  <text x="700" y="490" font-size="11" fill="#1a3a5c" text-anchor="middle">GPIO10</text>
+
+  <!-- ===== U2 IMU ===== -->
+  <rect x="910" y="250" width="185" height="205" rx="8" fill="#fdecea" stroke="#2c3e50" stroke-width="1.8"/>
+  <text x="922" y="276" font-size="15" font-weight="700" fill="#7c2d24">U2  ICM-42688-P</text>
+  <text x="922" y="294" font-size="12" fill="#555">6-axis IMU (SPI)</text>
+  <text x="922" y="311" font-size="11" fill="#777">VDD/VDDIO 1.71–3.6 V</text>
+
+  <!-- U2 left pins -->
+  <g font-size="11" fill="#7c2d24">
+    <text x="918" y="304">SCLK</text>
+    <text x="918" y="334">SDI</text>
+    <text x="918" y="364">SDO</text>
+    <text x="918" y="394">CS</text>
+    <text x="918" y="424">INT1</text>
+  </g>
+  <line x1="890" y1="300" x2="910" y2="300" stroke="#2c7be5" stroke-width="2"/>
+  <line x1="890" y1="330" x2="910" y2="330" stroke="#2c7be5" stroke-width="2"/>
+  <line x1="890" y1="360" x2="910" y2="360" stroke="#2c7be5" stroke-width="2"/>
+  <line x1="890" y1="390" x2="910" y2="390" stroke="#2c7be5" stroke-width="2"/>
+  <line x1="890" y1="420" x2="910" y2="420" stroke="#8e44ad" stroke-width="2"/>
+  <!-- U2 top power pins -->
+  <line x1="960" y1="250" x2="960" y2="120" stroke="#e67e22" stroke-width="2.5"/>
+  <circle cx="960" cy="120" r="3.5" fill="#e67e22"/>
+  <text x="946" y="244" font-size="10.5" fill="#7c2d24" text-anchor="end">VDD</text>
+  <line x1="1010" y1="250" x2="1010" y2="120" stroke="#e67e22" stroke-width="2.5"/>
+  <circle cx="1010" cy="120" r="3.5" fill="#e67e22"/>
+  <text x="1004" y="244" font-size="10.5" fill="#7c2d24" text-anchor="end">VDDIO</text>
+  <!-- U2 GND -->
+  <line x1="1000" y1="455" x2="1000" y2="560" stroke="#34495e" stroke-width="2.5"/>
+  <circle cx="1000" cy="560" r="3.5" fill="#34495e"/>
+  <text x="1006" y="450" font-size="10.5" fill="#7c2d24">GND</text>
+
+  <!-- ===== SPI / INT nets between U1 and U2 ===== -->
+  <line x1="825" y1="300" x2="890" y2="300" stroke="#2c7be5" stroke-width="2" marker-end="url(#arrB)"/>
+  <line x1="825" y1="330" x2="890" y2="330" stroke="#2c7be5" stroke-width="2" marker-end="url(#arrB)"/>
+  <line x1="890" y1="360" x2="825" y2="360" stroke="#2c7be5" stroke-width="2" marker-end="url(#arrB)"/>
+  <line x1="825" y1="390" x2="890" y2="390" stroke="#2c7be5" stroke-width="2" marker-end="url(#arrB)"/>
+  <line x1="890" y1="420" x2="825" y2="420" stroke="#8e44ad" stroke-width="2" marker-end="url(#arrP)"/>
+  <g font-size="9.5" fill="#555" text-anchor="middle">
+    <text x="857" y="294">SCLK</text>
+    <text x="857" y="324">MOSI→SDI</text>
+    <text x="857" y="354">SDO→MISO</text>
+    <text x="857" y="384">CS</text>
+    <text x="857" y="414" fill="#8e44ad">INT1 (data-ready)</text>
+  </g>
+
+  <!-- ===== R2 CS pull-up ===== -->
+  <path d="M857,390 L857,175 L960,175" fill="none" stroke="#e67e22" stroke-width="1.6" stroke-dasharray="0"/>
+  <rect x="849" y="230" width="16" height="40" fill="#fff" stroke="#333" stroke-width="1.4"/>
+  <circle cx="857" cy="390" r="3" fill="#2c7be5"/>
+  <text x="872" y="254" font-size="10.5" fill="#333">R2 10k</text>
+  <text x="872" y="268" font-size="9" fill="#777">CS pull-up</text>
+
+  <!-- ===== LED D1 + R1 ===== -->
+  <line x1="700" y1="495" x2="700" y2="512" stroke="#333" stroke-width="2"/>
+  <rect x="692" y="512" width="16" height="34" fill="#fff" stroke="#333" stroke-width="1.4"/>
+  <text x="714" y="533" font-size="10.5" fill="#333">R1 330Ω</text>
+  <path d="M690,548 L710,548 L700,566 Z" fill="#7bd88f" stroke="#2e7d32" stroke-width="1.2"/>
+  <line x1="690" y1="566" x2="710" y2="566" stroke="#2e7d32" stroke-width="1.6"/>
+  <text x="714" y="562" font-size="10.5" fill="#333">D1 LED</text>
+  <line x1="700" y1="566" x2="700" y2="576" stroke="#34495e" stroke-width="2"/>
+  <line x1="640" y1="576" x2="760" y2="576" stroke="#34495e" stroke-width="1.5"/>
+  <line x1="700" y1="576" x2="700" y2="560" stroke="#34495e" stroke-width="0"/>
+  <text x="620" y="590" font-size="9" fill="#777">status LED + optical sync-flash marker (§7)</text>
+
+  <!-- decoupling caps at ICs (representative) -->
+  <g stroke="#333" stroke-width="1.6">
+    <line x1="620" y1="300" x2="620" y2="330"/><line x1="610" y1="330" x2="630" y2="330"/><line x1="612" y1="336" x2="628" y2="336"/>
+  </g>
+  <text x="600" y="352" font-size="9.5" fill="#555">C1 100nF+C3 10µF</text>
+  <g stroke="#333" stroke-width="1.6">
+    <line x1="1075" y1="130" x2="1075" y2="160"/><line x1="1065" y1="160" x2="1085" y2="160"/><line x1="1067" y1="166" x2="1083" y2="166"/>
+  </g>
+  <line x1="1075" y1="120" x2="1075" y2="130" stroke="#e67e22" stroke-width="2"/>
+  <line x1="1075" y1="166" x2="1075" y2="560" stroke="#34495e" stroke-width="1.4"/>
+  <circle cx="1075" cy="120" r="3" fill="#e67e22"/><circle cx="1075" cy="560" r="3" fill="#34495e"/>
+  <text x="1030" y="184" font-size="9.5" fill="#555">C2 100nF+C4 1µF (IMU)</text>
+
+  <!-- ===== Legend ===== -->
+  <rect x="40" y="612" width="360" height="176" rx="6" fill="#fbfbfb" stroke="#ccc"/>
+  <text x="54" y="634" font-size="13" font-weight="700" fill="#222">Legend — nets</text>
+  <g font-size="11.5" fill="#333">
+    <line x1="54" y1="652" x2="86" y2="652" stroke="#d9534f" stroke-width="3"/><text x="94" y="656">+5 V (USB VBUS)</text>
+    <line x1="54" y1="672" x2="86" y2="672" stroke="#f0ad4e" stroke-width="3"/><text x="94" y="676">VBAT 3.0–4.2 V (LiPo)</text>
+    <line x1="54" y1="692" x2="86" y2="692" stroke="#e67e22" stroke-width="3"/><text x="94" y="696">+3.3 V rail (LDO out)</text>
+    <line x1="54" y1="712" x2="86" y2="712" stroke="#34495e" stroke-width="3"/><text x="94" y="716">GND</text>
+    <line x1="54" y1="732" x2="86" y2="732" stroke="#2c7be5" stroke-width="3"/><text x="94" y="736">SPI (SCLK/MOSI/MISO/CS)</text>
+    <line x1="54" y1="752" x2="86" y2="752" stroke="#8e44ad" stroke-width="3"/><text x="94" y="756">INT1 data-ready (IMU→MCU)</text>
+  </g>
+  <text x="54" y="778" font-size="10" fill="#777">● = junction (connected). Crossing without ● = not connected.</text>
+
+  <!-- ===== Notes ===== -->
+  <rect x="420" y="612" width="720" height="176" rx="6" fill="#fbfbfb" stroke="#ccc"/>
+  <text x="434" y="634" font-size="13" font-weight="700" fill="#222">Design notes</text>
+  <g font-size="11" fill="#333">
+    <text x="434" y="654">• LDO (AP2112) keeps 3V3 regulated down to ~3.55 V LiPo → no mid-set brownout.</text>
+    <text x="434" y="674">• R2 10k pull-up on CS latches SPI mode at power-on.</text>
+    <text x="434" y="694">• IMU: SPI mode 3, ≤12 MHz, 200 Hz FIFO, INT1 = FIFO-watermark (data-ready).</text>
+    <text x="434" y="714">• Decoupling: 100nF &lt;2 mm from each VDD/VDDIO; 10µF bulk on 3V3; 1µF on VDDIO.</text>
+    <text x="434" y="734">• Verify ICM-42688-P LGA pin numbers vs datasheet; tie RESV pins per datasheet.</text>
+    <text x="434" y="754">• POC-A: Seeed XIAO ESP32-C3 integrates U3+U4 on-board — external charger/LDO not needed.</text>
+    <text x="434" y="776" fill="#777">• Avoid ESP32-C3 strapping pins (GPIO2/8/9) &amp; USB pins (GPIO18/19) — assignment above complies.</text>
+  </g>
+</svg>

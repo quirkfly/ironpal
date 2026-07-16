@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" font-family="'Segoe UI',Arial,sans-serif">
+  <defs>
+    <pattern id="pour" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="10" stroke="#cfe3d0" stroke-width="4"/>
+    </pattern>
+    <pattern id="keepout" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="9" stroke="#e6a6a6" stroke-width="3"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="0" width="1000" height="720" fill="#ffffff"/>
+  <rect x="4" y="4" width="992" height="712" fill="none" stroke="#cccccc" stroke-width="1.5"/>
+
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#1a1a1a">IronPal IMU Module — PCB Placement (top view)</text>
+  <text x="500" y="56" text-anchor="middle" font-size="13" fill="#666">2-layer · ~28 × 22 mm · top = parts, bottom = solid GND pour · scale ≈ 20 px/mm</text>
+
+  <!-- Board outline (28mm x 22mm @20px/mm = 560x440), centered-ish -->
+  <g transform="translate(230,120)">
+    <rect x="0" y="0" width="560" height="440" rx="14" fill="url(#pour)" stroke="#2c3e50" stroke-width="2.5"/>
+    <rect x="0" y="0" width="560" height="440" rx="14" fill="none" stroke="#2c3e50" stroke-width="2.5"/>
+
+    <!-- Mounting holes -->
+    <circle cx="26" cy="26" r="9" fill="#fff" stroke="#333" stroke-width="2"/>
+    <circle cx="534" cy="26" r="9" fill="#fff" stroke="#333" stroke-width="2"/>
+    <circle cx="26" cy="414" r="9" fill="#fff" stroke="#333" stroke-width="2"/>
+    <circle cx="534" cy="414" r="9" fill="#fff" stroke="#333" stroke-width="2"/>
+
+    <!-- ESP32 module at top edge with antenna keepout -->
+    <rect x="150" y="14" width="260" height="120" rx="6" fill="#dbe8f7" stroke="#2c3e50" stroke-width="2"/>
+    <text x="280" y="60" text-anchor="middle" font-size="15" font-weight="700" fill="#1a3a5c">U1 ESP32-C3-MINI-1</text>
+    <text x="280" y="80" text-anchor="middle" font-size="11" fill="#42607e">module at board edge</text>
+    <!-- antenna keepout zone at very top edge -->
+    <rect x="150" y="14" width="260" height="34" fill="url(#keepout)" stroke="#c0392b" stroke-width="1.5"/>
+    <text x="280" y="36" text-anchor="middle" font-size="10.5" font-weight="700" fill="#a5281c">ANTENNA KEEPOUT — no copper (any layer)</text>
+
+    <!-- IMU near a mounting hole, low-flex, away from connectors -->
+    <rect x="220" y="200" width="120" height="120" rx="6" fill="#fbe0dc" stroke="#2c3e50" stroke-width="2"/>
+    <text x="280" y="250" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d24">U2 ICM-42688-P</text>
+    <text x="280" y="268" text-anchor="middle" font-size="9.5" fill="#8a5049">low board-flex zone</text>
+    <!-- axis marker -->
+    <g stroke="#7c2d24" stroke-width="1.6" font-size="10" fill="#7c2d24">
+      <line x1="280" y1="298" x2="304" y2="298"/>
+      <line x1="280" y1="298" x2="280" y2="278"/>
+      <text x="308" y="302">X</text>
+      <text x="276" y="274">Y</text>
+      <circle cx="280" cy="298" r="2.5" fill="#7c2d24"/>
+      <text x="286" y="312">Z⊙ (out of board)</text>
+    </g>
+
+    <!-- decoupling caps near IC pins -->
+    <rect x="214" y="188" width="10" height="6" fill="#666"/><text x="196" y="186" font-size="8.5" fill="#555">C 100n</text>
+    <rect x="336" y="188" width="10" height="6" fill="#666"/>
+    <rect x="150" y="120" width="10" height="6" fill="#666"/><text x="120" y="118" font-size="8.5" fill="#555">C 100n/10µ</text>
+
+    <!-- LDO + charger near power-in side (left), away from IMU -->
+    <rect x="30" y="180" width="90" height="60" rx="5" fill="#eef2f5" stroke="#2c3e50" stroke-width="1.6"/>
+    <text x="75" y="205" text-anchor="middle" font-size="11" font-weight="700" fill="#333">U4 LDO</text>
+    <text x="75" y="222" text-anchor="middle" font-size="9" fill="#666">AP2112</text>
+    <rect x="30" y="260" width="90" height="60" rx="5" fill="#eef2f5" stroke="#2c3e50" stroke-width="1.6"/>
+    <text x="75" y="285" text-anchor="middle" font-size="11" font-weight="700" fill="#333">U3 chg</text>
+    <text x="75" y="302" text-anchor="middle" font-size="9" fill="#666">MCP73831</text>
+
+    <!-- USB-C at bottom edge -->
+    <rect x="150" y="392" width="120" height="42" rx="6" fill="#eef2f5" stroke="#2c3e50" stroke-width="1.8"/>
+    <text x="210" y="418" text-anchor="middle" font-size="12" font-weight="700" fill="#333">J1 USB-C</text>
+
+    <!-- JST battery + switch at right edge -->
+    <rect x="440" y="200" width="100" height="50" rx="5" fill="#fff4d6" stroke="#2c3e50" stroke-width="1.6"/>
+    <text x="490" y="222" text-anchor="middle" font-size="11" font-weight="700" fill="#333">J2 JST-PH</text>
+    <text x="490" y="238" text-anchor="middle" font-size="9" fill="#666">battery</text>
+    <rect x="440" y="270" width="100" height="46" rx="5" fill="#eef2f5" stroke="#2c3e50" stroke-width="1.6"/>
+    <text x="490" y="298" text-anchor="middle" font-size="11" font-weight="700" fill="#333">SW1</text>
+
+    <!-- SPI routing hint: short lines U1 -> U2 -->
+    <g stroke="#2c7be5" stroke-width="2" fill="none">
+      <path d="M300,134 L300,200"/>
+      <path d="M320,134 L320,200"/>
+      <path d="M340,134 L260,200" stroke="#8e44ad"/>
+    </g>
+    <text x="352" y="176" font-size="9.5" fill="#2c7be5">short SPI</text>
+
+    <!-- charge-loop keep-away hint -->
+    <path d="M120,290 C 170,340 250,360 300,340" fill="none" stroke="#c0392b" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="150" y="372" font-size="9.5" fill="#c0392b">charge/battery current loop — keep away from IMU &amp; SPI</text>
+  </g>
+
+  <!-- ===== Legend / rules ===== -->
+  <rect x="40" y="596" width="920" height="108" rx="6" fill="#fbfbfb" stroke="#ccc"/>
+  <text x="54" y="618" font-size="13" font-weight="700" fill="#222">Layout rules</text>
+  <g font-size="11" fill="#333">
+    <text x="54" y="638">• ESP32 module at board edge; antenna keepout = NO copper on any layer under/around it (red hatch).</text>
+    <text x="54" y="656">• IMU near a mounting hole, away from USB/JST connectors — connector insertion flex → gyro bias. Silkscreen axes.</text>
+    <text x="54" y="674">• Bottom layer = solid GND pour (green hatch). 100nF within 2 mm of each VDD/VDDIO; 10µF bulk on 3V3.</text>
+    <text x="54" y="692">• Keep the charger/battery current loop physically away from the IMU and SPI; SPI traces short, SCLK away from INT1.</text>
+  </g>
+</svg>
