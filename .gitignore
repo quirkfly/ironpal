@@ -36,6 +36,3 @@ input/x/
 
 # Brand / social post image assets (regenerable, large)
 /post/assets/
-
-# X posting scripts — may embed live session/auth material; keep local only
-/scripts/x/
