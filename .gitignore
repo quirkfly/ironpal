@@ -19,3 +19,23 @@ input/kb/clips/
 
 # IronPal KB: scratch analysis frames (contact sheets/montages/zooms) — regenerable from clips
 out/
+
+# X session HARs contain auth cookies/tokens — never commit
+input/x/
+*.har
+
+# Stray working screenshots at repo root (scratch, regenerable)
+/*.png
+
+# Social-feed generated images (regenerable from prompts)
+/feed/
+
+# IronPal KB: pulled gallery images + scratch analysis frames (regenerable / large)
+/input/kb/images/
+/input/kb/frames/
+
+# Brand / social post image assets (regenerable, large)
+/post/assets/
+
+# X posting scripts — may embed live session/auth material; keep local only
+/scripts/x/
