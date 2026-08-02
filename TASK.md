@@ -1198,3 +1198,450 @@ What do you think about this approach? Please provide your thoughts and any sugg
 ---
 
 let's explore the competitive landscape of mobile apps that provide exercise recognition, repetition counting, and weight identification features connected to external devices. give me a detailed analysis of the top 5 mobile apps in this space, including their features, functionality, and user experience. Additionally, provide insights into how these apps handle exercise recognition, repetition counting, and weight identification, as well as any unique approaches or techniques they employ to achieve accurate results. Finally, describe any potential gaps or opportunities for improvement in the competitive landscape that could inform the development of our own exercise recognition and tracking solution.
+
+
+---
+
+come up with a comprehensive plan for ironpal landing page that effectively showcases the product's features and benefits, while also providing a clear and compelling call-to-action for potential customers. The plan should include a detailed outline of the content and layout of the landing page, as well as any visual elements or multimedia that will be used to enhance the user experience. Additionally, the plan should address any potential challenges or obstacles that may arise during the development of the landing page, and provide strategies for overcoming them to ensure a successful launch. Finally, the plan should emphasize the importance of maintaining a consistent visual style and messaging across all marketing materials to effectively communicate the value proposition of IronPal to potential customers.
+
+make sure the it is not an AI slop!!!! use the best sites from fitness industry featured at https://www.awwwards.com/ for reference. Use also top 3 fitness apps and hardware products as reference. The landing page should be designed to effectively communicate the unique value proposition of IronPal, while also providing a seamless and engaging user experience that encourages potential customers to take action and learn more about the product. Additionally, the plan should include a detailed timeline for the development and launch of the landing page, as well as any necessary resources or tools required to ensure a successful implementation. Finally, the plan should emphasize the importance of ongoing testing and optimization to continuously improve the performance and effectiveness of the landing page over time.
+
+save the plan as docs/ironpal-landing-page-plan.md
+
+
+---
+
+the landing page is a complete AI slop. I dont see a single reference from the best fitness industry sites you mentioned in docs/ironpal-landing-page-plan.md
+
+rebuild it!!!
+
+---
+
+i registered ironpal.co with cloudflare. 
+deploy ironpal to the same host as ../gitnfit  (IP: 45.55.36.33) and make sure to use SSL.
+
+see credentials/ for ssl files
+
+---
+
+given the fact that i am a solo founder and i have limited resources i decided to start building the distribution channel for ironpal from day one. 
+
+here is the plan:
+
+my typical workflow is as follows:
+
+1. i type a task in the task.md file
+2. i run /rt claude skill to read the task.md file and execute the task
+3. i rinse and repeat
+
+now i want to build a distribution channel around this worklow. I want the public have ability to see what tasks i am working on and what their results are.
+
+here is the plan:
+
+there will be an AI redactor that will receive both the task and its results and will redact them to remove any sensitive information. The redacted task and results will be published on ironpal.com twitter account. Later we will also create a dedicated video using google flows and publish it on YT.
+
+come up with a comprehensive plan for building the distribution channel for IronPal, including the specific steps and processes involved in creating and publishing the redacted tasks and results on social media platforms. The plan should also include strategies for engaging with the audience and building a community around the IronPal brand, as well as any potential challenges or obstacles that may arise during the implementation of the distribution channel. Additionally, the plan should emphasize the importance of maintaining a consistent visual style and messaging across all social media platforms to effectively communicate the value proposition of IronPal to potential customers. Finally, provide a detailed timeline for the development and launch of the distribution channel, as well as any necessary resources or tools required to ensure a successful implementation.
+
+save the plan as docs/ironpal-distribution-channel-plan.md
+
+---
+
+based on docs/ironpal-distribution-channel-plan.md prepare 5 posts for ironpal.com twitter account. Each post should be concise, engaging, and informative, highlighting the key features and benefits of IronPal while also providing a clear call-to-action for potential customers. Additionally, the posts should be designed to encourage audience interaction and engagement, such as asking questions or prompting users to share their own experiences with fitness tracking and exercise recognition. Finally, the posts should maintain a consistent visual style and messaging that aligns with the overall branding of IronPal, ensuring that they effectively communicate the value proposition of the product to potential customers.
+
+use existings docs, knowledge base, input folder 
+
+each post must contain also a set of images to accompany the text, showcasing the product's features and benefits in a visually appealing way. The images should be high-quality and relevant to the content of each post, helping to capture the attention of the audience and enhance the overall impact of the message. Additionally, ensure that the images are optimized for social media platforms, with appropriate dimensions and file sizes to ensure fast loading times and a seamless user experience. Finally, provide any necessary captions or descriptions for the images to provide context and further engage the audience.
+
+
+save the posts as docs/ironpal-twitter-posts.md
+
+---
+
+prepare a comprehensive plan for automating the process of creating and publishing the redacted tasks and results on social media platforms for IronPal. The plan should include specific steps and processes involved in automating the workflow, including any necessary tools or software that will be used to streamline the process. Additionally, the plan should address any potential challenges or obstacles that may arise during the implementation of the automation process, and provide strategies for overcoming them to ensure a successful launch. Finally, the plan should emphasize the importance of maintaining a consistent visual style and messaging across all social media platforms to effectively communicate the value proposition of IronPal to potential customers.
+
+the plan should also include detailed steps how to create ironplan X handle account and how to link it to the automation workflow and how to link it to founder's personal account to allow for easy management and oversight of the social media presence. Additionally, the plan should outline strategies for monitoring and analyzing the performance of the social media posts, including metrics such as engagement rates, click-through rates, and follower growth. Finally, the plan should provide recommendations for ongoing optimization and improvement of the automation process to ensure that it continues to effectively support the distribution channel for IronPal.
+
+
+save the plan as docs/ironpal-social-media-automation-plan.md
+
+---
+
+revisit docs/ironpal-twitter-posts.md i need to create 10 posts that are concise, engaging, and informative, highlighting the key features and benefits of IronPal while also providing a clear call-to-action for potential customers. 
+
+the posts should be chronologically ordered to reflect the development and progress of IronPal, showcasing the evolution of the product and its features over time. 
+skip kickstarter campaign and focus on the development of the product itself, highlighting key milestones and achievements in the development process.
+focus primarily on analyzing the video clips for exercise recognition, repetition counting, and weight identification, showcasing the unique capabilities of IronPal in providing accurate and efficient analyses of workout performance.
+do not reveal the moal or any other sensitive information about the product, instead focus on the features and benefits of IronPal in providing real-time feedback on workout performance and enhancing the overall fitness experience for users.
+include also video frame and intermediate montages to showcase the analysis process and provide visual context for the posts. Additionally, ensure that the posts maintain a consistent visual style and messaging that aligns with the overall branding of IronPal, effectively communicating the value proposition of the product to potential customers.
+
+update docs/ironpal-twitter-posts.md to reflect these changes and provide a comprehensive set of 10 posts that effectively showcase the development and progress of IronPal, while also engaging with the audience and encouraging interaction and feedback.
+
+---
+
+address 4.4 Link to the founder's personal account (amplification) in docs/ironpal-twitter-posts.md - i need a playbook how to amplify the brand posts on the founder's personal account. The playbook should include specific strategies and techniques for sharing and promoting the IronPal posts on the founder's personal account, including best practices for timing, frequency, and content selection. Additionally, the playbook should provide guidance on how to engage with the audience and respond to comments or questions in a timely and professional manner. Finally, the playbook should emphasize the importance of maintaining a consistent visual style and messaging across both the IronPal brand account and the founder's personal account to effectively communicate the value proposition of IronPal to potential customers.
+
+---
+
+my personal account has 0 followers same problem as ironpal.com account. I need a playbook how to grow the personal account followers and how to amplify the brand posts on the personal account. The playbook should include specific strategies and techniques for growing the personal account followers, including best practices for content creation, engagement, and promotion. Additionally, the playbook should provide guidance on how to leverage the personal account to amplify the IronPal brand posts, including strategies for sharing and promoting the content in a way that maximizes reach and engagement. Finally, the playbook should emphasize the importance of maintaining a consistent visual style and messaging across both the personal account and the IronPal brand account to effectively communicate the value proposition of IronPal to potential customers.
+
+do not include any ads any paid promotion in the playbook. The focus should be on organic growth and engagement strategies that can be implemented without any financial investment. Additionally, the playbook should provide recommendations for ongoing optimization and improvement of the personal account growth and amplification strategies to ensure that they continue to effectively support the distribution channel for IronPal.
+
+save the playbook as docs/ironpal-personal-account-growth-and-amplification-playbook.md
+
+---
+
+apart from digital product solo builder i am also a hybrid athlete. create an engaging personal bio i can use for my personal account and for the IronPal brand account. The bio should highlight my unique combination of skills and experiences as both a digital product solo builder and a hybrid athlete, showcasing my expertise in fitness, technology, and entrepreneurship. Additionally, the bio should emphasize my passion for creating innovative solutions that enhance the fitness experience for users, while also providing a glimpse into my personal journey and achievements in both the digital product and athletic realms. Finally, the bio should be concise, engaging, and memorable, effectively capturing the attention of potential followers and conveying my unique value proposition as a thought leader in the fitness and technology space.
+
+---
+
+create a python script that will publish an arbitratry post to X by replaing HAR in input/x/publish_post_01.har
+
+test it on post 02
+
+---
+
+create a detailed document oulining the issue you are facing along with the steps you have taken to troubleshoot and resolve the problem. The document should include a clear description of the issue, any error messages or unexpected behavior encountered, and the specific actions taken to address the problem. Additionally, provide any relevant screenshots or logs that can help illustrate the issue and support your troubleshooting efforts. Finally, outline any next steps or recommendations for further investigation or resolution of the problem, including any additional resources or support that may be needed to effectively address the issue.
+
+save the document as docs/troubleshooting-post-publishing-issue.md
+
+---
+
+come up with a comprehensive plan for fixing the issue described in docs/troubleshooting-post-publishing-issue.md and save it to docs/fixing-post-publishing-issue-plan.md. The plan should include specific steps and processes involved in identifying and resolving the issue, including any necessary tools or software that will be used to troubleshoot and fix the problem. Additionally, the plan should address any potential challenges or obstacles that may arise during the implementation of the fix, and provide strategies for overcoming them to ensure a successful resolution. Finally, the plan should emphasize the importance of testing and validating the fix to ensure that it effectively resolves the issue and does not introduce any new problems or errors.
+
+---
+
+implement post publishing as per /home/quirkfly/job_stuff/prj/ironpal/docs/fixing-post-publishing-issue-plan.md
+
+---
+
+given the fact that you were able to fully answer all three questions from the first exercise raw footage analysis simply by pushing you to the right frames indicates that you are capable of performing the exercise recognition, repetition counting, and weight identification tasks accurately. that alone is quite remarkable. however, the fact that you were able to do it only after being pushed to the right frames indicates that your current approach is not robust enough to handle the entire video clip without human intervention. this is a significant limitation that needs to be addressed in order to ensure that your analysis process is both efficient and accurate.
+
+
+---
+
+transfer latest video clip from attached phone to the laptop and than analyze it applying your KB skills and motion_profile
+
+---
+
+these are the very same plates used in exercise 001 where you correctly identified the weight lifted. why are you struggling to identify the weight lifted in this exercise? Please provide a detailed explanation of the specific challenges or ambiguities that are causing difficulties in accurately identifying the weight lifted in this exercise.
+
+---
+
+transfer latest video clip from attached phone to the laptop and than apply /weight-lifted-analysis to analyze it and determine the weight lifted. Please provide a detailed report on the results of your analysis, including the total weight lifted and any relevant observations or insights that were gained during the process.
+
+
+---
+
+your visual capabilities are clearly quite limited and not up for the task of analyzing the video clips for weight identification. I gave you a clip with very precise and clear frames yet you failed repeatedly to accurately identify the weight lifted. This indicates that your current approach is not robust enough to handle the analysis of video clips without human intervention. In order to ensure that your analysis process is both efficient and accurate, we need to develop a more advanced and automated approach that can handle large amounts of footage and provide accurate results in a timely manner.
+
+---
+
+show me the frame which shows 2 x 2kg loaded on the barbell. Trace the outter weight plate with tred red line and the inner weight with the green line and trace the diameter of the plates with respective colors too.
+
+---
+
+your visual capabilities are clearly quite limited and not up for the task of analyzing the video clips for weight identification. I gave you a clip with very precise and clear frames yet you failed repeatedly to accurately identify the weight lifted.
+
+on below image are plate diameters completely different yet you consider them to be the same. Explain in details why? 
+
+/home/quirkfly/job_stuff/prj/ironpal/input/kb/frames/20260713_115428/traced_v1.jpg 
+
+---
+
+transfer latest gallery image from attached phone to the laptop and than apply /weight-lifted-analysis to analyze it and determine the weight lifted. Please provide a detailed report on the results of your analysis, including the total weight lifted and any relevant observations or insights that were gained during the process.
+
+---
+
+show me 5 360 mini cameras with 4k resolution that are suitable for capturing exercise footage using a headband. Please provide a detailed description of each camera, including its key features, specifications, and any relevant information regarding its performance and suitability for exercise recognition and analysis. Additionally, provide insights into how each camera may impact the overall accuracy and efficiency of the exercise recognition process, as well as any potential challenges or limitations that may arise when using these cameras for capturing exercise footage. Finally, provide recommendations for selecting the most appropriate camera for capturing high-quality exercise footage that can be effectively analyzed for exercise recognition, repetition counting, and weight identification.
+
+---
+
+I am at loss i have neither time nor resources to correct numerous errors in your analysis of the video clips when it come to anylysis the lifted weight.
+
+---
+
+come with a detailed plan how to create a POC IMU external unit attached to the headband together with the ELP camera. Below are initial requirements for the POC IMU external unit.
+
+The camera will be equipped with a set of motion sensors too
+
+That changes things quite a bit. If your head-mounted camera also includes an IMU (accelerometer + gyroscope, and ideally a magnetometer), you can build a much more robust system than one relying on video alone.
+
+Here's how I'd approach it.
+
+Question	Video	Motion sensors	Combined accuracy
+What exercise?	Excellent	Good	98–99%+
+What weight?	OCR only	Indirect	Excellent if visible, impossible if not
+How many reps?	Excellent	Excellent	99%+
+1. Exercise recognition
+
+The IMU produces a unique "motion signature" for each exercise.
+
+For example:
+
+Bench press → head stays mostly horizontal with small periodic motion.
+Squat → large vertical oscillations.
+Walking lunges → forward translation plus vertical oscillation.
+Pull-ups → pronounced vertical movement.
+Cycling → rhythmic vibration.
+Running → completely different acceleration profile.
+
+Fusing the IMU data with video makes classification far more reliable, especially if the camera view is partially obstructed.
+
+2. Rep counting
+
+This is where the IMU really shines.
+
+Each repetition generates a characteristic acceleration pattern.
+
+Instead of asking an AI to infer reps from images alone, you can:
+
+smooth the IMU signal,
+detect peaks and valleys,
+use a small temporal model (LSTM, Transformer, TCN, etc.) to identify complete repetitions.
+
+This continues to work even if the camera briefly points away from the user or another person walks in front of the lens.
+
+3. Weight estimation
+
+The IMU cannot directly measure the weight being lifted.
+
+However, it can provide useful context:
+
+movement speed,
+acceleration,
+range of motion,
+fatigue (slowing reps),
+pauses,
+tempo.
+
+Combined with OCR, this becomes powerful.
+
+For example:
+
+User looks at a dumbbell.
+OCR reads 22.5 kg.
+IMU confirms a shoulder press movement.
+Rep counter counts 11 reps.
+The system records:
+Shoulder Press
+22.5 kg
+11 reps
+Tempo: 2-1-3
+Last rep significantly slower.
+Even better: detect the start of a set
+
+The IMU lets you avoid processing hours of video.
+
+You could continuously sample the sensors at low power.
+
+When movement exceeds a threshold:
+
+start recording video,
+analyze the exercise,
+stop recording after inactivity.
+
+This saves battery and reduces the amount of video your AI needs to process.
+
+A complete IronPal architecture
+Headband
+├── 4K Camera
+├── 6-axis IMU
+├── Microphone (optional)
+├── Bluetooth LE
+└── Wi-Fi
+
+        ↓
+
+Phone
+
+├── OCR
+├── Pose estimation
+├── Object detection
+├── IMU processing
+├── Exercise classifier
+├── Rep counter
+└── Workout database
+
+        ↓
+
+LLM
+
+"Today you performed:
+
+• Bench Press
+• 80 kg
+• 10 / 8 / 7 reps
+
+Your last set slowed considerably after rep 6, suggesting you were close to failure."
+One feature I think could make IronPal stand out
+
+Because you have both first-person video and an IMU, you can go beyond simple workout logging. You could automatically provide form analysis.
+
+Examples include:
+
+"You didn't fully lock out the last three reps."
+"Your squat depth became shallower as the set progressed."
+"You leaned to the left during the final reps."
+"Your tempo became inconsistent after rep 8."
+
+That moves the product from being just a rep counter to a personal AI lifting coach, which is a much stronger value proposition.
+
+How do i add imu sensors to the camera above?
+
+The camera you linked is essentially a consumer body camera, so you generally can't add IMU sensors internally unless you're willing to redesign its electronics and firmware. Instead, you have three realistic options.
+
+Option 1 (Recommended): Build a separate IMU module
+
+Rather than modifying the camera, create a small module that mounts on the same headband.
+
+[Camera]
+    │
+[3D-printed bracket]
+    │
+[ESP32 + IMU + Battery]
+
+The IMU module would contain:
+
+ESP32-C3 or ESP32-S3 microcontroller
+6-axis IMU (e.g. Bosch BMI270 or InvenSense ICM-42688-P)
+Small LiPo battery (200–500 mAh)
+Bluetooth Low Energy (BLE)
+
+The ESP32 timestamps and streams IMU data to your phone while the camera records video.
+
+Advantages
+No need to hack the camera.
+Easy to prototype.
+Low cost (around €15–30 in parts).
+Easy to upgrade later.
+Option 2: Use a camera with built-in IMU
+
+Many action cameras already include an IMU for image stabilization.
+
+Examples include:
+
+DJI Osmo Action
+Insta360 GO
+Insta360 Ace
+GoPro Hero
+
+These cameras internally record:
+
+accelerometer
+gyroscope
+timestamps
+
+Some models allow access to this telemetry, though support varies by manufacturer and software tools.
+
+Option 3: Design your own hardware
+
+If IronPal becomes a commercial product, you'd likely design a custom PCB with:
+
+Camera sensor
+Image processor
+IMU
+Bluetooth/Wi-Fi
+Battery management
+Storage
+
+This gives full control but is a much larger engineering effort.
+
+Synchronizing the IMU and video
+
+The key is accurate timestamps.
+
+00.000  Camera starts recording
+00.003  IMU starts streaming
+00.020  IMU sample
+00.040  IMU sample
+...
+
+The phone aligns IMU samples with video frames during analysis.
+
+Recommended IMUs
+
+For a wearable fitness product, these are excellent choices:
+
+Sensor	Features
+Bosch BMI270	Low power, widely used in wearables
+TDK ICM-42688-P	High accuracy, low noise
+Bosch BHI360	Includes onboard motion processing
+Bosch BNO085/BNO086	Sensor fusion and orientation built in
+My recommendation for IronPal
+
+For an initial prototype, I would not modify the Amazon camera at all.
+
+Instead:
+
+Mount the camera on the headband.
+Mount a tiny ESP32 + BMI270 module beside it.
+Stream IMU data over BLE to your React Native app.
+Record video independently.
+Synchronize both streams in software.
+
+This approach is inexpensive, relatively simple, and gives you a flexible platform to test your AI pipeline before investing in custom hardware. Once you've validated the concept, you can integrate everything into a single custom device in a future hardware revision.
+
+save the plan as docs/ironpal-imu-poc-integration-plan.md
+
+---
+
+add a detailed electronic curcuit diagram for the ESP32 + IMU module, showing the connections between the microcontroller, IMU sensor, battery, and any additional components such as voltage regulators or capacitors. Include specifications for each component, such as part numbers, voltage ratings, and pin configurations. Additionally, provide a layout for the PCB design, indicating the placement of each component and the routing of traces to ensure optimal performance and minimal interference. Finally, include any necessary firmware considerations for the ESP32 to handle data acquisition from the IMU, timestamping, and Bluetooth Low Energy communication with the mobile app.
+
+
+---
+
+update docs/ironpal-imu-poc-integration-plan.md to include a complete shopping list of all components required for the ESP32 + IMU module, including part numbers, suppliers, and estimated costs. Additionally, provide a detailed bill of materials (BOM) that outlines the quantity of each component needed for the prototype, as well as any additional tools or equipment required for assembly and testing. Finally, include recommendations for sourcing high-quality components and any potential alternatives that may be suitable for the project, ensuring that the shopping list is comprehensive and practical for building the POC IMU external unit.
+
+---
+
+create a drawing of the electronic circuit diagram for the ESP32 + IMU module, showing the connections between the microcontroller, IMU sensor, battery, and any additional components such as voltage regulators or capacitors. The drawing should clearly indicate the pin configurations and voltage ratings for each component, as well as any necessary annotations to explain the function of each connection. Additionally, provide a layout for the PCB design, indicating the placement of each component and the routing of traces to ensure optimal performance and minimal interference. Finally, include any necessary firmware considerations for the ESP32 to handle data acquisition from the IMU, timestamping, and Bluetooth Low Energy communication with the mobile app.
+
+
+make sure it is not an ascii diagram but proper drawing with clear labels and annotations and reference it from docs/ironpal-imu-poc-integration-plan.md
+
+---
+
+i have found this off shelf product 
+
+https://techfun.sk/produkt/arduino-nano-33-ble-original/?gad_source=1&gad_campaignid=17176525587&gbraid=0AAAAADPccu6eeAjuNpg1ELJBi4JsIRpAW&gclid=CjwKCAjwpefSBhBvEiwAzyEtZxQGpqssIxLrfTK645havqCOL-wEfo5y0r_uu1pWKXNWOigyWbpsVRoCHuQQAvD_BwE
+
+compare it with the ESP32 + IMU module you are proposing. What are the pros and cons of each approach? Which one would you recommend for the IronPal POC IMU external unit, considering factors such as cost, ease of integration, performance, and future scalability? Please provide a detailed analysis and recommendation based on these considerations.
+
+---
+
+transfer latest video clip from attached phone to the laptop and than apply /weight-lifted-analysis to analyze it and determine the weight lifted. Please provide a detailed report on the results of your analysis, including the total weight lifted and any relevant observations or insights that were gained during the process. Additionally, describe any challenges or ambiguities that were encountered during the analysis and how they were resolved to ensure an accurate determination of the weight lifted. Finally, provide any recommendations for improving the weight identification process in future analyses of similar video clips.
+
+
+---
+
+now apply /exercise-recognition and /repetition-counting skills to the same video clip and provide a detailed report on the results of your analysis, including the identified exercise, the total number of repetitions performed, and any relevant observations or insights that were gained during the process. Additionally, describe any challenges or ambiguities that were encountered during the analysis and how they were resolved to ensure an accurate identification of the exercise being performed. Finally, provide any recommendations for improving the exercise recognition process in future analyses of similar video clips.
+
+---
+
+now that we successfully migrated from android built-in camera to ELP 4K fisheye camera and confirmed that the camera is capable of capturing high-quality video footage suitable for exercise recognition, repetition counting, and weight identification, we can now proceed to the next phase of our project.
+
+ i want to commence a supervised learning phase inside a real gym environment. Two challenges we need to address are:
+
+1. come with up with a detailed plan for the supervised learning phase, including the specific steps and processes involved in collecting and labeling video clips of various exercises being performed in a real gym environment. The plan should also include strategies for ensuring the accuracy and consistency of the labeled data, as well as any potential challenges or obstacles that may arise during the data collection process. Additionally, the plan should emphasize the importance of maintaining a diverse dataset that includes a wide range of exercises, equipment, and user demographics to ensure that the AI model can generalize effectively to different scenarios.
+
+ i am thinking to post process the captured video clip using an internal tool to:
+  - mark interval where a specific exercise is being performed
+  - label the exercise being performed
+  - mark the start and end of each repetition
+  - mark the weight being lifted
+
+The objective is to cover all possible exercises and weights that can be performed in a gym environment following a curated list of exercises (I am thinking to take that list from Fitbod at https://fitbod.me/). 
+Once the model is trained on a specific exercise it should be able to recognize that exercise in any video clip captured in a gym environment.
+We need to figure out what the best training approach is for this supervised learning phase, including the selection of appropriate machine learning algorithms, model architectures, and hyperparameters. Additionally, we need to determine the best evaluation metrics and validation techniques to assess the performance of the trained model and ensure that it meets the desired accuracy and reliability standards.
+
+I am thinking to use either claude opus 4.8 or fable 5 for the supervised learning phase. 
+
+2. current clip is over 700mb in size and it covers only one exercise. Tipical gym session is over 1 hour so we need to figure out how to handle large video clips and break them down into smaller segments for analysis. We also need to determine the best approach for storing and managing the large amounts of video data that will be generated during the supervised learning phase, including any necessary data preprocessing or augmentation techniques that may be required to ensure that the data is suitable for training the AI model.
+
+Maybe it is not even neccessary to capture the entire gym session. I am considering to leverage this IMU unit
+
+https://www.conrad.sk/sk/p/arduino-doska-nano-33-ble-rev2-nano-arm-cortex-m4-3065560.html?utm_source=Order_confirmation&utm_medium=Email&utm_term=3065560
+
+to help me detect a still period of time when the user is NOT performing any exercise and only capture the video clips when the user is actually performing an exercise. This would significantly reduce the amount of video data that needs to be captured and processed, while also ensuring that the captured video clips are relevant and useful for training the AI model.
+
+come up with a detailed plan for the supervised learning phase addressing both challenges mentioned above and save it to docs/ironpal-supervised-learning-phase-plan.md
