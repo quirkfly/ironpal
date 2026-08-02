@@ -22,6 +22,18 @@ wrong.) **Orientation verification rule:** un-rotate with `transpose=2`, then co
 text reads forward and (b) the watch is on the LEFT wrist. If text reads backward, you've added a
 spurious mirror — remove it. Do **not** hflip this rig.
 
+### PER-RIG rotation table — the rotation is a property of the RIG, not a constant (case 007)
+- **Galaxy A52 headband:** 90° → `transpose=2`.
+- **ELP USB fisheye headband (`IPS_*.mp4` from `/sdcard/DCIM/USBCamera/`):** **180°** → `transpose=1,transpose=1`
+  (camera mounted upside-down). Raw frames LOOK upright (room roughly in place) which makes this
+  rotation far sneakier than the A52's 90°: everything vertical is inverted — "implement at TOP of
+  frame" is actually the implement LOW near the thighs. Case 007: the un-flipped montage read as an
+  overhead press (DBs "exiting the top"); the flip revealed alternating biceps curls (DBs looming at
+  chest, never above eye line). The same checks catch it: mat/room text reads UPSIDE-DOWN raw (I had
+  to rotate every plate crop 180° to read DOMYOS stamps — that WAS the orientation check failing, and
+  I ignored it), watch side swaps. **Run the text+watch check on every new rig/source before judging
+  any trajectory, and treat "I keep rotating crops to read text" as the alarm, not an inconvenience.**
+
 ## Current defaults
 
 - **Sampling rate:** 1–2 fps to find structure/phases; **≥3 fps for the actual rep count in the

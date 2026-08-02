@@ -86,14 +86,17 @@ Same DOMYOS plates as case 001, yet I called them "unreadable." Post-mortem — 
    (dark-on-dark, **effectively unreadable → COUNT plates**, case 003). If the plate reads small/thin,
    expect to count, not OCR — that's a correct outcome, not a failure.
 
-## Loadable dumbbell weight = PLATE SUM. Do NOT add a handle estimate (case 001 correction)
+## Loadable dumbbell weight = PLATE SUM + 1 kg handle, reported as COMPONENTS (case 007 supersedes 001's "no handle")
 
-Case 001 plate read was CORRECT (DOMYOS 2.5kg ×2 = 5kg); my error was **adding a ~1.5–2kg handle**
-→ reported 7kg vs actual **5kg**. Rule for adjustable/spinlock dumbbells:
-- **weight = Σ plate denominations** (e.g. 2 × 2.5kg = 5kg). Report this number.
-- **Do NOT add the handle/bar** weight. Home spinlock convention (and how lifters report it) counts
-  the plate load only; the handle is light and excluded. (Contrast a *barbell*, where you DO add the
-  20kg bar — that rule is barbell-specific, do not carry it over to dumbbells.)
+Case 001 correction said "do NOT add a handle" (confirmed total 5kg for 2×2.5kg plates). Case 007 the
+founder confirmed the opposite decomposition: **"6 kg plates + 1 kg bar" = 7 kg per dumbbell** — this
+rig's spinlock handle is a known **1 kg** (my case-001 sin was adding a *guessed* 1.5–2 kg, not adding
+per se). Reconciled rule:
+- **Read/tally the plates** → report the plate sum explicitly.
+- **This rig's handle = 1 kg (founder-confirmed, 007).** Report the decomposition — `X kg plates +
+  1 kg bar = Y kg total` — so either convention can be read off. Never *estimate* an unknown handle;
+  use a confirmed handle mass or report plates-only and say the handle is excluded.
+- (A *barbell* still gets its 20 kg bar added — unchanged.)
 
 ### Calibrated plate types (read accurately next time)
 - **DOMYOS cast spinlock plate (Decathlon):** grey cast iron, embossed `DOMYOS` + denomination
@@ -112,6 +115,15 @@ Case 001 plate read was CORRECT (DOMYOS 2.5kg ×2 = 5kg); my error was **adding 
   the 1/1.25kg). Face **dual-marked `2 KG` + `4.4 LBS`** around `DOMYOS`. Read cleanly face-on during
   loading (t12, t31). NB the DOMYOS home set spans **1, 1.25, 2, 2.5 kg** — **same brand, MANY
   denominations**; always read the number, never assume one.
+- **FOUNDER'S STANDARD CURL LOADOUT (seen twice — cases 004 & 007): per end = 2 kg OUTER + 1 kg
+  INNER = 3 kg/end, 6 kg plates + 1 kg handle = 7 kg/dumbbell.** When this DOMYOS set shows a 2 kg
+  going on, actively EXPECT a hidden 1 kg inner behind it — the flush stack hides it completely
+  (identical silhouette). In 007 exactly this produced a wrong provisional "2×2 kg = 4 kg"; the
+  abstention gate caught it. Strong prior, still verify: watch for a second, smaller disc in each
+  end's loading sequence, and treat "only saw one plate per end" as unconfirmed until pickup.
+- **Loading isn't finished until PICKUP (case 007).** Collars being fitted ≠ done — in 007 extra
+  plates went on AFTER a collar frame (t40 "1/end + collar" was mid-assembly; a 1 kg was added ~t54).
+  Freeze the loadout only at the moment the dumbbell leaves the floor for the set.
 
 ## COUNT/SIZE the LOADOUT from the load ORDER, not the assembled edge-on stack (case 20260713)
 Reading a *denomination* is solved (face-on loading glance). The unsolved-by-a-single-frame part is the

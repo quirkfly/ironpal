@@ -39,6 +39,7 @@ resolving abstentions with a second independent method, **not** by guessing.
 | 004 | 20260713_115428.mp4 | spinlock DB (mixed 2kg+1kg/end) | **6 kg** | total | ✅ |
 | 005 | 20260713_182249.jpg | pin stack (13kg +8/plate) | **37 kg** | total | ✅ |
 | 006 | 20260713_182833.jpg | pin stack (13kg +8/plate) | **53 kg** | total | ✅ |
+| 007 | IPS_2026-08-02.15.33.00.0640.mp4 | 2× spinlock DB (2kg+1kg per end + 1kg handle) | **7 kg / dumbbell** (6kg plates + 1kg bar) | total | ✅ (run abstained — correct: hidden 1kg inners) |
 | 002 | 20260614_202314.mp4 | barbell (2kg plates + bar) | denom 2kg only | denomination | ⚪ not scored (total unconfirmed) |
 | 003 | 20260615_122213.mp4 | cable/lever rig (10kg plates) | 10kg plate mass | plate-mass | ⚪ not scored (lever: mass ≠ resistance) |
 

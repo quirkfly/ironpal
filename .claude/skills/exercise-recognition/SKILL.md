@@ -23,6 +23,10 @@ LLM (Claude) reading extracted JPEG frames + the accumulated heuristics in
 - This rig (Galaxy A52) records **4K HEVC, ~30fps, and frames come out ROTATED 90°** — critical, see Step 2.
 
 ## Tooling notes (this environment)
+- **ROTATION IS PER-RIG — check the table in `docs/video-analysis-kb/frame-extraction.md` FIRST:**
+  Galaxy A52 = 90° (`transpose=2`); **ELP USB fisheye (`IPS_*.mp4`) = 180°** (`transpose=1,transpose=1`,
+  looks deceptively upright — case 007 nearly inverted curl→press). Verify mat text + watch wrist
+  before judging any trajectory.
 - `ffprobe` on PATH is a symlink to static `ffmpeg` and rejects ffprobe-only flags → read the header
   with `ffmpeg -i <clip> 2>&1 | grep -E "Duration|Stream.*Video"`.
 - The static ffmpeg lacks `drawtext` → no burned-in timestamps; map tile→time by arithmetic instead.

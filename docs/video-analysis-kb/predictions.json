@@ -48,6 +48,14 @@
       "confidence": 0.3,
       "abstained": true,
       "method": "lever rig: 10kg plate mass read but working resistance ratio unknown -> abstain"
+    },
+    {
+      "id": "007",
+      "predicted_kg": null,
+      "unit": "kg",
+      "confidence": 0.5,
+      "abstained": true,
+      "method": "two spinlock DBs used together; DB#1 = 2x2kg DOMYOS read (dual 2KG/4.4LBS stamp) -> 4kg provisional; DB#2 = 4 unread small/mid plates -> gate fails on totals, abstain"
     }
   ]
 }

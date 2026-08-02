@@ -23,6 +23,10 @@ moving field-of-view inject "peaks" that aren't reps, and a head-mounted IMU —
 reliable rep counter. Report `~N (range a–b), confidence X`, and say the integer is IMU-territory.
 
 ## Tooling notes (this rig)
+- **ROTATION IS PER-RIG — check the table in `docs/video-analysis-kb/frame-extraction.md` FIRST:**
+  Galaxy A52 = 90° (`transpose=2`); **ELP USB fisheye (`IPS_*.mp4`) = 180°** (`transpose=1,transpose=1`,
+  looks deceptively upright — case 007 nearly inverted curl→press). Verify mat text + watch wrist
+  before judging any trajectory.
 - `ffprobe` is a symlink to static `ffmpeg` → read the header with
   `ffmpeg -i <clip> 2>&1 | grep -E "Duration|Stream.*Video"`.
 - Frames come out **rotated 90°** — **un-rotate first**: `-vf "transpose=2"` (NOT mirrored, don't

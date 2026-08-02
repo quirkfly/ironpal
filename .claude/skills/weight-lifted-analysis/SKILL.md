@@ -77,8 +77,10 @@ face.
   — it rotates them to portrait and breaks landscape crop offsets.)
 - **Plate-loaded barbell/machine:** read each plate face; **total = Σ plates + the BAR** (Olympic =
   20kg/45lb). IWF colour cross-check: red25 blue20 yellow15 green10 white5.
-- **Loadable / spinlock dumbbell:** **weight = Σ plate denominations — do NOT add the handle**
-  (home convention; the handle is light). (Contrast a barbell, where you DO add the bar.)
+- **Loadable / spinlock dumbbell:** **weight = Σ plate denominations + this rig's 1 kg handle
+  (founder-confirmed, case 007)** — report the decomposition `X kg plates + 1 kg bar = Y kg total`.
+  Never *estimate* an unknown handle mass; if unconfirmed, report plates-only and say so.
+  (A barbell still gets its 20 kg bar added.)
 - **Fixed dumbbell / kettlebell:** read the cast number. **Bodyweight:** "not applicable".
 
 ### Step 3 — Read the number; if you can't, COUNT plates
@@ -169,8 +171,14 @@ Log a case in `docs/video-analysis-kb/cases/` and add calibrated plate types to 
   - **1 kg** — `1 KG / 2.2 LBS`, ~13cm, small domed. Read face-on during loading (case 20260711).
   - **1.25 kg** — thin ~14cm; number dark-on-dark → **effectively unreadable, COUNT plates** (case 003).
   - **2.5 kg** — `2.5 KG / 5.5 LBS`, ~18cm; typically 1/end → a pair = **5 kg/dumbbell** (case 001).
-  Spinlock loadable ⇒ **weight = Σ plate denominations, NO handle added.** Same brand ≠ same
-  denomination — always read/confirm which member (001 was 2.5kg, 20260711 was 1kg).
+  - **2 kg** — `2 KG / 4.4 LBS`, ~19–20cm in the case-007 set (bigger than that set's 2.5!) — size
+    ordering is NOT monotonic across DOMYOS generations; the label always wins.
+  Spinlock loadable ⇒ **weight = Σ plates + the rig's confirmed 1 kg handle** (case 007: report
+  `plates + bar = total`). Same brand ≠ same denomination — always read/confirm which member.
+  **FOUNDER'S STANDARD CURL LOADOUT (cases 004 & 007): 2 kg outer + 1 kg inner per end = 6 kg plates
+  + 1 kg bar = 7 kg/dumbbell.** Expect the hidden 1 kg inner behind each 2 kg outer — a flush stack
+  hides it completely. And **loading isn't final until PICKUP**: collars on ≠ done (007: a 1 kg went
+  on after a collar frame).
 
 ## Honest limits → the product
 **Unpainted cast adjustable dumbbells are the worst case** — no legible number at any glance; the POC

@@ -66,6 +66,17 @@
       "confirmed": "plate-mass",
       "scorable": false,
       "notes": "10kg PLATE MASS confirmed, but LEVER rig -> working resistance != mass (unknown ratio). Not scored as working weight. Plate mass recorded for reference only."
+    },
+    {
+      "id": "007",
+      "source": "IPS_2026-08-02.15.33.00.0640.mp4",
+      "equipment": "2x spinlock DB (DOMYOS mixed 2kg outer + 1kg inner per end; 1kg handle)",
+      "actual_kg": 7.0,
+      "unit": "kg",
+      "tolerance_kg": 2.5,
+      "confirmed": "total",
+      "scorable": true,
+      "notes": "PER DUMBBELL: 6kg plates (2+1 per end) + 1kg bar = 7kg; two identical DBs used (alternating curl). Run prediction ABSTAINED (correct: provisional 4kg plate read for DB#1 was wrong - hidden 1kg inners behind the 2kg outers, case-004 geometry). Exercise (alternating two-DB biceps curl) and reps (~12 total / 6 per arm) also lifter-confirmed correct."
     }
   ]
 }
