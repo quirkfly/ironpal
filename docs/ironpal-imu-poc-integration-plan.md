@@ -79,6 +79,14 @@ problem, not a two-independent-clocks problem. (See §7.)
 
 ## 5. Bill of Materials (one POC unit)
 
+> **POC-A hardware updated (see Appendix E):** the recommended POC board is the **all-in-one
+> Arduino Nano 33 BLE Rev2** (nRF52840 + onboard **BMI270 + BMM150** IMU, EU-local) — same one-board
+> convenience, far less effort than the two-board build below, plus a better BLE radio + FPU/Edge-Impulse
+> motion-ML ecosystem. **Get the Rev2, not the "original"** — its BMI270 is a modern low-noise, low-power
+> IMU with on-chip wake-on-motion (powers set-gating §3); the original's LSM9DS1 is older/noisier. The
+> **ESP32-C3 + ICM-42688-P** parts below remain the **custom Tier-2 / product** path (cheapest BOM at
+> scale). Buy the Rev2 Nano for the POC; keep the parts below for the custom board.
+
 > Quick view below; the **complete sourced shopping list** (exact MPNs, EU suppliers, quantities,
 > tools, and alternatives) is in **Appendix D**.
 
@@ -343,6 +351,57 @@ Component-placement drawing (top view — antenna keepout, IMU stress-free zone,
 - Control characteristic: start/stop, set ODR/FSR, fire the LED sync-flash at a returned `device_ts`.
 - Watchdog + reconnect logic; persist config in NVS.
 
+# Appendix E — Off-the-shelf alternative: Arduino Nano 33 BLE (POC board decision)
+
+**Decision (2026-07-17): use the Arduino Nano 33 BLE Rev2 for the POC; keep ESP32-C3 + ICM-42688-P for
+the custom Tier-2 board.** This is the IMU-side of the same "buy off-the-shelf to validate before
+building" call made for the ELP camera.
+
+**The board** (Nano 33 BLE **Rev2** — Conrad.sk #3065560, or Berrybase/Botland/Mouser/techfun for best
+EU price): **nRF52840** (Cortex-M4F @64 MHz, BLE 5.0, native USB) + **onboard BMI270 + BMM150 IMU**,
+45×18 mm, 5 g, 3.3 V. All-in-one — MCU + BLE + IMU on one board, no wiring, no soldering.
+**Get the Rev2, not the "original":** Rev2 = **BMI270 (6-axis) + BMM150 (mag)**, a modern low-noise,
+low-power IMU with **on-chip wake-on-motion** (directly powers set-gating §3); the original's
+**LSM9DS1** is older, noisier, and discontinued.
+
+## Comparison
+
+| Factor | Arduino Nano 33 BLE **Rev2** | ESP32-C3 + ICM-42688-P (two-board) |
+|--------|---------------------|------------------------------------|
+| Cost (bench POC) | **~€30, one board** | ~€35–40, multiple parts |
+| Ease of integration | **★ one board, Arduino IDE + ArduinoBLE + onboard-IMU lib → data in an evening** | two boards, SPI wiring, ESP-IDF/NimBLE → days |
+| IMU quality | **BMI270 + BMM150** — modern, low-noise, low-power, wake-on-motion | ICM-42688-P (marginally lower noise) |
+| BLE power | **★ nRF52840 best-in-class radio** (battery life) | ESP32-C3 less efficient |
+| On-device compute | **★ Cortex-M4F + FPU; Edge Impulse motion-ML supported** | RISC-V, no FPU |
+| Battery charging | ✗ no onboard charger (add TP4056) | ★ XIAO ESP32-C3 has one |
+| WiFi | none (not needed) | present (not needed — camera is UVC→phone) |
+| EU-local / customs | **★ Conrad.sk / EU sellers, genuine** | Berrybase/AliExpress |
+| Path to product | dev board (but nRF52840 is productizable) | **★ same silicon as custom Tier-2 board** |
+
+## Why the Nano Rev2 wins the POC
+The two factors that decide a solo-founder POC — **cost-parity with far less effort** and **fastest
+time-to-data** — both favour the all-in-one board, and it adds real bonuses (**nRF52840 BLE battery
+life**, an **FPU/Edge-Impulse motion-ML ecosystem** purpose-built for the exercise-signature/rep work in
+§10–11, and **BMI270 wake-on-motion** that bakes in set-gating §3). With the **BMI270** (Rev2), the IMU
+gap to the ICM-42688-P is marginal — and irrelevant for detecting gross rep motion and set-gating.
+
+## Caveats
+1. **Buy the Rev2, not the "original."** Rev2 = **BMI270 + BMM150**; the original = **LSM9DS1**
+   (older, noisier, discontinued). Confirm the listing says Rev2 / BMI270 before ordering.
+2. **It's a dev board, not the product** — same status as the ELP camera.
+
+## Impact on the plan
+- **§5 / D.1 POC-A:** buy the Nano 33 BLE instead of wiring XIAO + ICM breakout. Firmware becomes
+  **Arduino IDE + ArduinoBLE + the onboard-IMU library** (no SPI bring-up); the §7 time-sync,
+  §10 fusion, and §11 validation are otherwise unchanged.
+- **Appendix A–C (custom board):** unchanged — they define the **Tier-2 / product** design, which keeps
+  **ICM-42688-P** and picks the MCU from what the POC teaches: **nRF52840** (as validated by the Nano,
+  if battery life dominates) or **ESP32-C3** (WiFi / cheapest BOM). Best-of-both product = **nRF52840 +
+  ICM-42688-P**.
+- **§8 firmware note:** the ESP-IDF/NimBLE detail in Appendix C applies to the custom ESP32-C3 board;
+  for the Nano POC, use ArduinoBLE with the same GATT layout (IMU-data / Control / Clock characteristics)
+  and `micros()` for timestamps.
+
 ---
 
 # Appendix D — Shopping list, BOM & tooling
@@ -353,6 +412,13 @@ indicative EUR incl. typical EU retail markup; MPN = manufacturer part number. F
 so EU-stocking suppliers (TME/Berrybase/Botland/Mouser-EU) are prioritised to dodge customs friction.
 
 ## D.1 POC-A shopping list — buy this now (dev-board build)
+
+> **Recommended (Option 1): Arduino Nano 33 BLE Rev2** — all-in-one MCU+BLE+IMU (**BMI270 + BMM150**).
+> Buy the **Rev2**, not the "original" (LSM9DS1 — older/noisier). Sources: Conrad.sk (ARM Cortex-M4,
+> #3065560), or check Berrybase / Botland / Mouser / techfun for best EU price (original was ~€29.50;
+> confirm Rev2 price). Add only a LiPo + TP4056 for battery use; USB-powered on the bench needs nothing
+> else. Full rationale: **Appendix E**. The two-board list below is **Option 2** (parts feed the custom
+> Tier-2 board).
 
 | # | Item | MPN / SKU | Qty | Supplier (EU-first) | ~Unit € | Notes |
 |---|------|-----------|-----|---------------------|---------|-------|
