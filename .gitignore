@@ -36,3 +36,8 @@ input/x/
 
 # Brand / social post image assets (regenerable, large)
 /post/assets/
+
+# Ontology source caches (regenerable: scripts/kb/build_ontology.py --fetch).
+# The wger dump is CC-BY-SA 4.0 -- committing it would pull copyleft data into
+# the repo. Only the derived ontology.json (public-domain sources) is tracked.
+/input/kb/ontology-sources/

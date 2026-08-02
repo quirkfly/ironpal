@@ -44,15 +44,51 @@ video data** — they are API models. "Supervised learning with Claude" therefor
 
 ### 1.1 Exercise ontology (what we label against)
 
-- Derive the catalogue from **Fitbod's exercise list** (https://fitbod.me/) — scrape/transcribe
-  into `docs/video-analysis-kb/ontology.json`: canonical name, synonyms, equipment class
-  (barbell / dumbbell / cable / machine / pin-stack / bodyweight / kettlebell), motion plane,
-  head-motion class (head-moving vs head-still — decides whether IMU or vision carries reps).
+**Built and committed:** `docs/video-analysis-kb/ontology.json` — 738 entries (37 Tier 1, 701
+Tier 2). Rebuild with `python3 scripts/kb/build_ontology.py --fetch`.
+
+> **Corrected 2026-08-02.** An earlier draft of this section said to derive the catalogue from
+> **Fitbod's exercise list**. That instruction was wrong and has been removed. Fitbod is a named
+> competitor; bulk-extracting their curated catalogue — via their API on a logged-in account or by
+> decompiling the APK — implicates their terms of service, **EU database rights**
+> (Directive 96/9/EC, in force in Slovakia, which protect the *compilation* even where the
+> individual facts are free), and, in the EU, the narrow interoperability-only limits on lawful
+> decompilation. Exercise names are facts and nobody owns them; a competitor's curated database is
+> a different thing. Do not reinstate this.
+
+**Sources actually used:**
+
+| Source | License | Role |
+|---|---|---|
+| [free-exercise-db](https://github.com/yuhonas/free-exercise-db) | Unlicense (public domain) | Exercise names + muscle/mechanic/force metadata — **the only source copied** |
+| [wger](https://wger.de/api/v2/) | CC-BY-SA 4.0 | **Coverage cross-check only, nothing copied** — its copyleft would otherwise force share-alike obligations onto our ontology |
+| IronPal | proprietary | `head_motion_class`, `egocentric_visibility`, `rep_signal`, synonyms, tier |
+
+Per-entry fields: canonical name, synonyms, equipment class (barbell / dumbbell / cable / machine /
+kettlebell / bodyweight / band), `weight_read_strategy` (maps 1:1 onto the procedures in
+`weight-reading.md`), motion plane, and the three IronPal-specific fields below.
+
+**The fields that matter most exist in no public dataset**, because nobody else is doing egocentric
+recognition:
+
+- `head_motion_class` — moving vs still. Decides whether the headband IMU can see the rep at all.
+- `egocentric_visibility` — visible / partial / occluded / floor_reference. A back squat's bar is
+  behind the neck and never enters frame; a dumbbell curl looms large in it.
+- `rep_signal` — **which sensor can actually certify a rep**: `imu` (212 entries), `vision` (522),
+  `fusion` (2), or `hard` (2 — neither works alone; case 003's cable pushdown counted 0 of 5 real
+  reps from video). This is the single most decision-relevant column in the file.
+
+These are hand-authored for all 37 Tier-1 entries, grounded in the case ledger. Tier 2 is
+heuristically inferred and every entry carries `needs_review: true` — **confirm before training on
+an inferred field**; a wrong label is worse than a gap.
+
 - Every label in the system must resolve to one ontology entry — this is what makes labels
   consistent across sessions and labelers.
-- Priority tiers: **Tier 1** = the ~30 most common gym exercises (squat, deadlift, bench,
-  rows, presses, curls, pushdowns, lat pulldown, leg press…); **Tier 2** = the long tail.
-  Collection targets are per-tier, not global.
+- Priority tiers: **Tier 1** covers the common gym movements *and* every exercise named in POC v1
+  and the task log (Bulgarian split squat, triceps cable pushdown, hack squat, machine calf raise,
+  dumbbell fly/pullover); **Tier 2** is the long tail. Collection targets are per-tier, not global.
+- 137 stretching/cardio records were excluded as out of scope: they are not resistance sets with
+  countable reps and a readable load.
 
 ### 1.2 Capture protocol (real gym)
 
