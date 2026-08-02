@@ -1645,3 +1645,11 @@ https://www.conrad.sk/sk/p/arduino-doska-nano-33-ble-rev2-nano-arm-cortex-m4-306
 to help me detect a still period of time when the user is NOT performing any exercise and only capture the video clips when the user is actually performing an exercise. This would significantly reduce the amount of video data that needs to be captured and processed, while also ensuring that the captured video clips are relevant and useful for training the AI model.
 
 come up with a detailed plan for the supervised learning phase addressing both challenges mentioned above and save it to docs/ironpal-supervised-learning-phase-plan.md
+
+---
+
+i am logged in to fitbod app as bob.hamstrovec see credentials..on the atteched android device there is running fitbod app featuring list of all the exercises. I need you to to scrap all the exercises from the fitbod app and create a comprehensive list of exercises that can be performed in a gym environment as per ironpal-supervised-learning-phase-plan.md
+
+if you need to decompile the ftbod app to understand the api calls and endpoints you can do that..there is a java decompiler installed on the laptop
+
+adopt a swarm approach without my assistence..keep on iterating until the list is complete
