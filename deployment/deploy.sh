@@ -155,8 +155,10 @@ server {
         add_header Cache-Control \"public, immutable\";
     }
 
+    # HTML is not fingerprinted — always revalidate so fixes ship immediately
     location / {
         try_files \$uri \$uri/ /index.html;
+        add_header Cache-Control \"no-cache\";
     }
 
     add_header X-Frame-Options          \"SAMEORIGIN\" always;

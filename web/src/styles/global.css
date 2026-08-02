@@ -18,7 +18,12 @@ html {
   -webkit-text-size-adjust: 100%;
           text-size-adjust: 100%;
 }
-body { min-height: 100vh; overflow-x: hidden; }
+/* No horizontal scrollbar, ever — clip at the root (the actual scroll
+   container on mobile), not just <body>. `clip` avoids creating a scroll
+   container (keeps position:sticky working); `hidden` is the fallback. */
+html, body { max-width: 100%; overflow-x: hidden; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+body { min-height: 100vh; }
 img, video, iframe { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 

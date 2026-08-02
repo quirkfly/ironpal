@@ -8,10 +8,30 @@
       <table class="cmp">
         <thead><tr><th>Device</th><th>Picks the exercise?</th><th>Counts reps?</th><th>Reads the weight?</th></tr></thead>
         <tbody>
-          <tr><td>Wrist trackers <span class="sub">(Garmin / WHOOP)</span></td><td>auto, often wrong</td><td>unreliable / none</td><td class="no">✕ estimates from body mass</td></tr>
-          <tr><td>Bar IMU sensors <span class="sub">(Enode / GymAware)</span></td><td>manual / learned</td><td>drops heavy reps</td><td class="no">✕ manual entry</td></tr>
-          <tr><td>Camera appliances <span class="sub">(Tempo)</span></td><td>in-class only</td><td>yes, in class</td><td class="no">✕ only their own plates</td></tr>
-          <tr class="cmp__us"><td>IronPal</td><td>automatic</td><td>sensor-fusion</td><td class="yes">✓ any free weight</td></tr>
+          <tr>
+            <td data-label="Device">Wrist trackers <span class="sub">(Garmin / WHOOP)</span></td>
+            <td data-label="Picks the exercise?">auto, often wrong</td>
+            <td data-label="Counts reps?">unreliable / none</td>
+            <td data-label="Reads the weight?" class="no">✕ estimates from body mass</td>
+          </tr>
+          <tr>
+            <td data-label="Device">Bar IMU sensors <span class="sub">(Enode / GymAware)</span></td>
+            <td data-label="Picks the exercise?">manual / learned</td>
+            <td data-label="Counts reps?">drops heavy reps</td>
+            <td data-label="Reads the weight?" class="no">✕ manual entry</td>
+          </tr>
+          <tr>
+            <td data-label="Device">Camera appliances <span class="sub">(Tempo)</span></td>
+            <td data-label="Picks the exercise?">in-class only</td>
+            <td data-label="Counts reps?">yes, in class</td>
+            <td data-label="Reads the weight?" class="no">✕ only their own plates</td>
+          </tr>
+          <tr class="cmp__us">
+            <td data-label="Device">IronPal</td>
+            <td data-label="Picks the exercise?">automatic</td>
+            <td data-label="Counts reps?">sensor-fusion</td>
+            <td data-label="Reads the weight?" class="yes">✓ any free weight</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -21,8 +41,8 @@
 
 <style>
   .compare { background: var(--bg-2); }
-  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius); border: 1px solid var(--line); }
-  .cmp { width: 100%; border-collapse: collapse; min-width: 640px; }
+  .table-scroll { border-radius: var(--radius); border: 1px solid var(--line); }
+  .cmp { width: 100%; border-collapse: collapse; }
   .cmp th, .cmp td { text-align: left; padding: 16px 20px; font-size: 15px; border-bottom: 1px solid var(--line); }
   .cmp thead th { font-weight: 600; color: var(--body); text-transform: uppercase; letter-spacing: .08em; font-size: 12px; background: rgba(255,255,255,.02); }
   .cmp td:first-child { color: var(--heading); font-weight: 500; }
@@ -32,4 +52,30 @@
   .cmp__us td { background: rgba(0,229,204,.07); border-bottom: 0; }
   .cmp__us td:first-child { color: var(--accent); font-family: var(--font-display); font-weight: 800; }
   .compare .fineprint { text-align: center; margin-inline: auto; }
+
+  /* Mobile: reflow the table into stacked cards — no horizontal scroll */
+  @media (max-width: 620px) {
+    .table-scroll { border: 0; border-radius: 0; }
+    .cmp thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } /* visually hidden */
+    .cmp, .cmp tbody, .cmp tr, .cmp td { display: block; width: 100%; }
+    .cmp tr {
+      background: linear-gradient(180deg, var(--panel), #23232e);
+      border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 6px 4px; margin-bottom: 14px;
+    }
+    .cmp tr.cmp__us { border-color: rgba(0,229,204,.4); }
+    .cmp td { border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; padding: 11px 16px; text-align: right; }
+    .cmp tr td:last-child { border-bottom: 0; }
+    .cmp__us td { background: transparent; }
+    /* row label from data-label */
+    .cmp td::before {
+      content: attr(data-label); text-align: left; color: var(--body);
+      text-transform: uppercase; letter-spacing: .06em; font-size: 11px; font-weight: 600;
+      flex: 0 0 auto; align-self: center;
+    }
+    /* device name = card header (full width, no label) */
+    .cmp td[data-label="Device"] { display: block; text-align: left; font-size: 17px; padding: 14px 16px 12px; }
+    .cmp td[data-label="Device"]::before { display: none; }
+    .cmp td[data-label="Device"] .sub { display: inline; }
+  }
 </style>
