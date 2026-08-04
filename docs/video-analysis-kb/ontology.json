@@ -20,6 +20,8 @@
       "role": "head_motion_class, egocentric_visibility, rep_signal, synonyms, tier"
     }
   ],
+  "_rig_coupling_warning": "egocentric_visibility -- and therefore rep_signal, which depends on the implement actually being in frame -- is PARTLY A PROPERTY OF THE CAPTURE RIG'S FIELD OF VIEW, not purely of the exercise. These verdicts were authored against the POC rig (ELP 4K fisheye, 180-degree mount). A narrower production camera can push a 'visible' exercise to 'partial'/'occluded' and degrade its rep_signal toward 'hard'. Before trusting these fields on new hardware, either spec its FOV >= the POC usable image circle, or re-audit all 37 Tier-1 verdicts. See docs/ironpal-poc-to-production-transfer.md.",
+  "authored_against_rig": "ELP 4K fisheye + 180-degree headband mount (POC)",
   "counts": {
     "total": 738,
     "tier1": 37,
