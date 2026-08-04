@@ -1653,3 +1653,33 @@ i am logged in to fitbod app as bob.hamstrovec see credentials..on the atteched 
 if you need to decompile the ftbod app to understand the api calls and endpoints you can do that..there is a java decompiler installed on the laptop
 
 adopt a swarm approach without my assistence..keep on iterating until the list is complete
+
+----
+
+this plan docs/ironpal-supervised-learning-phase-plan.md assumes there are multiple researchers using USB cameras and IMU sensors to capture video clips of various exercises being performed in multiple gyms. The reality is brutally hasrs though. I am a solo founder and I have limited resources. I am tying with the idea of capturing all the video clips myself from a gym equipped with gym80 equiment.
+Once captured I would leverage AI to synthesize the rest of the training data by generating a variety of clips based on those I captured and mashing it up with different gym equipment manufacturers and different gym environments taken from YT videos and manufacturer websites.
+Is this even possible? If yes, come up with a detailed plan how to implement this approach and save it to docs/ironpal-supervised-learning-phase-solo-founder-plan.md
+
+
+---
+
+i have bought this IMU unit
+
+https://www.conrad.sk/sk/p/arduino-doska-nano-33-ble-rev2-nano-arm-cortex-m4-3065560.html?utm_source=Order_confirmation&utm_medium=Email&utm_term=3065560
+
+
+i am using USB camera android app from ShenYao to communicate with ELP 4K fisheye camera
+
+since it is a 3rd party app i dont know how to integrate the IMU unit with the camera app. I need a detailed plan for integrating the IMU unit with the USB camera android app from ShenYao to enable synchronized data capture of both video and motion sensor data. The plan should include specific steps and processes involved in establishing communication between the IMU unit and the camera app, including any necessary modifications or configurations required for successful integration. Additionally, the plan should address any potential challenges or obstacles that may arise during the integration process, and provide strategies for overcoming them to ensure a seamless and reliable data capture experience. Finally, the plan should emphasize the importance of maintaining accurate timestamps and synchronization between the video footage and motion sensor data to ensure that the captured data is suitable for training the AI model.
+
+needless to say i dont have any working IMU unit prototype yet.
+
+save the plan as docs/ironpal-imu-integration-with-usb-camera-app-plan.md
+
+---
+
+here are the issues we need to address:
+
+- ELP camera is not what the final product will be. It is just a POC camera to validate the exercise recognition, repetition counting, and weight identification capabilities of IronPal. The final product will have a custom camera with integrated IMU sensors and other features that are not present in the ELP camera. Therefore, we need to ensure that the data captured with the ELP camera is representative of the data that will be captured with the final product.
+- likewise USB UVC app will be used only in the POC phase to validate the exercise recognition, repetition counting, and weight identification capabilities of IronPal. The final product will have a custom camera app with integrated IMU sensors and other features that are not present in the USB UVC app. Therefore, we need to ensure that the data captured with the USB UVC app is representative of the data that will be captured with the final product.
+- as for arduino nano 33 ble rev2 IMU unit, it is not what the final product will be. It is just a POC IMU unit to validate the exercise recognition, repetition counting, and weight identification capabilities of IronPal. The final product will have a custom IMU unit with integrated sensors and other features that are not present in the Arduino nano 33 ble rev2 IMU unit. Therefore, we need to ensure that the data captured with the Arduino nano 33 ble rev2 IMU unit is representative of the data that will be captured with the final product.
