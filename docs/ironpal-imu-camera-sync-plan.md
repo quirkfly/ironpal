@@ -1,10 +1,15 @@
 # IronPal — IMU ⇄ Camera Synchronised Capture Plan
 
-**Status:** Draft v1 · 2026-08-04
+**Status:** v2 · 2026-08-05 — design review complete, all branches resolved
 **Hardware:** Arduino Nano 33 BLE Rev2 (nRF52840 + BMI270 + BMM150) — purchased, not yet built.
 ELP 4K USB fisheye driven by the **ShenYao USB Camera** Android app (third-party, closed source).
 **Consumes:** `docs/ironpal-imu-poc-integration-plan.md` (hardware/BOM) ·
 **Feeds:** `docs/ironpal-supervised-learning-phase-plan.md` (§1.2 capture, §2.1 IMU-gated capture)
+
+> **Note:** every open design branch was resolved in a review session — see
+> [`ironpal-imu-camera-sync-plan_grilled.md`](./ironpal-imu-camera-sync-plan_grilled.md) (Q1–Q7,
+> decision log with rationale and the measurements behind each call). **This document has been
+> updated to reflect those decisions.**
 
 ---
 
@@ -59,21 +64,36 @@ are **1-second resolution** (`creation_time` ends `.000000`).
 
 ### 1.2 The capture is variable frame rate — this is the bigger finding
 
-Measured over a 20 s window (457 frames):
+> **Corrected 2026-08-04.** An earlier draft reported "22.86 fps vs 25.41 declared, 33.8 ms
+> jitter" from a **20-second sample**. Re-measuring the *whole* clip (all 2702 frames) shows that
+> figure was a sampling artifact — the window happened to land in a startup transient. The header
+> rate is correct on average, and the real finding is different and more useful.
 
-| Metric | Value |
-|---|---|
-| Header-declared rate | 25.41 fps |
-| **Actually measured in-window** | **22.86 fps** |
-| Frame delta | min 28.3 ms, max 62.1 ms, mean 43.8 ms |
-| **Jitter** | **33.8 ms** — more than one nominal frame |
+Measured across the full clip (2702 frames, 106.3 s) — **capture starts unstable and settles**:
 
-USB UVC capture on Android drops and delays frames under load. **Frame *N* is not at *N*/fps.**
+| Segment | Mean interval | Effective fps | Jitter (sd) | Worst frame |
+|---|---|---|---|---|
+| First third | 46.1 ms | **21.69** | 8.0 ms | 145.5 ms |
+| Middle third | 38.4 ms | 26.05 | 5.4 ms | 64.1 ms |
+| Last third | 33.6 ms | **29.76** | **3.8 ms** | 89.4 ms |
+| **Whole clip** | 39.3 ms | **25.41** — matches the header | — | — |
+
+Frame interval **improves by 27 %** from start to end, and jitter more than halves. **This is a
+warm-up transient, not thermal throttling** — thermal degrades with time, this does the opposite
+(auto-exposure settling, USB bandwidth negotiation, buffer fill). Only 0.7 % of frames are delayed
+beyond 60 ms.
+
+**Frame *N* is still not at *N*/fps** — jitter is real even at its best (sd 3.8 ms) — but the
+capture is far better behaved than the first measurement suggested.
+
+> ⚠️ **Caveat: 106 s cannot rule out thermal effects over a 90-minute session.** This clip is too
+> short to say anything about sustained capture. Re-run this segment analysis on the first full-length
+> session (bring-up task B3) before trusting long-session timing.
 
 > **Consequences, all load-bearing:**
 > 1. Every frame reference — rep boundaries, staging glances, extracted stills — must come from the
->    **actual PTS**, never from a raw frame index times the header's nominal rate (which is a
->    whole-clip average and, as measured above, off by ~10 % locally).
+>    **actual PTS**, never from a raw frame index times the header's nominal rate. The header is a
+>    whole-clip average and is off by ~15 % during the warm-up transient.
 >    *Checked: the existing KB scripts are safe.* `motion_profile.sh` reads `lavfi.scd.time`, and
 >    ffmpeg's `fps` filter is PTS-aware, so `extract_frames.sh`'s uniform output grid maps back to
 >    real time correctly. The exposure is in **new** code — label exports, the Label Studio
@@ -88,11 +108,33 @@ USB UVC capture on Android drops and delays frames under load. **Frame *N* is no
 
 ## 2. Firmware — Nano 33 BLE Rev2 (bring-up from zero)
 
+**Why BLE streaming rather than logging to the Nano itself (Q1).** Standalone logging is
+arithmetically dead without extra hardware: 100 Hz × 6 axes × 2 B = 1.2 kB/s = **4.3 MB/h** against
+the Nano's **2 MB** QSPI flash ≈ **28 minutes**, well short of a session. Avoiding that would mean
+bolting on an SD module — mass against a < 25 g headband budget, more soldering, another failure
+point — to remove a link carrying 1.2 kB/s that BLE handles trivially. It would also lose the live
+stream the pre-session nod gate depends on (§3).
+
 **Library: `Arduino_BMI270_BMM150`.** The Rev2 carries a Bosch BMI270 + BMM150. The original Nano
 33 BLE used an LSM9DS1 and the `Arduino_LSM9DS1` library — **that library will not work on your
 board**, and this is the single most common Rev2 bring-up failure.
 
 ### 2.1 Sampling and packet format
+
+**Log at 100 Hz; the DSP pipeline consumes 50 Hz (Q3).** `poc/mobile` already defines
+`CANONICAL_SAMPLE_RATE_HZ = 50`, and rep detection needs far less — its band is 0.2–1.5 Hz, so 50 Hz
+is ~33× oversampled. The higher logged rate buys **sync resolution** (10 ms per sample instead of
+20, against a < 40 ms residual target) and headroom for future form analysis. **The Kotlin BLE
+backend resamples 100 → 50 Hz** before handing to `SignalModule`, reusing the existing D4
+resample-to-canonical path — existing DSP is untouched. `imu.jsonl` archives the full 100 Hz stream.
+You can always downsample later; you can never recover a rate you did not capture.
+
+**Full-scale range: ±8 g accelerometer, ±1000 dps gyroscope.** ±8 g covers sharp sync nods and head
+impacts with headroom; ±16 g would halve resolution (0.24 → 0.5 mg/LSB) for range head-mounted
+motion never uses. Head rotation during lifting runs ~100–300 dps. **Clipping, not resolution, is
+the risk** — record FSR per session and flag saturated windows rather than training on a flattened
+peak (`ironpal-poc-to-production-transfer.md` §4.2 classes clipped-vs-unclipped as a difference *in
+kind*).
 
 Target **100 Hz**, 6 axes (accel + gyro). Raw budget: 100 × 6 × 2 B = 1.2 kB/s — trivial for BLE,
 *provided you batch*. One notification per sample at 100 Hz will not fit BLE's connection interval.
@@ -127,7 +169,16 @@ and loses nothing.
 Keep the connection interval short (7.5–15 ms) — request it from the central. Long intervals batch
 notifications and add latency jitter, which directly widens the §4 alignment uncertainty.
 
-### 2.3 What the firmware must NOT do
+### 2.3 Bracket must expose the USB-C port (Q7)
+
+**Decide this before printing** — the bracket is still a to-print BOM item, so a slot is free now
+and a re-print later. During bring-up (B0–B5) firmware is reflashed tens of times while tuning ODR,
+batching and nod-detection thresholds against real captures; that loop must be trivial. BLE DFU is
+possible on the nRF52840 but needs a bootloader swap (Arduino ships USB CDC) plus a DFU path in the
+app, and a half-failed OTA on a headband about to be worn to a gym is a bad failure mode. OTA is a
+shipping-product answer, not a rig-you-own answer. Add a cover flap if sweat ingress is a concern.
+
+### 2.4 What the firmware must NOT do
 
 - **Do not timestamp with `millis()`** — 1 ms resolution is a tenth of your target alignment budget.
   Use `micros()`.
@@ -136,9 +187,24 @@ notifications and add latency jitter, which directly widens the §4 alignment un
 
 ---
 
-## 3. Companion Android app (the only software you write now)
+## 3. Companion app — a BLE backend inside `poc/mobile`, not a new app
 
-Deliberately small. It does **not** touch video.
+> **Revised after design review.** An earlier draft called for a standalone companion app. There is
+> already a React Native app — `poc/mobile` (`IronPalPOC`) — with a Kotlin native-module bridge,
+> SQLite storage, an offline queue and label screens. **Extend it**: add a **BLE `ImuModule`
+> backend** behind the existing interface, selected by a rig flag, leaving the phone-IMU backend
+> intact so POC v1 stays runnable.
+>
+> `ImuModule` exposes only `getDeviceInfo/start/stop/onMotionGate` and **raw samples never cross the
+> JS bridge**, so swapping the phone IMU for the BLE Nano is an implementation change behind an
+> unchanged interface — `dsp`, `fusion`, `labels` and every screen are untouched. The module's
+> existing **motion-gate event already implements the collection plan's §2.1 IMU gating**.
+>
+> ⚠️ **Do not inherit decision D5** (`ironpal-poc-v1-design_grilled.md`), which chose an
+> accel-only baseline because *tester phones* vary. The Nano's BMI270 always has a gyroscope, and
+> §4.1 alignment **requires** gyro magnitude. Applying D5 here would silently break sync.
+
+It does **not** touch video.
 
 **Responsibilities:**
 
@@ -151,7 +217,12 @@ Deliberately small. It does **not** touch video.
 2. **Session metadata** — writes the `meta.json` §1.2 of the collection plan requires: rig id and
    **rotation (ELP = 180°)**, gym, lifter, consent reference, firmware version, ODR.
 3. **Ground-truth capture** — the tap-to-log exercise/reps/weight the collection plan wants
-   "while memory is fresh." Same app, same session folder, no extra device to juggle.
+   "while memory is fresh." Already present in `poc/mobile`; reuse rather than rebuild.
+4. **Pre-session gates** (both blocking, from the design review):
+   - **Nod detection** — refuse to start until the sync-nod pattern is seen on the live BLE stream,
+     so a forgotten anchor cannot silently cost a session.
+   - **Free-space precheck + live remaining-recording-time** — storage is offload-only, capping
+     sessions at ~65 min (the phone fills at 77).
 
 **Deliberately out of scope:** video preview, video recording, controlling ShenYao. Adding any of
 those pulls you into UVC-on-Android, which is a multi-week project (see §8).
@@ -178,8 +249,10 @@ is only weakly related to what the camera sees.
 
 ### 4.2 Deliberate sync events (cheap insurance)
 
-At the **start and end** of every session, with the headband on: **three sharp head nods**, roughly
-one per second. Costs three seconds and gives:
+**After the warm-up, and at the end** of every session, with the headband on: **three sharp head
+nods**, roughly one per second. Placing the opening anchor at t=0 would land it in the least stable
+part of the capture (§1.2: first-third jitter is 8.0 ms, worst frame 145 ms) — **wait ~60 s after
+starting the recorder before nodding.** Costs three seconds and gives:
 
 - an unmistakable correlation peak to bootstrap the search,
 - two anchors far apart in time — which is what makes drift estimable (§4.4).
@@ -189,12 +262,21 @@ outside its field of view. Motion is the shared channel, not light.
 
 ### 4.3 Alignment procedure
 
+**Two mechanisms, different jobs (Q4).** The nods are guaranteed high-SNR anchors; rolling
+cross-correlation across the whole session is the *primary* drift estimator, because it yields an
+offset per window rather than just two endpoints. Neither alone is sufficient: continuous
+correlation needs motion, and **22 of 37 Tier-1 exercises are `rep_signal: vision`** — head still,
+both signals quiet — which is exactly where it degrades and exactly where sync matters most.
+
 1. Bracket the offset from the filename timestamp (§1.1) → search window ±5 s.
 2. Resample both signals to a common 50 Hz grid — video via **true PTS**, IMU via `device_ts_us`.
 3. Normalise both (zero mean, unit variance) and cross-correlate over the window.
 4. Take the peak → coarse offset. Refine to sub-frame by parabolic interpolation around the peak.
 5. Repeat on the trailing nods → second offset.
-6. Fit a **linear clock model** between the two anchors (§4.4) and write `sync` into `session.json`.
+6. **Roll a windowed correlation across the session** (e.g. 5-minute windows, skipping low-motion
+   windows where neither signal carries information) → one offset per window.
+7. Fit the clock model (§4.4) to the windowed offsets when there are enough of them; **fall back to
+   the two-anchor linear fit** when the session is too quiet. Write `sync` into `session.json`.
 
 Implement as `scripts/kb/sync_imu_video.py`, reusing `motion_profile.sh`'s energy computation so
 there is one definition of video motion in the codebase.
@@ -222,8 +304,21 @@ it as a failed session rather than a calibration.
 Sync silently wrong is the worst outcome — it degrades every downstream label without ever raising
 an error. Prove it, per session:
 
-- **Residual check.** After alignment, the sync-nod peaks should coincide within **< 1 frame
-  (~40 ms)**. Log the residual into `session.json`. Fail the session above 80 ms.
+- **Residual check — the session quality gate (Q6).** Evaluated **at ingest**, never deferred to
+  training: a silently misaligned session degrades every label in it without raising an error.
+
+  | Post-alignment residual | Verdict | Usable for |
+  |---|---|---|
+  | **< 40 ms** (one frame) | ✅ accept | everything |
+  | **40–80 ms**, or rate ratio outside ±100 ppm | ⚠️ flag, keep | exercise ID only — **not** rep boundaries or form work |
+  | **> 80 ms** (two frames) | ❌ reject, re-shoot | nothing |
+
+  **Two hard invalidators regardless of residual:** a **BLE gap > 2 s** not followed by re-anchoring
+  nods, and **any saturated IMU window** (FSR clipping). Record residual and rate ratio in
+  `session.json` so downstream consumers filter rather than guess.
+
+  At ~13 sessions, rejecting one costs ~8 % of the dataset — which is the argument for a generous
+  flag-and-keep band and **strict pre-session gates** (§3) rather than strict post-hoc rejection.
 - **Physical drop test** (bring-up only). Drop a light plate on the mat in frame: a sharp transient
   in video *and* a floor-borne spike in the IMU. Independent of the nods, so it validates the method
   rather than the anchor.
@@ -260,8 +355,21 @@ that cannot be driven programmatically, **that is not achievable now**. Revised 
 
 - **Now (ShenYao):** record continuously; the IMU gate segments *at ingest*. You still get
   per-set clips and still discard rest footage — but you pay the full disk write during capture
-  and must transcode more. A 1-hour session is ~28 GB raw before trimming, so **keep a good margin
-  of free space on the phone** (≥ 64 GB card recommended).
+  and must transcode more.
+
+  **Storage is offload-only — no SD card (Q5) — and that caps session length.** The capture phone
+  (LG G7, LM-G710) has **36 GB free** and records at 62.2 Mbps:
+
+  | Session | Footage | Fits? |
+  |---|---|---|
+  | 60 min | 28.0 GB | ✅ |
+  | 70 min | 32.7 GB | ✅ |
+  | 90 min | 42.0 GB | ❌ over by 6 GB |
+
+  **Hard ceiling 77 min; cap sessions at ~65 min** for margin. A 90-minute session would stop
+  recording mid-workout and take the closing sync anchor with it. Consequences: ~15 sets per session
+  instead of 20 → **~13 sessions** for Tier-1 coverage; **offload after every session is mandatory**,
+  not housekeeping; and the app must precheck free space and show remaining recording time (§3).
 - **Later (own capture app, §8):** the gate can drive the recorder and the original saving returns.
 
 The training-data outcome is identical; only the storage profile differs. Worth updating §2.1 to
@@ -288,7 +396,7 @@ better engineering choice, because it keeps a proven recorder in the critical pa
 |---|---|---|---|
 | B0 | Board bring-up | `Arduino_BMI270_BMM150` printing 6 axes over USB serial at 100 Hz | half a day |
 | B1 | BLE streaming | packets (§2.1) received by `nRF Connect`; no `seq` gaps over 10 min | 1–2 days |
-| B2 | Companion app v0 | `imu.jsonl` + `meta.json` written; both clocks logged; foreground service survives screen-off | 3–4 days |
+| B2 | BLE backend in `poc/mobile` | `imu.jsonl` + `meta.json` written; both clocks logged; resamples 100→50 Hz to canonical; foreground service survives screen-off | 2–3 days |
 | B3 | Mount + first dual capture | headband rig, ShenYao recording, nods at both ends, files land in one session folder | half a day |
 | B4 | `sync_imu_video.py` | start/end residual < 40 ms on 3 consecutive sessions | 2–3 days |
 | B5 | Drift characterisation | 60-min session; rate ratio measured and written into the sync model | half a day |

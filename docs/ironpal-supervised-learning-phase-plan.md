@@ -10,7 +10,7 @@ weight identification (cases 001–007, `docs/video-analysis-kb/`); IMU external
 ## 0. Executive summary
 
 Move from single-clip home validation to a **systematically labeled dataset** covering the curated
-exercise catalogue, captured **solo at one Gym80-equipped gym over 8–12 sessions**, and use it two
+exercise catalogue, captured **solo at one Gym80-equipped gym over ~13 sessions**, and use it two
 ways:
 
 - **Track A (immediate):** Claude as the recognition engine — labeled clips grow the
@@ -29,8 +29,9 @@ data** — they carry no IMU, no valid physics for plate OCR, and self-fulfillin
 The 700 MB/clip problem is handled by **IMU-gated segmentation + H.265 on ingest**, taking a 1-hour
 session from ~28 GB raw to **~1–2 GB of relevant, per-set footage**. Note this happens at *ingest*,
 not at capture: the third-party ShenYao camera app cannot be started/stopped programmatically, so
-the phone still writes the full session (≥64 GB card needed). Capture-time gating returns with our
-own camera app — see `docs/ironpal-imu-camera-sync-plan.md`.
+the phone writes the full session. With offload-only storage (no SD card) that caps sessions at
+**~65 minutes** — the phone fills at 77. Capture-time gating returns with our own camera app — see
+`docs/ironpal-imu-camera-sync-plan.md`.
 
 ### An important correction to the premise
 
@@ -121,9 +122,14 @@ an inferred field**; a wrong label is worse than a gap.
   working set, (3) set-down glance. Spoken or app-tapped ground truth immediately after each set
   (exercise + reps + weight) while memory is fresh — this *is* the label, captured at source.
 - **Primary site:** one gym, **Gym80** equipment, founder as lifter. This is the training set.
-- **Per-exercise target:** **5 clean sets per Tier-1 exercise** (not 20). At ~20 labeled sets per
-  90-minute capture session, full Tier-1 coverage is **8–12 gym sessions** — three to four weeks of
-  normal training, not a research programme. Tier 2 is opportunistic: capture it when you happen to
+- **Per-exercise target:** **5 clean sets per Tier-1 exercise** (not 20). At ~15 labeled sets per
+  capture session, full Tier-1 coverage is **~13 gym sessions** — four to five weeks of normal
+  training, not a research programme.
+- **Cap each capture session at ~65 minutes.** This is a hard storage constraint, not a preference:
+  the capture phone has 36 GB free and records 62.2 Mbps, so it fills at **77 minutes**. A 90-minute
+  session would stop recording mid-workout and take the closing sync anchor with it. The companion
+  app must precheck free space and show remaining recording time
+  (`ironpal-imu-camera-sync-plan_grilled.md` Q5). Tier 2 is opportunistic: capture it when you happen to
   do it, never make a special trip.
 - **Diversity axes, ranked by value-per-euro** (track all in `meta.json`):
   1. **Rig fit** — deliberately vary headband tightness and tilt between sessions. Free, and it is
@@ -301,8 +307,10 @@ simple, robust gate — no ML needed at first:
 > the third-party **ShenYao** USB-camera app, which cannot be started or stopped programmatically.
 > So for now: **record continuously and apply the gate at ingest.** You still get per-set clips and
 > still discard rest footage; you just pay the full disk write during capture instead of avoiding
-> it. Budget accordingly — ~28 GB for a 1-hour session before trimming, so a ≥64 GB card and a
-> free-space check before each session. True capture-time gating returns with our own camera app.
+> it. Budget accordingly — ~28 GB per hour, against 36 GB free on the capture phone. Storage is
+> **offload-only (no SD card)**, so sessions are capped at **~65 min** and offload to the laptop is
+> mandatory before the next one. The app must precheck free space and show remaining recording time.
+> True capture-time gating returns with our own camera app.
 > Full reasoning and the sync architecture: `docs/ironpal-imu-camera-sync-plan.md`.
 
 - **Activity detector:** rolling accelerometer variance over a 3 s window. Below threshold for
