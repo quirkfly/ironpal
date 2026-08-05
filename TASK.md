@@ -1683,3 +1683,8 @@ here are the issues we need to address:
 - ELP camera is not what the final product will be. It is just a POC camera to validate the exercise recognition, repetition counting, and weight identification capabilities of IronPal. The final product will have a custom camera with integrated IMU sensors and other features that are not present in the ELP camera. Therefore, we need to ensure that the data captured with the ELP camera is representative of the data that will be captured with the final product.
 - likewise USB UVC app will be used only in the POC phase to validate the exercise recognition, repetition counting, and weight identification capabilities of IronPal. The final product will have a custom camera app with integrated IMU sensors and other features that are not present in the USB UVC app. Therefore, we need to ensure that the data captured with the USB UVC app is representative of the data that will be captured with the final product.
 - as for arduino nano 33 ble rev2 IMU unit, it is not what the final product will be. It is just a POC IMU unit to validate the exercise recognition, repetition counting, and weight identification capabilities of IronPal. The final product will have a custom IMU unit with integrated sensors and other features that are not present in the Arduino nano 33 ble rev2 IMU unit. Therefore, we need to ensure that the data captured with the Arduino nano 33 ble rev2 IMU unit is representative of the data that will be captured with the final product.
+
+
+---
+
+now that we are talking about rate transmission. I dont want to use USB in the final camera product. I want to use WiFi or BLE for data transmission. How do i acheive a transmission on ~1GB in few minutes not using USB?
