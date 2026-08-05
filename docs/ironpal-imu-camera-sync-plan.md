@@ -300,15 +300,56 @@ The Nano's crystal and the phone's clock are independent. At a typical ±20–50
 **72–180 ms over a one-hour session** — several video frames, enough to smear rep boundaries by the
 end of a session even though the start looks perfect.
 
+> **Measured on hardware (B2): −52.8 ppm ≈ −206 ms per 65 min session** — just above the predicted
+> band, and **5× the 40 ms budget**. The prediction was right that this matters; the magnitude is at
+> the pessimistic end.
+
 So do not fit a constant offset. Fit:
 
 ```
 phone_time ≈ a · device_ts + b
 ```
 
-with `a` (rate ratio) and `b` (offset) from the start and end anchors. Report `a` in ppm; a value
-outside ±100 ppm means something is wrong (wrong ODR assumed, or dropped packets miscounted) — treat
-it as a failed session rather than a calibration.
+Report `a` in ppm; a value outside ±100 ppm means something is wrong (wrong ODR assumed, or dropped
+packets miscounted) — treat it as a failed session rather than a calibration.
+
+#### `a` and `b` no longer come from the nod anchors — fit them from `imu.jsonl` alone
+
+This section originally derived `a` and `b` from the start/end anchors, because that was the only
+information available. **B2 changed that:** `ImuSessionLogger` now writes **both clocks on every
+packet** — `device_ts_us` (already unwrapped past the 71.6 min rollover) and `host_ns`
+(`elapsedRealtimeNanos`). A 65 min session yields ~30 000 paired observations of the very mapping
+being fitted.
+
+So regress `host_ns` on `device_ts_us` over the whole session. Two anchors give a line through two
+noisy points; 30 000 points give a line whose slope uncertainty is negligible. **This needs no
+video and no nods at all** — the IMU→phone mapping becomes a self-contained, verifiable calculation.
+
+**Do not estimate the slope from the endpoint difference.** BLE notification jitter spans ±67 ms
+(residual sd 15.9 ms, measured), which swamps the endpoint signal — a naive endpoint calculation on
+a 44 s capture returned −164 ppm where the regression returned −52.8 ppm. Fit the line.
+
+#### This collapses the problem to a single unknown
+
+The three clocks do **not** all drift against each other:
+
+| Pair | Relationship |
+|---|---|
+| Nano `device_ts_us` ↔ phone | **Drifts** (−52.8 ppm) — independent crystals. Solved by the regression above. |
+| Video PTS ↔ phone `host_ns` | **No relative drift.** ShenYao records *on the phone*; its PTS is generated from the phone's own clock. Same oscillator. |
+
+So after the regression, the only unknown left is **one scalar**: the host time at which video
+PTS = 0. That is what §4.3's cross-correlation finds, and the nods make it high-SNR.
+
+A useful side effect: because correlation aligns the *observed signals*, the offset it returns
+absorbs every fixed latency in the camera path (sensor readout, MJPEG encode, USB transfer) without
+needing any of them measured.
+
+⚠️ **The one caveat.** `elapsedRealtimeNanos` is `CLOCK_BOOTTIME` (counts through suspend), while
+some recorders timestamp from `CLOCK_MONOTONIC` (does not). They advance identically while the
+device is awake and diverge only across deep sleep. Both apps hold wake locks during capture, so
+this should never trigger — but if a session shows a step discontinuity rather than smooth drift,
+suspect this before suspecting the crystal.
 
 ---
 
