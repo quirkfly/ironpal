@@ -94,6 +94,7 @@ object BleImuSource {
 
   private var gatt: BluetoothGatt? = null
   private var scanning = false
+  @Volatile private var connecting = false
   private var prevSeq: Int = -1
   private var prevTsUs: Long = -1
   private var tsWrapOffsetUs: Long = 0
@@ -159,6 +160,7 @@ object BleImuSource {
     gatt?.disconnect()
     gatt?.close()
     gatt = null
+    connecting = false
     connected = false
   }
 
@@ -173,6 +175,13 @@ object BleImuSource {
     override fun onScanResult(callbackType: Int, result: ScanResult) {
       val dev: BluetoothDevice = result.device ?: return
       val ctx = appContext ?: return
+      // stopScan is asynchronous, so a second advertisement can still land here
+      // before it takes effect. Observed on hardware: connectGatt ran twice and
+      // leaked a second GATT client. Claim the connect exactly once.
+      synchronized(this) {
+        if (connecting || gatt != null) return
+        connecting = true
+      }
       adapter()?.bluetoothLeScanner?.stopScan(this)
       scanning = false
       Log.i(TAG, "found ${dev.address}, connecting")
@@ -197,6 +206,7 @@ object BleImuSource {
         g.requestMtu(REQUESTED_MTU)
       } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
         connected = false
+        connecting = false
         Log.w(TAG, "disconnected (status=$status)")
       }
     }

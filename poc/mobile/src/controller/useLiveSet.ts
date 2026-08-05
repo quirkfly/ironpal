@@ -36,6 +36,10 @@ import type {SessionCreateRequest} from '../api/types';
 
 type SetPhase = 'idle' | 'syncing' | 'weightGlance' | 'repping' | 'review';
 
+// Refuse to start a session with less headroom than this. A ~65 min session is
+// the plan's cap; below ~10 min of space there is no point starting at all.
+const MIN_SESSION_MINUTES = 10;
+
 const emptyHud = (setNumber: number): HudState => ({
   exercise: {value: null, confidence: null, source: 'unknown', pending: false},
   reps: {value: null, confidence: null, source: 'unknown', pending: false},
@@ -169,6 +173,36 @@ export function useLiveSet() {
           `[useLiveSet] IMU source fell back to ${active} (asked ${IMU_SOURCE})`,
         );
       }
+
+      // Blocking pre-session gate: running out of storage mid-session cannot be
+      // recovered afterwards, so refuse before capturing rather than truncate.
+      try {
+        const space = await ImuModule.getFreeSpace();
+        if (space.estimatedMinutes < MIN_SESSION_MINUTES) {
+          const msg =
+            `Only ${space.freeGb.toFixed(1)} GB free ` +
+            `(~${space.estimatedMinutes.toFixed(0)} min). Free space before capturing.`;
+          setError(msg);
+          setPhase('idle');
+          setHud(prev => ({...prev, recording: false}));
+          return;
+        }
+      } catch (e) {
+        console.warn('[useLiveSet] free-space check failed:', e);
+      }
+
+      // Log the raw headband stream for post-hoc video alignment.
+      if (active === 'BLE') {
+        try {
+          const dir = await ImuModule.startSession(
+            startedAtRef.current.replace(/[:.]/g, '-'),
+          );
+          console.warn(`[useLiveSet] imu session logging to ${dir}`);
+        } catch (e) {
+          console.warn('[useLiveSet] imu session start failed:', e);
+        }
+      }
+
       await ImuModule.start();
     }
 
@@ -268,11 +302,27 @@ export function useLiveSet() {
   // End set: stop sampling, assemble the review (confirm/correct) data.
   // -------------------------------------------------------------------------
   const endSet = useCallback(async () => {
+    // Teardown must be all-or-nothing-per-step: if one stop throws, the rest
+    // still run. A thrown stopLive() previously left BLE streaming and the log
+    // file growing after the set had visibly ended.
     if (SignalModule.isAvailable()) {
-      await SignalModule.stopLive();
+      try {
+        await SignalModule.stopLive();
+      } catch (e) {
+        console.warn('[useLiveSet] stopLive failed:', e);
+      }
     }
     if (ImuModule.isAvailable()) {
-      await ImuModule.stop();
+      try {
+        await ImuModule.stop();
+      } catch (e) {
+        console.warn('[useLiveSet] imu stop failed:', e);
+      }
+      try {
+        await ImuModule.stopSession();
+      } catch (e) {
+        console.warn('[useLiveSet] imu session stop failed:', e);
+      }
     }
     const imu =
       latestMatch.current ??

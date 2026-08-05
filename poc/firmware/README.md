@@ -13,9 +13,9 @@ post-hoc alignment.
 |---|---|
 | B0 board bring-up | ✅ **done 2026-08-05** — flashed and running; IMU initialises; **measured 99.84 Hz** accel + gyro (36 % flash, 27 % RAM) |
 | B1 BLE streaming | ✅ **done 2026-08-05** — 10-min exit run PASS: 4502 packets / 36016 samples, **0 seq gaps**, 60.04 Hz, dt jitter sd 250 µs |
-| B2 Android backend | 🟡 **built, not yet verified on hardware** — Kotlin `BleImuSource` + session logger + foreground service compile and install; **the MTU negotiation and end-to-end stream still need one live run** (see below) |
+| B2 Android backend | ✅ **done 2026-08-05** — end-to-end on a Galaxy A52: **MTU 247**, 0 seq gaps, 59.9 Hz, `imu.jsonl` + `meta.json` written, session stops cleanly |
 
-### B2 — what exists and what is still unproven
+### B2 — what exists
 
 Implemented in [`poc/mobile`](../mobile): `BleImuSource.kt` (scan → connect → MTU → config →
 notify → parse), `ImuSessionLogger.kt` (`imu.jsonl` + `meta.json`, both clocks), and
@@ -32,14 +32,44 @@ g. So `BleImuSource` converts g → m/s² and dps → rad/s, and subtracts a slo
 (fc ≈ 0.1 Hz, an octave below the 0.2 Hz rep band). Feeding raw values would be a *semantic* mismatch,
 not just a scale error, and would surface only as quietly mistuned thresholds much later.
 
-**Still unproven — needs the headband powered and one set started on the phone:**
+**Measured on a Galaxy A52 (SM-A525F, Android 13), headband streaming live:**
 
-- **MTU ≥ 109 B on Android.** The 106 B packet needs `MTU ≥ 109`. BlueZ negotiated this in B1 but
-  Android negotiates independently; a short MTU truncates every notification and reads downstream as
-  corrupt data rather than a config fault. `onMtuChanged` logs an explicit error if it lands short —
-  check logcat for `BleImuSource`.
-- **Sustained streaming with 0 seq gaps** through the Android stack, and that `imu.jsonl` grows.
-- **Screen-off survival** across a full session length.
+| Check | Result |
+|---|---|
+| **ATT MTU** | **247 B** — comfortably over the 109 B floor, so no truncation |
+| `seq` gaps | **0** over 408 packets / 3264 samples |
+| Effective rate | 59.86 Hz from `dt_us` (sd 282 µs), 60.18 samples/s wall-clock |
+| Saturated values | 0 |
+| `|accel|` at rest | **0.985 g** — confirms the g→m/s² scaling and gravity handling |
+| Session stop | `imu.jsonl` stops growing, `meta.json` flips to `partial: false` |
+
+This also settled the **FSR question** left open below: the config characteristic reports
+**±8 g / ±1000 dps**, matching grill Q3's target, so the Bosch library defaults are correct as-is.
+
+### ⚠️ The two clocks drift ~53 ppm — a single offset is NOT enough
+
+Regressing `device_ts_us` against `host_ns` over a 44 s capture:
+
+- slope 0.999947 → **−52.8 ppm**, i.e. **≈ −206 ms over a 65 min session**
+- residual sd **15.9 ms** (min −26 ms, max +67 ms) — this is BLE notification jitter, not clock error
+
+−206 ms is **5× the < 40 ms alignment budget**, so ingest must fit a *linear* `device → host` model
+per session rather than applying one constant offset. Nothing is broken — this is exactly the failure
+that logging both clocks exists to catch, and it is correctable precisely because both are recorded.
+`scripts/kb/sync_imu_video.py` (B4) must do this fit; the naive endpoint difference is not usable
+because endpoint jitter alone (±67 ms) swamps it.
+
+### Two bugs this run caught, both fixed
+
+- **Double `connectGatt`.** `stopScan` is asynchronous, so a second advertisement landed in
+  `onScanResult` before it took effect and a second GATT client was opened. Now claimed once under a
+  lock.
+- **Session kept streaming after "End set".** Teardown awaited several stops in sequence, so one
+  throwing left BLE connected and `imu.jsonl` growing after the set had visibly ended. Each step is
+  now independently guarded.
+
+**Still unverified:** screen-off survival across a full 65 min session (the foreground service is in
+place but has only been exercised over minutes).
 
 ## Build
 
@@ -185,15 +215,15 @@ latency jitter, which widens alignment uncertainty directly.
 
 Everything below needs the board in hand — flagged rather than assumed:
 
-- Whether the Bosch library's default accel/gyro **FSR** matches the ±8 g / ±1000 dps target from
-  grill Q3. The library exposes floats in g/dps and does not surface range configuration directly;
+- ~~Whether the Bosch library's default accel/gyro **FSR** matches the ±8 g / ±1000 dps target from
+  grill Q3~~ — **verified in B2: the config characteristic reports ±8 g / ±1000 dps.** Original note
+  kept for context:  The library exposes floats in g/dps and does not surface range configuration directly;
   if the defaults differ, subclass `BoschSensorClass` and override `configure_sensor()`. The
   quantisation scales above are independent of this, but the **clipping behaviour is not**.
 - ~~Actual achieved ODR~~ — **verified: 99.84 Hz** accel and gyro.
 - ~~Sustained throughput over 10 minutes~~ — **PASS**: 599.8 s, 0 seq gaps, 60.04 Hz, sd 250 µs
   (identical to the 60 s run, so the link is stable over time rather than degrading).
-- **MTU negotiation reaching ≥ 106 B on the *phone*.** Confirmed working from Linux/BlueZ (full
-  106 B payloads parsed). The Android client requests 185 B and logs an error if it lands below 109,
-  but **this has not yet run against the board** — it is B2's remaining open item.
+- ~~**MTU negotiation reaching ≥ 106 B on the *phone*.**~~ — **verified: Android negotiated 247 B**
+  on a Galaxy A52, full packets parsed, 0 seq gaps.
 - ~~Whether `dt_us` stays stable~~ — **sd 252 µs** at 60 Hz (min 16017, max 17386). It was sd
   2086 µs before the availability-check fix, so this is the metric that showed the fix worked.

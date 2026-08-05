@@ -23,6 +23,10 @@ yarn-error.log
 # Bundle artifacts
 *.jsbundle
 android/app/src/main/assets/index.android.bundle
+# Emitted by `react-native bundle --assets-dest` alongside the bundle above
+# (LogBox images + generated keep.xml). Build output, not source.
+android/app/src/main/res/drawable-*/
+android/app/src/main/res/raw/
 
 # Metro health-check temp files
 .metro-health-check*
