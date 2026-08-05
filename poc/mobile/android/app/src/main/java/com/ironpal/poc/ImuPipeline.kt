@@ -46,6 +46,29 @@ object ImuPipeline : SensorEventListener {
 
   private var lastGyro = DoubleArray(3)
 
+  /**
+   * Which sensor feeds the buffers (design review Q1/Q2).
+   *
+   * PHONE keeps POC v1 runnable unchanged. BLE is the headband unit for the
+   * collection rig. Everything downstream of the ring buffers is identical for
+   * both — [snapshot] resamples by *measured* rate, so the BLE unit's 60 Hz
+   * reaches the 50 Hz canonical rate with no code that knows about 60.
+   */
+  enum class Source { PHONE, BLE }
+
+  @Volatile var source: Source = Source.PHONE
+    private set
+
+  /** Swap the source. Only takes effect on the next [start]. */
+  fun setSource(s: Source) {
+    synchronized(lock) {
+      if (s == source) return
+      if (running) throw IllegalStateException("cannot switch source while sampling")
+      source = s
+      hasGyro = if (s == Source.BLE) true else gyroSensor != null
+    }
+  }
+
   @Volatile var hasGyro: Boolean = false
     private set
 
@@ -64,7 +87,8 @@ object ImuPipeline : SensorEventListener {
           .getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
         gyroSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
-        hasGyro = gyroSensor != null
+        hasGyro = if (source == Source.BLE) true else gyroSensor != null
+        BleImuSource.init(context)
       }
     }
   }
@@ -73,14 +97,22 @@ object ImuPipeline : SensorEventListener {
     synchronized(lock) {
       startCount++
       if (running) return
+      head = 0
+      count = 0
+      nativeRateHz = 0.0
+      if (source == Source.BLE) {
+        // No handler thread: samples arrive on the BLE callback thread and are
+        // pushed straight in via pushExternalSample.
+        BleImuSource.start()
+        running = true
+        return
+      }
       val sm = sensorManager ?: return
       handlerThread = HandlerThread("ImuPipeline").also { it.start() }
       handler = Handler(handlerThread!!.looper)
       // SENSOR_DELAY_GAME ≈ 50 Hz (design §4.1 / spec §4.1).
       accelSensor?.let { sm.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME, handler) }
       gyroSensor?.let { sm.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME, handler) }
-      head = 0
-      count = 0
       running = true
     }
   }
@@ -90,11 +122,41 @@ object ImuPipeline : SensorEventListener {
       if (!running) return
       startCount = (startCount - 1).coerceAtLeast(0)
       if (startCount > 0) return // another consumer still needs sampling
+      if (source == Source.BLE) {
+        BleImuSource.stop()
+        running = false
+        return
+      }
       sensorManager?.unregisterListener(this)
       handlerThread?.quitSafely()
       handlerThread = null
       handler = null
       running = false
+    }
+  }
+
+  /**
+   * Ingest one sample from an external source ([BleImuSource]).
+   *
+   * Contract — the caller MUST match the phone path's conventions, because
+   * everything downstream assumes them: accel is **linear** (gravity removed)
+   * in m/s², gyro is rad/s, and [tsNs] is a nanosecond timestamp on a
+   * monotonic, wrap-corrected clock. Feeding raw g / dps here would be a silent
+   * scale error that only shows up as mistuned thresholds much later.
+   */
+  fun pushExternalSample(
+    ax: Double, ay: Double, az: Double,
+    gx: Double, gy: Double, gz: Double,
+    tsNs: Long,
+  ) {
+    synchronized(lock) {
+      val i = head
+      accel[i][0] = ax; accel[i][1] = ay; accel[i][2] = az
+      gyro[i][0] = gx; gyro[i][1] = gy; gyro[i][2] = gz
+      timestampsNs[i] = tsNs
+      head = (head + 1) % CAPACITY
+      if (count < CAPACITY) count++
+      updateRate()
     }
   }
 

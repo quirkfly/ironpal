@@ -46,6 +46,24 @@ class ImuModule(private val reactContext: ReactApplicationContext) :
       val result: WritableMap = Arguments.createMap()
       result.putString("deviceModel", "${Build.MANUFACTURER} ${Build.MODEL}")
       result.putMap("sensorInfo", sensorInfo)
+      result.putString("source", ImuPipeline.source.name)
+
+      if (ImuPipeline.source == ImuPipeline.Source.BLE) {
+        // Link health, so a bad session is visible while the founder is still
+        // in the gym rather than at ingest time. Mirrors ble_validate.py.
+        val ble = Arguments.createMap()
+        ble.putBoolean("connected", BleImuSource.connected)
+        ble.putInt("mtu", BleImuSource.negotiatedMtu)
+        ble.putInt("deviceOdrHz", BleImuSource.deviceOdrHz)
+        ble.putString("firmware", BleImuSource.firmware)
+        ble.putDouble("packets", BleImuSource.packets.toDouble())
+        ble.putDouble("samples", BleImuSource.samples.toDouble())
+        ble.putDouble("seqGaps", BleImuSource.seqGaps.toDouble())
+        ble.putDouble("saturated", BleImuSource.saturated.toDouble())
+        ble.putInt("lastDtUs", BleImuSource.lastDtUs)
+        BleImuSource.lastError?.let { ble.putString("error", it) }
+        result.putMap("ble", ble)
+      }
       // Native rate may be 0 until sampling has run; report the measured rate
       // if available, else a nominal SENSOR_DELAY_GAME estimate (~50 Hz).
       val rate = if (ImuPipeline.nativeRateHz > 0) ImuPipeline.nativeRateHz else 50.0
@@ -57,10 +75,43 @@ class ImuModule(private val reactContext: ReactApplicationContext) :
     }
   }
 
+  /**
+   * Select the IMU source: `"PHONE"` (POC v1, default) or `"BLE"` (headband
+   * unit, collection rig). Must be called before [start]; switching while
+   * sampling is rejected rather than silently splicing two clocks into one
+   * buffer.
+   */
+  @ReactMethod
+  fun setSource(source: String, promise: Promise) {
+    try {
+      ImuPipeline.init(reactContext)
+      ImuPipeline.setSource(
+        when (source.uppercase()) {
+          "BLE" -> ImuPipeline.Source.BLE
+          "PHONE" -> ImuPipeline.Source.PHONE
+          else -> throw IllegalArgumentException("unknown source: $source")
+        }
+      )
+      promise.resolve(null)
+    } catch (e: Exception) {
+      promise.reject("IMU_SOURCE_ERROR", e.message, e)
+    }
+  }
+
   @ReactMethod
   fun start(promise: Promise) {
     try {
       ImuPipeline.start()
+      // Scanning is async, but permission / bluetooth-off failures are known
+      // synchronously. Surface them now rather than letting the session look
+      // like it started and yield an empty imu.jsonl an hour later.
+      if (ImuPipeline.source == ImuPipeline.Source.BLE) {
+        BleImuSource.lastError?.let {
+          ImuPipeline.stop()
+          promise.reject("IMU_BLE_UNAVAILABLE", it)
+          return
+        }
+      }
       promise.resolve(null)
     } catch (e: Exception) {
       promise.reject("IMU_START_ERROR", e.message, e)
@@ -74,6 +125,61 @@ class ImuModule(private val reactContext: ReactApplicationContext) :
       promise.resolve(null)
     } catch (e: Exception) {
       promise.reject("IMU_STOP_ERROR", e.message, e)
+    }
+  }
+
+  /**
+   * Begin logging the raw headband stream to `imu.jsonl` + `meta.json`, and
+   * hold a foreground service so the session survives screen-off.
+   * Resolves with the session directory.
+   */
+  @ReactMethod
+  fun startSession(sessionId: String, promise: Promise) {
+    try {
+      val path = ImuSessionLogger.start(reactContext, sessionId)
+      ImuForegroundService.start(reactContext)
+      promise.resolve(path)
+    } catch (e: Exception) {
+      promise.reject("IMU_SESSION_START_ERROR", e.message, e)
+    }
+  }
+
+  @ReactMethod
+  fun stopSession(promise: Promise) {
+    try {
+      ImuSessionLogger.stop()
+      ImuForegroundService.stop(reactContext)
+      promise.resolve(ImuSessionLogger.sessionDir)
+    } catch (e: Exception) {
+      promise.reject("IMU_SESSION_STOP_ERROR", e.message, e)
+    }
+  }
+
+  /**
+   * Free space on the volume holding session logs.
+   *
+   * A blocking pre-session gate (sync plan): the A52 has ~17 GB free, which is
+   * roughly 36 min of 4K, so running out mid-session is a live risk rather than
+   * a theoretical one. Checking after the fact is worthless — a truncated
+   * session cannot be recovered.
+   */
+  @ReactMethod
+  fun getFreeSpace(promise: Promise) {
+    try {
+      val dir = reactContext.getExternalFilesDir(null)
+        ?: throw IllegalStateException("no external files dir")
+      val stat = android.os.StatFs(dir.absolutePath)
+      val freeBytes = stat.availableBlocksLong * stat.blockSizeLong
+      val out = Arguments.createMap()
+      out.putDouble("freeBytes", freeBytes.toDouble())
+      out.putDouble("freeGb", freeBytes / 1e9)
+      // ~470 MB/min measured for this rig's 4K stream; IMU logging is ~1 % of
+      // that and is not the constraint.
+      out.putDouble("estimatedMinutes", freeBytes / 470e6)
+      out.putString("path", dir.absolutePath)
+      promise.resolve(out)
+    } catch (e: Exception) {
+      promise.reject("IMU_FREE_SPACE_ERROR", e.message, e)
     }
   }
 

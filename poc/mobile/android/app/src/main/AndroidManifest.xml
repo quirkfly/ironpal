@@ -2,6 +2,24 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Headband IMU over BLE (poc/firmware). Android split these at API 31:
+         BLUETOOTH/BLUETOOTH_ADMIN cover <=30, SCAN/CONNECT cover >=31.
+         neverForLocation lets us skip ACCESS_FINE_LOCATION on 31+; the legacy
+         path below still needs it, because pre-31 BLE scanning returns no
+         results at all without location permission (silently, with no error). -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+
+    <!-- Capture must survive screen-off for a ~65 min session (ImuForegroundService). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- High-rate IMU access does not require a runtime permission, but we
          declare the hardware features as optional so gyro-less phones (D5)
          can still install the sideloaded APK (D4). -->
@@ -30,5 +48,9 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+        <service
+            android:name=".ImuForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
     </application>
 </manifest>

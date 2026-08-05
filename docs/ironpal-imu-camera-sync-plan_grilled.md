@@ -153,6 +153,13 @@ every screen are untouched by the swap.
 **Answer: 100 Hz logged**, resampled to the existing 50 Hz canonical rate for the DSP pipeline.
 FSR adopted as recommended (**±8 g / ±1000 dps**) — not separately contested.
 
+> ⚠️ **Revised to 60 Hz by hardware measurement, 2026-08-05.** 100 Hz proved unreachable: each
+> `Arduino_BMI270_BMM150` read costs ~7.7 ms, capping accel+gyro at ~66 samples/s. The sensor is not
+> the bottleneck (99.84 Hz, data always ready) — I2C transaction cost through the library is. 60 Hz
+> gives ~10 % headroom and still exceeds the 50 Hz canonical rate, so the *decision's intent*
+> survives; only the number changed. FSR unaffected. 100 Hz would need the BMI270 FIFO.
+> Measured in `poc/firmware/` during B0/B1 bring-up.
+
 **Consequences:**
 - The Nano firmware and BLE packet design target 100 Hz (§2.1 of the sync plan stands).
 - The Kotlin BLE backend must **resample 100 → 50 Hz** before handing to `SignalModule`, reusing
@@ -310,7 +317,11 @@ precheck (Q4, Q5). Cheap prevention beats expensive rejection.
 
 ## Q7 (branch I) — How do you reflash the Nano once it is bracket-mounted? ✅
 
-**Answer: expose the USB-C port through the bracket.**
+**Answer: expose the USB port through the bracket.**
+
+> **Corrected 2026-08-05.** This originally said *USB-C*. The Nano 33 BLE Rev2 uses
+> **Micro-USB (Micro-B)**; only the newer Nano ESP32 is USB-C. The USB-C in the hardware plan
+> (J1) is the future custom PCB's connector. Bracket cutout must be sized for Micro-B.
 
 During bring-up (B0–B5) firmware is reflashed tens of times while tuning ODR, packet batching and
 nod-detection thresholds against real captures — that loop must be trivial and reliable. BLE DFU is
@@ -330,12 +341,12 @@ and a re-print later. Add a cover flap if sweat ingress is a concern.
 | A | IMU data path | **BLE streaming** (standalone flash holds only ~28 min) |
 | B | Companion app | **Extend `poc/mobile`** with a Kotlin BLE `ImuModule` backend behind a rig flag |
 | C | Sync anchors | **Both** — nods as guaranteed anchors + continuous windowed correlation; nods **after ~60 s** |
-| D | Sampling config | **100 Hz logged**, resampled to the existing 50 Hz canonical; **±8 g / ±1000 dps** |
+| D | Sampling config | **60 Hz logged** (revised from 100 by measurement), 50 Hz canonical; **±8 g / ±1000 dps** |
 | E | Clock/drift | Windowed correlation for drift; two-anchor linear model as fallback |
 | F | Session invalidation | <40 ms accept · 40–80 ms flag · >80 ms reject; BLE gap >2 s and FSR clipping are hard invalidators |
 | G | Capture-device viability | VFR is a **warm-up transient, not thermal**; 36 GB free caps sessions |
 | H | Offload | **Laptop after every session**, no SD card → **~65 min cap, ~13 sessions** |
-| I | Firmware reflash | **USB-C slot in the bracket** |
+| I | Firmware reflash | **Micro-USB slot in the bracket** (board is Micro-B, not USB-C) |
 
 ## What the review changed in the plans
 

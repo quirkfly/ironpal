@@ -121,12 +121,21 @@ board**, and this is the single most common Rev2 bring-up failure.
 
 ### 2.1 Sampling and packet format
 
-**Log at 100 Hz; the DSP pipeline consumes 50 Hz (Q3).** `poc/mobile` already defines
+> **Superseded by hardware measurement, 2026-08-05: the rate is 60 Hz, not 100.**
+> Benchmarked on the board, each `Arduino_BMI270_BMM150` read costs **~7.7 ms**, so accel+gyro tops
+> out at **~66 samples/s** (accel alone ~130). The sensor is *not* the limit — it reports 99.84 Hz
+> and always has data waiting — the limit is **I2C transaction cost through this library**.
+> **60 Hz** leaves ~10 % headroom and still clears the 50 Hz canonical rate. Reaching 100 Hz would
+> require the BMI270's **FIFO** (one bulk transaction returning many samples), which this library
+> does not expose. Sample spacing becomes 16.7 ms rather than 10 ms — still inside the < 40 ms
+> alignment budget with sub-sample interpolation, but with less margin.
+
+**Log at 60 Hz; the DSP pipeline consumes 50 Hz (Q3, as revised).** `poc/mobile` already defines
 `CANONICAL_SAMPLE_RATE_HZ = 50`, and rep detection needs far less — its band is 0.2–1.5 Hz, so 50 Hz
-is ~33× oversampled. The higher logged rate buys **sync resolution** (10 ms per sample instead of
+is ~33× oversampled. The higher logged rate buys **sync resolution** (16.7 ms per sample instead of
 20, against a < 40 ms residual target) and headroom for future form analysis. **The Kotlin BLE
-backend resamples 100 → 50 Hz** before handing to `SignalModule`, reusing the existing D4
-resample-to-canonical path — existing DSP is untouched. `imu.jsonl` archives the full 100 Hz stream.
+backend resamples 60 → 50 Hz** before handing to `SignalModule`, reusing the existing D4
+resample-to-canonical path — existing DSP is untouched. `imu.jsonl` archives the full 60 Hz stream.
 You can always downsample later; you can never recover a rate you did not capture.
 
 **Full-scale range: ±8 g accelerometer, ±1000 dps gyroscope.** ±8 g covers sharp sync nods and head
@@ -169,7 +178,11 @@ and loses nothing.
 Keep the connection interval short (7.5–15 ms) — request it from the central. Long intervals batch
 notifications and add latency jitter, which directly widens the §4 alignment uncertainty.
 
-### 2.3 Bracket must expose the USB-C port (Q7)
+### 2.3 Bracket must expose the Micro-USB port (Q7)
+
+The Nano 33 BLE Rev2 has a **Micro-USB (Micro-B)** socket — *not* USB-C. The USB-C in
+`ironpal-imu-poc-integration-plan.md` (J1) belongs to the **future custom ESP32-C3 PCB**, not to
+this board; the bracket must be cut for Micro-B.
 
 **Decide this before printing** — the bracket is still a to-print BOM item, so a slot is free now
 and a re-print later. During bring-up (B0–B5) firmware is reflashed tens of times while tuning ODR,

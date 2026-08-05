@@ -1688,3 +1688,7 @@ here are the issues we need to address:
 ---
 
 now that we are talking about rate transmission. I dont want to use USB in the final camera product. I want to use WiFi or BLE for data transmission. How do i acheive a transmission on ~1GB in few minutes not using USB?
+
+---
+
+attached is device i want you use for session ingestion in the gym (it has bigger storage..) i have arduino nano 33 ble rev2 IMU unit lying next to it. let's implement the /ironpal-imu-integration-with-usb-camera-app-plan.md

@@ -85,6 +85,29 @@ export interface DeviceInfo {
   /** Native sampling rate BEFORE resample-to-canonical (D4). */
   sampleRateHz: number;
   hasGyro: boolean;
+  /** Which IMU fed the samples — 'PHONE' (POC v1) or 'BLE' (headband). */
+  source?: 'PHONE' | 'BLE';
+  /** Headband link health; present only when source is 'BLE'. */
+  ble?: BleLinkInfo;
+}
+
+/**
+ * BLE link health, mirroring what `poc/firmware/tools/ble_validate.py` audits.
+ * Surfaced so a bad session is caught in the gym, not at ingest.
+ */
+export interface BleLinkInfo {
+  connected: boolean;
+  /** Must be >= 109 B or every 106 B packet is truncated. */
+  mtu: number;
+  deviceOdrHz: number;
+  firmware: string;
+  packets: number;
+  samples: number;
+  /** Non-zero means dropped notifications — session alignment is suspect. */
+  seqGaps: number;
+  saturated: number;
+  lastDtUs: number;
+  error?: string;
 }
 
 /** A single confidence-tagged metric on the HUD / in a session row. */

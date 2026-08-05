@@ -18,7 +18,7 @@ import {
   sendOrQueueVisionRecognize,
   sendOrQueueVisionWeight,
 } from '../store/offlineQueue';
-import {WEIGHT_GLANCE_SEC} from '../config';
+import {WEIGHT_GLANCE_SEC, IMU_SOURCE} from '../config';
 import type {
   DeviceInfo,
   HudState,
@@ -161,6 +161,14 @@ export function useLiveSet() {
 
     // Begin native sampling so the buffer is warm before the rep phase.
     if (ImuModule.isAvailable()) {
+      // Apply the rig flag first (Q1/Q2). On the collection rig this connects
+      // the headband over BLE; on POC v1 it is a no-op that keeps the phone IMU.
+      const active = await ImuModule.prepare(IMU_SOURCE);
+      if (active !== IMU_SOURCE) {
+        console.warn(
+          `[useLiveSet] IMU source fell back to ${active} (asked ${IMU_SOURCE})`,
+        );
+      }
       await ImuModule.start();
     }
 

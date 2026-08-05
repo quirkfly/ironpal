@@ -1,4 +1,4 @@
-import {BACKEND_BASE_URL, IRONPAL_AUTH_TOKEN, IRONPAL_ROLE} from '@env';
+import {BACKEND_BASE_URL, IRONPAL_AUTH_TOKEN, IRONPAL_ROLE, IRONPAL_IMU_SOURCE} from '@env';
 import type {UserRole} from '../types/domain';
 
 // ---------------------------------------------------------------------------
@@ -31,6 +31,16 @@ export const getApiUrl = (path: string): string =>
  * this is replaced by the result of POST /auth/token. May be empty.
  */
 export const SEEDED_AUTH_TOKEN: string | undefined = IRONPAL_AUTH_TOKEN || undefined;
+
+/**
+ * Which IMU feeds the pipeline — the rig flag from grill Q1/Q2.
+ *
+ * 'PHONE' (default) keeps POC v1 runnable on the handset alone. 'BLE' selects
+ * the headband unit for supervised collection. Defaulting to PHONE matters:
+ * an unset flag must never silently produce a session with no IMU at all.
+ */
+export const IMU_SOURCE: 'PHONE' | 'BLE' =
+  (IRONPAL_IMU_SOURCE || '').toUpperCase() === 'BLE' ? 'BLE' : 'PHONE';
 
 /** Founder unlocks enroll mode; tester is live-only (Q1/Q2). */
 export const USER_ROLE: UserRole =
