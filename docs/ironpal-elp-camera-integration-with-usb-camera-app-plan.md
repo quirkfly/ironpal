@@ -1,246 +1,306 @@
-# ELP camera + ShenYao USB Camera app — synchronised capture plan
+# Integrating the ELP USB camera into the IronPal POC app
 
-Operational plan for capturing a gym session with the **ELP 4K 200° fisheye** driven by the
-**ShenYao USB Camera** app, alongside the **Nano 33 BLE Rev2** IMU streaming into the IronPal app.
+Detailed implementation plan for bringing the **ELP 4K 200° fisheye (UVC)** into `poc/mobile` — the
+same app that already streams the **Nano 33 BLE Rev2** IMU — so one app owns both streams and stamps
+them with one clock.
 
-**This is the rig you take to the gym next week.** It is the "make the current setup rigorous" plan.
-The separate [`ironpal-elp-camera-in-app-plan.md`](ironpal-elp-camera-in-app-plan.md) is the "own the
-capture ourselves later" plan — they do not compete, and this one must work first regardless of
-whether that one ever happens.
-
----
-
-## 0. One correction before anything else — this is configuration, not integration
-
-The task asks to "establish communication between the ELP camera and the camera app". Two things
-must be said plainly, because getting either wrong wastes a gym trip:
-
-**The ELP is already "integrated" with ShenYao.** ShenYao *is* a UVC host app; plugging the ELP into
-the phone over OTG is the entire integration. There is no pairing step, no SDK, no configuration
-handshake to build. What follows is therefore a **configuration and operating procedure**, not a
-software integration.
-
-**Synchronisation does not come from ShenYao and cannot be made to.** ShenYao is closed-source with
-no plugin API, no broadcast intent, and no callback — this was settled in
-[`ironpal-imu-camera-sync-plan.md`](ironpal-imu-camera-sync-plan.md) §1 and is not reopened here. It
-contributes exactly one artefact: an MP4 with presentation timestamps. **Alignment comes from shared
-rigid-body motion** — the head wearing the camera is the same head wearing the IMU — recovered
-post-hoc by cross-correlation. Any plan that assumes ShenYao can be made to emit a sync signal is
-wrong at the premise.
-
-So the honest statement of the goal: *configure both halves so that a post-hoc cross-correlation can
-succeed, and make it impossible to record a session that cannot be aligned.*
+**Related docs.** [`ironpal-shenyao-capture-procedure.md`](ironpal-shenyao-capture-procedure.md) is
+the operating procedure for the *current* rig (ELP driven by the third-party ShenYao app) and stays
+valid until this work is proven. [`ironpal-imu-camera-sync-plan.md`](ironpal-imu-camera-sync-plan.md)
+§1 rejected *hooking into* ShenYao — that judgement stands and is not reopened. Owning capture is a
+different proposition, and "closed source, no API, breaks on update" argues for it.
 
 ---
 
-## 1. The physical chain, and the constraint that actually bites
+## 1. Why this is worth building
+
+Four problems collapse into one fix. Only the first is about elegance; the rest are live defects in
+the current rig.
+
+**It deletes the alignment problem rather than solving it.** Today two independent recorders produce
+two files with no shared clock, and alignment is recovered post-hoc by cross-correlating head motion,
+seeded by a nod, against a < 40 ms budget. If our app owns capture, every frame carries
+`SystemClock.elapsedRealtimeNanos()` — **the same clock already written as `host_ns` on every IMU
+packet**. Alignment becomes a subtraction.
+
+**It makes the variable frame rate a non-issue.** ShenYao's output ramps **21.69 → 26.05 → 29.76 fps**
+across a clip. PTS math recovers this, but every downstream tool must keep getting it right forever.
+Per-frame arrival timestamps make frame timing *recorded data*, not reconstructed inference.
+
+**It is the only way the motion gate can ever act.** `TASK.md` asked for exactly this: use the IMU to
+detect rest and only record while exercising. The gate exists (`ImuModule.onMotionGate`) and
+**currently has nothing to act on**, because ShenYao does not listen. The A52 holds ~17 GB ≈ **36 min**
+of 4K against a **65 min** session — it does not fit *today*. Gating is the only fix that reduces size
+at the source; codecs and bigger cards do not change the ratio.
+
+**One app means one session.** One foreground service, one storage precheck, one directory holding
+`imu.jsonl`, `meta.json` and the video — instead of matching `IPS_*.mp4` filenames to session dirs by
+wall clock, which silently mismatches when two sessions are captured close together.
+
+### 1.1 What does *not* go away — stated precisely
+
+- **The IMU's own drift stays.** The Nano's `micros()` runs **−52.8 ppm ≈ −206 ms per 65 min**
+  (measured in B2). That is two crystals, not app architecture, and still needs its linear
+  `device_ts_us → host_ns` fit.
+- **Frame arrival ≠ exposure.** There is a pipeline latency between photons and the USB frame landing
+  on the host: sensor readout, camera-side MJPEG encode, USB transfer. Integration does **not**
+  eliminate it. What it does is convert it from an *unknown per-session offset* into a **roughly
+  constant, once-calibratable** one (§7.3). That is the honest description of the win — not "perfect
+  sync".
+
+---
+
+## 2. The decisive platform constraint, measured
 
 ```
-ELP 4K fisheye (UVC, USB 2.0)
-   └─ USB-C OTG ──► Galaxy A52 ──► ShenYao ──► /sdcard/DCIM/USBCamera/IPS_<wallclock>.mp4
-                         ▲
-                         └─ BLE ── Nano 33 BLE Rev2 ──► IronPal app ──► sessions/<id>/imu.jsonl + meta.json
+$ adb shell getprop ro.build.version.release   ->  14   (SDK 34)
+$ adb shell pm list features | grep camera
+    android.hardware.camera.external            ABSENT
+$ adb shell pm list features | grep usb
+    feature:android.hardware.usb.host           PRESENT
 ```
 
-**Power is the unglamorous blocker.** The A52 is simultaneously powering the ELP over OTG, holding a
-BLE link, and encoding H.264. The OTG port is occupied by the camera, so it **cannot charge from that
-port while capturing**. A 65-minute session on battery, with the screen periodically on, is not a
-safe assumption — measure it before relying on it. If it does not hold, a powered OTG splitter (OTG
-hub with external power input) is the fix, and it must be sourced *before* the gym trip, not after a
-session dies at minute 40.
+**`android.hardware.camera.external` is absent on the A52 even on Android 14**, so Camera2/CameraX
+**cannot enumerate the UVC camera at all**. Samsung did not enable the platform external-camera path.
+The easy route is closed.
 
-### 1.1 Storage is a hard blocker today, not a warning
+`android.hardware.usb.host` **is** present, so the route is the **USB Host API plus a userspace UVC
+stack** — which is what ShenYao itself does. No root required.
 
-Measured: H.264 Baseline at **~62 Mbps ≈ 465 MB/min**. The A52 has ~17 GB free.
-
-| | |
-|---|---|
-| Capacity at current settings | **~36 minutes** |
-| Target session length | **65 minutes** |
-| Verdict | **A full session does not fit.** |
-
-This is not a caveat to note and move past — it is a blocking gate. Three ways out, in order of
-preference:
-
-1. **Free ~15 GB on the A52.** Cheapest, no quality cost, and already on the task list. Do this
-   first.
-2. **Shorter sessions.** Two 30-minute captures beat one truncated 65-minute one. A truncated session
-   is not 55 minutes of data plus a gap — it is a session whose end is missing without a record of
-   *what* is missing.
-3. **Lower the capture resolution** — last resort. It trades directly against weight-plate OCR, which
-   is already the weakest link in the pipeline (see [`weight-reading.md`](video-analysis-kb/weight-reading.md)).
-   Do not spend pixels-on-target to buy minutes until options 1 and 2 are exhausted.
-
-The IronPal app already enforces a **blocking free-space precheck** (`ImuModule.getFreeSpace()`,
-refuses below 10 minutes of headroom). That gate covers the IMU log's volume, which is the same
-volume — so it will catch this, but only if the app is started *before* filling the card.
+> This single feature flag separates "an afternoon" from "a multi-week build". **Check it on any phone
+> considered for the rig**, and never infer it from the Android version.
 
 ---
 
-## 2. ELP camera configuration
+## 3. Architecture — mirror the IMU swap that already worked
 
-The ELP is a fixed-focus 200° fisheye on an IMX415. Its defaults are wrong for this job in two ways.
+The BLE backend succeeded because it slotted in behind an existing seam and changed nothing
+downstream. Do the same here.
 
-| Setting | Value | Why |
+```
+UsbManager (permission, attach intent)
+      │
+      ▼
+UvcSource.kt  ── JNI ──►  libusb + libuvc (native)
+      │                     ▲ wraps the fd from UsbDeviceConnection
+      │
+      ├──► frame callback: stamp elapsedRealtimeNanos, hand off buffer
+      │
+      ├──► VideoEncoder (MediaCodec) ──► MediaMuxer ──► session/video.mp4
+      │
+      └──► VideoSessionLogger ──────────────────────► session/frames.jsonl
+                                                              ▲
+ImuPipeline / BleImuSource ──► ImuSessionLogger ──► session/imu.jsonl, meta.json
+                                                              │
+                              both stamped with the SAME host clock
+```
+
+New Kotlin files, named to match the existing convention:
+
+| File | Mirrors | Responsibility |
 |---|---|---|
-| Resolution | **3840×2160** (until storage forces otherwise) | 21.1 % of every frame is black outside the image circle, so effective resolution is already far below the label. Do not cut it further by choice. |
-| Frame rate | **highest stable the link sustains** (~25–30) | Rep boundaries are temporal; frames are the sampling grid. |
-| Focus | **fixed — confirm autofocus is OFF/absent** | The lens is fixed-focus. If ShenYao exposes an AF toggle, disable it: hunting mid-set ruins the staging frames that weight OCR depends on. |
-| Exposure | **auto, but locked once framing is set if ShenYao allows** | Gym lighting is even; auto-exposure hunting across a mirrored wall causes luminance swings that corrupt the motion-energy profile the routing tools use. |
-| White balance | **fixed if available** | Same reason; also keeps plate colour cues (IWF red/blue/yellow) usable. |
+| `UvcSource.kt` | `BleImuSource.kt` | device discovery, permission, stream lifecycle, frame callbacks |
+| `VideoEncoder.kt` | — | MediaCodec encode + MediaMuxer, segment control |
+| `VideoSessionLogger.kt` | `ImuSessionLogger.kt` | `frames.jsonl`, extends `meta.json` |
+| `CameraForegroundService` | reuse `ImuForegroundService` | one service covering both streams |
 
-**Mount rotation is 180°** on this rig (case 007). Record it in the session notes — the ingest side
-must read rotation from per-session metadata and **never hardcode `transpose=2`**, because that value
-is a property of *this* mount, not of the camera.
+**Rig flag**, matching `IRONPAL_IMU_SOURCE`: `IRONPAL_CAMERA_SOURCE = NONE | UVC`. Default `NONE`
+so POC v1 and the current ShenYao workflow are untouched by an unset flag — the same
+"unset must never silently change behaviour" rule the IMU flag follows.
 
----
-
-## 3. ShenYao app configuration
-
-Settings vary by app version; the intent matters more than the exact menu path.
-
-- **Output**: `/sdcard/DCIM/USBCamera/`, filename `IPS_<date>.<time>.<ms>.mp4`. **This filename is
-  the only link between the video and the IMU session** — see §5.
-- **Audio: OFF.** Nothing downstream uses it, it adds bytes to a storage-constrained capture, and it
-  creates an avoidable privacy surface in a shared gym. This is also already a checked item in the
-  `review-takes` skill.
-- **Codec/bitrate**: leave at H.264 unless storage forces a change. HEVC would roughly halve the
-  size, but only if the phone encodes it reliably at 4K for 65 minutes — verify before trusting.
-- **Screen timeout / lock**: the phone must not sleep mid-capture. ShenYao holds its own wake lock
-  while recording, but confirm rather than assume — a sleeping phone also drops the BLE link.
-- **Do not enable any overlay/watermark/timestamp burn-in.** Burned-in pixels corrupt the frames the
-  vision KB reads and cannot be removed later.
+**Leave `CameraModule.kt` (CameraX, weight glance) alone.** It drives the *phone's* camera and is
+independent. Note it currently throws `IllegalStateException: Not in application's main thread` — a
+pre-existing bug, not caused by and not fixed by this work.
 
 ---
 
-## 4. The pre-session ritual — ordering is not arbitrary
+## 4. C0 — Bring-up: see the device, learn what it really does
 
-Run these in this order. Each step exists because skipping it produces a session that looks fine and
-is unusable.
+**Goal: enumerate the ELP and print its actual capabilities.** No frames, no encode.
 
-1. **Free-space check.** Open the IronPal app first; its precheck refuses below 10 minutes of
-   headroom. Confirm the number covers the *planned* session, not the minimum.
-2. **Plug in the ELP**, grant ShenYao USB permission, confirm live preview. A 200° fisheye at
-   headband height should show the floor at the bottom of the frame and your own hands when raised.
-3. **Power the Nano**, start the IronPal set, confirm in logcat or the HUD that BLE connected and
-   `mtu ≥ 109` (it negotiates 247 on this phone).
-4. **Start ShenYao recording.**
-5. **Wait ~60 seconds before the sync nod.** ← *see §5.1, this is the non-obvious one*
-6. **Perform the sync nod** — 3 crisp head nods, ~1 s apart, with a clear stillness before and after.
-7. Train.
-8. **Stop ShenYao first, then end the IronPal set.** Stopping the IMU first leaves video with no
-   IMU tail to correlate against.
+1. **Declare USB host intent filter** with `res/xml/device_filter.xml` so plugging the ELP in offers
+   to launch IronPal. Filter on the ELP's VID/PID — read them from the device, do not copy them from a
+   product page.
+2. **Request permission** via `UsbManager.requestPermission()`. This is a runtime dialog, not a
+   manifest permission; it must be handled before any native call.
+3. **Open and hand the fd down.** `UsbDeviceConnection.getFileDescriptor()` → JNI. Android blocks
+   direct `/dev/bus/usb` access, so libusb **must not** enumerate on its own. Use
+   **`libusb_wrap_sys_device()`** (libusb ≥ 1.0.24) to adopt the already-open fd. This is the single
+   API that makes rootless UVC work; a libusb build without it is a dead end.
+4. **Enumerate formats** with libuvc and log every `format / resolution / fps` triple the camera
+   actually reports.
 
-### 4.1 Why the IMU starts before the camera but the nod comes late
+**Exit criterion:** the device's real capability list, written into this doc. Not the spec sheet.
 
-Starting the IMU first guarantees the IMU log strictly contains the video's time span, so the
-cross-correlation search window is bounded on both sides. If video started first, the nod could fall
-outside the IMU record entirely.
+**Evaluate a maintained wrapper first.** The `UVCCamera` lineage and its active forks (e.g.
+`UVCAndroid`, `AndroidUSBCamera`) already package libusb+libuvc+JNI for Android. Spending a day
+evaluating one is cheaper than the weeks the JNI plumbing otherwise costs. Adopt one unless it blocks
+the timestamp path in §7 — that path is non-negotiable and is the reason this project exists.
+
+### 4.1 Format reality — MJPEG is mandatory at 4K
+
+Uncompressed 4K is arithmetically impossible on USB 2.0:
+
+```
+3840 × 2160 × 2 B/px (YUY2) × 30 fps ≈ 497 MB/s
+USB 2.0 practical                    ≈  40 MB/s
+```
+
+So the camera **must** deliver MJPEG at 4K, and the real question is what resolution/fps combination
+the link sustains. Expect to characterise this rather than trust the label — the same lesson as the
+firmware's 100 Hz → 60 Hz retarget, where the bus, not the sensor, set the ceiling.
 
 ---
 
-## 5. Synchronisation — where the timestamps actually come from
+## 5. C1 — Frames with timestamps, no encode
 
-Three clocks are in play. Confusing them is the main way this goes wrong.
+**Goal: prove frames arrive and that their timing is good enough to be the sync mechanism.**
 
-| Clock | Source | Property |
+Stream MJPEG, and for each frame record `{index, host_ns, bytes}` to `frames.jsonl`. Write the raw
+MJPEG to disk only for a short test capture — it is far too large to keep.
+
+**Exit criteria:**
+- Sustained frame delivery at the negotiated rate, with **no gaps**
+- **Inter-frame interval jitter characterised** — this is the number that decides whether §7 works.
+  It must be small relative to the < 40 ms budget; if arrival jitter is tens of milliseconds, the
+  timestamps are not the improvement this plan claims and that must be discovered here, not in C5.
+
+---
+
+## 6. C2 — Sustained encode: the gate most likely to fail
+
+**Goal: 4K MJPEG → H.264/HEVC, continuously, without throttling.**
+
+This is the highest-risk step and it **fails late** — twenty minutes in, not at startup.
+
+**Preferred path (GPU, no CPU pixel copies):**
+
+```
+MJPEG ─► MediaCodec MJPEG decoder ─► Surface ─► GL blit ─► encoder input Surface ─► MediaCodec AVC/HEVC ─► MediaMuxer
+```
+
+**Fallback (CPU-bound):** libjpeg-turbo → NV12 → MediaCodec ByteBuffer input. Materially more CPU and
+the most likely thermal-throttle source.
+
+**Unmeasured, and required before committing to a path:** whether the A52 exposes a hardware MJPEG
+decoder. The phone was disconnected when this plan was written, so this was *not* verified. Check with:
+
+```sh
+adb shell 'cat /vendor/etc/media_codecs*.xml | grep -i mjpeg'
+```
+
+If there is no hardware MJPEG decoder, the fallback path is forced and the thermal risk rises sharply
+— that finding alone could justify capturing below 4K.
+
+**Exit criterion: 20 minutes continuous** at the chosen resolution with zero dropped frames and no
+thermal throttling. Log frame drops explicitly; a silently dropped frame is exactly the invisible
+timing error this whole effort exists to eliminate.
+
+---
+
+## 7. C3 — Session integration and the timestamp contract
+
+**Goal: video and IMU in one session directory, on one clock.**
+
+```
+sessions/<id>/
+  ├── imu.jsonl      (existing)
+  ├── meta.json      (extended with a "video" block)
+  ├── video.mp4      (or video_000.mp4, video_001.mp4 … when gated)
+  └── frames.jsonl   (new)
+```
+
+### 7.1 `frames.jsonl` — one line per frame
+
+```json
+{"i":0,"host_ns":1295435421308495,"pts_us":0,"bytes":184320,"key":true,"seg":0}
+```
+
+**Write the sidecar even though the MP4 has PTS.** Muxers rewrite, normalise and occasionally
+resample presentation timestamps; the sidecar is captured before any of that and is ground truth.
+This is the same reasoning that made `imu.jsonl` log raw wire values rather than scaled ones.
+
+### 7.2 The contract that makes this worthwhile
+
+- Stamp `SystemClock.elapsedRealtimeNanos()` **at frame arrival**, as early as possible in the
+  callback — not after decode, not after encode.
+- Derive the encoder PTS from that same stamp so container time and sidecar time share an origin.
+- `host_ns` here is **the same clock** as `host_ns` in `imu.jsonl`. That identity *is* the deliverable.
+
+### 7.3 Calibrate the constant offset once
+
+Frame arrival lags exposure by sensor readout + camera MJPEG encode + USB transfer. Roughly constant,
+so calibrate once rather than per session: film a sharp, IMU-visible event — a hand clap or a single
+hard tap on the headband — and compare the video frame against the IMU spike. The difference is the
+fixed offset; record it in this doc and apply it at ingest.
+
+Re-measure if the resolution or frame rate changes, since readout time scales with them.
+
+---
+
+## 8. C4 — Motion-gated capture
+
+**Goal: stop recording rest periods.** This is where the 36-minute storage ceiling gets fixed.
+
+Drive segmentation from the existing IMU motion gate, with three details that decide whether the
+result is usable:
+
+**Pre-roll ring buffer — without it you lose the first rep.** The gate can only fire *after* motion
+has begun, and codec segment start adds latency. Keep a rolling buffer of the last ~5 s of encoded
+frames and flush it when the gate opens. A set whose first rep is missing is worse than one that
+carries a few seconds of rest.
+
+**Segments must start on an IDR frame.** Request one when the gate opens
+(`MediaCodec.PARAMETER_KEY_REQUEST_SYNC_FRAME`), or the segment cannot be decoded independently.
+
+**Hysteresis: open fast, close slow.** Close only after several seconds of continuous stillness,
+otherwise the pause between reps chops one set into many segments.
+
+**Never let a gap be silent.** Every segment records its `host_ns` span in `meta.json`. A gap must be
+an explicit recorded interval, never an unremarked discontinuity — the same discipline as `seq_gaps`
+on the IMU side.
+
+**Exit criterion:** measured size reduction versus an ungated capture of the same session, and no set
+with a clipped first rep.
+
+---
+
+## 9. C5 — Parallel validation, the gate that retires ShenYao
+
+Capture one session **both ways**: ShenYao recording as it does today, and the in-app path running
+simultaneously if the USB topology allows — otherwise back-to-back on the same movements.
+
+Then confirm the in-app timestamps agree with the cross-correlation result from
+`sync_imu_video.py` (B4). **This is the only run where cross-correlation earns its keep as an
+independent check** rather than the primary mechanism.
+
+**Do not retire ShenYao before this passes.** It works today; a homegrown recorder will have a tail of
+bugs, and each one costs a gym session.
+
+---
+
+## 10. Risks, and when to stop
+
+| Risk | Likelihood | Kill criterion |
 |---|---|---|
-| **Video PTS** | ShenYao/MediaCodec | Relative to recording start. **Not wall clock.** |
-| **`host_ns`** | `SystemClock.elapsedRealtimeNanos` on every IMU packet | Monotonic, survives sleep, immune to NTP steps |
-| **`device_ts_us`** | Nano `micros()`, unwrapped past the 71.6 min rollover | Drifts **−52.8 ppm ≈ −206 ms per 65 min** (measured, B2) |
+| No hardware MJPEG decoder → CPU decode throttles | Medium | If C2 cannot hold 20 min, drop resolution once; if it still fails, **stop and keep ShenYao** |
+| USB 2.0 cannot sustain 4K30 MJPEG | Medium | Accept the highest stable mode found in C0 |
+| Frame-arrival jitter too large to beat cross-correlation | Low | If C1 jitter approaches the 40 ms budget, the premise fails — **abandon and keep ShenYao** |
+| libusb build lacks `libusb_wrap_sys_device` | Low | Use a maintained wrapper (§4) |
+| Battery/thermal over 65 min with OTG occupied | Medium | Powered OTG hub; measure before relying on it |
 
-**Coarse link — the filename.** `IPS_<wallclock>.mp4` and `meta.json`'s `started_wall_ms` are both
-wall clock, so the filename identifies *which* IMU session a video belongs to. It is good to seconds,
-never better. **Use it to pair files, never to align them.**
-
-**Fine alignment — shared motion.** Cross-correlate video motion energy against gyro magnitude. The
-head carrying the camera is the head carrying the IMU, so the two signals share structure. The nod
-seeds the search window; the correlation does the alignment. Budget: **< 40 ms**.
-
-**The IMU drift correction is mandatory and is not optional bookkeeping.** −206 ms over a session is
-5× the alignment budget. `sync_imu_video.py` (B4) must fit a **linear** `device_ts_us → host_ns`
-model across the whole session, not apply a constant offset. The naive endpoint difference is
-unusable: BLE notification jitter alone spans ±67 ms (residual sd 15.9 ms), which swamps the endpoint
-signal. Fit the line; do not subtract two numbers.
-
-### 5.1 The warm-up ramp — do not nod at t=0
-
-The ELP/ShenYao frame rate is **variable and it ramps**:
-
-| Segment | fps | jitter |
-|---|---|---|
-| First third | 21.69 | 8.0 ms |
-| Middle third | 26.05 | 5.4 ms |
-| Last third | **29.76** | **3.8 ms** |
-
-Early frames have both the wrong rate *and* the worst timing jitter. A sync nod placed at t=0 is
-correlated against the least reliable part of the whole recording — the one place where an 8 ms
-jitter directly eats a 40 ms budget.
-
-**So: start recording, let it settle ~60 s, then nod.** This costs ~470 MB of storage and buys the
-alignment its best possible anchor. It also means the nod is genuinely *inside* the stable region
-rather than on its edge.
-
-> An earlier reading of "22.86 fps, 33.8 ms jitter" for this rig came from a 20 s sample taken inside
-> this warm-up transient and is wrong as a whole-clip figure. The declared 25.41 fps is the honest
-> mean. Corrected in [`ironpal-poc-to-production-transfer.md`](ironpal-poc-to-production-transfer.md)
-> §2.1.
+**Explicit stop rule.** This project competes with collecting training data, which is the actual goal.
+If C0–C2 have not passed within a bounded effort, keep ShenYao and revisit only when storage or
+alignment demonstrably blocks real sessions.
 
 ---
 
-## 6. Failure modes, and how each is detected
+## 11. What changes elsewhere if this lands
 
-The theme: every failure below is **silent at capture time**. Detection has to be designed in, because
-none of them announce themselves in the gym.
-
-| Failure | Looks like | Detection | Mitigation |
-|---|---|---|---|
-| Storage exhausted mid-session | Video simply ends | Compare video duration vs IMU session span | Free-space gate (§1.1); shorter sessions |
-| Phone battery dies | Both streams end | `meta.json` stays `partial: true` | Powered OTG hub; charge to 100 % |
-| BLE drops mid-set | IMU gap, video continues | **`seq_gaps > 0` in `meta.json`** | Invalidate the affected span — never interpolate across it |
-| Nod missed or off-camera | Correlation finds no anchor | B4 reports low peak correlation | Nod again mid-session as a second anchor |
-| OTG unseated | Video ends, IMU continues | Duration mismatch | Tape the connector; check preview after mounting |
-| Autofocus hunting | Staging frames soft | Frame-sharpness check in `review-takes` | Confirm AF off (§2) |
-| Wrong rotation assumed at ingest | Everything upside down | Mat text unreadable / watch on wrong wrist | Rotation from session metadata, never hardcoded |
-
-**`seq_gaps` deserves emphasis.** The firmware ring-buffers rather than dropping silently, so a gap
-means the *link* lost notifications. That span's alignment is unreliable, and the correct response is
-to mark it invalid. Interpolating across it fabricates motion that never happened and would train the
-model on it.
-
----
-
-## 7. Validation — what makes a session usable
-
-Run this checklist on the **first** session before capturing several more against an unvalidated
-procedure.
-
-- [ ] Video duration ≈ IMU session span (within a few seconds)
-- [ ] `meta.json`: `partial: false`, `seq_gaps: 0`, `mtu ≥ 109`
-- [ ] Filename wall clock matches `started_wall_ms` to within seconds
-- [ ] The nod is visible in the video **and** obvious in gyro magnitude
-- [ ] Cross-correlation peak is sharp and unambiguous, offset within **< 40 ms** after the linear drift fit
-- [ ] Rotation recorded in session notes (180° on this rig)
-- [ ] A staging frame exists where a plate face is legible — the weight-OCR path needs it
-- [ ] Battery ≥ 20 % at the end, and no thermal throttling observed
-
-If the correlation peak is broad or ambiguous, **the session is not aligned — it is guessed**. Log it
-as such rather than feeding it to training. A mislabelled boundary is worse than a missing session,
-because it is invisible downstream.
-
----
-
-## 8. What this plan does not solve
-
-Being explicit about the ceiling, since these are the reasons the in-app plan exists:
-
-- **The motion gate cannot act.** ShenYao does not listen, so the IMU's rest-detection cannot stop
-  recording. The whole session is captured, which is why storage binds at 36 minutes.
-- **Frame timing stays reconstructed, not recorded.** PTS plus a ramping frame rate is recoverable but
-  fragile, and every downstream tool must keep getting it right.
-- **Alignment stays an estimate.** Cross-correlation with a nod anchor is good; a shared capture clock
-  would be exact.
-
-Those three are precisely what [`ironpal-elp-camera-in-app-plan.md`](ironpal-elp-camera-in-app-plan.md)
-removes. **Nothing here should be deferred waiting for it** — this procedure is what produces training
-data now, and the in-app path only earns its cost once real sessions prove where the pain is.
+- **`sync_imu_video.py` (B4) demotes from primary to validator.** Still build it — C5 needs it, and it
+  remains the fallback for every ShenYao-captured session.
+- **The nod gate becomes optional**, and the "wait ~60 s before nodding" rule in the ShenYao procedure
+  becomes moot.
+- **The wireless-offload plan improves at the source** — gated clips of 20–50 MB are a different
+  problem from 1 GB of continuous 4K, and that beats any transfer-rate optimisation.
+- **The IMU drift fit stays required.** Two crystals, not app architecture.
