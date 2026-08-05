@@ -32,7 +32,7 @@ g. So `BleImuSource` converts g → m/s² and dps → rad/s, and subtracts a slo
 (fc ≈ 0.1 Hz, an octave below the 0.2 Hz rep band). Feeding raw values would be a *semantic* mismatch,
 not just a scale error, and would surface only as quietly mistuned thresholds much later.
 
-**Measured on a Galaxy A52 (SM-A525F, Android 13), headband streaming live:**
+**Measured on a Galaxy A52 (SM-A525F, Android 14), headband streaming live:**
 
 | Check | Result |
 |---|---|
