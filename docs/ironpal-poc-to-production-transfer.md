@@ -210,6 +210,8 @@ valid; the *rationale* column is what stops it being negotiated away.
 | **Per-frame PTS embedded**, or hardware timestamp | Ends reliance on post-hoc cross-correlation |
 | Rotation/orientation **documented in metadata**, not assumed | Case 007: a wrong rotation assumption inverted an entire exercise class |
 | Rolling-shutter readout **no worse than POC** | Fast head motion under rolling shutter warps geometry; a worse sensor changes it in kind |
+| **On-device hardware HEVC encode** | Without it a session is 28 GB instead of 9 GB and no wireless path is viable — an SoC selection criterion, not a firmware feature (`ironpal-wireless-offload-plan.md` §3) |
+| **5 GHz 802.11ac radio + BLE**, µSD buffer | BLE carries control/IMU (0.01 Mbps); Wi-Fi carries bulk. 2.4 GHz is saturated in commercial gyms. Keeps the option of pulling full gated video from real users later (§6 of the offload plan) |
 
 ### IMU
 
