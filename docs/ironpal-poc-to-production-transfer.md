@@ -77,7 +77,7 @@ calibration target and is a bring-up task, not an assumption to carry forward.
 | Horizontal content span | 3400 px of 3840 (88%) |
 | Vertical content span | 2159 px of 2160 (~100%) |
 | Radial luminance | collapses past r≈0.7; **r≥0.8 is essentially black** (mean luminance 1) |
-| Frame rate | **variable** — 22.86 fps measured vs 25.41 declared, 33.8 ms jitter |
+| Frame rate | **variable, and it RAMPS** — 21.69 → 26.05 → **29.76 fps** across the clip (jitter 8.0 → 5.4 → **3.8 ms**). The declared 25.41 is the honest whole-clip mean. An earlier "22.86 fps / 33.8 ms jitter" reading here was a 20 s sample taken inside the warm-up transient — corrected, see [sync-plan grilled](ironpal-imu-camera-sync-plan_grilled.md) Q6 |
 | Mount rotation | **180°** (case 007) |
 | Codec | H.264 Baseline, ~62 Mbps |
 
