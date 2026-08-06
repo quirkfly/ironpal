@@ -145,6 +145,90 @@ the **dev-board outline**, not the product:
 
 ---
 
+## 7b. Evaluated 2026-08-06: swapping to the SVPRO bare board — **REJECTED**
+
+**Question asked:** replace the current camera with a caseless board that fits the headband better —
+does it have a fisheye, and if not, can one be fitted?
+
+### The two parts, confirmed from the listings
+
+| | **Current** — [`B0CYSP85LP`](https://www.amazon.com/ELP-Computer-Simultaneously-Security-200degree/dp/B0CYSP85LP) | **Proposed** — [`B0D6BNMV8X`](https://us.amazon.com/SVPRO-Lightburn-Computer-Raspberry-Windows/dp/B0D6BNMV8X) |
+|---|---|---|
+| Vendor / model | ELP 4K HDMI+USB | SVPRO 12MP USB |
+| Sensor | Sony **IMX415**, 1/2.8", 8 MP | Sony **IMX577**, 1/2.3", 12 MP |
+| Lens | **1.56 mm fisheye, ~200°** | **M12 manual focus, 88° HFOV** |
+| Modes | 4K30 | 4K30, 1080p120 |
+| Mount | M12 | M12 |
+
+**Answer to the question: no, it has no fisheye — it is 88° HFOV.**
+
+### Why that is disqualifying, not a compromise
+
+**88° is less than half the current field of view**, and §5 already set **≥180°** as the bar (D3/D4)
+and rejected a 140° candidate for failing it. 88° is not a step down; it is a different product
+class — roughly a normal webcam cone.
+
+The reason the bar exists is worth restating, because it is the whole premise of a headband rig:
+**you do not control where you look while lifting.** A ~200° lens means the implement stays in frame
+whether or not you glance at it. At 88°, capture becomes aim-dependent — hands out wide (cable fly,
+lateral raise) leave the frame entirely, and a barbell's loaded ends sit outside it. The fisheye is
+not there for image quality; it is there to buy **angle-independence**.
+
+This part is also already in the log's own market note (§5): *"Entire ELP/Svpro stock is
+IMX317/IMX577, 80–100°."* The proposed board is that exact family.
+
+### The stated reason for switching does not survive contact
+
+The motivation was fit — a caseless board sits in the headband better. But **de-casing the current
+camera already yields a bare board**: §7 records it as a 38 × 38 mm module with mounting ears and an
+HDMI connector. The SVPRO is a comparable bare board. So the swap buys little or no fit benefit while
+losing the single hardest component to source.
+
+**There is one genuine size complaint hiding in there, though**, and it has a better answer: the
+current unit is the **HDMI + USB** variant, and that HDMI connector is bulk serving no purpose here.
+ELP sells the same IMX415 sensor with **USB-only** boards, in **38 × 38 mm and 32 × 32 mm**. That is
+the size fix — same sensor, same fisheye family, less board.
+
+### Could a fisheye be fitted to the SVPRO instead?
+
+Mechanically yes — it is an M12 (S-mount) board, and per §5 ELP's own range is *"same board, different
+lens"* across 110/120/150/170/185/200°, so the lens is genuinely the variable. But for this specific
+swap it is the wrong trade:
+
+- The IMX577 is **1/2.3", physically larger than the IMX415's 1/2.8"**, so it needs a lens with a
+  **larger image circle**. A ~200° M12 fisheye that covers 1/2.3" without heavy vignetting is rarer
+  and bulkier than one for 1/2.8" — the problem gets *harder*, not easier.
+- Swapping M12 lenses means **re-focusing by hand** (screw depth), on a rig whose weakest link is
+  already weight-plate legibility.
+- Net effect: pay for a new board, then pay again for a scarce lens, to arrive back where you started.
+
+### Recommendation
+
+1. **Do not buy `B0D6BNMV8X`.** It fails the ≥180° requirement by a wide margin.
+2. **Keep the current camera for session 01.** De-casing already solves the fit problem it was meant
+   to solve.
+3. **If size is still a problem after a real session**, move to an **ELP USB-only IMX415 fisheye**
+   (drop the HDMI connector; consider the 32 × 32 mm board) — same sensor, same lens family.
+4. **Do not change sensor family before §6 is answered.**
+
+### The strategic point — do not buy hardware to fix an unmeasured problem
+
+§6 still records the only question worth money: *can the pipeline read the working weight from a 4K
+fisheye after reframe, or does it abstain too often?* That gate has **not** been answered.
+
+There is a real tension worth acknowledging, because the instinct behind the question is not baseless:
+the fisheye costs pixels. Measured in
+[`ironpal-poc-to-production-transfer.md`](ironpal-poc-to-production-transfer.md) §2.1, **21.1 % of
+every frame is black** outside the image circle and radial luminance collapses past r ≈ 0.7. So "4K"
+overstates what reaches a plate face, and *if* weight OCR fails, trading FOV for pixel density is a
+legitimate future move.
+
+But that trade can only be made **after** the FOV/distortion calibration (still outstanding, needs an
+ArUco/checkerboard target) and a weight-OCR coverage number. Swapping to 88° now would answer the
+pixel question by destroying the coverage the design depends on — and would do it blind.
+
+---
+
 ## 8. Cross-references
 - Build plan + BOM + per-unit costs: `ironpal-tier1-capture-module-spec.md`
 - Weight-reading method + abstain-first gate: `.claude/skills/weight-lifted-analysis/SKILL.md`,
