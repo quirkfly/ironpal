@@ -184,10 +184,14 @@ camera already yields a bare board**: §7 records it as a 38 × 38 mm module wit
 HDMI connector. The SVPRO is a comparable bare board. So the swap buys little or no fit benefit while
 losing the single hardest component to source.
 
-**There is one genuine size complaint hiding in there, though**, and it has a better answer: the
-current unit is the **HDMI + USB** variant, and that HDMI connector is bulk serving no purpose here.
-ELP sells the same IMX415 sensor with **USB-only** boards, in **38 × 38 mm and 32 × 32 mm**. That is
-the size fix — same sensor, same fisheye family, less board.
+**There is one genuine size complaint hiding in there, though.** The current unit is the **HDMI + USB**
+variant, and ELP's own spec calls it a **"double-deck configuration"** — two stacked PCBs — to carry an
+HDMI output this project never uses. That is real thickness in a headband, not just footprint.
+
+⚠️ **Correction (same day).** This section first recommended "move to an ELP USB-only IMX415 fisheye,
+32 × 32 mm board". **That product does not appear to exist** — see §7c. The recommendation was made
+from a search snippet reporting "38\*38 / 32\*32 mm" board options, which turns out to belong to the
+*narrow-lens* USB-only line, not the fisheye one.
 
 ### Could a fisheye be fitted to the SVPRO instead?
 
@@ -207,8 +211,8 @@ swap it is the wrong trade:
 1. **Do not buy `B0D6BNMV8X`.** It fails the ≥180° requirement by a wide margin.
 2. **Keep the current camera for session 01.** De-casing already solves the fit problem it was meant
    to solve.
-3. **If size is still a problem after a real session**, move to an **ELP USB-only IMX415 fisheye**
-   (drop the HDMI connector; consider the 32 × 32 mm board) — same sensor, same lens family.
+3. **If size is still a problem after a real session**, see §7c — the obvious "USB-only fisheye"
+   product is not on the shelf, and the routes that remain each carry a caveat.
 4. **Do not change sensor family before §6 is answered.**
 
 ### The strategic point — do not buy hardware to fix an unmeasured problem
@@ -226,6 +230,51 @@ legitimate future move.
 But that trade can only be made **after** the FOV/distortion calibration (still outstanding, needs an
 ArUco/checkerboard target) and a weight-OCR coverage number. Swapping to 88° now would answer the
 pixel question by destroying the coverage the design depends on — and would do it blind.
+
+---
+
+## 7c. Searched 2026-08-06: is there a USB-only IMX415 fisheye, 32 × 32? — **NOT OFF THE SHELF**
+
+Checked ELP's own catalogue page for the USB-only IMX415 family
+([Fixed Focus USB4K03 Series](https://www.elpcctv.com/fixed-focus-usb4k03-series-c-97_110.html)).
+**All eight products, none with a fisheye:**
+
+| Model | Lens |
+|---|---|
+| `ELP-USB4K03-L36` | 3.6 mm, **84° HFOV** |
+| `ELP-USB4K03-V100` | 100°, no distortion |
+| `ELP-USB4K03-H110` | 110°, low distortion |
+| `ELP-USB4K03-H120` | 120°, low distortion |
+| `ELP-USB4K03-SFV/MFV (2.8–12)`, `(5–50)` | varifocal zoom |
+
+**The USB-only line tops out at 120°.** Every IMX415 fisheye ELP retails sits on the
+**`USB4KCAM01H` (USB + HDMI, 38 × 38, double-deck)** line: `-L170` 150°, `-SL170` 170°, `-L185` 180°
+($96.80), and the 200° variant currently in hand.
+
+**So the two attributes cannot currently be bought together.** The 32 × 32 board option is real, but
+only for the narrow-lens line.
+
+### The routes that remain, and what each costs
+
+| Route | Reality |
+|---|---|
+| **A. Stay on the current 200° double-deck** | Works today; the extra deck is the price of a lens nobody else sells. **Default.** |
+| **B. Ask ELP for a USB4K03 + fisheye** (`sales@elpcctv.com`) | An [Alibaba listing](https://www.alibaba.com/product-detail/ELP-4K-USB-Camera-Module-Ultra_1600359236468.html) advertises a *"4K USB module, 170° fisheye, IMX415"* at ~$91, and a web search reported a model string `ELP-USB4K03-L170` — but **that model is absent from ELP's retail catalogue**, so treat it as an OEM/inquiry item, not a confirmed purchase. ELP does build to order (§5 already records their inquiry-only channel). **Also note 170° < the ≥180° bar** this log set. |
+| **C. Buy a narrow USB4K03 (32 × 32) and swap in an M12 fisheye** | The most direct route to *USB-only + small + wide*, and credible because §5 already established ELP's range is "same board, different lens" — the boards are M12. The current 200° lens is a **1.56 mm M12** for 1/2.8", so the part is identifiable. Risks: back-focal distance must suit the board, and focus is set by screw depth **by hand** — on the rig whose weakest link is already plate legibility. |
+| **D. `ELP-USB4KHDR01-BL170`** — 170° fisheye, USB-only, $74.76 | **Wrong sensor.** §5 already recorded that the `USB4KHDR01` family is **IMX317**, not IMX415, and the matching Amazon listing confirms IMX317. Rejected on D5. |
+
+### Recommendation
+
+**Take route A for now, and do not spend on this yet.** The size complaint is real but second-order:
+the double-deck is a few millimetres, whereas §6's unanswered question — *can weight be read through
+the fisheye at all?* — decides whether this sensor/lens class survives. Session 01 informs that.
+
+If size becomes the binding constraint afterwards, **route C is the one to price**, and route B is a
+free email worth sending in parallel.
+
+**Lesson worth keeping:** a search snippet said the fisheye module came in "38\*38 / 32\*32 mm", and
+that was repeated here as a recommendation before the vendor's own catalogue was checked. The size
+option was real; the *pairing* with a fisheye was not. Verify the combination, not the attributes.
 
 ---
 
