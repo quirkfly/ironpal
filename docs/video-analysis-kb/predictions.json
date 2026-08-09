@@ -39,7 +39,15 @@
       "unit": "kg",
       "confidence": 0.4,
       "abstained": true,
-      "method": "plate denom 2kg read; bar weight unverified -> abstain on total"
+      "method": "plate denom 2kg read; bar weight unverified -> abstain on total",
+      "predicted_reps": 5,
+      "reps_range": [
+        3,
+        6
+      ],
+      "reps_confidence": 0.3,
+      "reps_abstained": false,
+      "reps_method": "looming-cycle count; aliasing-vs-legibility bind (case 002)"
     },
     {
       "id": "003",
@@ -47,7 +55,12 @@
       "unit": "kg",
       "confidence": 0.3,
       "abstained": true,
-      "method": "lever rig: 10kg plate mass read but working resistance ratio unknown -> abstain"
+      "method": "lever rig: 10kg plate mass read but working resistance ratio unknown -> abstain",
+      "predicted_reps": 0,
+      "reps_range": null,
+      "reps_confidence": 0.0,
+      "reps_abstained": false,
+      "reps_method": "declared 'static/setup'; rep confidence NOT recorded in the case -> 0.0 so it cannot be scored confident-wrong on an invented number"
     },
     {
       "id": "007",
@@ -55,7 +68,15 @@
       "unit": "kg",
       "confidence": 0.5,
       "abstained": true,
-      "method": "two spinlock DBs used together; DB#1 = 2x2kg DOMYOS read (dual 2KG/4.4LBS stamp) -> 4kg provisional; DB#2 = 4 unread small/mid plates -> gate fails on totals, abstain"
+      "method": "two spinlock DBs used together; DB#1 = 2x2kg DOMYOS read (dual 2KG/4.4LBS stamp) -> 4kg provisional; DB#2 = 4 unread small/mid plates -> gate fails on totals, abstain",
+      "predicted_reps": 12,
+      "reps_range": [
+        10,
+        14
+      ],
+      "reps_confidence": 0.5,
+      "reps_abstained": false,
+      "reps_method": "looming cycles, alternating (case 007)"
     }
   ]
 }

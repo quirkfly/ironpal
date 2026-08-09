@@ -54,7 +54,11 @@
       "tolerance_kg": 2.5,
       "confirmed": "denomination",
       "scorable": false,
-      "notes": "Plate denom 2kg (4.4LB) lifter-confirmed 'spot on'; TOTAL (with bar) never cleanly confirmed -> not scored on total. Denomination read is a separate confirmed fact."
+      "notes": "Plate denom 2kg (4.4LB) lifter-confirmed 'spot on'; TOTAL (with bar) never cleanly confirmed -> not scored on total. Denomination read is a separate confirmed fact.",
+      "actual_reps": 4,
+      "rep_signal": "vision",
+      "scorable_reps": true,
+      "notes_reps": "Barbell Curl. Ledger: predicted ~5 (range 3-6), actual 4."
     },
     {
       "id": "003",
@@ -65,7 +69,11 @@
       "tolerance_kg": 2.5,
       "confirmed": "plate-mass",
       "scorable": false,
-      "notes": "10kg PLATE MASS confirmed, but LEVER rig -> working resistance != mass (unknown ratio). Not scored as working weight. Plate mass recorded for reference only."
+      "notes": "10kg PLATE MASS confirmed, but LEVER rig -> working resistance != mass (unknown ratio). Not scored as working weight. Plate mass recorded for reference only.",
+      "actual_reps": 5,
+      "rep_signal": "hard",
+      "scorable_reps": true,
+      "notes_reps": "Triceps Cable Pushdown. Ledger: counted 0 ('static/setup') -> REP MISS."
     },
     {
       "id": "007",
@@ -76,7 +84,11 @@
       "tolerance_kg": 2.5,
       "confirmed": "total",
       "scorable": true,
-      "notes": "PER DUMBBELL: 6kg plates (2+1 per end) + 1kg bar = 7kg; two identical DBs used (alternating curl). Run prediction ABSTAINED (correct: provisional 4kg plate read for DB#1 was wrong - hidden 1kg inners behind the 2kg outers, case-004 geometry). Exercise (alternating two-DB biceps curl) and reps (~12 total / 6 per arm) also lifter-confirmed correct."
+      "notes": "PER DUMBBELL: 6kg plates (2+1 per end) + 1kg bar = 7kg; two identical DBs used (alternating curl). Run prediction ABSTAINED (correct: provisional 4kg plate read for DB#1 was wrong - hidden 1kg inners behind the 2kg outers, case-004 geometry). Exercise (alternating two-DB biceps curl) and reps (~12 total / 6 per arm) also lifter-confirmed correct.",
+      "actual_reps": 12,
+      "rep_signal": "vision",
+      "scorable_reps": true,
+      "notes_reps": "Alternating DB Biceps Curl, 12 total lifts / 6 per arm."
     }
   ]
 }
