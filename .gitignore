@@ -41,3 +41,7 @@ input/x/
 # The wger dump is CC-BY-SA 4.0 -- committing it would pull copyleft data into
 # the repo. Only the derived ontology.json (public-domain sources) is tracked.
 /input/kb/ontology-sources/
+
+# Sealed ground-truth logs — must not reach the analyst before predictions are written
+# (blind protocol, see docs/ironpal-essential-exercise-video-capture-plan.md §7b)
+input/kb/groundtruth-sealed/

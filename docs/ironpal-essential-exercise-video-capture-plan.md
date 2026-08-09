@@ -1,5 +1,11 @@
 # Capturing all 37 Tier-1 exercises in three gym visits
 
+> **Decisions from the design interview are in
+> [`..._grilled.md`](ironpal-essential-exercise-video-capture-plan_grilled.md) and are folded in
+> below.** Headline: this is a **coverage / feasibility pass**, not training-data collection. The
+> deliverable is a capability map and an honest failure list — which of the 37 the rig can and cannot
+> handle. The ~13 training sessions follow, targeted only at what passes.
+
 Plan for collecting labelled clips of the **37 Tier-1 exercises** in
 [`docs/video-analysis-kb/ontology.json`](video-analysis-kb/ontology.json), using the headband rig
 (de-cased ELP fisheye + Nano 33 BLE Rev2), in **exactly three visits**.
@@ -13,10 +19,13 @@ the nods matter).
 
 ## 0. Preconditions — do not start this programme until both are true
 
-**1. The rig has survived one real session.** Session 01 was the shakedown. Nothing in this plan is
-worth attempting until the de-cased board has proven it survives sweat and a full session, and until
-the **new mount rotation is measured and written down** (the old 180° belonged to the case mount,
-which no longer exists).
+**1. The rig is built and bench-tested at home.** ⚠️ **Session 01 never happened** (confirmed: no
+clips since 2026-08-02), so the rig is **unproven**. The shakedown is therefore folded into the front
+of Visit 1 — see §1.2 — and Visit 1 is now the smallest, most controlled group.
+
+Before Visit 1 is scheduled: de-case, mount, insulate, and run the home bench test in
+[`ironpal-gym-session-01-plan.md`](ironpal-gym-session-01-plan.md) §1.5. **Measure and write down the
+new mount rotation** — the old 180° belonged to the case mount, which no longer exists.
 
 **2. Storage is freed.** At ~62 Mbps ≈ **465 MB/min**, the ~17 GB currently free is **~36 minutes**.
 Each visit below needs 25–35 minutes of *recorded* video. **Free to ≥ 32 GB (~68 min)** and every
@@ -32,7 +41,7 @@ visit has comfortable headroom. This is the single cheapest thing that de-risks 
 Split by **rep-signal class first** (the user's requirement: IMU-dependent work last), then by
 **equipment station** so a visit is not spent walking laps of the gym.
 
-### Group 1 — Free weights, head still (12) · *Visit 1*
+### Group 1 — Free weights, head still (12) · *Visit 2*
 
 Weight lives on **plate faces and cast numbers** — the known-hard OCR case.
 
@@ -51,7 +60,7 @@ Weight lives on **plate faces and cast numbers** — the known-hard OCR case.
 | 11 | Dumbbell Biceps Curl | dumbbell | vision | cast number |
 | 12 | Single-Arm Dumbbell Row | dumbbell | vision | cast number |
 
-### Group 2 — Stations, head still (10) · *Visit 2*
+### Group 2 — Stations, head still (10) · *Visit 1 — includes the shakedown*
 
 Weight lives on **pin stacks** — painted, printed, the OCR case most likely to work.
 
@@ -97,14 +106,16 @@ Every `imu` and `fusion` exercise. **This is the visit the Nano exists for.**
 Each visit answers a **different question**, which means a bad visit invalidates one question rather
 than the whole dataset:
 
-| Visit | Question it answers |
-|---|---|
-| **1** | Can vision count reps *and* can OCR read **cast/plate** weights? *(expect many weight abstentions — that is the honest baseline, not a failure)* |
-| **2** | Same rep question, but the **easy** weight case. If OCR does not work on painted pin stacks, it will not work anywhere. |
-| **3** | Does the **IMU rep path** actually work on the exercises it was chosen for? |
+| Visit | Group | Question it answers |
+|---|---|---|
+| **1** | 2 — stations | Does the **rig** work at all (shakedown), and can OCR read the **easy** weight case — painted pin stacks? **If OCR fails here it will not work anywhere.** |
+| **2** | 1 — free weights | Same rep question, but the **hard** weight case: cast plates and dumbbell cast numbers. *Expect many abstentions — that is the honest baseline, not a failure.* |
+| **3** | 3 — IMU | Does the **IMU rep path** actually work on the exercises it was chosen for? |
 
-Visits 1 and 2 also bracket the weight-reading problem from both ends, which is exactly the open
-question in [`ironpal-capture-hardware-decision-log.md`](ironpal-capture-hardware-decision-log.md) §6.
+Visits 1 and 2 bracket the weight-reading problem from the easy and hard ends, which is exactly the
+open question in [`ironpal-capture-hardware-decision-log.md`](ironpal-capture-hardware-decision-log.md)
+§6. **Running the easy case first is deliberate**: a failure in Visit 1 indicts the pipeline, whereas
+the same failure in Visit 2 alone would only indict the plates.
 
 ### 1.2 ⚠️ Visit 3 is not a workout — read this before loading a bar
 
@@ -309,6 +320,53 @@ Then:
 
 **Do not batch all three visits before scoring.** Score after **Visit 1** — if rep counting or weight
 reading fails systematically, Visits 2 and 3 should change before they are spent.
+
+---
+
+## 7b. Scoring rules, blind protocol and halt conditions
+
+Settled in the design interview — full reasoning in
+[`..._grilled.md`](ironpal-essential-exercise-video-capture-plan_grilled.md).
+
+### What counts as a PASS, per axis
+
+| Axis | PASS | Scorer |
+|---|---|---|
+| **Exercise** | matches `canonical_name` **or** any listed `synonyms` entry in the ontology | manual |
+| **Reps** | true count inside the reported range **AND** range width ≤ 2 (±1). **Visit 3 `imu` exercises: exact integer** — the IMU is supposed to deliver it | **`score_reps.py` — to be built** |
+| **Weight** | `\|predicted − actual\| ≤ tolerance_kg` for that rig | [`score_weights.py`](../scripts/kb/score_weights.py) ✅ exists |
+
+The range-width cap is the point: without it a useless "6–12" scores as correct.
+
+**Four states, not two** — mirroring the weight scorer: **correct / wrong / abstained /
+confident-wrong**. Abstentions cost **coverage, not correctness**. `confident-wrong` must stay **0**.
+
+### Blind protocol — set 1 blind, set 2 open
+
+Set 1 of every exercise (**37 clips**) is *the measurement*; set 2 is for debugging and KB
+improvement with labels in hand. The mechanic must be followed literally or the numbers are worthless:
+
+1. Photograph the paper log into a **gitignored** staging path — `input/kb/groundtruth-sealed/`.
+   **Not** into `docs/`.
+2. Analyse every **set-1** clip and write `predictions.json` **before** any label for it is visible.
+3. Only then transcribe the log into [`ground-truth.md`](video-analysis-kb/ground-truth.md) and run
+   the scorers.
+4. Set-2 clips may be analysed freely with labels visible.
+
+### Halt conditions — stop after Visit 1, do not spend Visits 2–3 the same way
+
+| Condition | Halts? |
+|---|---|
+| **Any confident-wrong reading** | ✅ method bug; would poison Visits 2–3 identically |
+| **Sync/alignment failure** — low correlation peak, or `seq_gaps > 0` on most blocks | ✅ rig-level; repeats identically |
+| **Video unusable** — framing, focus, sweat, board death | ✅ rig-level; unrecoverable by analysis |
+| **Recognition failure > ~30 %** | ✅ recognition does not depend on plate legibility, so this is a pipeline problem |
+| **Rep abstention on `imu` exercises** | ✅ the IMU path is not working |
+| **Weight abstention on cast plates / cast numbers** | ❌ **expected baseline** — halting here destroys the Visit 1 ↔ Visit 2 comparison |
+| **Rep abstention on `vision` exercises** | ❌ the skill states egocentric vision cannot certify an integer |
+
+The abstention tripwire is **scoped by axis on purpose**: as a single blunt rate it would blind the
+very experiment the visits are built around.
 
 ---
 
