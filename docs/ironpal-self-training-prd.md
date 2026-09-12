@@ -1,13 +1,15 @@
 # IronPal Self-Training — Product Requirements Document
 
-**Status:** Draft v1.1 · 2026-09-13 — design review complete (auto mode)
+**Status:** Draft v1.2 · 2026-09-13 — design review complete (auto mode); **revised the same day for
+the two founding premises (§1.4): one home gym per user, and one user's data serving the whole gym**
 **Owner:** founder (solo — product, engineering, user zero)
 
 > **Decisions from the design review are in
 > [`ironpal-self-training-prd_grilled.md`](ironpal-self-training-prd_grilled.md) (Q1–Q26) and are
-> folded in below.** The review ran **without user interaction**: 13 decisions rest on evidence in
-> the repo, 10 are assumptions tagged for veto, 3 are open (data sharing, monetisation, marketing
-> claims — §15). Read the ledger's "worth a veto" list before building on §8.2's thresholds.
+> folded in below.** The review ran **without user interaction**: 15 decisions rest on evidence in
+> the repo, 15 are assumptions tagged for veto, 5 are open (data-sharing legal basis, the gym
+> partnership and its reward, monetisation, marketing claims — §15). Read the ledger's "worth a
+> veto" list before building on §8.2's thresholds or §6.5's gym pack.
 **Working title of the feature:** *Campaign* (the gamified self-training mode)
 **Supersedes:** the centralised-training path in
 [`ironpal-supervised-learning-phase-plan.md`](ironpal-supervised-learning-phase-plan.md) (Track B as a
@@ -34,6 +36,10 @@ is presented as a game: a first-person campaign whose "first-person view" is lit
 camera, whose targets are plates and pin stacks, whose hits are reps, and whose levels are exercises
 that the user *certifies* by recording enough clean, correctly-tagged sets. The reward for finishing a
 level is real: that exercise is now recognised, counted and logged automatically in live workouts.
+Because each user trains at one home gym, the equipment-side knowledge one committed user builds
+there (which machines, which stacks, which plates, what they look like from the headband) is
+packaged as a **gym pack** that every other member of that gym starts from — and the user who built
+it, the **Scout**, is rewarded when the gym adopts it (§1.4, §6.5).
 
 ---
 
@@ -75,14 +81,54 @@ and the game must not pretend otherwise (§5.3).
 
 ---
 
+### 1.4 The two founding premises
+
+The initiative rests on two premises stated by the founder, and the design has to be honest about
+what each one buys.
+
+**Premise 1 — a user trains at the same gym, consistently.** The environment is controlled and
+familiar: the same stations, stacks, plate sets, lighting and floor. Self-training therefore does not
+have to generalise across gyms at all; it has to get *this* gym right, and it gets many repeated
+looks at it.
+
+**Premise 2 — many other members of that gym can profit from user A's data.** The first member who
+plays through the campaign at a gym leaves behind an accurate map of that gym's equipment as seen
+from a headband. Every later member should start from that map instead of from zero.
+
+**The reward.** When adoption at the gym happens, user A is awarded a discount on their gym
+membership or a comparable benefit, so that continuing to contribute high-quality labelled data is
+in their interest.
+
+**What actually transfers from user A to user B — and what does not.** This is the design-critical
+split, and the repo already contains the evidence for it:
+
+| Channel | Transfers across bodies at the same gym? | Why |
+|---|---|---|
+| **Equipment atlas** — which stations exist, what each looks like from the headband, stack label layout and increment per machine, plate inventory and colours, dumbbell rack labels | **Yes, strongly.** | This is a property of the *gym*, not the lifter. It is exactly what the weight-reading procedures need (`weight-reading.md`: count empty holes, per-rig calibration note) and what the vision arbiter needs for exercise ID. |
+| **Visual exemplars per station** (cropped implement/stack frames, never wide frames) | **Yes.** | Same machine, same paint, same angle range from a headband. |
+| **Weight priors per station** (the typical loads members use) | **Weakly** — as a prior only. | Loads are personal; the pack carries the distribution, not a value. |
+| **IMU fingerprints** | **No, not as truth.** | `ironpal-supervised-learning-phase-plan.md` §1.2b: an IMU trace "is a property of the human movement, not the paint on the machine". Cross-body IMU generalisation is the risk the POC flagged (Q2). User A's IMU templates can serve user B only as **pooled priors**, exactly like the founder's. |
+
+So premise 2 is **true for the equipment and weight side, and only a prior for the rep-counting
+side**. The gym pack (§6.5) is built on that split; the game's Scout mechanic (§8.6) rewards the part
+that genuinely transfers.
+
+---
+
 ## 2. Goals and non-goals
 
 ### 2.1 Goals
 
 - **G1 — Zero central training.** No IronPal-run labelling pipeline is required for a user to get a
   working recogniser for their exercises.
-- **G2 — Personal, local, incremental model.** The model is on the phone, improves with each confirmed
-  set, can be inspected, exported and deleted by the user.
+- **G2 — Personal, local-first, incremental model.** The model is on the phone, improves with each
+  confirmed set, can be inspected, exported and deleted by the user. Nothing leaves the phone except
+  what the user explicitly contributes to their gym's pack (G7), in reduced form.
+- **G7 — One member's work serves the whole gym.** A Scout's equipment atlas becomes the gym pack
+  every later member at that gym starts from, so their first session already knows the stations,
+  stacks and plates.
+- **G8 — The Scout is rewarded for adoption, not for volume.** The incentive triggers on other
+  members actually using the pack, which is what makes it an incentive for *quality*.
 - **G3 — Labels at source, verified not authored.** The app proposes; the user confirms or corrects.
   A tagging round for one set takes well under a minute and fits inside a normal rest period.
 - **G4 — Real payoff per level.** Finishing an exercise's level turns on automatic recognition for it
@@ -95,7 +141,10 @@ and the game must not pretend otherwise (§5.3).
 ### 2.2 Non-goals (v1)
 
 - Form analysis / coaching feedback (future; the labelled data enables it).
-- Social features: leaderboards, friends, sharing runs.
+- Social features: leaderboards, friends, sharing runs. (The gym pack is infrastructure, not a social
+  feature: members never see each other's sets, names or progress.)
+- Cross-gym generalisation. Premise 1 means a user's model is for their home gym; a second gym is a
+  second campaign map, seeded by that gym's pack if one exists.
 - Training a neural network on the phone. v1's model is the template store (§6). A distilled
   classifier trained *from* the template store is a v2 option.
 - Custom exercises outside the 37 Tier-1 ontology entries (v1.1 — §5.4).
@@ -112,6 +161,9 @@ and the game must not pretend otherwise (§5.3).
 | **User zero** | the founder | Dogfood the loop on all 37 Tier-1 exercises; produce the founder template pack that ships as cold-start priors. |
 | **Committed lifter** (primary) | trains 3–5×/week, follows a programme, already logs sets manually in an app like Fitbod | Stop typing sets. Willing to invest a few sessions if the payoff is automatic logging that is *right*. Will abandon if tagging feels like data entry. |
 | **Beta tester** | 2–3 gym acquaintances on their own phones + a loaned headband | Same as above; additionally the source of cross-user evidence. |
+| **Scout** (user A) | the first committed lifter at a gym to play through the campaign — the founder at gym #1 | Wants their work to count beyond themselves and to be rewarded for it. Needs visible adoption progress and a reward that is real, not points. |
+| **Follower** (user B…N) | later members at the same gym | Wants day-one accuracy on the machines they use. Does not want to know or care who the Scout is. |
+| **Gym operator** (stakeholder, not a user) | owner/manager of the gym | Must consent to headband capture on the premises (a blocking requirement already in the supervised plan §1.2) and is the counterparty for the membership discount. |
 
 **What the primary persona will not tolerate:** being made to record sets that do not count as
 training, being asked to hold a phone mid-set, a game that awards points for junk, and a
@@ -140,6 +192,12 @@ training, being asked to hold a phone mid-set, a game that awards points for jun
 - **C7 — Marketing guardrails.** The feature may be described as "learns your exercises"; weight
   reading remains a vision-assisted, confirm-when-unsure feature and is never claimed as fully
   automatic. Privacy claims stay "one frame to the cloud, deleted", never "no cloud".
+- **C8 — Gym identity without equipment instrumentation.** A gym is identified by the user's choice
+  plus a location check at session start. No QR codes, no stickers, no per-machine tagging — the
+  original no-instrumentation constraint stands at gym level too.
+- **C9 — Contributions are consented and reduced.** Only a Scout who has opted in contributes, and
+  only in the reduced form (§6.5): cropped implement/stack frames and derived calibrations, never
+  clips, never wide frames, never anything a bystander could be identified from.
 
 ---
 
@@ -247,6 +305,41 @@ Runtime cost is negligible: kNN/DTW over tens of windows on a phone is milliseco
 - **Export:** JSON + IMU windows + exemplar frames, for the user or for a future rig migration.
 - **Backup/restore:** the store rides along with the app's normal backup, opt-in; it never syncs to
   IronPal servers by default (§11).
+
+---
+
+### 6.5 The gym pack — how user A's work reaches user B
+
+A **gym pack** is the rig-independent, body-independent part of a gym's stores, assembled on the
+backend from Scout contributions and downloaded by every member who checks in at that gym.
+
+| Pack component | Source | Used by followers for |
+|---|---|---|
+| **Station atlas** | one entry per machine/rack the Scout certified: ontology exercise ids performed there, `weight_read_strategy`, cropped exemplar frames of the station and its stack/plates from the headband viewpoint | exercise-ID arbitration on day one; the tagging round's top-1 proposal at that station |
+| **Weight-reading calibration per station** | stack label layout and increment (count-empty-holes reference), plate inventory and colour code, dumbbell rack labels, bar weights | pre-filling and sanity-checking the weight; fewer OCR abstentions on a known stack |
+| **Weight prior per station** | distribution of confirmed loads (binned, no user ids) | pre-fill |
+| **Pooled IMU priors** | Scout's certified IMU templates, canonicalised, anonymised, **flagged as priors** | the same role the founder's priors play — down-weighted from the follower's first own set, retired at Certified |
+| **Pack metadata** | gym id, version, contributing-scout count, per-station quality score, last update | precedence and refresh |
+
+**Precedence on a follower's phone:** own store → gym pack → founder priors. A follower's own
+confirmed set at a station always outranks the pack; the pack never overwrites a user's data.
+
+**What the pack never contains:** video clips, wide frames, faces, timestamps that place a person
+at the gym, user identifiers, or any IMU window labelled as *truth* for someone else.
+
+**Assembly.** Contributions arrive per certified station as reduced-form bundles (C9). The backend
+merges by station: exemplars are deduplicated, calibrations must agree (a disagreement between two
+Scouts on a stack's increment flags the station for review rather than averaging), quality score =
+the Scout's integrity and glance coverage at that station. Multiple Scouts per gym are normal; credit
+is proportional to accepted contributions per station.
+
+**Refresh.** Members pull the pack on check-in when its version changed. A Scout's later corrections
+at a station (a re-labelled machine, a new plate set) propagate as a new pack version; followers'
+own stores are untouched.
+
+**Why this is not "federated learning".** Nothing is averaged into a shared model; the pack is a
+catalogue of the gym plus priors. That keeps it explainable, deletable per contribution, and inside
+the same instance-based design as §6.1.
 
 ---
 
@@ -414,6 +507,27 @@ Volume follows the phone's media volume; all cues are optional.
 The calibration ritual repeats at the start of every session (shortened: nods + holds), because it
 is what keeps the store valid across rig changes.
 
+### 8.6 Territory — the Scout mechanic
+
+The gym is the map; its stations are the territory. This is the one place the game reaches beyond a
+single player, and it does so without ever showing one member to another.
+
+| Element | What it is |
+|---|---|
+| **Check-in** | choosing the gym (C8) at session start; the map shows this gym's stations |
+| **Uncharted station** | no pack entry yet — the first member to certify an exercise there **charts** it |
+| **Charting** | opting in as Scout and contributing that station's reduced-form bundle (§6.5) after certifying it; one tap after the level's certification screen, with the "what leaves the phone" summary shown every time |
+| **Charted station** | pack entry exists; followers see it as pre-mapped — their tagging rounds start with the Scout's proposals |
+| **Adoption meter** | per gym, per Scout: how many *verified* other members have used the pack in ≥ 3 sessions in the last 30 days. Shown to the Scout as territory held; shown to nobody else |
+| **Reward tiers** | adoption thresholds at which the Scout's benefit is unlocked (§9.8); the benefit itself is external and conditional (§15) |
+| **Scout rank** | cosmetic tier from stations charted × adoption; never gates a feature |
+
+**Verified member** = a session captured with IronPal headband hardware inside the gym's location
+check, on an account with its own device. This is what makes the meter hard to inflate (R13).
+
+**Followers are never asked to become Scouts** until they have certified at least one exercise
+themselves; the offer is then a single, dismissible prompt per station.
+
 ---
 
 ## 9. Functional requirements
@@ -480,12 +594,40 @@ is what keeps the store valid across rig changes.
   the app shows a "what leaves the phone" screen with exactly this.
 - **FR-D3** Storage cap for the feature (default 2 GB) with oldest-first reduction and a visible meter.
 - **FR-D4** Export and delete everything (templates, exemplars, clips, progress) from one screen.
-- **FR-D5** No upload of templates, exemplars or clips to IronPal. **v1 ships with no sharing option
-  in the UI at all.** The store's export format (reduced form: exemplar frames + IMU windows, never
-  clips) is designed so that a later opt-in programme — if it is approved (§15) — needs no schema
-  change.
+- **FR-D5** No upload of a user's templates, exemplars or clips to IronPal **except** a Scout's
+  opt-in, per-station, reduced-form contribution to their gym pack (FR-P4). The contribution is the
+  only egress besides the OCR still, and the app's "what leaves the phone" screen lists both. The
+  legal basis and consent text for contributions are open (§15); until settled, the contribution
+  path ships behind a server-side flag, off.
 
-### 9.7 Accessibility and safety
+### 9.7 Gym pack
+
+- **FR-P1** Gym selection at session start with a location check; a gym record is created on first
+  use; no equipment tagging of any kind.
+- **FR-P2** Download the gym pack on check-in when its version changed; work fully offline with the
+  cached pack.
+- **FR-P3** Apply precedence own store → gym pack → founder priors in the matcher, the vision
+  arbiter and the weight pre-fill; a pack entry never overwrites a user's own data.
+- **FR-P4** A Scout contributes per certified station, opt-in, in reduced form only (C9), with the
+  "what leaves the phone" summary shown at every contribution; contributions are revocable and
+  revocation removes them from the next pack version.
+- **FR-P5** Backend assembly per §6.5: merge by station, flag calibration disagreements for review,
+  score quality, version the pack, keep credit per Scout per station.
+- **FR-P6** A user may belong to several gyms; each has its own campaign map and pack; the user's
+  IMU stores are shared across gyms (they are about the body), the atlas is not.
+
+### 9.8 Scout incentive
+
+- **FR-S1** Compute the adoption meter per gym per Scout from verified sessions only (§8.6).
+- **FR-S2** Reward tiers are configuration, not code; defaults 5 / 20 / 50 verified adopters.
+- **FR-S3** When a tier is reached, notify the Scout and record an eligibility event with the gym id;
+  **fulfilment of the reward is external to the app** and depends on the gym agreement (§15).
+- **FR-S4** Anti-fraud: one account per device per headband; sessions without a location check do not
+  count; adoption by accounts created from the Scout's device or network does not count; the meter
+  is recomputed, never incremented.
+- **FR-S5** A Scout can see their adoption meter and eligibility history; nobody can see who adopted.
+
+### 9.9 Accessibility and safety
 
 - **FR-A1** Every audio cue has a haptic equivalent; every colour state has a shape/label.
 - **FR-A2** No interaction is required within 5 s of gate-close; the debrief waits.
@@ -541,7 +683,26 @@ CREATE TABLE level_progress (
   integrity REAL, xp INTEGER, last_change INTEGER
 );
 CREATE TABLE model_audit (id INTEGER PRIMARY KEY, at INTEGER, exercise_id TEXT, change TEXT, integrity_after REAL);
+
+-- gym pack (local cache of the downloaded pack + this user's contributions)
+CREATE TABLE gyms (id TEXT PRIMARY KEY, name TEXT, lat REAL, lon REAL, pack_version INTEGER, checked_in_at INTEGER);
+CREATE TABLE gym_stations (
+  id TEXT PRIMARY KEY, gym_id TEXT, exercise_ids TEXT, weight_read_strategy TEXT,
+  calibration_json TEXT,                                   -- stack layout/increment, plate set, bar weight
+  weight_prior_json TEXT, quality REAL, pack_version INTEGER
+);
+CREATE TABLE gym_station_exemplars (id TEXT PRIMARY KEY, station_id TEXT, role TEXT, path TEXT);
+CREATE TABLE contributions (                               -- this user's Scout contributions
+  id TEXT PRIMARY KEY, gym_id TEXT, station_id TEXT, exercise_id TEXT,
+  bundle_hash TEXT, state TEXT CHECK (state IN ('pending','accepted','rejected','revoked')),
+  submitted_at INTEGER
+);
 ```
+
+Backend (PostgreSQL) gains `gyms`, `gym_packs` (versioned blobs), `station_contributions`
+(Scout, station, bundle, review state), `adoption_events` (verified sessions per gym per account, no
+content) and `scout_eligibility` (gym, scout, tier, reached_at). Contribution bundles contain the
+reduced form only and are deleted when revoked.
 
 The backend's `session_sets` table (detected vs corrected, device metadata) continues to receive
 **metrics only** (no windows, no frames) so the founder can measure the feature (§12) without
@@ -564,6 +725,10 @@ cross-user generalisation of the priors is measurable from metrics alone.
 | Certifications lost per 100 live sets | ≤ 2 | demotion events |
 | 30-day continuation of the loop | ≥ 40 % of activated users still tagging | sessions |
 | Phone battery per hour | ≤ 25 % | measured on the A52 |
+| Follower day-one uplift (gym #1) | "all correct" rate in a follower's first session ≥ 2× a no-pack baseline; weight abstentions on charted stacks ≤ ½ baseline | P4 A/B: testers with and without the pack |
+| Stations charted at gym #1 | all Tier-1 stations present at the gym | pack metadata |
+| Adoption at gym #1 | ≥ 5 verified adopters within 60 days of the pack existing (tier 1) | `adoption_events` |
+| Scout retention | the Scout still contributes corrections 60 days after charting | `contributions` |
 
 ---
 
@@ -577,9 +742,10 @@ Solo-founder sizing; each phase ends with the founder using it in a real session
 | **P1 — tagging round** | per-set clip recording (own camera path), replay + trace + rep marks, four-question debrief, quality gates, OCR reconcile | one full gym block tagged in-app, ≤ 20 s median | ~3 weeks |
 | **P2 — game layer** | campaign map, mission cards, XP/bonuses, audio/haptics (new small RN sound + haptic libraries; no engine), boot camp, integrity meter, demotion | the three-visit capture plan is played in its fixed visit order: Visit 1 = Campaign 2 station levels + both Campaign 3 levels (shakedown), Visit 2 = Campaign 2 free-weight levels, Visit 3 = all of Campaign 1 | ~3 weeks |
 | **P3 — beta** | 2–3 testers on their own phones with a loaned headband; metrics dashboard from `session_sets` | §12 targets measured on non-founder users; go/no-go on the MVP | ~2 weeks |
+| **P4 — gym pack pilot** | gym check-in, Scout contribution (reduced form, behind the flag), backend assembly, pack download and precedence, adoption meter; the founder is the Scout at gym #1 | testers run one session with the pack and one without; follower uplift measured (§12); the gym operator conversation (permission + reward) has happened | ~3 weeks |
 
 The founder's three-visit capture plan is **not replaced**: it becomes the P2 playthrough, so the
-capability map it was designed to produce comes out of the game.
+capability map it was designed to produce comes out of the game — and, in P4, the first gym pack.
 
 ---
 
@@ -598,25 +764,36 @@ capability map it was designed to produce comes out of the game.
 | R9 | Solo scope creep into a "real" game | no 3D, no social, no economy beyond XP; P2 is capped at three weeks |
 | R10 | Integrity bars (0.80 / 0.90) are unmeasured assumptions | P0 publishes the measured distribution on the founder's own stores before P1 starts; bars are config, not code |
 | R11 | Auto-harvested negatives swallow an untagged real set | periodic windows are never harvested; the debrief queue shows untagged sets until resolved |
+| R12 | The gym partnership (permission + discount) never materialises | the pack and the Scout mechanic work without it; the reward has an IronPal-controlled fallback (§15); permission is needed for capture anyway, so it is one conversation, held before P4 |
+| R13 | Scouts inflate adoption (fake accounts, shared devices) | verified-member rule (§8.6), FR-S4; tiers recomputed from events, never incremented |
+| R14 | A pack leaks bystanders or the gym's own imagery | reduced form only (C9): tight implement/stack crops, no wide frames, no faces; review queue for flagged stations; gym operator consent covers on-premises capture |
+| R15 | User A's IMU priors misclassify user B | pooled priors carry the same down-weight/retire rules as founder priors; a follower's first own set outranks them; cross-body accuracy is measured in P3/P4 before priors are enabled by default |
+| R16 | Two Scouts disagree on a station's calibration | never averaged; station flagged for review; the higher-quality contribution is served meanwhile |
 
 ---
 
-## 15. Open questions — the three decisions that are not the founder-as-engineer's to make alone
+## 15. Open questions — the decisions that are not the founder-as-engineer's to make alone
 
 Everything else in the earlier draft's open list was resolved in the review (ledger Q8, Q9, Q13,
-Q14). These three involve money, law or external claims and stay conditional:
+Q14). These involve money, law or external parties and stay conditional in the text above:
 
-1. **Data-sharing programme (ledger Q24).** Should users ever be able to opt in to sending confirmed
-   sets to IronPal to improve the shipped priors and the KB? Needs consent wording, a GDPR basis for
-   motion data and bystander video, retention and an incentive decision. *Recommendation:* ship v1
-   with no sharing in the UI; keep the export format ready; revisit after P3 with counsel.
-2. **Monetisation boundary (ledger Q25).** Base product or a tier? *Recommendation:* base product —
-   it is how the product becomes accurate. The economy in §8.3 never gates features on XP or
-   certifications, so either answer remains possible.
-3. **Marketing claims (ledger Q26).** *Recommendation under the claim guardrails:* "learns your
+1. **Legal basis and consent for Scout contributions (ledger Q24, reopened as Q28).** Premise 2 makes
+   sharing a feature, not an option, so "no sharing in v1" no longer holds. What is still open is the
+   GDPR basis for motion-derived data and on-premises imagery, the consent wording, and retention.
+   *Recommendation:* build the pipeline behind a server-side flag (FR-D5); reduced form only (C9);
+   get counsel's wording before the flag is turned on for anyone but the founder.
+2. **The gym partnership and the reward (ledger Q32).** A membership discount can only be granted by
+   the gym. *Recommendation:* fold it into the capture-permission conversation the supervised plan
+   already requires (§1.2, a blocking requirement), starting with gym #1; until a gym signs, the
+   Scout reward is an IronPal-controlled benefit (subscription credit or hardware credit) so the
+   mechanic is real from day one and the discount is an upgrade, not a promise.
+3. **Monetisation boundary (ledger Q25).** Base product or a tier? *Recommendation:* base product —
+   it is how the product becomes accurate. The economy in §8.3 never gates features on XP,
+   certifications or Scout rank, so either answer remains possible.
+4. **Marketing claims (ledger Q26).** *Recommendation under the claim guardrails:* "learns your
    exercises" and "counts your reps automatically" only for Campaign-1 exercises and only after the
-   §12 targets are measured; "recognises your lifts" across campaigns; weight stays "reads it when it
-   can, asks when it can't".
+   §12 targets are measured; "recognises your lifts" across campaigns; "knows your gym" only once a
+   pack exists there; weight stays "reads it when it can, asks when it can't".
 
 ---
 
@@ -629,3 +806,9 @@ Q14). These three involve money, law or external claims and stay conditional:
 - **Priors** — founder-recorded templates shipped for cold start.
 - **Staging glance** — the ~2 s still, face-on look at the weight before the set.
 - **Sensor class** — `rep_signal` in the ontology: `imu`, `fusion`, `vision`, `hard`.
+- **Gym pack** — the body-independent part of a gym's stores (station atlas, calibrations, weight
+  priors, pooled IMU priors), assembled from Scout contributions and downloaded on check-in.
+- **Scout** — a member who opts in to contribute certified stations to their gym's pack.
+- **Follower** — a member who starts from the gym pack.
+- **Verified adopter** — a different account, on its own device, with ≥ 3 headband sessions inside
+  the gym's location check in 30 days, using the pack.
