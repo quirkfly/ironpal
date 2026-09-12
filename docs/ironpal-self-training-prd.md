@@ -1,7 +1,13 @@
 # IronPal Self-Training — Product Requirements Document
 
-**Status:** Draft v1 · 2026-09-13
+**Status:** Draft v1.1 · 2026-09-13 — design review complete (auto mode)
 **Owner:** founder (solo — product, engineering, user zero)
+
+> **Decisions from the design review are in
+> [`ironpal-self-training-prd_grilled.md`](ironpal-self-training-prd_grilled.md) (Q1–Q26) and are
+> folded in below.** The review ran **without user interaction**: 13 decisions rest on evidence in
+> the repo, 10 are assumptions tagged for veto, 3 are open (data sharing, monetisation, marketing
+> claims — §15). Read the ledger's "worth a veto" list before building on §8.2's thresholds.
 **Working title of the feature:** *Campaign* (the gamified self-training mode)
 **Supersedes:** the centralised-training path in
 [`ironpal-supervised-learning-phase-plan.md`](ironpal-supervised-learning-phase-plan.md) (Track B as a
@@ -161,6 +167,13 @@ user's own data can and cannot certify, per exercise. The game's campaigns are b
 - **Campaign 3 — "Black ops"** (2 `hard`): explicitly framed as intel-gathering. The level's brief
   states that a headband cannot count these reps and that the mission is exercise + weight only.
 
+### 5.2b Confusability inside Campaign 1
+
+Grouping Tier-1 by motion plane and head-motion class puts **14 of the 15 Campaign-1 exercises in
+one bucket** (sagittal, head moving); pull-up is the only frontal one. The head IMU therefore has to
+separate squat-pattern from hinge-pattern from press-pattern within a single family, and the
+integrity check (§6.3) is run over the **whole campaign's stores**, not per exercise pair.
+
 ### 5.3 The rule the game must never break
 
 **A level may only award a certification the sensor can back.** The `imu` badge is never shown on a
@@ -197,21 +210,27 @@ deletable per set — which also makes GDPR erasure trivial.
 
 ### 6.2 Cold start
 
-The founder's own template pack for the 37 Tier-1 exercises ships in the app as **priors**. They give
-the matcher something to say on day one ("this looks like a goblet squat — confirm?"), which makes the
-first tagging rounds mostly confirmations rather than blank forms. Priors are down-weighted as the
-user's own templates accumulate and are ignored once an exercise is certified (§8.2).
+The founder's own template pack for the 37 Tier-1 exercises ships **inside the app binary** as
+**priors** (≈ 4–5 MB: ~5 windows per exercise at 50 Hz). They give the matcher something to say on
+day one ("this looks like a goblet squat — confirm?"), which makes the first tagging rounds mostly
+confirmations rather than blank forms. Priors are down-weighted as the user's own templates
+accumulate and are ignored once an exercise is certified (§8.2). Beta testers start *with* priors;
+every proposal records whether it matched a prior or a user template, so the cross-user question the
+POC still owes (its Q2) is answered from the logs, and a debug toggle can run a tester priors-off.
 
 ### 6.3 Incremental update — what happens after each confirmed set
 
 1. Slice the set window at the confirmed rep marks; extract features; canonicalise using the session
    calibration.
 2. Append the set template and the rep templates to the exercise's store.
-3. Harvest negatives from adjacent REST windows.
-4. **Self-consistency check (leave-one-out):** re-match every stored set of this exercise, and of its
-   confusable neighbours (same `motion_plane` + `head_motion_class`), against the store without
-   itself. The resulting agreement rate is the exercise's **integrity meter** in the game (§8.3) and
-   the gate for certification.
+3. Harvest negatives from adjacent REST/walk windows — **excluding any window the motion gate
+   flagged as periodic**, so an untagged real set never becomes an `unknown` example.
+4. **Self-consistency check (leave-one-out):** re-match every stored set in the exercise's
+   **campaign** (§5.2b — for Campaign 1 that is all IMU/fusion stores) against the store without
+   itself. The per-exercise agreement rate is the exercise's **integrity meter** in the game (§8.3)
+   and the gate for certification. For Campaigns 2 and 3 the IMU store does not certify, so the
+   meter shown there is glance + exemplar coverage; integrity is still computed for the
+   exercise-ID prior.
 5. If the store exceeds its cap (20 sets per exercise), drop the oldest set whose removal does not
    lower the leave-one-out agreement.
 6. Bump the local model version; write the change to the audit log (what was added, what was
@@ -253,12 +272,17 @@ reading required after the first time.
 
 The user racks/loads/pins the weight, then does the **staging glance**: ~2 s, still, face-on at the
 plate face, dumbbell head or pin. In the game this is *aiming*: the app confirms "target acquired"
-with a sound and a haptic when the camera reports a still, sharp frame with an implement in it. The
-sharpest still is captured for OCR and for the exemplar store. The user then declares the weight
-(pre-filled from the weight prior; one tap if unchanged).
+with a sound and a haptic when the IMU reports stillness and the camera reports a sharp frame (the
+existing sharpest-still selection). The sharpest still is captured for OCR and for the exemplar
+store. **No phone touch happens here** — the weight is declared in the debrief (§7.4), pre-filled
+from the weight prior and from OCR once it has arrived.
 
 The glance is the highest-value two seconds of the whole protocol — it is the only frame weight
 reading can use, and it marks the set boundary in the video.
+
+A *live* first-person preview during ARM exists only on the production module (preview over Wi-Fi).
+On the POC rigs the cue fires without a preview; on the ShenYao rig the app never sees the video
+until ingest, so the debrief there is trace-only.
 
 ### 7.3 FIRE — the set
 
@@ -283,10 +307,13 @@ Label-Studio half of the brief, reduced to four questions the app has already an
 |---|---|---|
 | **Which exercise?** | best match from the store/priors, with the confusable neighbour as the alternative | tap to confirm, or pick the alternative / search |
 | **Where is the set?** | motion-gate boundaries with ±10 s pre/post roll | drag the handles only if wrong |
-| **How many reps?** | IMU peak count, with rep marks drawn on the trace and the replay | confirm; or scrub and add/remove marks; or just type the number |
-| **What weight?** | declared at ARM, cross-checked against OCR | confirm; if OCR disagrees, both values are shown and the user picks |
+| **How many reps?** | IMU peak count, with rep marks drawn on the trace and the replay | confirm; or type the number; or tap a proposed mark to toggle it off/on |
+| **What weight?** | pre-filled from the weight prior; OCR shown only after the user has entered a value, and only if it disagrees | confirm; if OCR disagrees, both values are shown and the user picks |
 
 Rep marks use one frozen convention: **the top of the rep** (lockout / top of the looming cycle).
+**v1 has no free placement of new marks** — the detector's peaks can be toggled, or the count typed.
+If dogfood shows the detector missing more than 5 % of real peaks on `imu` exercises, "add mark at
+playhead" is the first thing added.
 
 "Unreadable" and "not sure" are first-class answers for weight and reps; they never block the set
 from counting toward the exercise level, they only withhold the corresponding bonus.
@@ -333,7 +360,7 @@ the product: "Goblet squat is now recognised automatically."
 | Boot camp | first session: rig calibration ritual + one tutorial level |
 | Rank | overall XP tier (cosmetic) |
 | Integrity meter ("armour") | leave-one-out agreement of the exercise's template store |
-| Hard mode | deliberately varied rig fit / tempo sets that widen the store's coverage |
+| Hard mode | sets recorded under a different rig fit — detected as a ≥ 10° change in the calibration ritual's axis-to-head rotation from the store's median, or self-declared until the ritual is validated on hardware |
 | Mission failed | a quality gate failed, with the reason |
 
 No 3D world, no enemies, no violence: the shooting vocabulary is aimed at iron.
@@ -348,8 +375,11 @@ No 3D world, no enemies, no violence: the shooting vocabulary is aimed at iron.
 | **Certified** | 5 clean sets at ≥ 2 different weights, integrity ≥ 0.9, priors no longer needed | recognised and counted live; auto-logged above the confidence threshold, confirm only on doubt |
 | **Veteran** | certified + 3 sets across ≥ 2 sessions with different rig fits (hard mode) | as certified, with the widest tolerance |
 
-Numbers come from the capture programme (5 sets per exercise, two weights) and the matcher's reject
-threshold; they are tuned in dogfood, not sacred.
+The set counts come from the capture programme (5 sets per exercise, two weights). The integrity
+bars are **assumptions**: 0.80 sits well above the matcher's reject line (0.45) and 0.90 above its
+high-confidence line (0.70), so a certified store clears the live thresholds with margin — but no
+integrity distribution has been measured yet. **P0 must publish the measured distribution before
+these numbers are trusted**; if Campaign-1 integrity clusters near 0.7, the bars move, not the loop.
 
 Certification can be **lost**: if live workouts produce two corrections in a row on a certified
 exercise, it drops to Provisional and the app asks for one confirming set. The game says "integrity
@@ -394,16 +424,17 @@ is what keeps the store valid across rig changes.
   through the existing ring buffer; store both device and host clocks.
 - **FR-C2** Record video **per set only**: from ARM (glance) to gate-close plus pre/post roll, when the
   app owns the camera. When it does not (ShenYao path), record continuously and segment at ingest.
-- **FR-C3** Capture the sharpest still during the staging glance; detect "still + sharp + implement
-  present" on device to fire the target-acquired cue.
+- **FR-C3** Capture the sharpest still during the staging glance; fire the target-acquired cue from
+  IMU stillness + on-device sharpness (no preview required); use a live preview only where the rig
+  provides one (production module).
 - **FR-C4** Detect link loss, saturation and orientation jumps during a set and mark the set.
 - **FR-C5** Pre-check free storage and battery at session start; show remaining recording time.
 - **FR-C6** Run the per-session calibration ritual and store its outputs in the session metadata.
 
 ### 9.2 Tagging round
 
-- **FR-T1** Show the set replay with the IMU trace and proposed rep marks; scrub by dragging the
-  trace; marks snap to detected peaks.
+- **FR-T1** Show the set replay (where the rig provides the file) with the IMU trace and proposed
+  rep marks; scrub by dragging the trace; marks are toggleable, not freely placeable (v1).
 - **FR-T2** Propose exercise (top-1 + confusable alternative), set boundaries, rep count/marks and
   weight; all confirmable in one tap each; a single "all correct" tap when nothing changed.
 - **FR-T3** Support "unreadable" / "not sure" for weight and reps.
@@ -414,9 +445,10 @@ is what keeps the store valid across rig changes.
 
 ### 9.3 Model
 
-- **FR-M1** Append confirmed sets as templates (set + rep windows), canonicalised; harvest negatives.
-- **FR-M2** Compute leave-one-out integrity per exercise after every update, including confusable
-  neighbours.
+- **FR-M1** Append confirmed sets as templates (set + rep windows), canonicalised; harvest negatives
+  from non-periodic REST/walk windows only.
+- **FR-M2** Compute leave-one-out integrity per exercise after every update, over all stores in the
+  same campaign.
 - **FR-M3** Apply level-state transitions from integrity and set counts (§8.2), both up and down.
 - **FR-M4** Ship founder priors; down-weight and retire them per §6.2.
 - **FR-M5** Cap the store per exercise; prune without lowering integrity.
@@ -448,8 +480,10 @@ is what keeps the store valid across rig changes.
   the app shows a "what leaves the phone" screen with exactly this.
 - **FR-D3** Storage cap for the feature (default 2 GB) with oldest-first reduction and a visible meter.
 - **FR-D4** Export and delete everything (templates, exemplars, clips, progress) from one screen.
-- **FR-D5** No upload of templates, exemplars or clips to IronPal unless the user opts in to a
-  separate, clearly described data-sharing programme (§11, open).
+- **FR-D5** No upload of templates, exemplars or clips to IronPal. **v1 ships with no sharing option
+  in the UI at all.** The store's export format (reduced form: exemplar frames + IMU windows, never
+  clips) is designed so that a later opt-in programme — if it is approved (§15) — needs no schema
+  change.
 
 ### 9.7 Accessibility and safety
 
@@ -511,7 +545,8 @@ CREATE TABLE model_audit (id INTEGER PRIMARY KEY, at INTEGER, exercise_id TEXT, 
 
 The backend's `session_sets` table (detected vs corrected, device metadata) continues to receive
 **metrics only** (no windows, no frames) so the founder can measure the feature (§12) without
-receiving user data — subject to the open sharing question below.
+receiving user data. Each proposal also records whether it matched a prior or a user template, so
+cross-user generalisation of the priors is measurable from metrics alone.
 
 ---
 
@@ -540,7 +575,7 @@ Solo-founder sizing; each phase ends with the founder using it in a real session
 |---|---|---|---|
 | **P0 — user-authored model** | open Enroll to all roles; store templates locally; canonicalise; negatives; integrity check; level states without UI polish | founder certifies 3 `imu` exercises at home with the phone IMU | ~2 weeks |
 | **P1 — tagging round** | per-set clip recording (own camera path), replay + trace + rep marks, four-question debrief, quality gates, OCR reconcile | one full gym block tagged in-app, ≤ 20 s median | ~3 weeks |
-| **P2 — game layer** | campaign map, mission cards, XP/bonuses, audio/haptics, boot camp, integrity meter, demotion | the three-visit capture plan is played as Campaigns 2 → 1 → 3 in the planned visit order | ~3 weeks |
+| **P2 — game layer** | campaign map, mission cards, XP/bonuses, audio/haptics (new small RN sound + haptic libraries; no engine), boot camp, integrity meter, demotion | the three-visit capture plan is played in its fixed visit order: Visit 1 = Campaign 2 station levels + both Campaign 3 levels (shakedown), Visit 2 = Campaign 2 free-weight levels, Visit 3 = all of Campaign 1 | ~3 weeks |
 | **P3 — beta** | 2–3 testers on their own phones with a loaned headband; metrics dashboard from `session_sets` | §12 targets measured on non-founder users; go/no-go on the MVP | ~2 weeks |
 
 The founder's three-visit capture plan is **not replaced**: it becomes the P2 playthrough, so the
@@ -561,25 +596,27 @@ capability map it was designed to produce comes out of the game.
 | R7 | Rig change invalidates the store | per-session calibration + canonical frame; a rig-mismatch warning if the ritual's rotation differs from the store's |
 | R8 | Game tone reads as violent or juvenile | targets are iron, never people; vocabulary reviewed against C6/C7; cosmetic ranks only |
 | R9 | Solo scope creep into a "real" game | no 3D, no social, no economy beyond XP; P2 is capped at three weeks |
+| R10 | Integrity bars (0.80 / 0.90) are unmeasured assumptions | P0 publishes the measured distribution on the founder's own stores before P1 starts; bars are config, not code |
+| R11 | Auto-harvested negatives swallow an untagged real set | periodic windows are never harvested; the debrief queue shows untagged sets until resolved |
 
 ---
 
-## 15. Open questions
+## 15. Open questions — the three decisions that are not the founder-as-engineer's to make alone
 
-1. **Data-sharing programme.** Should users be able to opt in to sending confirmed sets (IMU windows,
-   exemplar frames) to IronPal to improve the shipped priors and the KB? Consent text, legal basis,
-   retention and whether any incentive is offered are not settled.
-2. **Monetisation boundary.** Is self-training part of the base product or a tier? Affects whether
-   XP/certifications can ever gate features.
-3. **Marketing claims.** Which of "learns your exercises", "counts your reps automatically",
-   "recognises your lifts" may be used, and for which campaigns, under the claim guardrails.
-4. **Founder prior pack distribution.** Shipping the founder's IMU templates in the app binary vs
-   downloading them — size, update cadence, and whether beta testers should start with or without
-   priors (the cleaner cross-user experiment is without).
-5. **Weight declaration UX.** Declare at ARM (before the set) or in the debrief (after)? ARM makes the
-   OCR cross-check immediate but adds a phone touch before the set.
-6. **Hard-mode definition.** How to detect "different rig fit" reliably enough to award it.
-7. **Rep-mark editing.** Full mark editing on the trace vs "type the number" only, for v1.
+Everything else in the earlier draft's open list was resolved in the review (ledger Q8, Q9, Q13,
+Q14). These three involve money, law or external claims and stay conditional:
+
+1. **Data-sharing programme (ledger Q24).** Should users ever be able to opt in to sending confirmed
+   sets to IronPal to improve the shipped priors and the KB? Needs consent wording, a GDPR basis for
+   motion data and bystander video, retention and an incentive decision. *Recommendation:* ship v1
+   with no sharing in the UI; keep the export format ready; revisit after P3 with counsel.
+2. **Monetisation boundary (ledger Q25).** Base product or a tier? *Recommendation:* base product —
+   it is how the product becomes accurate. The economy in §8.3 never gates features on XP or
+   certifications, so either answer remains possible.
+3. **Marketing claims (ledger Q26).** *Recommendation under the claim guardrails:* "learns your
+   exercises" and "counts your reps automatically" only for Campaign-1 exercises and only after the
+   §12 targets are measured; "recognises your lifts" across campaigns; weight stays "reads it when it
+   can, asks when it can't".
 
 ---
 
