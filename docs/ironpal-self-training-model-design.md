@@ -1,7 +1,14 @@
 # IronPal Self-Training Model — Technical Design
 
-**Status:** Draft v1 · 2026-09-13
+**Status:** Draft v1.1 · 2026-09-13 — design review complete (auto mode)
 **Owner:** founder (solo)
+
+> **Decisions from the design review are in
+> [`ironpal-self-training-model-design_grilled.md`](ironpal-self-training-model-design_grilled.md)
+> (Q1–Q12) and are folded in below.** 5 rest on evidence in the repo, 7 are assumptions tagged for
+> veto, none are open. Two evidence-driven changes against the draft: package signatures use
+> **ECDSA P-256** (Ed25519 is not in the platform below API 33; minSdk is 24), and integrity runs
+> **natively** through a `scoreAll` bridge call (windows never cross into JS — D6).
 **Implements:** [`ironpal-self-training-prd.md`](ironpal-self-training-prd.md) (the feature: loop,
 levels, gym pack) and [`ironpal-self-training-model-prd.md`](ironpal-self-training-model-prd.md) (the
 model: R1–R12). Decisions in their `_grilled.md` ledgers are inputs here and are not re-opened.
@@ -138,7 +145,7 @@ Budget: ≤ 2 s (model PRD R1); measured in the harness.
 ```
 packageManager.fetch()   GET /model/package?since=<version>  → bytes cached
 packageManager.apply():
-  verify Ed25519 signature (public key in binary) → check engine_min ≤ engine → BEGIN
+  verify ECDSA P-256 signature (public key in binary) → check engine_min ≤ engine → BEGIN
   migrate store schema if store_schema_version bumped
   if extractor_version changed: re-derive features for all templates from window_f16 (background job, progress)
   swap active package → smoke-test 3 bundled golden windows → COMMIT
@@ -222,7 +229,8 @@ match(live):
    2. K = top-8 templates by d_knn (across all buckets)                  # O(N) on ≤ 740 vectors
    3. for t in K: d_dtw(t) = normalizedDtw(live.mag, t.mag)              # 8 DTWs, band 0.2
       d_fused(t) = w_knn · d_knn + w_dtw · d_dtw
-   4. per exercise e: d_e = min over its templates in K (rep templates count like set templates)
+   4. per exercise e: d_e = min over its templates in K   (index holds set, negative and prior
+      templates; per-rep templates stay out of it — they feed the rep-shape fit and explanations)
       winner = argmin d_e; runner-up = next; margin = d_runner − d_winner
    5. conf = 1/(1 + d_winner); label = conf ≥ T_reject_user ? winner : unknown
    returns Match{label, conf, margin, bestTemplateId, byRepresentation: {knn, dtw}, candidates[3]}
@@ -230,7 +238,8 @@ kindPenalty: own set/rep = 1.0 ; prior (founder or gym pack) = 1 + n_own(e)/3 ; 
              negative templates carry label `unknown` and compete normally (they *are* the reject class)
 ```
 
-Live ticks call steps 1–2 only (`provisional = true`); `SetAnalyzer.finish` runs the full match.
+Live ticks call steps 1–2 only (`provisional = true`, emitted but **hidden on the HUD by default** —
+an opt-in setting shows it); `SetAnalyzer.finish` runs the full match.
 
 ### 3.6 ModelParams (the injected constants)
 
@@ -280,8 +289,10 @@ integrity(e) = (# own set templates of e whose LOO match, against the campaign i
                returns e) / (# own set templates of e)
 ```
 
-Incremental rule after adding set `s` to exercise `e`: re-score only templates whose previous top-8
-contained a template of `e`, plus all templates of `e`. Worst case ≈ 300 kNN + 2 400 DTW ≈ 1.5 s on
+Scoring runs **natively**: `SignalModule.scoreAll(exerciseIds)` returns each template's top-k with
+itself excluded; `integrity.ts` only aggregates (windows never cross the bridge — D6; the TS mirror
+stays a test fixture). Incremental rule after adding set `s` to exercise `e`: re-score only templates
+whose previous top-8 contained a template of `e`, plus all templates of `e`. Worst case ≈ 300 kNN + 2 400 DTW ≈ 1.5 s on
 the A52; typical ≪ 1 s. A full re-score runs in the background on package apply and weekly.
 
 ### 4.5 Pruning
@@ -408,12 +419,14 @@ The POC `templates` table is migrated into this one as `kind='prior', source='fo
   "ontology_ref": "sha256:…", "campaign_map": { "imu": [...], "fusion": [...], "vision": [...], "hard": [...] },
   "priors": "priors.bin",  "explanations": { "exercise": "Matched your {exercise} from {date} ({conf}).", "...": "..." },
   "smoke": [ {"window_ref": "smoke/goblet.f16", "expect": "goblet-squat"}, ... ],
-  "signature": "ed25519:…"
+  "signature": "ecdsa-p256:…"
 }
 ```
 
 - `priors.bin`: founder templates (`kind='prior'`), `float16` windows + features, ≈ 4–5 MB.
-- Signed with an IronPal Ed25519 key; the public key is compiled into the app.
+- Signed with an IronPal **ECDSA P-256** key (`SHA256withECDSA`, in `java.security` on every
+  supported API level — Ed25519 only arrives at API 33 and `minSdk` is 24); the public key is
+  compiled into the app; no crypto dependency added.
 - Served by `GET /model/package?since=<version>` (returns 304 when current); the shipped package is in
   app assets as the fallback.
 - Apply algorithm in §2.4; extractor re-derivation reuses `learner.fit` after re-featurising.
@@ -431,6 +444,7 @@ The POC `templates` table is migrated into this one as `kind='prior', source='fo
 | `startSet(setId, exerciseHint?)` | — | Promise<void>; then events |
 | `endSet(setId)` | — | Promise<SetResult> |
 | `stopSession()` | — | Promise<SessionSummary{seqGaps, saturated, durationSec}> |
+| `scoreAll(exerciseIdsJson)` | campaign exercise ids | Promise<[{templateId, topK:[{templateId, exerciseId, dFused}]}]> (self excluded) — for integrity |
 | `benchmark()` | — | Promise<{tickMs, matchMs, dtwMs, memMb}> |
 | events | `GateEvent`, `RepEvent`, `MatchEvent(provisional)`, `LinkEvent{seqGaps, saturated, mtu}` | |
 
@@ -450,11 +464,12 @@ The POC `templates` table is migrated into this one as `kind='prior', source='fo
 
 ## 11. Verification harness
 
-- **Unit:** Kotlin tests for `GateMachine`, `RepClock` (synthetic sinusoids with known peaks, noise,
+- **Unit:** a JVM test source set is **added** (none exists today — no `app/src/test`, no JUnit
+  dependency): Kotlin tests for `GateMachine`, `RepClock` (synthetic sinusoids with known peaks, noise,
   head-bob blips), `TemplateIndex` (top-k equals brute force), `Canonicalizer` (known rotations);
   Jest on `dsp.ts` and `canonical.ts` mirrors; `learner`/`integrity`/`levels` on fixtures.
 - **Replay:** `scripts/model/replay.py --session <dir> --labels <json>` feeds `imu.jsonl` (host time)
-  through the same engine (JVM build of `SignalEngine` via a small CLI, or the TS mirror) and writes
+  through the **same Kotlin engine** via a small JVM `SignalEngineCli` (JUnit source set) and writes
   `predictions.json` for `score_reps.py` / `score_weights.py`; confident-wrong fails CI. On-device
   replay (`replay.ts`) runs the same sessions through the phone build for parity.
 - **Golden stores:** three frozen stores (founder + two testers) with expected decisions and
@@ -518,18 +533,20 @@ riskiest assumption and the cheapest to verify.
 | D3 | Negative templates dominate top-8 and suppress true labels | cap negatives per session; `kindPenalty` never below 1; integrity would show it immediately |
 | D4 | `float16` loses precision on small-amplitude reps | values are m/s² and rad/s in ±100 range; 3 significant digits suffice for DTW after z-normalisation; verified in golden diff |
 | D5 | Incremental LOO misses re-scores after pruning | pruning triggers a full re-score of the exercise; weekly full pass |
-| D6 | `op-sqlite` + SQLCipher on RN 0.84 new architecture | P0 spike on the A52 before the swap; fallback is `EncryptedFile`-wrapped plain SQLite with the same `store.ts` API |
+| D6 | `op-sqlite` + SQLCipher on RN 0.84 new architecture — **unproven anywhere in the portfolio** | one-day spike on the A52 is day one of P0; fallback is `EncryptedFile`-wrapped plain SQLite with the same `store.ts` API |
 
 ---
 
-## 16. Open questions (for the design review)
+## 16. Open questions — resolved in review
 
-1. **Kotlin-side LOO or JS-side?** Integrity needs the matcher; running it in JS via the TS mirror
-   duplicates DSP; running it natively needs a bridge call that returns per-template scores.
-2. **Rep windows as templates** — do per-rep templates help set-level recognition enough to justify
-   ×8 index size, or should they serve only the rep-shape fit?
-3. **Provisional live label on ticks** — show it on the HUD (motivating) or suppress until set end
-   (honest)?
-4. **Ed25519 verification library** on Android without adding a large dependency.
-5. **Replay engine parity** — JVM build of `SignalEngine` for CI vs relying on the TS mirror.
-6. **Negative harvesting cap** — 5 per session enough to fit `T_reject` after ~4 sessions?
+All six were engineering choices and the review settled them; nothing remains conditional in this
+document (the PRDs' open items are unchanged).
+
+| Was open | Resolved as | Ledger |
+|---|---|---|
+| LOO in Kotlin or JS | native `scoreAll` bridge call; JS aggregates | Q1 |
+| Rep windows as index templates | no — rep-shape fit and explanations only | Q2 |
+| Provisional live label | emitted, hidden by default, opt-in setting | Q3 |
+| Signature library | ECDSA P-256 from `java.security`, no dependency | Q4 |
+| Replay parity | JVM test source set + `SignalEngineCli` running the shipped Kotlin | Q5 |
+| Negative cap | 5 per session; `T_reject` fits after ≈ 4 sessions | Q6 |
