@@ -1,7 +1,13 @@
 # IronPal Device-Hosted Model — Product Requirements Document
 
-**Status:** Draft v1 · 2026-09-13
+**Status:** Draft v1.1 · 2026-09-13 — design review complete (auto mode)
 **Owner:** founder (solo)
+
+> **Decisions from the design review are in
+> [`ironpal-self-training-model-prd_grilled.md`](ironpal-self-training-model-prd_grilled.md)
+> (Q1–Q17) and are folded in below.** The review ran **without user interaction**: 8 decisions rest
+> on evidence in the repo, 9 are assumptions tagged for veto, none are open — nothing in this
+> document spends money or binds legally; the feature PRD's open items still apply.
 **Companion to:** [`ironpal-self-training-prd.md`](ironpal-self-training-prd.md) — that document specifies
 the *feature* (the self-training loop, the game, the gym pack). This one specifies the **model
 component** that feature trains and runs: what it is, what it learns, how it fits on a phone, how it
@@ -166,7 +172,7 @@ device. Budgets are per-operation and enforced by the benchmark in §17.
 
 | Operation | Frequency | Budget | Design that meets it |
 |---|---|---|---|
-| Live tick (gate + features + prefilter) | 2 Hz on a 4 s window (200 samples) | ≤ 15 ms | band-pass and autocorrelation are O(n) and O(n·lags); features are cheap; **kNN prefilter only** on ticks — no DTW during the set |
+| Live tick (gate + features + prefilter) | fixed-delay executor in `SignalModule` over the 4 s `ANALYSIS_WINDOW_SEC` snapshot (200 samples); 2 Hz assumed, the period is a package parameter | ≤ 15 ms | band-pass and autocorrelation are O(n) and O(n·lags); features are cheap; **kNN prefilter only** on ticks — no DTW during the set |
 | DTW match at set end | once per set | ≤ 150 ms | DTW only against the **top-k = 8** candidates from the kNN prefilter, Sakoe-Chiba band 0.2 (200 × 40 cells); template band-passed magnitudes **cached at load**, not recomputed per comparison (the POC recomputes them inside the loop — `Dsp.matchAgainstTemplates`) |
 | Update after a confirmed set | once per set | ≤ 2 s | append + closed-form fits + leave-one-out integrity over the campaign (≤ 15 exercises × ≤ 20 sets: ≤ 300 kNN + ≤ 300 × 8 DTW ≈ 2 400 DTW ≈ 1.5 s worst case; incremental: only re-score sets whose top-k included the changed exercise) |
 | Rep clock | per sample | negligible | peak detection on the fitted band, incremental |
@@ -228,8 +234,11 @@ a hostile OS.
 **Data management.** Per-set delete removes templates, exemplars, clip and audit references in one
 transaction; per-exercise and full reset return to package priors; full erasure also destroys the
 Keystore key, which makes any remaining ciphertext unrecoverable. Android's auto-backup is **excluded**
-for the store (the encrypted DB would be useless without the device-bound key anyway) and replaced by
-the explicit passphrase export.
+for the store — the POC manifest already sets `android:allowBackup="false"` — and replaced by the
+explicit passphrase export. The encrypted database is provided by an SQLCipher-compatible SQLite
+binding (the design doc's own alternative, `op-sqlite`, ships one); the POC's
+`react-native-sqlite-storage` is replaced in P0, which is small because the store API in
+`store/db.ts` is thin.
 
 ---
 
@@ -489,17 +498,17 @@ The model is tested the way the KB already is: **replay, score, gate on confiden
 
 ---
 
-## 21. Open questions
+## 21. Open questions — resolved in review
 
-1. **Encrypted SQLite implementation** — SQLCipher-compatible library vs Android `EncryptedFile` with a
-   plain SQLite inside; both meet R4; pick by RN 0.84 new-architecture compatibility.
-2. **Tier B framework** — TFLite with on-device training signatures vs ONNX Runtime Mobile vs a
-   hand-written tiny encoder in Kotlin; irrelevant until the promotion gate is met.
-3. **Predictive cue** — whether to cue on the predicted next top (removes the latency floor, risks a
-   false cue on the last rep) or stay with confirmed peaks.
-4. **Model package distribution** — served by the existing FastAPI backend vs bundled with app assets
-   only; the former enables days-not-releases tuning but is a server touch on a device-first design.
-5. **Health Connect as the only local integration** — enough for v1, or is a Wear OS companion cue
-   channel in scope?
-6. **Raw-window retention** — forever (≈ 100 kB per certified exercise) vs capped; the extractor
-   re-derivation case argues for forever.
+The draft's six open items were all engineering choices, and the review settled them (ledger
+Q3, Q4, Q8, Q10, Q11, Q15). What remains conditional is inherited from the feature PRD (data-sharing
+legal basis, gym partnership, monetisation, marketing claims) and is not repeated here.
+
+| Was open | Resolved as | Ledger |
+|---|---|---|
+| Encrypted SQLite implementation | SQLCipher-compatible binding (`op-sqlite`), key wrapped by the Android Keystore; library swapped in P0 | Q11 |
+| Tier B framework | deferred to the promotion gate; not in the binary until it is met | Q3 |
+| Predictive cue | P2 experiment, off by default, kept as a setting once measured | Q10 |
+| Model package distribution | served by the existing FastAPI backend, bundled package as fallback, applied at next start; never a run-time dependency | Q8 |
+| Health Connect as the only local integration | yes for v1; Wear OS out, revisited by the game layer if a wrist cue channel is wanted | Q15 |
+| Raw-window retention | forever, as `float16`; bounded by the 20-set cap per exercise | Q4 |
