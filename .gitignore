@@ -45,3 +45,6 @@ input/x/
 # Sealed ground-truth logs — must not reach the analyst before predictions are written
 # (blind protocol, see docs/ironpal-essential-exercise-video-capture-plan.md §7b)
 input/kb/groundtruth-sealed/
+
+# Game assets: raw Leonardo output (paid, regenerable from docs/ironpal-game-asset-prompts.md)
+/input/game-assets/leonardo/

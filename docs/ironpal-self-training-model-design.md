@@ -1,6 +1,6 @@
 # IronPal Self-Training Model — Technical Design
 
-**Status:** Draft v1.1 · 2026-09-13 — design review complete (auto mode)
+**Status:** Draft v1.2 · 2026-09-13 — design review complete (auto mode); **§17 game layer added** (feel, engagement, assets)
 **Owner:** founder (solo)
 
 > **Decisions from the design review are in
@@ -85,8 +85,9 @@ scripts/model/
     └── build_package.py      (new) assemble + sign a model package
 ```
 
-The game layer (`src/game/`) and the tagging UI consume `SetResult`, decisions and level events; they
-are specified in the feature PRD and not designed here.
+The game layer (`src/game/`) and the tagging UI consume `SetResult`, decisions and level events; the
+feature PRD specifies them and §17 below designs their feel, screens, audio, engagement systems and
+asset pipeline.
 
 ---
 
@@ -550,3 +551,138 @@ document (the PRDs' open items are unchanged).
 | Signature library | ECDSA P-256 from `java.security`, no dependency | Q4 |
 | Replay parity | JVM test source set + `SignalEngineCli` running the shipped Kotlin | Q5 |
 | Negative cap | 5 per session; `T_reject` fits after ≈ 4 sessions | Q6 |
+
+---
+
+## 17. Game layer — design refinement for feel and engagement
+
+> Added 2026-09-13 on the founder's direction: the model's self-training loop must *feel* like
+> playing a tactical first-person shooter — the round rhythm, the crosshair, the hit marker, the
+> rank and the mission briefing of a Counter-Strike or Wolfenstein — while remaining original work.
+> Those titles are the **genre reference for the feel**; none of their names, art, sounds, fonts,
+> characters or level designs appear in IronPal (constraint C6 in the feature PRD). The first-person
+> view is the user's real headband camera; the game is the interface around it.
+
+### 17.1 Where the feel comes from — and where it cannot
+
+A shooter's feel is built from a few reliable ingredients: a **round structure** with a tense
+pre-round and a clean end-of-round scoreboard, a **crosshair that tells you when you are on target**,
+an **instant hit marker with a sound**, a **feed** of what just happened, a **rank** that moves
+slowly, a **map** with territory, and a **briefing** before each level. All of these map onto the
+self-training loop without inventing anything the loop does not already do:
+
+| Shooter ingredient | IronPal equivalent | Where it lives |
+|---|---|---|
+| Buy phase / freeze time | **ARM** — choose the level, glance at the weight, crosshair locks | phone screen, before the set |
+| Round live | **FIRE** — the set; screen-free; audio and haptic only | headband + pocket phone |
+| Hit marker + sound | **RepEvent** confirmed by the RepClock (§3.3) | audio/haptic in ≤ 150 ms of detection |
+| Kill feed | **Rep feed** on the debrief: one line per rep with timing and amplitude, rejected candidates greyed | debrief |
+| Round end scoreboard | **DEBRIEF** — four proposals, one-tap confirm, XP breakdown | rest period |
+| Weapon select | **Level select** on the campaign map (exercise = weapon, campaign = loadout class) | map |
+| Mission briefing | **Mission card** with campaign emblem, sensor-class statement, sets remaining | before ARM |
+| Rank / XP | cosmetic ranks (six tiers), XP only for gated-clean sets | profile, debrief |
+| Armour | **integrity meter** (§4.4) shown as a six-segment plate | level card, debrief |
+| Map control / territory | **Scout** charting stations; fog of war = uncharted stations | gym map |
+| Boot camp | calibration ritual + tutorial level | first session |
+| Level cleared | **certification**: the exercise is now automatic in live workouts | level-cleared card |
+
+Two ingredients deliberately do **not** carry over. There is no **timer** during a set and no
+**enemy**: the target is always iron, the clock is the user's own rest. A shooter's pressure comes
+from the opponent; IronPal's comes from the rep you are about to do, which is pressure enough under
+a loaded bar (G6).
+
+### 17.2 Screen-by-screen
+
+| Screen | Composition | Feel cues |
+|---|---|---|
+| **Campaign map** | `bg_campaign_map` backdrop; stations as `flag_*` markers on the gym's holographic floor plan; three campaign emblems as tabs; level badges (`badge_*`) with integrity segments | fog of war on uncharted stations; slow teal scan-line sweep; emblem glow on the active campaign |
+| **Mission briefing** | `bg_briefing_<campaign>` left-lit backdrop; emblem top-left; mission card centre: exercise, sensor-class statement in plain words, sets to certify, two-weights rule, `hud_magazine` showing today's sets | stencil-style headline type, typewriter reveal of the card lines (≤ 600 ms total), a single low "deploy" tone |
+| **ARM (live view)** | live preview where the rig has one, else the last exemplar frame dimmed; `hud_crosshair_idle` centred; `hud_target_*` glyph for the expected implement bottom-right; weight prior chip | crosshair snaps to `hud_crosshair_locked` + "target acquired" tone + haptic when the glance is sharp and still; no button to press |
+| **FIRE** | phone screen dark or in pocket; optional minimal live view with `hud_gate_open` and the rep count only | per-rep hit tick; exact-rep streak changes tick pitch subtly; gate-close "round over" tone; link-lost warning two-tone |
+| **DEBRIEF** | `bg_debrief` with the replay (or trace-only) centred; rep feed right; four proposal rows each with a one-tap confirm; `hud_hitmarker` flashes on confirm | scoreboard cadence: rows slide in one at a time; XP counter ticks up; "all correct" is one big control |
+| **Level cleared** | `bg_level_cleared`; badge upgrade animation; one sentence on what changed in the product | ascending three-note sting; haptic double pulse |
+| **Mission failed** | `bg_mission_failed`; the failed gate in plain words; a redo control | short descending tone; no penalty copy |
+| **Boot camp** | `bg_bootcamp`; `emblem_bootcamp`; the ritual steps as a checklist with the same cues | "calibrate armour", "sync", "zero the scope", "range check" callouts |
+| **Profile / rank** | `rank_*` insignia; XP; stations charted; certifications list | insignia change animation on rank-up |
+
+### 17.3 HUD composition rules
+
+- **Layering:** backdrop → live/replay view → SVG glyphs (tinted at runtime) → text. Generated
+  emblems and badges are composited with **screen/additive blending** over dark UI so their glow
+  survives and a residual dark background costs nothing.
+- **Glyph states are colour, not new art:** idle = gunmetal, active = teal, bonus = lime, warning =
+  ember. One SVG per glyph, `currentColor` tint (`draw-hud.py`).
+- **Never over the set:** during FIRE the HUD is the audio. The optional minimal live view shows
+  only the gate state and the count, no controls (FR-A2).
+- **Motion budget:** hit marker 120 ms scale-in, 240 ms fade; crosshair lock 160 ms; feed rows 90 ms
+  stagger; nothing loops during a set except the gate-open pulse.
+- **Type:** a condensed stencil-flavoured display face for headlines (an open-licence face, chosen
+  in P2), the app's body face for everything else; all-caps only on headlines and callouts.
+
+### 17.4 Audio, voice and haptics
+
+| Cue | Trigger | Sound design (original, synthesised) | Haptic |
+|---|---|---|---|
+| deploy | briefing confirmed | low 80 Hz thump + short riser | single 30 ms |
+| target acquired | glance sharp + still | two-note click, second note teal-bright | double 20 ms |
+| gate open | GateMachine → ACTIVE | rising sweep 200 ms | single 40 ms |
+| hit | RepEvent | 40 ms transient click with a 1.2 kHz body; pitch +2 % per exact-rep streak step | 15 ms tick |
+| hit bonus | exact-rep bonus at set end | the hit click plus a short lime chime | double tick |
+| gate close | GateMachine → CLOSED | falling sweep + soft "round over" tone | 60 ms |
+| link lost | LinkEvent | two-tone warning, repeats every 5 s until restored | long 120 ms |
+| level cleared | certification | three ascending notes | double pulse |
+| mission failed | gate failed | two descending notes, quiet | single |
+
+An **operator voice** (on-device TTS, short original lines: "target acquired", "set complete",
+"headband lost", "level cleared") is optional and off by default; it never speaks during a set
+except for the link-lost warning. All cues follow media volume; every cue has its haptic twin and
+can be muted individually (FR-G4, FR-A1).
+
+### 17.5 Engagement systems
+
+The loop has to be worth returning to for weeks, without dark patterns (feature PRD §8.3).
+
+| System | Mechanic | What it drives | Guardrail |
+|---|---|---|---|
+| **Certification** | the real reward: an exercise becomes automatic in live workouts | completing levels | the only reward that gates anything, and it gates only automation |
+| **XP and ranks** | XP for gated-clean sets; bonuses for exact reps, headshot (OCR agreement), new weight, new rig fit, new session; six cosmetic ranks | steady progress feeling | ranks unlock nothing; XP never lost |
+| **Missions from gaps** | generated from the store: "second weight for deadlift", "one hard-mode session", "chart the leg press" | the data the model actually needs | no calendar streaks; a missed mission simply stays available |
+| **Territory** | Scout charts stations; adoption meter; reward tiers (feature PRD §8.6) | contribution and long-term retention | reward fulfilment external and conditional; nobody sees anyone else |
+| **Integrity as armour** | leave-one-out agreement shown as a plate gauge that can dent and be repaired | quality of labels | demotion is framed as "integrity compromised — one set to restore" |
+| **Deployment log** | a plain count of sessions and clean sets, per campaign; no streak, no loss | competence, not compulsion | shown, never nagged |
+| **Debrief pacing** | the round-end scoreboard is the one moment the game asks for attention, and it fits a rest period | habit of tagging | deferrable to end of session; never blocks the next set |
+
+Why this works for the persona: competence (integrity, certification), autonomy (choose the level,
+choose the weight, skip the game entirely and still log), and relatedness handled without social
+exposure (territory). The shooter framing supplies the *rhythm* — arm, fire, debrief — that makes a
+chore feel like rounds.
+
+### 17.6 Asset pipeline
+
+Two channels, chosen by what each tool is good at:
+
+| Channel | Assets | Tool | Why |
+|---|---|---|---|
+| **Code-drawn SVG** | crosshair (idle, locked), hit marker (normal, bonus), gate open/close, link lost, armour meter, magazine, three target glyphs | `scripts/game/draw-hud.py` → `poc/mobile/assets/game/hud/*.svg` (+ PNG previews) | exact geometry, runtime tint, zero credits. The first Leonardo test turned a hit marker into a 3D crystal; precision glyphs are not a diffusion job |
+| **Leonardo (SDXL 1.0)** | 5 emblems, 5 equipment glyphs, 6 rank insignia, 5 level badges, 3 station flags, 8 backdrops (32 images) | `docs/ironpal-game-asset-prompts.md` → `scripts/game/leonardo_gen.py` → `input/game-assets/leonardo/` (gitignored, paid) → `scripts/game/install-assets.py` (rembg cut for squares, resize for backdrops) → `poc/mobile/assets/game/<section>/` | painterly, on-brand chrome; ~11 credits per image on the shared account, generator guarded by a 2 500-credit floor so Reddy keeps its budget |
+
+Licence: generated under the account's paid API plan (commercial use granted for paid-tier output),
+recorded the same way as `../reddy/docs/ASSET_LICENCES.md`. Raw generations are paid output — back
+them up outside the repo.
+
+**Originality checklist applied to every prompt and every accepted image:** no game names, no
+weapon shapes, no soldier or character figures, no faces, no counter-terrorist/terrorist or
+Nazi-era iconography, no lifted colourways beyond the IronPal palette, no typography from any game.
+Targets are plates, pins and dumbbells.
+
+### 17.7 Implementation notes (P2)
+
+- `react-native-svg` for the glyphs; `react-native-reanimated` for the hit marker, crosshair lock and
+  feed animations; a small sound library and a haptic module (both new, per feature ledger Q19).
+- Assets ship in the app binary under `assets/game/` (≈ 6 MB after `install-assets.py`); backdrops
+  at 1360×768 only (they sit behind UI and are never zoomed).
+- The game state machine (`src/game/`) subscribes to `GateEvent`, `RepEvent`, `SetResult`, level
+  changes and drift events from the model layer (§9) and owns nothing the model needs.
+- Engagement KPIs added to §12 of the feature PRD's spirit: debrief completion rate ≥ 85 %, median
+  debrief ≤ 20 s, sessions per week per active user ≥ 2, certifications per user per month ≥ 2,
+  "all correct" rate rising session over session.
