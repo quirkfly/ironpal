@@ -19,6 +19,13 @@
     <!-- Capture must survive screen-off for a ~65 min session (ImuForegroundService). -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <!--
+      DATA_SYNC is the fallback foreground type. CONNECTED_DEVICE is only legal when a Bluetooth
+      runtime permission is actually GRANTED, so with the phone IMU (or the e2e replay source)
+      startForeground threw SecurityException and killed the process on every session start.
+      The service now picks its type at runtime; both must be declared here.
+    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- High-rate IMU access does not require a runtime permission, but we
          declare the hardware features as optional so gyro-less phones (D5)
@@ -51,6 +58,6 @@
         <service
             android:name=".ImuForegroundService"
             android:exported="false"
-            android:foregroundServiceType="connectedDevice" />
+            android:foregroundServiceType="connectedDevice|dataSync" />
     </application>
 </manifest>

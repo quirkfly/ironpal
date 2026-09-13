@@ -22,6 +22,15 @@ interface Props {
 
 const CAMPAIGN_ORDER: CampaignKey[] = ['imu', 'vision', 'hard'];
 
+/** Budgets from design §5.1, shown next to the measurement so a regression is legible. */
+function benchLine(b: {tickMs: number; matchMs: number; templates: number; memMb: number}): string {
+  return (
+    `tick ${b.tickMs.toFixed(1)} ms (budget 15) · ` +
+    `match ${b.matchMs.toFixed(1)} ms (budget 150) · ` +
+    `${b.templates} templates · ${b.memMb.toFixed(0)} MB (budget 60)`
+  );
+}
+
 /**
  * One string, one Text node — so it reads correctly for every source and so an e2e assertion
  * matches a whole node rather than a fragment React split across children.
@@ -282,7 +291,7 @@ export function CampaignScreen({onBack}: Props) {
             </Pressable>
             {bench ? (
               <Text testID="inspector-bench-result" style={styles.hint}>
-                tick {bench.tickMs.toFixed(1)} ms (budget 15) · match {bench.matchMs.toFixed(1)} ms (budget 150) · {bench.templates} templates · {bench.memMb.toFixed(0)} MB (budget 60)
+                {benchLine(bench)}
               </Text>
             ) : null}
           </View>

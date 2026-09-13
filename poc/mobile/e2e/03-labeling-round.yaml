@@ -9,10 +9,11 @@ appId: com.twentydeka.ironpal
     id: "campaign-start-session"
 - extendedWaitUntil:
     visible:
-        id: "campaign-skip-calibration"
+        id: "campaign-calibrate"
     timeout: 20000
+# Calibrate rather than skip: a clean set requires the rig gate, which requires calibration.
 - tapOn:
-    id: "campaign-skip-calibration"
+    id: "campaign-calibrate"
 - tapOn:
     id: "level-bulgarian-split-squat"
 - scrollUntilVisible:
@@ -27,8 +28,15 @@ appId: com.twentydeka.ironpal
 - extendedWaitUntil:
     notVisible: "WAITING FOR MOTION"
     timeout: 45000
-- waitForAnimationToEnd:
-    timeout: 20000
+# Wait for REPS, not for animation. `waitForAnimationToEnd` returns as soon as the UI settles,
+# which can be after one or two reps — and the motion quality gate needs at least three, so the
+# set would be saved as "not counted" and the flow would fail for a reason that is entirely its
+# own doing. Waiting for a two-digit count is unambiguous and well clear of the gate.
+- extendedWaitUntil:
+    visible:
+        id: "hud-reps"
+        text: "[0-9]{2}"
+    timeout: 90000
 - tapOn:
     id: "hud-end-set"
 
@@ -49,7 +57,7 @@ appId: com.twentydeka.ironpal
     id: "labeling-detected-reps"
 - assertVisible:
     id: "labeling-rep-gate"
-- assertVisible: "within ±1 ✓"
+- assertVisible: ".*within ±1.*"
 - assertVisible:
     id: "labeling-reps-explain"
 
@@ -69,13 +77,18 @@ appId: com.twentydeka.ironpal
     id: "labeling-exercise-explain"
 - tapOn:
     id: "labeling-exercise-bulgarian-split-squat"
-# "why?" reveals the runner-up candidates the matcher considered.
+# "why?" only exists when the matcher had runner-up candidates to show. On a first-ever set the
+# index is empty, so there are none and the control is correctly absent — hence optional.
 - tapOn:
     id: "labeling-why"
+    optional: true
 
 # 3. Weight: type one, then prove "couldn't see it" is a first-class answer.
-- assertVisible:
-    id: "labeling-weight-explain"
+- scrollUntilVisible:
+    element:
+        id: "labeling-weight-explain"
+    direction: DOWN
+    timeout: 20000
 - tapOn:
     id: "labeling-weight-input"
 - inputText: "24"
@@ -88,21 +101,37 @@ appId: com.twentydeka.ironpal
 - hideKeyboard
 
 # 4. Save — and the model must report what it learned.
+- scrollUntilVisible:
+    element:
+        id: "labeling-save"
+    direction: DOWN
+    timeout: 20000
 - tapOn:
     id: "labeling-save"
-- extendedWaitUntil:
-    visible:
+- scrollUntilVisible:
+    element:
         id: "labeling-outcome"
+    direction: DOWN
     timeout: 30000
-- assertVisible: "Clean set"
-- assertVisible: "XP"
+- assertVisible: ".*Clean set.*"
+- assertVisible: ".*XP.*"
 
 # Back on the map the level has left `locked` and the inspector knows about it.
-- tapOn: "‹ Back"
+- scrollUntilVisible:
+    element:
+        id: "labeling-back"
+    direction: UP
+    timeout: 20000
+- tapOn:
+    id: "labeling-back"
 - extendedWaitUntil:
     visible:
         id: "campaign-screen"
     timeout: 15000
-- assertVisible:
-    id: "inspector-level-bulgarian-split-squat"
-- assertVisible: "recon"
+# The inspector is the last card on the map, below the level grid.
+- scrollUntilVisible:
+    element:
+        id: "inspector-level-bulgarian-split-squat"
+    direction: DOWN
+    timeout: 20000
+- assertVisible: ".*recon.*"

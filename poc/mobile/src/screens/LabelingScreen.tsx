@@ -56,7 +56,7 @@ export function LabelingScreen({result, proposals, answers, onChange, exercises,
       <ImageBackground source={BACKDROP.debrief} style={styles.bg} imageStyle={styles.bgImg}>
         <ScrollView testID="labeling-screen" contentContainerStyle={styles.container}>
           <View style={styles.topBar}>
-            <Pressable onPress={onBack} hitSlop={12}>
+            <Pressable testID="labeling-back" onPress={onBack} hitSlop={12}>
               <Text style={styles.back}>‹ Back</Text>
             </Pressable>
             <Text testID="labeling-title" style={styles.title}>DEBRIEF</Text>

@@ -73,6 +73,23 @@ fi
 # The app must have been launched once for its external files dir to exist.
 adb -s "$DEVICE" shell "mkdir -p $DEVICE_FILES/e2e" >/dev/null 2>&1 || true
 
+# --no-install is a footgun: a stale APK fails every flow for reasons that look like app bugs
+# (it cost a full 6/6 red run once). Compare what is installed against the local artefact and
+# say so loudly rather than letting the suite lie.
+if [ "$DO_INSTALL" = 0 ] && [ -f "$APK" ]; then
+  REMOTE_PATH="$(adb -s "$DEVICE" shell pm path "$APP_ID" 2>/dev/null | tr -d '\r' | sed 's/^package://')"
+  if [ -n "$REMOTE_PATH" ]; then
+    REMOTE_MD5="$(adb -s "$DEVICE" shell md5sum "$REMOTE_PATH" 2>/dev/null | awk '{print $1}')"
+    LOCAL_MD5="$(md5sum "$APK" | awk '{print $1}')"
+    if [ -n "$REMOTE_MD5" ] && [ "$REMOTE_MD5" != "$LOCAL_MD5" ]; then
+      printf '%s!%s the installed APK differs from %s\n' "$C_Y" "$C_0" "${APK#$ROOT/}"
+      printf '   flows will exercise a STALE build — re-run without --no-install\n'
+    else
+      ok "installed APK matches the local build"
+    fi
+  fi
+fi
+
 # ---- scenarios: flow -> fixture -------------------------------------------
 # A flow that needs no particular motion still gets a fixture, so every run is deterministic.
 declare -A FIXTURE=(

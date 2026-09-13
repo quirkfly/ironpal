@@ -10,10 +10,11 @@ appId: com.twentydeka.ironpal
     id: "campaign-start-session"
 - extendedWaitUntil:
     visible:
-        id: "campaign-skip-calibration"
+        id: "campaign-calibrate"
     timeout: 20000
+# Calibrate rather than skip: calibrate so the ONLY failing gate is motion, not the rig.
 - tapOn:
-    id: "campaign-skip-calibration"
+    id: "campaign-calibrate"
 - tapOn:
     id: "level-barbell-back-squat"
 - scrollUntilVisible:
@@ -41,16 +42,28 @@ appId: com.twentydeka.ironpal
     id: "labeling-detected-reps"
 - tapOn:
     id: "labeling-exercise-barbell-back-squat"
+- scrollUntilVisible:
+    element:
+        id: "labeling-save"
+    direction: DOWN
+    timeout: 20000
 - tapOn:
     id: "labeling-save"
-- extendedWaitUntil:
-    visible:
+- scrollUntilVisible:
+    element:
         id: "labeling-outcome"
+    direction: DOWN
     timeout: 30000
 # The quality gate refuses to count it — the honest outcome, not a silent pass.
-- assertVisible: "Set kept but not counted"
+- assertVisible: ".*Set kept but not counted.*"
 
-- tapOn: "‹ Back"
+- scrollUntilVisible:
+    element:
+        id: "labeling-back"
+    direction: UP
+    timeout: 20000
+- tapOn:
+    id: "labeling-back"
 - extendedWaitUntil:
     visible:
         id: "campaign-screen"

@@ -41,11 +41,13 @@ appId: com.twentydeka.ironpal
     id: "hud-reps"
 - assertVisible:
     id: "hud-gate-state"
-- assertVisible: "WAITING FOR MOTION"
 
-# Replay is real time: the gate opens once two qualifying ticks of the rep trace have played.
+# Do NOT assert the transient "WAITING FOR MOTION" state: the replay starts immediately and the
+# gate can open within a couple of ticks, so whether that text is still on screen by the time the
+# assertion runs is a race. Assert the state that MEANS something instead — that the gate opens
+# on a rep trace — which is both stable and the actual behaviour under test.
 - extendedWaitUntil:
-    notVisible: "WAITING FOR MOTION"
+    visible: "ACTIVE"
     timeout: 45000
 - assertVisible:
     id: "hud-end-set"

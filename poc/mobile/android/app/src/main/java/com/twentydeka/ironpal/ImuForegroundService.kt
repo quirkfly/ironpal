@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
@@ -57,16 +58,39 @@ class ImuForegroundService : Service() {
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     val notif = buildNotification()
     if (Build.VERSION.SDK_INT >= 34) {
-      // API 34+ requires declaring WHY the service runs in the foreground.
-      // CONNECTED_DEVICE is the correct type for a BLE peripheral session;
-      // an undeclared or mismatched type throws at startForeground.
-      startForeground(NOTIF_ID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
+      /* API 34+ requires declaring WHY the service runs in the foreground, and the platform
+       * VALIDATES the claim: CONNECTED_DEVICE additionally demands that a Bluetooth runtime
+       * permission actually be GRANTED, not merely declared in the manifest.
+       *
+       * That is a crash, not a warning. With the phone IMU (or the e2e replay source) nothing
+       * ever requests Bluetooth, so startForeground threw SecurityException and killed the
+       * process on every session start — the app relaunched and died again ("IronPal POC keeps
+       * stopping"). It went unnoticed because the headband path was the only one exercised by
+       * hand, and it was the e2e suite that surfaced it.
+       *
+       * So pick the type from what the service is actually doing: CONNECTED_DEVICE only when a
+       * BLE session is genuinely permitted, otherwise DATA_SYNC, which is the honest description
+       * of buffering on-board sensor samples. Both are declared in the manifest.
+       */
+      startForeground(NOTIF_ID, notif, foregroundType())
     } else {
       startForeground(NOTIF_ID, notif)
     }
     // STICKY so a low-memory kill restarts capture rather than ending the
     // session without telling anyone.
     return START_STICKY
+  }
+
+  /** CONNECTED_DEVICE is only legal with a granted Bluetooth permission; otherwise DATA_SYNC. */
+  private fun foregroundType(): Int {
+    val bleGranted = Build.VERSION.SDK_INT < 31 ||
+      checkSelfPermission(android.Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED ||
+      checkSelfPermission(android.Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
+    return if (ImuPipeline.source == ImuPipeline.Source.BLE && bleGranted) {
+      ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+    } else {
+      ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+    }
   }
 
   override fun onDestroy() {

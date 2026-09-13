@@ -41,9 +41,15 @@ appId: com.twentydeka.ironpal
 - hideKeyboard
 - tapOn:
     id: "labeling-exercise-triceps-cable-pushdown"
+- scrollUntilVisible:
+    element:
+        id: "labeling-save"
+    direction: DOWN
+    timeout: 20000
 - tapOn:
     id: "labeling-save"
-- extendedWaitUntil:
-    visible:
+- scrollUntilVisible:
+    element:
         id: "labeling-outcome"
+    direction: DOWN
     timeout: 30000
