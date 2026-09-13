@@ -1,0 +1,35 @@
+{
+ "schema": "ironpal.imu/1",
+ "partial": false,
+ "source": "BLE",
+ "packets_logged": 408,
+ "clocks": {
+  "host_clock": "SystemClock.elapsedRealtimeNanos",
+  "device_clock": "micros() unwrapped past uint32 rollover",
+  "started_host_ns": 1295756441280091,
+  "started_wall_ms": 1785935946790
+ },
+ "device": {
+  "name": "IronPal-IMU",
+  "firmware": "1.0",
+  "nominal_odr_hz": 60,
+  "accel_scale_g_per_lsb": 0.001,
+  "gyro_scale_dps_per_lsb": 0.0625,
+  "accel_fsr_g": 8,
+  "gyro_fsr_dps": 1000,
+  "sample_order": "ax,ay,az,gx,gy,gz",
+  "sample_units": "raw int16 LSB \u2014 multiply by the scales above"
+ },
+ "link": {
+  "mtu": 247,
+  "packets": 408,
+  "samples": 3264,
+  "seq_gaps": 0,
+  "saturated_values": 0
+ },
+ "fixture": {
+  "label": "real-stationary",
+  "expected_reps": 0,
+  "note": "VERBATIM COPY of the 2026-08-05 B2 bring-up recording. Board stationary (|accel| 0.98-0.99 g), so there is no exercise motion: this is the fixture for the gate-never-opens / not-counted paths."
+ }
+}

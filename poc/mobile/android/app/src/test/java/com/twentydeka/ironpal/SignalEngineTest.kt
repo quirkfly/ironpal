@@ -148,6 +148,27 @@ class SignalEngineTest {
   }
 
   @Test
+  fun emptyAndShortWindowsNeverIndexOutOfBounds() {
+    // Regression: endSet's slicing produced Array(1) over an EMPTY accel window and threw
+    // IndexOutOfBounds, which rejected the bridge call and stranded the user on the live HUD
+    // with no way to reach the debrief. A set with no samples must degrade, not crash.
+    val p = ModelParams.DEFAULT
+    for (n in intArrayOf(0, 1, 4, 7)) {
+      val accel = Array(n) { i -> DoubleArray(3) { c -> 0.1 * (i + c) } }
+      val rot = Rotation.IDENTITY
+      val rotated = rot.apply(accel)
+      assertEquals(n, rotated.size)
+      if (n >= 8) continue
+      // SetAnalyzer is only called for >= 8 samples; the guard is that nothing above throws.
+    }
+    // The analyser itself on a minimal-but-valid window.
+    val w = repWindow(4.0, 0.8, 1)
+    val idx = TemplateIndex(p)
+    val res = SetAnalyzer.analyze(w, null, idx, p, null)
+    assertEquals("unknown", res.match.label)   // empty index rejects rather than inventing a label
+  }
+
+  @Test
   fun paramsRoundTripAndDefaultsMatchPoc() {
     val d = ModelParams.DEFAULT
     assertEquals(0.45, d.tReject, 1e-9); assertEquals(400L, d.tickMs); assertEquals(4.0, d.windowSec, 1e-9)

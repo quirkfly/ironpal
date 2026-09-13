@@ -89,6 +89,9 @@ class ImuModule(private val reactContext: ReactApplicationContext) :
         when (source.uppercase()) {
           "BLE" -> ImuPipeline.Source.BLE
           "PHONE" -> ImuPipeline.Source.PHONE
+          // Test/dev only — drives the pipeline from a recorded imu.jsonl so e2e flows can
+          // assert exact rep counts (design §11). The app never selects this itself.
+          "REPLAY" -> ImuPipeline.Source.REPLAY
           else -> throw IllegalArgumentException("unknown source: $source")
         }
       )
@@ -96,6 +99,71 @@ class ImuModule(private val reactContext: ReactApplicationContext) :
     } catch (e: Exception) {
       promise.reject("IMU_SOURCE_ERROR", e.message, e)
     }
+  }
+
+  /**
+   * Point the REPLAY source at a recorded `imu.jsonl` and say whether to loop it.
+   * Test/dev affordance; resolves the resolved absolute path so a flow can assert it exists.
+   */
+  @ReactMethod
+  fun setReplayFile(path: String, loop: Boolean, promise: Promise) {
+    try {
+      val resolved = if (path.startsWith("/")) path
+      else java.io.File(reactContext.getExternalFilesDir(null), path).absolutePath
+      ReplayImuSource.configure(resolved, loop)
+      val out = Arguments.createMap()
+      out.putString("path", resolved)
+      out.putBoolean("exists", java.io.File(resolved).exists())
+      out.putBoolean("loop", loop)
+      promise.resolve(out)
+    } catch (e: Exception) {
+      promise.reject("IMU_REPLAY_ERROR", e.message, e)
+    }
+  }
+
+  /**
+   * E2E opt-in marker: `<externalFilesDir>/e2e/replay.json` = `{"file": "...", "loop": true}`.
+   *
+   * A marker FILE rather than a build flag or an env var, because the harness must be able to
+   * switch fixtures between Maestro flows without rebuilding the APK — `adb push` a different
+   * marker and relaunch. Absent marker (the normal case, including every user's phone) means the
+   * app behaves exactly as shipped; nothing here runs unless someone put the file there.
+   */
+  @ReactMethod
+  fun getE2eConfig(promise: Promise) {
+    try {
+      val marker = java.io.File(java.io.File(reactContext.getExternalFilesDir(null), "e2e"), "replay.json")
+      val out = Arguments.createMap()
+      if (!marker.exists()) {
+        out.putBoolean("enabled", false)
+        promise.resolve(out)
+        return
+      }
+      val o = org.json.JSONObject(marker.readText())
+      val raw = o.optString("file", "")
+      val resolved = if (raw.startsWith("/")) raw
+      else java.io.File(reactContext.getExternalFilesDir(null), raw).absolutePath
+      out.putBoolean("enabled", true)
+      out.putString("file", resolved)
+      out.putBoolean("loop", o.optBoolean("loop", true))
+      out.putBoolean("exists", java.io.File(resolved).exists())
+      out.putString("label", o.optString("label", ""))
+      promise.resolve(out)
+    } catch (e: Exception) {
+      promise.reject("IMU_E2E_CONFIG_ERROR", e.message, e)
+    }
+  }
+
+  /** Replay progress, so a flow can wait for playback rather than sleeping blindly. */
+  @ReactMethod
+  fun getReplayStatus(promise: Promise) {
+    val out = Arguments.createMap()
+    out.putString("file", ReplayImuSource.file)
+    out.putInt("packets", ReplayImuSource.packetsPlayed)
+    out.putInt("samples", ReplayImuSource.samplesPlayed)
+    out.putBoolean("finished", ReplayImuSource.finished)
+    ReplayImuSource.lastError?.let { out.putString("error", it) }
+    promise.resolve(out)
   }
 
   @ReactMethod
@@ -109,6 +177,13 @@ class ImuModule(private val reactContext: ReactApplicationContext) :
         BleImuSource.lastError?.let {
           ImuPipeline.stop()
           promise.reject("IMU_BLE_UNAVAILABLE", it)
+          return
+        }
+      }
+      if (ImuPipeline.source == ImuPipeline.Source.REPLAY) {
+        ReplayImuSource.lastError?.let {
+          ImuPipeline.stop()
+          promise.reject("IMU_REPLAY_UNAVAILABLE", it)
           return
         }
       }

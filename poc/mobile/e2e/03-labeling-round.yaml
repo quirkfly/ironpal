@@ -1,0 +1,108 @@
+# THE LABELING UI — the core of the harness.
+# Fixture: split-squat-8reps (verified against the engine in FixtureReplayTest).
+# Exercises: trace, rep marks, mark toggling, exercise picker, weight, explanations, save,
+# and the level transition the save causes.
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+- tapOn:
+    id: "campaign-start-session"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-skip-calibration"
+    timeout: 20000
+- tapOn:
+    id: "campaign-skip-calibration"
+- tapOn:
+    id: "level-bulgarian-split-squat"
+- scrollUntilVisible:
+    element:
+        id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "mission-arm"
+
+# Let the fixture play far enough to accumulate reps, then close the set.
+- extendedWaitUntil:
+    notVisible: "WAITING FOR MOTION"
+    timeout: 45000
+- waitForAnimationToEnd:
+    timeout: 20000
+- tapOn:
+    id: "hud-end-set"
+
+# --- the labeling round opens ---
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 30000
+- assertVisible:
+    id: "labeling-title"
+
+# 1. Reps: the trace renders with the detector's marks, and the ±1 gate is shown.
+- assertVisible:
+    id: "rep-trace"
+- assertVisible:
+    id: "rep-trace-caption"
+- assertVisible:
+    id: "labeling-detected-reps"
+- assertVisible:
+    id: "labeling-rep-gate"
+- assertVisible: "within ±1 ✓"
+- assertVisible:
+    id: "labeling-reps-explain"
+
+# Marks are individually toggleable — tap the first one off, the caption must follow.
+- assertVisible:
+    id: "rep-mark-1"
+- tapOn:
+    id: "rep-mark-1"
+- assertVisible:
+    id: "rep-trace-caption"
+# ...and back on, so the flow leaves the count as the detector found it.
+- tapOn:
+    id: "rep-mark-1"
+
+# 2. Exercise: the model's proposal is explained, and the picker is a real choice.
+- assertVisible:
+    id: "labeling-exercise-explain"
+- tapOn:
+    id: "labeling-exercise-bulgarian-split-squat"
+# "why?" reveals the runner-up candidates the matcher considered.
+- tapOn:
+    id: "labeling-why"
+
+# 3. Weight: type one, then prove "couldn't see it" is a first-class answer.
+- assertVisible:
+    id: "labeling-weight-explain"
+- tapOn:
+    id: "labeling-weight-input"
+- inputText: "24"
+- hideKeyboard
+- tapOn:
+    id: "labeling-weight-unreadable"
+- tapOn:
+    id: "labeling-weight-input"
+- inputText: "24"
+- hideKeyboard
+
+# 4. Save — and the model must report what it learned.
+- tapOn:
+    id: "labeling-save"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-outcome"
+    timeout: 30000
+- assertVisible: "Clean set"
+- assertVisible: "XP"
+
+# Back on the map the level has left `locked` and the inspector knows about it.
+- tapOn: "‹ Back"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-screen"
+    timeout: 15000
+- assertVisible:
+    id: "inspector-level-bulgarian-split-squat"
+- assertVisible: "recon"

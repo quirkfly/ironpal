@@ -1,0 +1,5 @@
+# Maestro project config — IronPal self-training e2e harness.
+# Flows are driven by the runner (scripts/e2e/run.sh), which pushes the IMU fixture and its
+# marker file before each flow: the fixture is what makes rep counts deterministic.
+appId: com.twentydeka.ironpal
+---

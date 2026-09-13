@@ -201,9 +201,15 @@ class SignalModule(private val reactContext: ReactApplicationContext) :
         // Trim to [fromNs, toNs] using the window's end timestamp.
         val n = win.accel.size
         fun idxAt(t: Long): Int = (n - 1 - ((win.endNs - t) / 1e9 * rate)).toInt().coerceIn(0, maxOf(0, n - 1))
-        val i0 = idxAt(fromNs); val i1 = idxAt(toNs)
-        val accelRaw = Array(maxOf(0, i1 - i0 + 1)) { k -> win.accel[i0 + k] }
-        val gyroRaw = win.gyro?.let { g -> Array(accelRaw.size) { k -> g[i0 + k] } }
+        // A set with NO samples is a normal outcome, not an error: the headband can be
+        // disconnected, or the phone IMU can be denied. Slice defensively so the debrief still
+        // opens and can say "no samples" (design §14) instead of the bridge call rejecting and
+        // stranding the user on the live HUD.
+        val i0 = if (n == 0) 0 else idxAt(fromNs)
+        val i1 = if (n == 0) -1 else idxAt(toNs)
+        val count = if (n == 0) 0 else (i1 - i0 + 1).coerceIn(0, n - i0)
+        val accelRaw = Array(count) { k -> win.accel[i0 + k] }
+        val gyroRaw = win.gyro?.takeIf { it.size >= i0 + count }?.let { g -> Array(count) { k -> g[i0 + k] } }
         val accel = rHead.apply(accelRaw)
         val gyro = gyroRaw?.let { rHead.apply(it) }
         val ex = params.exercise(exerciseHint)

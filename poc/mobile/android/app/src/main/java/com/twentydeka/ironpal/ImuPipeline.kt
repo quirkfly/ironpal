@@ -55,7 +55,7 @@ object ImuPipeline : SensorEventListener {
    * both — [snapshot] resamples by *measured* rate, so the BLE unit's 60 Hz
    * reaches the 50 Hz canonical rate with no code that knows about 60.
    */
-  enum class Source { PHONE, BLE }
+  enum class Source { PHONE, BLE, REPLAY }
 
   @Volatile var source: Source = Source.PHONE
     private set
@@ -66,7 +66,7 @@ object ImuPipeline : SensorEventListener {
       if (s == source) return
       if (running) throw IllegalStateException("cannot switch source while sampling")
       source = s
-      hasGyro = if (s == Source.BLE) true else gyroSensor != null
+      hasGyro = if (s == Source.BLE || s == Source.REPLAY) true else gyroSensor != null
     }
   }
 
@@ -88,7 +88,7 @@ object ImuPipeline : SensorEventListener {
           .getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
         gyroSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
-        hasGyro = if (source == Source.BLE) true else gyroSensor != null
+        hasGyro = if (source == Source.BLE || source == Source.REPLAY) true else gyroSensor != null
         BleImuSource.init(context)
       }
     }
@@ -105,6 +105,12 @@ object ImuPipeline : SensorEventListener {
         // No handler thread: samples arrive on the BLE callback thread and are
         // pushed straight in via pushExternalSample.
         BleImuSource.start()
+        running = true
+        return
+      }
+      if (source == Source.REPLAY) {
+        // Test/dev only: a recorded imu.jsonl drives the pipeline (design §11).
+        ReplayImuSource.start()
         running = true
         return
       }
@@ -125,6 +131,11 @@ object ImuPipeline : SensorEventListener {
       if (startCount > 0) return // another consumer still needs sampling
       if (source == Source.BLE) {
         BleImuSource.stop()
+        running = false
+        return
+      }
+      if (source == Source.REPLAY) {
+        ReplayImuSource.stop()
         running = false
         return
       }

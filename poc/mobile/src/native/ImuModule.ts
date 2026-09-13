@@ -24,6 +24,12 @@ interface ImuNativeModule {
   stopSession(): Promise<string | null>;
   /** Free space on the volume holding session logs (blocking pre-session gate). */
   getFreeSpace(): Promise<FreeSpace>;
+  /** Point the REPLAY source at a recorded imu.jsonl (test/dev only). */
+  setReplayFile(path: string, loop: boolean): Promise<{path: string; exists: boolean; loop: boolean}>;
+  /** Replay progress so a flow can wait on playback instead of sleeping. */
+  getReplayStatus(): Promise<ReplayStatus>;
+  /** Read the e2e opt-in marker file, if any. */
+  getE2eConfig(): Promise<E2eConfig>;
 }
 
 export interface FreeSpace {
@@ -39,7 +45,24 @@ export interface FreeSpace {
  * (poc/firmware) used by the collection rig. Both fill the same native
  * buffers, so nothing downstream of this choice differs.
  */
-export type ImuSource = 'PHONE' | 'BLE';
+export type ImuSource = 'PHONE' | 'BLE' | 'REPLAY';
+
+/** E2E replay opt-in, read from `<externalFilesDir>/e2e/replay.json` (test/dev only). */
+export interface E2eConfig {
+  enabled: boolean;
+  file?: string;
+  loop?: boolean;
+  exists?: boolean;
+  label?: string;
+}
+
+export interface ReplayStatus {
+  file: string | null;
+  packets: number;
+  samples: number;
+  finished: boolean;
+  error?: string;
+}
 
 const native = NativeModules.ImuModule as ImuNativeModule | undefined;
 
@@ -102,6 +125,22 @@ export const ImuModule = {
   },
   getFreeSpace(): Promise<FreeSpace> {
     return assertNative().getFreeSpace();
+  },
+  setReplayFile(path: string, loop: boolean) {
+    return assertNative().setReplayFile(path, loop);
+  },
+  getReplayStatus(): Promise<ReplayStatus> {
+    return assertNative().getReplayStatus();
+  },
+  async getE2eConfig(): Promise<E2eConfig> {
+    if (!native) {
+      return {enabled: false};
+    }
+    try {
+      return await assertNative().getE2eConfig();
+    } catch {
+      return {enabled: false};
+    }
   },
   /**
    * Request the runtime permissions BLE scanning needs. Call this before

@@ -1,0 +1,51 @@
+# Session start, boot-camp calibration, and the set HUD.
+# Expects the runner to have installed a REP fixture (split-squat-8reps).
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+- tapOn:
+    id: "campaign-start-session"
+
+# Boot camp: the calibration ritual is offered before any set.
+- extendedWaitUntil:
+    visible:
+        id: "campaign-calibrate"
+    timeout: 20000
+- assertVisible: "Boot camp: wear the band, nod three times sharply, then calibrate."
+- tapOn:
+    id: "campaign-skip-calibration"
+
+# The session reports which IMU is actually driving it — REPLAY under the harness.
+- extendedWaitUntil:
+    visible:
+        id: "session-imu-status"
+    timeout: 15000
+- assertVisible:
+    text: "IMU: REPLAY.*"
+
+# Pick a level and arm the set.
+- tapOn:
+    id: "level-bulgarian-split-squat"
+- scrollUntilVisible:
+    element:
+        id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "mission-arm"
+
+# The HUD: crosshair, rep counter, gate state.
+- assertVisible:
+    id: "hud-root"
+- assertVisible:
+    id: "hud-reps"
+- assertVisible:
+    id: "hud-gate-state"
+- assertVisible: "WAITING FOR MOTION"
+
+# Replay is real time: the gate opens once two qualifying ticks of the rep trace have played.
+- extendedWaitUntil:
+    notVisible: "WAITING FOR MOTION"
+    timeout: 45000
+- assertVisible:
+    id: "hud-end-set"

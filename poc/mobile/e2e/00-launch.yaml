@@ -1,0 +1,13 @@
+# Shared entry: open the Campaign.
+#
+# Deliberately NOT `clearState: true`. `pm clear` also wipes /sdcard/Android/data/<pkg>/, which
+# is where the runner pushes the IMU fixture and its marker — so clearing here would delete the
+# very input the flow depends on and the app would silently fall back to the real sensor. The
+# runner clears app state itself, before pushing.
+appId: com.twentydeka.ironpal
+---
+- launchApp
+- assertVisible: "IronPal"
+- tapOn: "Campaign (self-training P0)"
+- assertVisible:
+    id: "campaign-screen"

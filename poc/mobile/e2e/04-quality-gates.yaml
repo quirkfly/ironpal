@@ -1,0 +1,59 @@
+# The paths that must NOT fire.
+# Fixture: real-stationary — a VERBATIM copy of the 2026-08-05 headband bring-up recording,
+# a board sitting still. No motion means no reps; a set built from it must be kept but NOT
+# counted, and must not advance a level. (Before the absolute peak floor existed, this same
+# recording produced 93 phantom reps — that regression is what this flow guards.)
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+- tapOn:
+    id: "campaign-start-session"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-skip-calibration"
+    timeout: 20000
+- tapOn:
+    id: "campaign-skip-calibration"
+- tapOn:
+    id: "level-barbell-back-squat"
+- scrollUntilVisible:
+    element:
+        id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "mission-arm"
+
+# The gate must stay shut for the whole window.
+- assertVisible: "WAITING FOR MOTION"
+- waitForAnimationToEnd:
+    timeout: 20000
+- assertVisible: "WAITING FOR MOTION"
+- tapOn:
+    id: "hud-end-set"
+
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 30000
+# Zero reps detected, and the trace says there is nothing to label.
+- assertVisible:
+    id: "labeling-detected-reps"
+- tapOn:
+    id: "labeling-exercise-barbell-back-squat"
+- tapOn:
+    id: "labeling-save"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-outcome"
+    timeout: 30000
+# The quality gate refuses to count it — the honest outcome, not a silent pass.
+- assertVisible: "Set kept but not counted"
+
+- tapOn: "‹ Back"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-screen"
+    timeout: 15000
+# A failed gate must not advance the level.
+- assertVisible: "locked"

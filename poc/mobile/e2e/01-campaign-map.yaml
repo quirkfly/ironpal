@@ -1,0 +1,47 @@
+# The generated assets and the campaign structure actually render.
+# This is the flow that would have failed when the 44 Leonardo assets shipped in nothing.
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+
+# Rank insignia + XP (cosmetic progression).
+- assertVisible:
+    id: "rank-name"
+- assertVisible:
+    id: "rank-xp"
+
+# Three campaigns, keyed on the ontology's rep_signal classes.
+- assertVisible:
+    id: "campaign-tab-imu"
+- assertVisible:
+    id: "campaign-tab-vision"
+- assertVisible:
+    id: "campaign-tab-hard"
+
+# Ground Game: IMU exercises, and the honest statement of what it can certify.
+- assertVisible: "Exercise + reps from the headband."
+- assertVisible:
+    id: "level-bulgarian-split-squat"
+- assertVisible:
+    id: "level-barbell-back-squat"
+- assertVisible: "locked"
+
+# Arms: vision class — reps are NOT certified by the headband, and the UI must say so.
+- tapOn:
+    id: "campaign-tab-vision"
+- assertVisible: "Exercise ID + weight. Reps need your confirmation."
+- assertVisible:
+    id: "level-dumbbell-biceps-curl"
+
+# Black Ops: the `hard` class states outright that a headband cannot count these reps.
+- tapOn:
+    id: "campaign-tab-hard"
+- assertVisible: "Exercise + weight only — a headband cannot count these reps."
+- assertVisible:
+    id: "level-triceps-cable-pushdown"
+- assertVisible:
+    id: "level-seated-leg-curl"
+
+# Back to Ground Game for the following flows.
+- tapOn:
+    id: "campaign-tab-imu"

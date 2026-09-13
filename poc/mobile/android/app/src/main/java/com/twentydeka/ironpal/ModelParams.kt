@@ -45,6 +45,16 @@ data class ModelParams(
   val sConfMsMin: Int = 150,
   val sConfMsMax: Int = 400,
   val peakHeightRmsFactor: Double = 0.35,
+  /**
+   * Absolute amplitude floor for a rep peak, m/s² on the band-passed rep channel.
+   *
+   * Without this the threshold is purely relative (0.35 x RMS), so on a MOTIONLESS band the RMS
+   * collapses to sensor noise and the detector finds "reps" in the noise floor — the real
+   * 2026-08-05 stationary recording produced 93 of them before this existed. A rep is a physical
+   * event of real amplitude; 0.15 m/s² sits far above the noise (~0.01-0.05) and far below the
+   * lightest real rep measured (~1.8).
+   */
+  val peakMinAbs: Double = 0.15,
   // Decision thresholds (fusion ladder, src/config).
   val tReject: Double = 0.45,
   val tImuHigh: Double = 0.7,
@@ -101,6 +111,7 @@ data class ModelParams(
         sConfMsMin = o.optInt("s_conf_ms_min", d.sConfMsMin),
         sConfMsMax = o.optInt("s_conf_ms_max", d.sConfMsMax),
         peakHeightRmsFactor = o.optDouble("peak_height_rms_factor", d.peakHeightRmsFactor),
+        peakMinAbs = o.optDouble("peak_min_abs", d.peakMinAbs),
         tReject = o.optDouble("t_reject", d.tReject),
         tImuHigh = o.optDouble("t_imu_high", d.tImuHigh),
         tVisHigh = o.optDouble("t_vis_high", d.tVisHigh),

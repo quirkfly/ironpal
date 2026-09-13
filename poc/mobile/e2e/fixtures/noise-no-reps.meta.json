@@ -1,0 +1,22 @@
+{
+ "schema": "ironpal.imu/1",
+ "partial": false,
+ "source": "FIXTURE",
+ "device": {
+  "name": "IronPal-IMU (synthetic fixture)",
+  "firmware": "fixture",
+  "nominal_odr_hz": 60,
+  "accel_scale_g_per_lsb": 0.001,
+  "gyro_scale_dps_per_lsb": 0.0625,
+  "accel_fsr_g": 8,
+  "gyro_fsr_dps": 1000,
+  "sample_order": "ax,ay,az,gx,gy,gz",
+  "sample_units": "raw int16 LSB -- multiply by the scales above"
+ },
+ "fixture": {
+  "label": "noise-no-reps",
+  "expected_reps": 0,
+  "note": "aperiodic jitter: energy without periodicity, gate must stay shut",
+  "duration_s": 15.0
+ }
+}

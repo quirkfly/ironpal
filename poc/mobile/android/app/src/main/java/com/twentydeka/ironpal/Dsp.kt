@@ -179,11 +179,13 @@ object Dsp {
     /** Fitted absolute amplitude threshold (design §4.2); null = heightRmsFactor · RMS (the POC rule). */
     minHeightAbs: Double? = null,
     heightRmsFactor: Double = 0.35,
+    /** Absolute floor so a motionless sensor cannot produce peaks out of its own noise. */
+    minAbs: Double = 0.15,
   ): PeakResult {
     val n = signal.size
     if (n < 3) return PeakResult(IntArray(0), 0, 0.0)
     val rms = sqrt(energy(signal) / n)
-    val minHeight = minHeightAbs ?: (heightRmsFactor * rms)
+    val minHeight = max(minHeightAbs ?: (heightRmsFactor * rms), minAbs)
     val minSpacing = max(1, Math.floor(rateHz / maxCadenceHz).toInt())
     val peaks = ArrayList<Int>()
     var lastPeak = -minSpacing

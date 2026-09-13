@@ -179,7 +179,7 @@ class RepClock(private val p: ModelParams, private val ex: ExerciseParams?) {
   fun update(signal: DoubleArray, rateHz: Double, endNs: Long, cadenceHz: Double, nowNs: Long): List<Rep> {
     val n = signal.size
     if (n < 3) return emptyList()
-    val pk = Dsp.detectPeaks(signal, rateHz, cadenceHigh, ex?.aMin, p.peakHeightRmsFactor)
+    val pk = Dsp.detectPeaks(signal, rateHz, cadenceHigh, ex?.aMin, p.peakHeightRmsFactor, p.peakMinAbs)
     val sConf = sConfSec(cadenceHz)
     val minSepNs = (0.5e9 / cadenceHigh).toLong()
     val out = ArrayList<Rep>()
@@ -349,7 +349,7 @@ object SetAnalyzer {
     val per = Dsp.autocorrelationPeriodicity(sig, p.canonicalRateHz, ex?.cadenceLowHz ?: p.repBandLowHz, ex?.cadenceHighHz ?: p.repBandHighHz)
     var e = 0.0; for (v in sig) e += v * v
     val energy = if (sig.isEmpty()) 0.0 else e / sig.size
-    val peaks = Dsp.detectPeaks(sig, p.canonicalRateHz, ex?.cadenceHighHz ?: p.repBandHighHz, ex?.aMin, p.peakHeightRmsFactor)
+    val peaks = Dsp.detectPeaks(sig, p.canonicalRateHz, ex?.cadenceHighHz ?: p.repBandHighHz, ex?.aMin, p.peakHeightRmsFactor, p.peakMinAbs)
     val features = Dsp.extractFeatures(accel, p.canonicalRateHz, gyro)
     val liveMag = Dsp.bandPass(Dsp.magnitudeSeries(accel), p.canonicalRateHz, p.repBandLowHz, p.repBandHighHz)
     val match = index.match(features, liveMag, null, provisional = false)

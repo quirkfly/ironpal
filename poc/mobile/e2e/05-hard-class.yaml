@@ -1,0 +1,49 @@
+# Honesty of the campaign taxonomy.
+# Fixture: case003-pushdown-5reps (count from KB case 003, where a headband saw 0 of 5 real reps).
+# The triceps pushdown is `rep_signal: hard`, so the app must DECLINE to certify its reps
+# rather than quietly reporting a number.
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+- tapOn:
+    id: "campaign-start-session"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-skip-calibration"
+    timeout: 20000
+- tapOn:
+    id: "campaign-skip-calibration"
+- tapOn:
+    id: "campaign-tab-hard"
+- assertVisible: "Exercise + weight only — a headband cannot count these reps."
+- tapOn:
+    id: "level-triceps-cable-pushdown"
+- scrollUntilVisible:
+    element:
+        id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "mission-arm"
+- waitForAnimationToEnd:
+    timeout: 25000
+- tapOn:
+    id: "hud-end-set"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 30000
+# The rep question refuses to answer itself for this class.
+- assertVisible: "This exercise cannot be counted from a headband — please enter the count."
+- tapOn:
+    id: "labeling-reps-input"
+- inputText: "5"
+- hideKeyboard
+- tapOn:
+    id: "labeling-exercise-triceps-cable-pushdown"
+- tapOn:
+    id: "labeling-save"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-outcome"
+    timeout: 30000

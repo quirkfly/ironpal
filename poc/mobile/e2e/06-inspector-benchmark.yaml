@@ -1,0 +1,19 @@
+# Inspector and the on-device benchmark (design §5 budgets / §14 P0 exit gate).
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+# The inspector is the last card in a scroll view; assertVisible only sees what is on screen.
+- scrollUntilVisible:
+    element:
+        id: "inspector"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "inspector-benchmark"
+- extendedWaitUntil:
+    visible:
+        id: "inspector-bench-result"
+    timeout: 30000
+- assertVisible: "budget 15"
+- assertVisible: "budget 150"
+- assertVisible: "budget 60"
