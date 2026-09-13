@@ -115,6 +115,7 @@ class SessionIn(BaseModel):
     llm_calls: int = 0
     llm_cost_estimate: float = 0.0
     notes: str | None = None
+    model_metrics: dict | None = None  # design §10: metrics only, never windows or frames
 
 
 class SessionOut(SessionIn):

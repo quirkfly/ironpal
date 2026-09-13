@@ -176,11 +176,14 @@ object Dsp {
     signal: DoubleArray,
     rateHz: Double = CANONICAL_RATE_HZ,
     maxCadenceHz: Double = REP_BAND_HIGH_HZ,
+    /** Fitted absolute amplitude threshold (design §4.2); null = heightRmsFactor · RMS (the POC rule). */
+    minHeightAbs: Double? = null,
+    heightRmsFactor: Double = 0.35,
   ): PeakResult {
     val n = signal.size
     if (n < 3) return PeakResult(IntArray(0), 0, 0.0)
     val rms = sqrt(energy(signal) / n)
-    val minHeight = 0.35 * rms
+    val minHeight = minHeightAbs ?: (heightRmsFactor * rms)
     val minSpacing = max(1, Math.floor(rateHz / maxCadenceHz).toInt())
     val peaks = ArrayList<Int>()
     var lastPeak = -minSpacing
@@ -311,32 +314,36 @@ object Dsp {
   private const val W_JERK = 0.8
   private const val W_GYRO = 1.5
 
-  fun featureDistance(a: FeatureVector, b: FeatureVector): Double {
+  fun featureDistance(a: FeatureVector, b: FeatureVector): Double =
+    featureDistance(a, b, FeatureWeights(W_AXIS, W_CADENCE, W_DUTY, W_ASYM, W_FLAT, W_JERK, W_GYRO))
+
+  /** Same maths with the weights injected from ModelParams (design §3.4). */
+  fun featureDistance(a: FeatureVector, b: FeatureVector, w: FeatureWeights): Double {
     var d = 0.0
     for (i in 0 until 3) {
       val diff = a.axisEnergyRatio[i] - b.axisEnergyRatio[i]
-      d += W_AXIS * diff * diff
+      d += w.axis * diff * diff
     }
     val ca = max(1e-3, a.normalizedCadenceHz)
     val cb = max(1e-3, b.normalizedCadenceHz)
     val cd = ln(ca / cb)
-    d += W_CADENCE * cd * cd
+    d += w.cadence * cd * cd
 
     val md = a.motionDutyRatio - b.motionDutyRatio
-    d += W_DUTY * md * md
+    d += w.duty * md * md
     val pa = a.peakAsymmetry - b.peakAsymmetry
-    d += W_ASYM * pa * pa
+    d += w.asym * pa * pa
     val sf = a.spectralFlatness - b.spectralFlatness
-    d += W_FLAT * sf * sf
+    d += w.flat * sf * sf
     val nj = a.normalizedJerk - b.normalizedJerk
-    d += W_JERK * nj * nj
+    d += w.jerk * nj * nj
 
     val ag = a.gyroEnergyRatio
     val bg = b.gyroEnergyRatio
     if (ag != null && bg != null) {
       for (i in 0 until 3) {
         val diff = ag[i] - bg[i]
-        d += W_GYRO * diff * diff
+        d += w.gyro * diff * diff
       }
     }
     return sqrt(d)

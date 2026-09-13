@@ -24,8 +24,9 @@ import android.os.Handler
  */
 object ImuPipeline : SensorEventListener {
 
-  // ~12 s window at 100 Hz upper bound; the matcher uses the last few seconds.
-  private const val CAPACITY = 1200
+  // ~100–120 s at the 50–60 Hz sources: a whole set plus pre/post roll can be sliced from the
+  // buffer at set end (design §2.2). 6000 × (3+3) doubles + timestamps ≈ 340 kB.
+  private const val CAPACITY = 6000
 
   private val lock = Any()
 
@@ -205,6 +206,8 @@ object ImuPipeline : SensorEventListener {
     val accel: Array<DoubleArray>,
     val gyro: Array<DoubleArray>?,
     val nativeRateHz: Double,
+    /** Timestamp (ns, elapsedRealtime domain) of the newest sample; sample i is at endNs − (N−1−i)/rate. */
+    val endNs: Long = 0L,
   )
 
   fun snapshot(seconds: Double): Window {
@@ -222,7 +225,8 @@ object ImuPipeline : SensorEventListener {
       }
       val rAccel = Dsp.resample(accelWin, nativeRateHz)
       val rGyro = gyroWin?.let { Dsp.resample(it, nativeRateHz) }
-      return Window(rAccel, rGyro, nativeRateHz)
+      val endNs = timestampsNs[(head - 1 + CAPACITY) % CAPACITY]
+      return Window(rAccel, rGyro, nativeRateHz, endNs)
     }
   }
 }

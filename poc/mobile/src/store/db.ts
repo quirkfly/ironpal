@@ -1,4 +1,5 @@
 import SQLite from 'react-native-sqlite-storage';
+import {MODEL_SCHEMA} from '../model/schema';
 
 // Local SQLite cache (design §4.1): cached founder templates for offline
 // matching, queued SessionSet rows, and queued vision requests for retry.
@@ -51,7 +52,7 @@ export async function getDb(): Promise<SQLite.SQLiteDatabase> {
         name: DB_NAME,
         location: 'default',
       });
-      for (const stmt of SCHEMA) {
+      for (const stmt of [...SCHEMA, ...MODEL_SCHEMA]) {
         await db.executeSql(stmt);
       }
       return db;

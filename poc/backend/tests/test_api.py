@@ -181,3 +181,31 @@ def test_session_roundtrip(client, tester_auth):
     assert row["has_gyro"] is False  # D5 split
     assert row["device_model"] == "Pixel 6a"  # D4
     assert row["corrected_weight"] == 12.5  # ground truth (Q9)
+
+
+def test_model_package_served_with_etag_and_304(client, tester_auth, tmp_path, monkeypatch):
+    # Serve a throwaway package dir (design §8): latest → <version>.json.
+    from ironpal_poc.config import settings
+
+    (tmp_path / "2026.09.9.json").write_text('{"package_version":"2026.09.9","params":{}}')
+    (tmp_path / "latest").write_text("2026.09.9")
+    monkeypatch.setattr(settings, "model_packages_dir", str(tmp_path), raising=False)
+
+    r = client.get("/api/v1/model/package", headers=tester_auth)
+    assert r.status_code == 200, r.text
+    assert r.headers["X-Package-Version"] == "2026.09.9"
+    assert r.json()["package_version"] == "2026.09.9"
+    etag = r.headers["ETag"]
+
+    r2 = client.get("/api/v1/model/package", headers={**tester_auth, "If-None-Match": etag})
+    assert r2.status_code == 304
+    r3 = client.get("/api/v1/model/package?since=2026.09.9", headers=tester_auth)
+    assert r3.status_code == 304
+    r4 = client.get("/api/v1/model/package")
+    assert r4.status_code in (401, 403, 422)  # missing bearer → 422 in this API (see auth.py)
+
+
+def test_session_accepts_model_metrics(client, tester_auth):
+    body = {"detected_exercise": "goblet-squat", "model_metrics": {"prior_vs_own": "own", "integrity": 0.92, "level_state": "certified"}}
+    r = client.post("/api/v1/sessions", json=body, headers=tester_auth)
+    assert r.status_code == 201, r.text

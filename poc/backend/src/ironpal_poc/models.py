@@ -98,6 +98,8 @@ class SessionSet(Base):
     llm_calls: Mapped[int] = mapped_column(Integer, default=0)
     llm_cost_estimate: Mapped[float] = mapped_column(Float, default=0.0)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Self-training model metrics (design §10): prior_vs_own, integrity, level_state, params_source.
+    model_metrics: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
 

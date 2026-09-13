@@ -1,0 +1,170 @@
+{
+ "package_version": "2026.09.0",
+ "engine_min": "1.0.0",
+ "store_schema_version": 1,
+ "extractor_version": "fx-1",
+ "signed_at": 1789325733,
+ "params": {
+  "canonical_rate_hz": 50,
+  "rep_band_low_hz": 0.2,
+  "rep_band_high_hz": 1.5,
+  "gate_p_on": 0.35,
+  "gate_p_off": 0.25,
+  "gate_e_on": 0.02,
+  "gate_arm_ticks": 2,
+  "closing_grace_sec": 1.5,
+  "s_conf_ms_min": 150,
+  "s_conf_ms_max": 400,
+  "peak_height_rms_factor": 0.35,
+  "t_reject": 0.45,
+  "t_imu_high": 0.7,
+  "t_vis_high": 0.65,
+  "t_ocr": 0.6,
+  "w_knn": 0.6,
+  "w_dtw": 0.4,
+  "feature_weights": {
+   "axis": 2.0,
+   "cadence": 0.8,
+   "duty": 1.2,
+   "asym": 1.0,
+   "flat": 1.0,
+   "jerk": 0.8,
+   "gyro": 1.5
+  },
+  "top_k": 8,
+  "dtw_band": 0.2,
+  "prior_penalty_per_own": 0.3333333333333333,
+  "tick_ms": 400,
+  "window_sec": 4,
+  "negatives_per_session": 5,
+  "per_exercise": {
+   "bulgarian-split-squat": {
+    "cadence_low_hz": 0.3,
+    "cadence_high_hz": 0.9
+   }
+  },
+  "levels": {
+   "provisional": {
+    "sets": 3,
+    "integrity": 0.8
+   },
+   "certified": {
+    "sets": 5,
+    "weights": 2,
+    "integrity": 0.9
+   },
+   "veteran": {
+    "sets": 3,
+    "sessions": 2
+   },
+   "demoteAfterCorrections": 2,
+   "storeCapPerExercise": 20
+  }
+ },
+ "campaign_map": {
+  "imu": [
+   "barbell-back-squat",
+   "barbell-deadlift",
+   "barbell-front-squat",
+   "bulgarian-split-squat",
+   "chin-up",
+   "dip",
+   "goblet-squat",
+   "hack-squat-machine",
+   "pull-up",
+   "push-up",
+   "romanian-deadlift",
+   "standing-calf-raise-machine",
+   "walking-lunge"
+  ],
+  "fusion": [
+   "barbell-hip-thrust",
+   "barbell-overhead-press"
+  ],
+  "vision": [
+   "barbell-bench-press",
+   "barbell-bent-over-row",
+   "barbell-curl",
+   "cable-biceps-curl",
+   "cable-lateral-raise",
+   "chest-press-machine",
+   "dumbbell-bench-press",
+   "dumbbell-biceps-curl",
+   "dumbbell-fly",
+   "dumbbell-front-raise",
+   "dumbbell-lateral-raise",
+   "dumbbell-pullover",
+   "dumbbell-row",
+   "dumbbell-shoulder-press",
+   "incline-barbell-bench-press",
+   "lat-pulldown",
+   "leg-extension",
+   "leg-press",
+   "seated-cable-row",
+   "shoulder-press-machine"
+  ],
+  "hard": [
+   "seated-leg-curl",
+   "triceps-cable-pushdown"
+  ]
+ },
+ "exercise_names": {
+  "barbell-back-squat": "Barbell Back Squat",
+  "barbell-bench-press": "Barbell Bench Press",
+  "barbell-bent-over-row": "Barbell Bent-Over Row",
+  "barbell-curl": "Barbell Curl",
+  "barbell-deadlift": "Barbell Deadlift",
+  "barbell-front-squat": "Barbell Front Squat",
+  "barbell-hip-thrust": "Barbell Hip Thrust",
+  "barbell-overhead-press": "Barbell Overhead Press",
+  "bulgarian-split-squat": "Bulgarian Split Squat",
+  "cable-biceps-curl": "Cable Biceps Curl",
+  "cable-lateral-raise": "Cable Lateral Raise",
+  "chest-press-machine": "Chest Press (Machine)",
+  "chin-up": "Chin-Up",
+  "dip": "Dip",
+  "dumbbell-bench-press": "Dumbbell Bench Press",
+  "dumbbell-biceps-curl": "Dumbbell Biceps Curl",
+  "dumbbell-fly": "Dumbbell Fly",
+  "dumbbell-front-raise": "Dumbbell Front Raise",
+  "dumbbell-lateral-raise": "Dumbbell Lateral Raise",
+  "dumbbell-pullover": "Dumbbell Pullover",
+  "dumbbell-row": "Single-Arm Dumbbell Row",
+  "dumbbell-shoulder-press": "Dumbbell Shoulder Press",
+  "goblet-squat": "Goblet Squat",
+  "hack-squat-machine": "Hack Squat (Machine)",
+  "incline-barbell-bench-press": "Incline Barbell Bench Press",
+  "lat-pulldown": "Lat Pulldown",
+  "leg-extension": "Leg Extension",
+  "leg-press": "Leg Press",
+  "pull-up": "Pull-Up",
+  "push-up": "Push-Up",
+  "romanian-deadlift": "Romanian Deadlift",
+  "seated-cable-row": "Seated Cable Row",
+  "seated-leg-curl": "Seated Leg Curl",
+  "shoulder-press-machine": "Shoulder Press (Machine)",
+  "standing-calf-raise-machine": "Standing Calf Raise (Machine)",
+  "triceps-cable-pushdown": "Triceps Cable Pushdown",
+  "walking-lunge": "Walking Lunge"
+ },
+ "ontology_ref": "docs/video-analysis-kb/ontology.json",
+ "priors": [],
+ "explanations": {
+  "exercise_match": "Matched your {exercise} from {date} ({conf}). Runner-up: {runner} ({runnerConf}).",
+  "exercise_prior": "Looks like {exercise} ({conf}) — from a prior, not your own set yet.",
+  "exercise_unknown": "No rhythm I recognise (best guess {exercise}, {conf}).",
+  "reps_imu": "{n} reps from the headband — {rejected} candidate peak(s) rejected.",
+  "reps_vision": "{n} motion cycles seen; the headband cannot certify reps for this exercise.",
+  "reps_hard": "This exercise cannot be counted from a headband — please enter the count.",
+  "weight_prior": "Your usual {weight} {unit}.",
+  "weight_ocr_agree": "Read {ocr} {unit} ({conf}), matches your usual {weight} {unit}.",
+  "weight_ocr_disagree": "Read {ocr} {unit} ({conf}) but your usual is {weight} {unit} — which is it?",
+  "weight_none": "I never saw the weight.",
+  "gate_unknown": "No steady rhythm found (periodicity {periodicity} < {bar}).",
+  "level_up": "{exercise} is now {state}.",
+  "level_certified": "{exercise} is now recognised automatically in live workouts.",
+  "level_demoted": "Integrity compromised on {exercise} — one clean set restores it."
+ },
+ "smoke": [],
+ "signature": "ecdsa-p256:MEUCIC3axNd5h9omu9DZobSsMAcT03ZAgRT77baRMEeL2xc7AiEAsP0ZkXtJQc73YnAiP0WJMxVDLJE6OHSEIeYLhd9sbNs="
+}

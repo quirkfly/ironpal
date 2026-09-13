@@ -1,93 +1,143 @@
 import {NativeModules, NativeEventEmitter} from 'react-native';
+import type {FeatureVector, MatchResult, Template} from '../types/domain';
 import type {
-  FeatureVector,
-  MatchResult,
-  Template,
-} from '../types/domain';
+  GateEvent,
+  LinkEvent,
+  MatchEvent,
+  RepEvent,
+  ScoreAllRow,
+  SetResult,
+  TemplateRow,
+} from '../types/model';
 
-// JS wrapper over the custom Kotlin `SignalModule` (decisions D1/D6).
-//
-// The DSP (band-pass, autocorrelation periodicity, peak detection, feature
-// extraction, kNN, normalized DTW) runs natively over the IMU window buffer
-// shared with ImuModule. Only RESULTS cross the bridge: MatchResult events
-// during live mode, and an extracted {featureVector, imuSeriesResampled}
-// pair when enrollment finishes a take.
+// JS wrapper over the Kotlin `SignalModule` — the bridge for the signal engine (design §9).
+// Only results cross (D6): events GateEvent / RepEvent / MatchEvent / LinkEvent, one SetResult
+// per set, and per-template scores for integrity. The legacy POC surface (setTemplates,
+// startLive/stopLive, startEnroll/finishEnroll) is kept for the founder's prior-pack authoring.
 
-interface SignalNativeModule {
-  /** Load the synced founder templates into the native matcher cache (D7). */
+interface SignalNative {
+  configure(paramsJson: string, rHeadJson: string | null): Promise<void>;
+  loadTemplates(json: string, mode: 'replace' | 'delta'): Promise<{count: number; bytes: number}>;
+  startSession(sessionId: string): Promise<void>;
+  stopSession(): Promise<{sessionId: string | null; seqGaps: number; saturated: number; negativesHarvested: number}>;
+  runCalibration(step: string): Promise<string>;
+  computeCalibration(wornGravityJson: string, nodEnergyJson: string): Promise<string>;
+  startSet(setId: string, hint: string | null): Promise<void>;
+  endSet(setId: string): Promise<string>;
+  harvestNegatives(): Promise<string>;
+  scoreAll(exerciseIdsJson: string): Promise<string>;
+  benchmark(): Promise<{tickMs: number; matchMs: number; templates: number; memMb: number}>;
+  // legacy
   setTemplates(templatesJson: string): Promise<void>;
-  /** Begin live matching; emits 'SignalResult' events (~2–4 Hz). */
   startLive(): Promise<void>;
-  /** Stop live matching. */
   stopLive(): Promise<void>;
-  /** Begin recording an enrollment take for the given label. */
   startEnroll(exerciseLabel: string): Promise<void>;
-  /**
-   * Finish the enrollment take. Resolves with the extracted feature vector
-   * and the resampled raw window (both representations — D7), as JSON.
-   */
   finishEnroll(): Promise<string>;
 }
 
-const native = NativeModules.SignalModule as SignalNativeModule | undefined;
+const native = NativeModules.SignalModule as SignalNative | undefined;
+const emitter = native ? new NativeEventEmitter(NativeModules.SignalModule) : undefined;
 
-const emitter = native
-  ? new NativeEventEmitter(NativeModules.SignalModule)
-  : undefined;
-
-interface EnrollResultJson {
-  featureVector: FeatureVector;
-  imuSeriesResampled: number[][];
-  sampleRateHz: number;
-}
-
-export interface EnrollResult {
-  featureVector: FeatureVector;
-  imuSeriesResampled: number[][];
-  sampleRateHz: number;
-}
-
-function assertNative(): SignalNativeModule {
+function assertNative(): SignalNative {
   if (!native) {
     throw new Error(
-      '[SignalModule] Native module not linked. Build an APK; the DSP ' +
-        'pipeline runs in Kotlin and cannot run in a JS-only environment.',
+      '[SignalModule] Native module not linked. Build an APK; the signal engine runs in Kotlin.',
     );
   }
   return native;
 }
 
+export interface CalibrationStep {
+  step: string;
+  samples: number;
+  meanAccel?: number[];
+  nodGyroEnergy?: number[];
+}
+export interface CalibrationResult {
+  rotation: number[][];
+  residualDeg: number;
+  nodAxisDominance: number;
+  angleToPreviousDeg: number;
+}
+export interface LoadTemplate {
+  id: string;
+  exerciseId: string;
+  kind: string;
+  source: string;
+  features: FeatureVector;
+  windowF16: string;
+  channels: number;
+  remove?: boolean;
+}
+
+function on<T>(name: string, cb: (e: T) => void): () => void {
+  if (!emitter) {
+    return () => {};
+  }
+  const sub = emitter.addListener(name, cb);
+  return () => sub.remove();
+}
+
 export const SignalModule = {
+  isAvailable: () => !!native,
+
+  configure(engineJson: string, rHead: number[][] | null): Promise<void> {
+    return assertNative().configure(engineJson, rHead ? JSON.stringify(rHead) : null);
+  },
+  loadTemplates(templates: LoadTemplate[], ownCounts: Record<string, number>, mode: 'replace' | 'delta') {
+    return assertNative().loadTemplates(JSON.stringify({templates, ownCounts}), mode);
+  },
+  loadTemplateRows(rows: TemplateRow[], ownCounts: Record<string, number>, mode: 'replace' | 'delta') {
+    return this.loadTemplates(
+      rows.map(r => ({
+        id: r.id,
+        exerciseId: r.exerciseId,
+        kind: r.kind,
+        source: r.source,
+        features: r.features,
+        windowF16: r.windowF16,
+        channels: r.channels,
+      })),
+      ownCounts,
+      mode,
+    );
+  },
+  startSession: (sessionId: string) => assertNative().startSession(sessionId),
+  stopSession: () => assertNative().stopSession(),
+  async runCalibration(step: 'hold_0' | 'hold_1' | 'hold_2' | 'hold_3' | 'hold_4' | 'hold_5' | 'nods'): Promise<CalibrationStep> {
+    return JSON.parse(await assertNative().runCalibration(step)) as CalibrationStep;
+  },
+  async computeCalibration(wornGravity: number[], nodEnergy: number[]): Promise<CalibrationResult> {
+    return JSON.parse(
+      await assertNative().computeCalibration(JSON.stringify(wornGravity), JSON.stringify(nodEnergy)),
+    ) as CalibrationResult;
+  },
+  startSet: (setId: string, hint: string | null) => assertNative().startSet(setId, hint),
+  async endSet(setId: string): Promise<SetResult> {
+    return JSON.parse(await assertNative().endSet(setId)) as SetResult;
+  },
+  async harvestNegatives(): Promise<{windowF16: string; channels: number}[]> {
+    return JSON.parse(await assertNative().harvestNegatives());
+  },
+  async scoreAll(exerciseIds: string[]): Promise<ScoreAllRow[]> {
+    return JSON.parse(await assertNative().scoreAll(JSON.stringify(exerciseIds))) as ScoreAllRow[];
+  },
+  benchmark: () => assertNative().benchmark(),
+
+  onGate: (cb: (e: GateEvent) => void) => on<GateEvent>('GateEvent', cb),
+  onRep: (cb: (e: RepEvent) => void) => on<RepEvent>('RepEvent', cb),
+  onMatch: (cb: (e: MatchEvent) => void) => on<MatchEvent>('MatchEvent', cb),
+  onLink: (cb: (e: LinkEvent) => void) => on<LinkEvent>('LinkEvent', cb),
+
+  // ---- legacy POC surface (founder prior authoring + POC live HUD) ----
   async setTemplates(templates: Template[]): Promise<void> {
     await assertNative().setTemplates(JSON.stringify(templates));
   },
-  startLive(): Promise<void> {
-    return assertNative().startLive();
+  startLive: () => assertNative().startLive(),
+  stopLive: () => assertNative().stopLive(),
+  startEnroll: (exerciseLabel: string) => assertNative().startEnroll(exerciseLabel),
+  async finishEnroll(): Promise<{featureVector: FeatureVector; imuSeriesResampled: number[][]; sampleRateHz: number}> {
+    return JSON.parse(await assertNative().finishEnroll());
   },
-  stopLive(): Promise<void> {
-    return assertNative().stopLive();
-  },
-  startEnroll(exerciseLabel: string): Promise<void> {
-    return assertNative().startEnroll(exerciseLabel);
-  },
-  async finishEnroll(): Promise<EnrollResult> {
-    const json = await assertNative().finishEnroll();
-    const parsed = JSON.parse(json) as EnrollResultJson;
-    return {
-      featureVector: parsed.featureVector,
-      imuSeriesResampled: parsed.imuSeriesResampled,
-      sampleRateHz: parsed.sampleRateHz,
-    };
-  },
-  /** Subscribe to live match results (exercise/reps/confidence, results only). */
-  onResult(cb: (r: MatchResult) => void): () => void {
-    if (!emitter) {
-      return () => {};
-    }
-    const sub = emitter.addListener('SignalResult', cb);
-    return () => sub.remove();
-  },
-  isAvailable(): boolean {
-    return !!native;
-  },
+  onResult: (cb: (r: MatchResult) => void) => on<MatchResult>('SignalResult', cb),
 };

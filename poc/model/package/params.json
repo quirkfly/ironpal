@@ -1,0 +1,36 @@
+{
+  "canonical_rate_hz": 50,
+  "rep_band_low_hz": 0.2,
+  "rep_band_high_hz": 1.5,
+  "gate_p_on": 0.35,
+  "gate_p_off": 0.25,
+  "gate_e_on": 0.02,
+  "gate_arm_ticks": 2,
+  "closing_grace_sec": 1.5,
+  "s_conf_ms_min": 150,
+  "s_conf_ms_max": 400,
+  "peak_height_rms_factor": 0.35,
+  "t_reject": 0.45,
+  "t_imu_high": 0.7,
+  "t_vis_high": 0.65,
+  "t_ocr": 0.6,
+  "w_knn": 0.6,
+  "w_dtw": 0.4,
+  "feature_weights": {"axis": 2.0, "cadence": 0.8, "duty": 1.2, "asym": 1.0, "flat": 1.0, "jerk": 0.8, "gyro": 1.5},
+  "top_k": 8,
+  "dtw_band": 0.2,
+  "prior_penalty_per_own": 0.3333333333333333,
+  "tick_ms": 400,
+  "window_sec": 4,
+  "negatives_per_session": 5,
+  "per_exercise": {
+    "bulgarian-split-squat": {"cadence_low_hz": 0.3, "cadence_high_hz": 0.9}
+  },
+  "levels": {
+    "provisional": {"sets": 3, "integrity": 0.8},
+    "certified": {"sets": 5, "weights": 2, "integrity": 0.9},
+    "veteran": {"sets": 3, "sessions": 2},
+    "demoteAfterCorrections": 2,
+    "storeCapPerExercise": 20
+  }
+}

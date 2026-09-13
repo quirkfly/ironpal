@@ -523,6 +523,12 @@ The POC `templates` table is migrated into this one as `kind='prior', source='fo
 Sequencing rule: nothing in P1+ starts until P0's benchmark passes — the budget is the design's
 riskiest assumption and the cheapest to verify.
 
+> **P0 status (2026-09-13):** implemented — engine, bridge, Keystore module, JS learning layer,
+> controllers, bare-bones Campaign screen, signed package, backend route; JVM 8/8, Jest 23, pytest
+> 13, `tsc` clean. **Not yet done:** the on-device benchmark (no phone attached), the SQLCipher
+> spike (D6), and the recorder-based set slicing (ring buffer used instead). See `poc/README.md`
+> "Self-training model — P0 status" for the exact list of deviations.
+
 ---
 
 ## 15. Risks specific to this design

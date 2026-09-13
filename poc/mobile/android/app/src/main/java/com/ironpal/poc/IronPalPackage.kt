@@ -21,6 +21,7 @@ class IronPalPackage : ReactPackage {
       ImuModule(reactContext),
       SignalModule(reactContext),
       CameraModule(reactContext),
+      KeystoreModule(reactContext),
     )
   }
 

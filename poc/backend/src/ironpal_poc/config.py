@@ -36,6 +36,8 @@ def _load_openai_key(explicit: str = "") -> str:
 
 
 class Settings(BaseSettings):
+    # Directory holding signed model packages + a `latest` pointer (design §8, §10); "" = default
+    model_packages_dir: str = ""
     # --- Database ---
     # Default targets the docker-compose Postgres; tests override with sqlite.
     database_url: str = "postgresql+psycopg://ironpal:ironpal@localhost:5544/ironpal_poc"

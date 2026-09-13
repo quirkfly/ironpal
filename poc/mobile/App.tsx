@@ -9,6 +9,7 @@ import {
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {colors, radii, spacing} from './src/components/theme';
 import {USER_ROLE} from './src/config';
+import {CampaignScreen} from './src/screens/CampaignScreen';
 import {EnrollScreen} from './src/screens/EnrollScreen';
 import {LiveHudScreen} from './src/screens/LiveHudScreen';
 import {drainQueues} from './src/store/offlineQueue';
@@ -18,7 +19,7 @@ import type {AppMode} from './src/types/domain';
 // Mode controller (design §4.1): enroll (founder-only, Q1) vs live. Testers
 // (role=tester) only get live mode — they never enroll (Q1/Q2).
 
-type Screen = 'home' | 'enroll' | 'live';
+type Screen = 'home' | 'enroll' | 'live' | 'campaign';
 
 function App(): React.JSX.Element {
   const [screen, setScreen] = useState<Screen>('home');
@@ -46,6 +47,8 @@ function App(): React.JSX.Element {
         <EnrollScreen onBack={() => setScreen('home')} />
       ) : screen === 'live' ? (
         <LiveHudScreen onBack={() => setScreen('home')} />
+      ) : screen === 'campaign' ? (
+        <CampaignScreen onBack={() => setScreen('home')} />
       ) : (
         <SafeAreaView style={styles.safe}>
           <View style={styles.container}>
@@ -60,6 +63,11 @@ function App(): React.JSX.Element {
                 <Text style={styles.btnSub}>Founder-only · record fingerprints</Text>
               </Pressable>
             ) : null}
+
+            <Pressable style={styles.btn} onPress={() => setScreen('campaign')}>
+              <Text style={styles.btnText}>Campaign (self-training P0)</Text>
+              <Text style={styles.btnSub}>Session · calibrate · arm · set · debrief · learn</Text>
+            </Pressable>
 
             <Pressable
               style={[styles.btn, styles.btnPrimary]}

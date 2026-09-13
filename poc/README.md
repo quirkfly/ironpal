@@ -35,6 +35,27 @@ poc/
 | Mobile: RN/TS app, native Kotlin modules, signal pipeline, screens, sync/offline | ✅ **Authored** (faithful to design) + TypeScript typecheck |
 | Mobile: Android device build / on-device run | ⏸️ **Not buildable in this sandbox** (no Android SDK/device). Build with the `coolteen/cultee-app` toolchain — see `mobile/README.md` |
 
+## Self-training model — P0 status (2026-09-13)
+
+Implements [`../docs/ironpal-self-training-model-design.md`](../docs/ironpal-self-training-model-design.md)
+§14 **P0**. What exists and how it was verified:
+
+| Layer | What | Verified by |
+|---|---|---|
+| Kotlin engine (`ModelParams.kt`, `SignalEngine.kt`, `F16.kt`) | injected params (POC constants as package `2026.09.0`), `Canonicalizer`, `GateMachine` with hysteresis, streaming `RepClock` (per-set count, confirmed peaks, dedup across ticks), `TemplateIndex` (cached magnitudes, kNN top-8 prefilter, DTW on top-k, prior/kind penalties, leave-one-out `scoreAll`), `SetAnalyzer`, float16 windows | `./gradlew :app:testDebugUnitTest` — **8/8** (`app/src/test`, new JUnit source set) |
+| Bridge (`SignalModule.kt`, `KeystoreModule.kt`) | design §9 API: `configure`, `loadTemplates`, `startSession`/`stopSession`, `runCalibration`/`computeCalibration`, `startSet`/`endSet` → `SetResult`, `harvestNegatives`, `scoreAll`, `benchmark`; events `GateEvent`/`RepEvent`/`MatchEvent`/`LinkEvent`; legacy POC methods kept. Keystore: AES-GCM key wrapping, ECDSA P-256 verify | compiles with the app; **not yet exercised on a phone** (no device attached in this session) |
+| JS learning layer (`src/model/`) | `params` (compose package ⊕ fitted), `store` (schema §7.2 in the POC SQLite), `learner` (append set+rep templates, harvest negatives, closed-form fits, integrity via `scoreAll`, level transitions, pruning, audit, hot reload), `integrity`, `levels`, `decide` (explanations at decision time), `priors`, `packageManager` (bundled package, signature check), `canonical`, `f16` | `npx jest` — **23** tests; `npx tsc --noEmit` clean |
+| Controllers + screen | `useSession` / `useSet` / `useDebrief`, `CampaignScreen` (session → calibrate → arm → set → debrief → outcome, inspector v0) | type-checked; on-device dogfood pending |
+| Package | `scripts/model/build_package.py` → `mobile/assets/model_package.json` + `backend/model_packages/2026.09.0.json`, **signed** (ECDSA P-256; key in `credentials/`, gitignored); campaign map from the ontology (37 Tier-1) | built |
+| Backend | `GET /api/v1/model/package` (ETag / 304), `sessions.model_metrics` | `pytest` — **13** |
+
+**Deliberate P0 deviations from the design (to revisit in P1):**
+- Sets are sliced from the IMU **ring buffer** (enlarged to ~2 min) rather than the session recorder's `imu.jsonl`; both IMU sources work, and the recorder still logs for replay.
+- The calibration ritual runs the **nods only**; both IMU paths are gravity-removed, so the worn-gravity vector is assumed as −g along device +Z until the pipeline exposes a raw gravity estimate.
+- The store is the POC's plain SQLite; the **SQLCipher swap is the D6 spike** (ledger Q7) and has not run. `KeystoreModule` is ready for it.
+- Negatives, rep templates and the `T_reject` fit are in; the **incremental** integrity re-score is a full campaign re-score (≤ 300 templates, fine at P0 scale).
+- OCR reconcile, the failure catalogue, the replay CLI and package fetch/rollback are P1–P2 per the design.
+
 ## Run it
 - Backend: `cd poc/backend && uv venv --python 3.10 && uv pip install -e ".[dev]" && docker compose up -d && .venv/bin/uvicorn ironpal_poc.main:app --port 8000`
 - Tests: `cd poc/backend && .venv/bin/pytest -q`

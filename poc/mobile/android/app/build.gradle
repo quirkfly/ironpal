@@ -82,6 +82,11 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
     implementation("androidx.camera:camera-view:${cameraxVersion}")
 
+    // JVM unit tests for the pure-Kotlin signal engine (design §11 — no test source set existed).
+    testImplementation("junit:junit:4.13.2")
+    // Real org.json on the JVM test classpath (the Android stub throws "not mocked").
+    testImplementation("org.json:json:20231013")
+
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
