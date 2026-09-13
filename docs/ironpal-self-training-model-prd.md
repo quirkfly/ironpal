@@ -60,7 +60,7 @@ the section that designs it.
 | # | Requirement (as given) | Concrete acceptance criterion | Designed in |
 |---|---|---|---|
 | **R1** | Train incrementally on the device from the user's labelled footage | A confirmed set is folded into the model on the phone with no network, in ≤ 2 s on a Galaxy A52, and the next live set already benefits from it. No batch retraining step exists. | §4 |
-| **R2** | Operate within the device's compute and memory | Live tick ≤ 15 ms CPU at 2 Hz; set-end match ≤ 150 ms; update ≤ 2 s; resident memory ≤ 60 MB for the model; store ≤ 50 MB for 37 certified exercises; battery ≤ 25 %/h in a session. | §5 |
+| **R2** | Operate within the device's compute and memory | Live tick ≤ 15 ms CPU at the 400 ms tick; set-end match ≤ 150 ms; update ≤ 2 s; resident memory ≤ 60 MB for the model; store ≤ 50 MB for 37 certified exercises; battery ≤ 25 %/h in a session. | §5 |
 | **R3** | Real-time feedback during recordings | Rep cue within 150 ms of *detection*, and detection within 400 ms of the physical top of the rep; gate-open within 2 rep cycles; target-acquired ≤ 500 ms after the still. The latency budget is stated, not hidden. | §6 |
 | **R4** | Securely store and manage the user's data locally | All model data encrypted at rest with a key held in the Android Keystore; nothing leaves the device except the OCR still and explicit exports/contributions; per-set deletion and full erasure in one action. | §7 |
 | **R5** | Update itself without full reinstallation | Model behaviour that lives in data (priors, thresholds, parameter defaults, ontology, campaign map, extractor configuration) ships as a signed **model package** applied in-app with migration and rollback; only native engine changes need an app update, and the store survives them because raw windows are kept. | §8 |
@@ -172,7 +172,7 @@ device. Budgets are per-operation and enforced by the benchmark in §17.
 
 | Operation | Frequency | Budget | Design that meets it |
 |---|---|---|---|
-| Live tick (gate + features + prefilter) | fixed-delay executor in `SignalModule` over the 4 s `ANALYSIS_WINDOW_SEC` snapshot (200 samples); 2 Hz assumed, the period is a package parameter | ≤ 15 ms | band-pass and autocorrelation are O(n) and O(n·lags); features are cheap; **kNN prefilter only** on ticks — no DTW during the set |
+| Live tick (gate + features + prefilter) | `SignalModule` fixed-delay executor, **400 ms** (≈ 2.5 Hz) over the 4 s `ANALYSIS_WINDOW_SEC` snapshot (200 samples); the period becomes a package parameter | ≤ 15 ms | band-pass and autocorrelation are O(n) and O(n·lags); features are cheap; **kNN prefilter only** on ticks — no DTW during the set |
 | DTW match at set end | once per set | ≤ 150 ms | DTW only against the **top-k = 8** candidates from the kNN prefilter, Sakoe-Chiba band 0.2 (200 × 40 cells); template band-passed magnitudes **cached at load**, not recomputed per comparison (the POC recomputes them inside the loop — `Dsp.matchAgainstTemplates`) |
 | Update after a confirmed set | once per set | ≤ 2 s | append + closed-form fits + leave-one-out integrity over the campaign (≤ 15 exercises × ≤ 20 sets: ≤ 300 kNN + ≤ 300 × 8 DTW ≈ 2 400 DTW ≈ 1.5 s worst case; incremental: only re-score sets whose top-k included the changed exercise) |
 | Rep clock | per sample | negligible | peak detection on the fitted band, incremental |
@@ -190,7 +190,7 @@ device. Budgets are per-operation and enforced by the benchmark in §17.
 ### 5.3 Battery
 
 ≤ 25 % per hour in a session with BLE IMU, per-set video and live ticks (self-training PRD §10).
-The model's share: ticks at 2 Hz ≈ 3 % of one core; BLE IMU ≈ 1–2 %/h. Video capture dominates.
+The model's share: ticks every 400 ms ≈ 4 % of one core; BLE IMU ≈ 1–2 %/h. Video capture dominates.
 
 ---
 

@@ -63,9 +63,10 @@ and DTW only the top-8 candidates — and never run DTW during live ticks, only 
 
 ### Q6 — Live tick period and window?
 
-**EVIDENCE.** `SignalModule` runs the live tick on a single-thread scheduled executor over a
-`windowSec = 4.0` snapshot of the 1 200-sample (24 s at 50 Hz) ring buffer (`ImuPipeline.CAPACITY`).
-The PRD's budget assumes 2 Hz ticks over the 4 s window; the constant is package territory (§8).
+**EVIDENCE.** `SignalModule` runs the live tick with `scheduleWithFixedDelay(300, 400 ms)` — a
+**400 ms** period (≈ 2.5 Hz) — over a `windowSec = 4.0` snapshot of the 1 200-sample (24 s at 50 Hz)
+ring buffer (`ImuPipeline.CAPACITY`). The PRD's budget uses that period; the constant becomes
+package territory (§8).
 
 ### Q7 — What survives an engine or extractor change?
 
