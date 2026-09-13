@@ -528,6 +528,10 @@ riskiest assumption and the cheapest to verify.
 > 13, `tsc` clean. **Not yet done:** the on-device benchmark (no phone attached), the SQLCipher
 > spike (D6), and the recorder-based set slicing (ring buffer used instead). See `poc/README.md`
 > "Self-training model — P0 status" for the exact list of deviations.
+>
+> **Benchmark, partially closed (A52, release build):** tick **4.4 ms** vs the 15 ms budget (§5.1
+> predicted 4–8 ms) and 6 MB resident vs 60 MB. The **match budget remains unverified** — the
+> bundled package has no priors, so the measurement ran against an empty index.
 
 ---
 

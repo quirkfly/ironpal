@@ -46,6 +46,12 @@ Implements [`../docs/ironpal-self-training-model-design.md`](../docs/ironpal-sel
 | Bridge (`SignalModule.kt`, `KeystoreModule.kt`) | design §9 API: `configure`, `loadTemplates`, `startSession`/`stopSession`, `runCalibration`/`computeCalibration`, `startSet`/`endSet` → `SetResult`, `harvestNegatives`, `scoreAll`, `benchmark`; events `GateEvent`/`RepEvent`/`MatchEvent`/`LinkEvent`; legacy POC methods kept. Keystore: AES-GCM key wrapping, ECDSA P-256 verify | compiles with the app; **not yet exercised on a phone** (no device attached in this session) |
 | JS learning layer (`src/model/`) | `params` (compose package ⊕ fitted), `store` (schema §7.2 in the POC SQLite), `learner` (append set+rep templates, harvest negatives, closed-form fits, integrity via `scoreAll`, level transitions, pruning, audit, hot reload), `integrity`, `levels`, `decide` (explanations at decision time), `priors`, `packageManager` (bundled package, signature check), `canonical`, `f16` | `npx jest` — **23** tests; `npx tsc --noEmit` clean |
 | Controllers + screen | `useSession` / `useSet` / `useDebrief`, `CampaignScreen` (session → calibrate → arm → set → debrief → outcome, inspector v0) | type-checked; on-device dogfood pending |
+**On-device measurement (A52, release build, 2026-09-13):** live tick **4.4 ms** against the 15 ms
+budget — inside the 4–8 ms the design's §12 analysis predicted — and 6 MB resident against the 60 MB
+budget. The **match budget is still unverified**: the bundled package ships 0 priors, so the
+benchmark ran against an empty index and reported 0.0 ms. Re-run it after the founder's prior pack
+or a few own sets exist.
+
 | Package | `scripts/model/build_package.py` → `mobile/assets/model_package.json` + `backend/model_packages/2026.09.0.json`, **signed** (ECDSA P-256; key in `credentials/`, gitignored); campaign map from the ontology (37 Tier-1) | built |
 | Backend | `GET /api/v1/model/package` (ETag / 304), `sessions.model_metrics` | `pytest` — **13** |
 
