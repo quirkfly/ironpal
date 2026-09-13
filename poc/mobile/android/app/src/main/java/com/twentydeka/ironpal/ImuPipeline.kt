@@ -1,4 +1,4 @@
-package com.ironpal.poc
+package com.twentydeka.ironpal
 
 import android.content.Context
 import android.hardware.Sensor

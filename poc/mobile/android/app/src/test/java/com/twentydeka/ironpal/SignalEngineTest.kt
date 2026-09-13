@@ -1,4 +1,4 @@
-package com.ironpal.poc
+package com.twentydeka.ironpal
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

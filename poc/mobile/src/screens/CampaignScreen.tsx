@@ -5,6 +5,7 @@ import {colors, radii, spacing} from '../components/theme';
 import {useDebrief, type DebriefAnswers} from '../controller/useDebrief';
 import {useSession} from '../controller/useSession';
 import {useSet} from '../controller/useSet';
+import {SignalModule} from '../native/SignalModule';
 import * as store from '../model/store';
 import type {LevelProgress} from '../types/model';
 
@@ -24,6 +25,7 @@ export function CampaignScreen({onBack}: Props) {
   const [answers, setAnswers] = useState<DebriefAnswers>({exerciseId: '', repsConfirmed: null, weight: null, weightUnit: 'kg', weightState: 'confirmed'});
   const [levels, setLevels] = useState<LevelProgress[]>([]);
   const [audit, setAudit] = useState<{at: number; exerciseId: string | null; change: Record<string, unknown>; integrityAfter: number | null}[]>([]);
+  const [bench, setBench] = useState<{tickMs: number; matchMs: number; templates: number; memMb: number} | null>(null);
 
   const pkg = session.state.pkg;
   const names = useMemo(() => ((pkg as unknown as {exercise_names?: Record<string, string>})?.exercise_names ?? {}), [pkg]);
@@ -84,6 +86,14 @@ export function CampaignScreen({onBack}: Props) {
             <>
               <Text style={styles.hint}>
                 Index: {session.state.indexCount} templates · calibration {session.state.calibration ? `${session.state.calibration.angleToPreviousDeg.toFixed(0)}° vs last, residual ${session.state.calibration.residualDeg.toFixed(1)}°` : 'skipped'}
+              </Text>
+              <Text style={session.state.imuSource === 'BLE' && !set.live.link?.connected ? styles.error : styles.hint}>
+                IMU: {session.state.imuSource ?? '—'}
+                {session.state.imuSource === 'BLE'
+                  ? set.live.link?.connected
+                    ? ` · headband connected (MTU ${set.live.link.mtu}, ${set.live.link.seqGaps} gaps)`
+                    : ' · headband NOT connected — no samples will arrive'
+                  : ' · phone sensor'}
               </Text>
               <Btn label="End session" onPress={() => void session.stop()} />
             </>
@@ -159,6 +169,12 @@ export function CampaignScreen({onBack}: Props) {
             </Text>
           ))}
           <Btn label="Refresh" onPress={() => void refreshInspector()} />
+          <Btn label="Run benchmark" onPress={() => void SignalModule.benchmark().then(setBench)} />
+          {bench ? (
+            <Text style={styles.line}>
+              tick {bench.tickMs.toFixed(1)} ms (budget 15) · match {bench.matchMs.toFixed(1)} ms (budget 150) · {bench.templates} templates · {bench.memMb.toFixed(0)} MB (budget 60)
+            </Text>
+          ) : null}
         </Section>
       </ScrollView>
     </SafeAreaView>

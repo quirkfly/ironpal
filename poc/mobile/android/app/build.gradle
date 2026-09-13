@@ -21,9 +21,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.ironpal.poc"
+    namespace "com.twentydeka.ironpal"
     defaultConfig {
-        applicationId "com.ironpal.poc"
+        applicationId "com.twentydeka.ironpal"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

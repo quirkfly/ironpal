@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "android": "react-native run-android --port 8800",
-    "start": "react-native start --port 8800",
+    "android": "react-native run-android --port 8099",
+    "start": "react-native start --port 8099",
     "lint": "eslint .",
     "test": "jest",
     "typecheck": "tsc --noEmit",

@@ -21,13 +21,15 @@ export interface SessionState {
   rotation: number[][] | null;
   calibration: {residualDeg: number; nodAxisDominance: number; angleToPreviousDeg: number} | null;
   indexCount: number;
+  /** The source `ImuModule.prepare` actually selected — BLE can silently fall back to PHONE. */
+  imuSource: 'PHONE' | 'BLE' | null;
   error: string | null;
 }
 
 const MIN_FREE_MB = 500;
 
 export function useSession() {
-  const [state, setState] = useState<SessionState>({phase: 'idle', sessionId: null, pkg: null, params: null, rotation: null, calibration: null, indexCount: 0, error: null});
+  const [state, setState] = useState<SessionState>({phase: 'idle', sessionId: null, pkg: null, params: null, rotation: null, calibration: null, indexCount: 0, imuSource: null, error: null});
   const gymRef = useRef<string | null>(null);
 
   const start = useCallback(async (gymId: string | null) => {
@@ -41,12 +43,13 @@ export function useSession() {
       const exercises = [...pkg.campaign_map.imu, ...pkg.campaign_map.fusion, ...pkg.campaign_map.vision, ...pkg.campaign_map.hard];
       const sessionId = `sess_${Date.now()}`;
       let indexCount = 0;
+      let imuSource: 'PHONE' | 'BLE' | null = null;
       if (SignalModule.isAvailable()) {
         const free = await ImuModule.getFreeSpace().catch(() => null);
         if (free && free.freeBytes < MIN_FREE_MB * 1e6) {
           throw new Error(`Low storage: ${(free.freeBytes / 1e6).toFixed(0)} MB free`);
         }
-        await ImuModule.prepare(IMU_SOURCE);
+        imuSource = await ImuModule.prepare(IMU_SOURCE);
         await SignalModule.configure(toEngineJson(params.engine), null);
         indexCount = (await loadIndex(exercises, certified))?.count ?? 0;
         await ImuModule.startSession(sessionId).catch(() => null); // imu.jsonl + meta.json (BLE rig)
@@ -60,7 +63,7 @@ export function useSession() {
           [sessionId, Date.now(), gymId, IMU_SOURCE === 'BLE' ? 'elp-nano' : 'phone', IMU_SOURCE, null, 0, 0, 1, null],
         );
       });
-      setState({phase: 'calibrating', sessionId, pkg, params, rotation: null, calibration: null, indexCount, error: null});
+      setState({phase: 'calibrating', sessionId, pkg, params, rotation: null, calibration: null, indexCount, imuSource, error: null});
     } catch (e) {
       setState(s => ({...s, phase: 'idle', error: (e as Error).message}));
     }

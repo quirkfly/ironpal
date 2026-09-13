@@ -12,7 +12,7 @@
 **Implements:** [`ironpal-self-training-prd.md`](ironpal-self-training-prd.md) (the feature: loop,
 levels, gym pack) and [`ironpal-self-training-model-prd.md`](ironpal-self-training-model-prd.md) (the
 model: R1–R12). Decisions in their `_grilled.md` ledgers are inputs here and are not re-opened.
-**Grounded in:** `poc/mobile/android/app/src/main/java/com/ironpal/poc/` (`Dsp.kt`, `SignalModule.kt`,
+**Grounded in:** `poc/mobile/android/app/src/main/java/com/twentydeka/ironpal/` (`Dsp.kt`, `SignalModule.kt`,
 `ImuPipeline.kt`, `CameraModule.kt`, `BleImuSource.kt`, `ImuSessionLogger.kt`), `poc/mobile/src/`
 (`fusion/`, `store/`, `controller/`, `config/`), `poc/backend/src/ironpal_poc/api/`,
 `scripts/kb/{score_reps,score_weights,sync_imu_video}.py`.
@@ -48,7 +48,7 @@ offline queues, OCR peer — is reused as is.
 
 ```
 poc/mobile/
-├── android/.../com/ironpal/poc/
+├── android/.../com/twentydeka/ironpal/
 │   ├── ImuPipeline.kt        (unchanged) 50 Hz ring buffer, phone or BLE source
 │   ├── BleImuSource.kt       (unchanged) Nano packets → pipeline + logger
 │   ├── ImuSessionLogger.kt   (extended)  imu.jsonl + meta.json  → SessionRecorder

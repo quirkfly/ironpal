@@ -56,13 +56,41 @@ Implements [`../docs/ironpal-self-training-model-design.md`](../docs/ironpal-sel
 - Negatives, rep templates and the `T_reject` fit are in; the **incremental** integrity re-score is a full campaign re-score (≤ 300 templates, fine at P0 scale).
 - OCR reconcile, the failure catalogue, the replay CLI and package fetch/rollback are P1–P2 per the design.
 
+## Dev-stack registration (antinloop `rnctl`)
+
+Registered in the multi-RN-app registry (`~/.config/rn-devstack/registry.json`, serial-bearing so
+it is deliberately outside git — the tracked `registry.example.json` is only a 2-app sample):
+
+| Field | Value |
+|---|---|
+| `repo` | `/home/quirkfly/job_stuff/prj/ironpal/poc/mobile` |
+| `appId` | `com.twentydeka.ironpal` |
+| `metroPort` | **8099** (was 8800 — see below) |
+| `backendPort` | 8077 |
+| pinned device | `R58T13ECWNL` (Galaxy A52 SM-A525F, Android 14, arm64-v8a) |
+
+```sh
+../antinloop/bin/rnctl ports            # allocation table + collision check
+../antinloop/bin/rnctl doctor ironpal   # validate derived files against the registry
+../antinloop/bin/rnctl sync ironpal     # regenerate metro.config.js / package.json / strings.xml
+```
+
+> **Why the port moved off 8800.** Registering the app surfaced a real defect: **a system service
+> (uid 1000) on the A52 already listens on 8800**, so `adb reverse tcp:8800` fails with
+> `cannot bind listener: Address already in use` and a debug build could never reach Metro on that
+> device. 8099 is free on both the laptop and the device and sits in the managed 8090–8099 band.
+> `rnctl` does **not** manage `android/gradle.properties`; its `reactNativeDevServerPort` is kept in
+> step by hand (the same footgun reddy's README documents).
+
 ## Run it
 - Backend: `cd poc/backend && uv venv --python 3.10 && uv pip install -e ".[dev]" && docker compose up -d && .venv/bin/uvicorn ironpal_poc.main:app --port 8000`
 - Tests: `cd poc/backend && .venv/bin/pytest -q`
 - Mobile: see `poc/mobile/README.md` (Metro + debug APK).
 
 ## Running on a physical device (verified 2026-05-31)
-Deployed and launched on a Samsung **SM-G935F** (arm64-v8a, Android 8), JS served by Metro on **:8800**, backend on **:8077**.
+Deployed and launched on a Samsung **SM-G935F** (arm64-v8a, Android 8), JS served by Metro, backend on **:8077**.
+Metro's port is now **8099** and owned by the registry — run `../../antinloop/bin/rnctl sync ironpal`
+rather than editing it by hand.
 
 ```bash
 # 0) JDK 17 with javac (Adoptium, auto-provisioned by Gradle)
@@ -72,12 +100,12 @@ sed -i 's/jcenter()/mavenCentral()/g' poc/mobile/node_modules/react-native-sqlit
 # 2) backend (Postgres + API on :8077, mock vision)
 cd poc/backend && docker compose up -d && VISION_MOCK=true .venv/bin/uvicorn ironpal_poc.main:app --port 8077 &
 # 3) seed poc/mobile/.env → BACKEND_BASE_URL=http://localhost:8077, IRONPAL_AUTH_TOKEN=<POST /auth/token>, IRONPAL_ROLE=founder
-# 4) metro on 8800
-cd poc/mobile && npx react-native start --port 8800 &
+# 4) metro on 8099 (port owned by the antinloop registry)
+cd poc/mobile && npx react-native start --port 8099 &
 # 5) build + install + reverse + launch
 cd poc/mobile/android && ./gradlew :app:installDebug -PreactNativeArchitectures=arm64-v8a
-adb reverse tcp:8800 tcp:8800 && adb reverse tcp:8077 tcp:8077
-adb shell monkey -p com.ironpal.poc -c android.intent.category.LAUNCHER 1
+adb reverse tcp:8099 tcp:8099 && adb reverse tcp:8077 tcp:8077
+adb shell monkey -p com.twentydeka.ironpal -c android.intent.category.LAUNCHER 1
 ```
 The app boots to the home screen (Enroll templates / Live workout) with the role from `.env`.
 

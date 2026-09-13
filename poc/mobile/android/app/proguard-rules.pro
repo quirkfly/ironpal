@@ -26,4 +26,4 @@
 }
 
 # Keep our custom native module classes (referenced by name from JS).
--keep class com.ironpal.poc.** { *; }
+-keep class com.twentydeka.ironpal.** { *; }

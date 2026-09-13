@@ -250,7 +250,7 @@ Then at the laptop:
 
 ```sh
 adb pull /sdcard/DCIM/USBCamera/            input/kb/clips/session01/
-adb pull /sdcard/Android/data/com.ironpal.poc/files/sessions/  input/kb/sessions/
+adb pull /sdcard/Android/data/com.twentydeka.ironpal/files/sessions/  input/kb/sessions/
 
 # layer 1 alone — needs no video, tells you immediately if the IMU half is sound
 python3 scripts/kb/sync_imu_video.py --session input/kb/sessions/<id> --clock-only

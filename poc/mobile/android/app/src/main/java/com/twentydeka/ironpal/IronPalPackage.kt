@@ -1,4 +1,4 @@
-package com.ironpal.poc
+package com.twentydeka.ironpal
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule

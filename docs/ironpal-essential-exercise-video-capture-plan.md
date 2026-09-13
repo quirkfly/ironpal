@@ -291,7 +291,7 @@ Per visit, at the laptop:
 ```sh
 # 1. Pull
 adb pull /sdcard/DCIM/USBCamera/  input/kb/clips/visit<N>/
-adb pull /sdcard/Android/data/com.ironpal.poc/files/sessions/  input/kb/sessions/
+adb pull /sdcard/Android/data/com.twentydeka.ironpal/files/sessions/  input/kb/sessions/
 
 # 2. Clock health — needs no video, tells you instantly if the IMU half is sound
 python3 scripts/kb/sync_imu_video.py --session input/kb/sessions/<id> --clock-only
