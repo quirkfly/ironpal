@@ -136,3 +136,31 @@ bg_debrief: a dark after-action backdrop with a faint holographic waveform trace
 bg_level_cleared: a dark triumphant backdrop with radiating thin teal light rays from the centre and floating small hexagonal particles, subtle neon lime highlights at the edges, the centre kept clear, dark cinematic tactical interface backdrop, charcoal navy and gunmetal, thin electric teal grid lines and holographic edges, subtle vignette, wide composition with a large empty centre area kept clear for UI, no text, no letters, no people, no weapons, moody volumetric light, high detail
 bg_mission_failed: a dark backdrop with a faint red-orange warning haze at the edges, a broken holographic ring in the lower left and a dim gym floor, the centre kept clear, dark cinematic tactical interface backdrop, charcoal navy and gunmetal, thin electric teal grid lines and holographic edges, subtle vignette, wide composition with a large empty centre area kept clear for UI, no text, no letters, no people, no weapons, moody volumetric light, high detail
 ```
+
+---
+
+## Generation log — 2026-09-13
+
+| Item | Value |
+|---|---|
+| Account | shared Leonardo API account (Reddy's key), balance 3 532 → **3 169** credits |
+| Spent | **363 credits**: 3 tests (11 each) + 30 batch images (11 each) |
+| Model / settings | SDXL 1.0 `1e60896f…`, `presetStyle ILLUSTRATION`, `alchemy false`, guidance 7; squares 1024², backdrops 1360×768 |
+| Installed | 32 images → `poc/mobile/assets/game/{emblems,glyphs,ranks,badges,territory,backdrops}/` (6.7 MB with the 12 HUD SVGs); squares cut with `rembg` to 512² RGBA, backdrops JPEG q85 |
+| Review sheet | `input/game-assets/contact-sheet.png` (gitignored) |
+
+**Verdicts** (keep / reroll later — nothing blocks P2):
+
+| Asset | Verdict | Note |
+|---|---|---|
+| emblems ×5 | keep | `emblem_bootcamp` is a gauge rather than a headband; acceptable as the calibration mark |
+| glyph_barbell, glyph_dumbbell, glyph_machine | keep | dumbbell rendered as a crossed pair — reads well at badge size |
+| **glyph_cable** | reroll when convenient | rendered as a hubcap/wheel; add "cable running down to a straight bar handle" and drop "pulley wheel" |
+| **glyph_bodyweight** | reroll when convenient | an abstract cable tree; replace with "a fixed horizontal pull-up bar between two uprights, nothing else" |
+| ranks ×6 | keep | tier order reads: diamond → chevrons → star-diamond → winged chevrons → star → winged star |
+| badges ×5 | keep | consistent hex family |
+| territory ×3 | keep | `flag_uncharted` carries a small tally mark — harmless |
+| backdrops ×8 | keep | `bg_level_cleared` drifted green; the UI's teal overlay corrects it; `bg_briefing_blackops` shows an empty chair — fits the covert framing |
+
+**HUD glyphs** (`hud_*`) were drawn locally — see `scripts/game/draw-hud.py`; preview at
+`input/game-assets/hud-preview/_sheet.png`.

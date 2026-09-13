@@ -59,13 +59,17 @@ def install(wid, section, force):
     src = raw_for(wid)
     if not src:
         return "missing"
-    dst = os.path.join(DST, section, wid + ".png")
+    ext = ".jpg" if section in WIDE else ".png"   # backdrops sit behind UI: JPEG q85 (~150 kB, not ~1.5 MB PNG)
+    dst = os.path.join(DST, section, wid + ext)
     if os.path.exists(dst) and not force:
         return "kept"
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     img = Image.open(src)
     if section in WIDE:
-        img.convert("RGB").resize((1360, 768), Image.LANCZOS).save(dst, optimize=True)
+        stale = os.path.join(DST, section, wid + ".png")
+        if os.path.exists(stale):
+            os.remove(stale)
+        img.convert("RGB").resize((1360, 768), Image.LANCZOS).save(dst, quality=85, optimize=True)
     else:
         cutout(img).save(dst, optimize=True)
     return "installed"
