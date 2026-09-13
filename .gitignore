@@ -47,4 +47,4 @@ input/x/
 input/kb/groundtruth-sealed/
 
 # Game assets: raw Leonardo output (paid, regenerable from docs/ironpal-game-asset-prompts.md)
-/input/game-assets/leonardo/
+/input/game-assets/
