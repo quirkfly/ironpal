@@ -19,14 +19,18 @@ export const STUDIO_COLORS = {
   sync: '#B48EFF',
 };
 
-/** A rep mark: a vertical stem with a numbered dot. state: on | off | proposed | rejected. */
-export function MarkGlyph({x, h, n, state, selected}: {x: number; h: number; n: number | string; state: 'on' | 'off' | 'proposed' | 'rejected'; selected?: boolean}) {
+/**
+ * A rep mark: a vertical stem with a numbered dot. state: on | off | proposed | rejected.
+ * `testID` goes on the dot (the tap target), so a flow — and an accessibility user — can address
+ * an individual mark rather than the lane as a whole.
+ */
+export function MarkGlyph({x, h, n, state, selected, testID}: {x: number; h: number; n: number | string; state: 'on' | 'off' | 'proposed' | 'rejected'; selected?: boolean; testID?: string}) {
   const fill = state === 'on' ? STUDIO_COLORS.active : state === 'proposed' ? 'transparent' : state === 'rejected' ? '#2A323B' : '#2A323B';
   const stroke = state === 'on' ? STUDIO_COLORS.active : state === 'proposed' ? STUDIO_COLORS.active : state === 'rejected' ? '#4A5560' : '#4A5560';
   return (
     <>
       <Line x1={x} y1={0} x2={x} y2={h} stroke={stroke} strokeWidth={selected ? 3 : state === 'on' ? 2 : 1} strokeDasharray={state === 'rejected' ? '2,3' : undefined} />
-      <Circle cx={x} cy={11} r={selected ? 11 : 9} fill={fill} stroke={stroke} strokeWidth={1.5} />
+      <Circle testID={testID} cx={x} cy={11} r={selected ? 11 : 9} fill={fill} stroke={stroke} strokeWidth={1.5} />
       {state === 'rejected' ? <Line x1={x - 5} y1={6} x2={x + 5} y2={16} stroke="#8E8E9A" strokeWidth={1.5} /> : null}
       <SvgText x={x} y={15} fontSize={10} fontWeight="800" fill={state === 'on' ? '#0B0E12' : '#8E8E9A'} textAnchor="middle">
         {String(n)}

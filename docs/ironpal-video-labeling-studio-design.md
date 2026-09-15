@@ -809,12 +809,25 @@ string and glyph.
 | **S3 — pins, import, export** | Pins mode with crop, `extractFrame`, "read this frame" via the OCR path, Import & sync with `session.json`, per-set proxy segmentation of a continuous clip, video-only sets, scorer export | one ShenYao visit imported and labelled in-app; `score_reps.py` clean on the export; pins feed the exemplar set | ~1 wk |
 | **S4 — polish and measure** | degraded states, large type, haptics settings, `studio_events` metrics to `session_sets`, battery run with ingest | §16 metrics collected on the founder for two weeks; go/no-go for beta exposure in P3 | ~0.5 wk |
 
-> **Status (2026-09-15):** S0–S3 implemented in one pass (recorder, range analysis, clip
-> recording and ingest, the model layer, the four screens, the three e2e flows); S4 partially
-> (degraded states, drafts, metrics recorded locally). JVM 22 / Jest 43 / `tsc` clean; the release
-> APK builds. **Not done:** every on-device measurement (frame step, proxy ratio, nod cross-check),
-> the Maestro runs of `07`–`09`, the OCR call behind "read this frame", drag-to-crop for pins, and
-> posting `studio_events` to `session_sets`. See `poc/README.md` "Video labeling studio — status".
+> **Status (2026-09-16):** S0–S3 implemented (recorder, range analysis, clip recording and
+> ingest, the model layer, the four screens); S4 partially (degraded states, drafts, metrics
+> recorded locally). JVM 22 / Jest 43 / `tsc` clean.
+>
+> **Now verified on a real device** (LG G7, Android 10) with **real knowledge-base footage**: the
+> e2e harness grew six studio flows (`07`–`12`) driven by a fixture derived from KB case 001 —
+> the confirmed 6-rep/5 kg dumbbell curl — paired with the IMU fixture built from the same case.
+> Running them found seven defects that unit tests could not, the worst a **missing `VIBRATE`
+> permission that crashed the app on the first haptic** (every frame step, snap and pin). See
+> `poc/mobile/e2e/README.md` "Bugs this harness caught (studio round)".
+>
+> Three implementation details changed as a result and are now the design's actual shape: the reps
+> and weight sheets open **over the viewer** (as §7.1 always said) rather than inline; both save
+> bars are **fixed footers** rather than the last card; and the gesture cheat sheet has a button
+> twin in the `⋯` menu, because a gesture must never be the only way in (§7.5/FR-A1).
+>
+> **Still not done:** the on-device performance measurements (frame-step p95, proxy transcode
+> ratio, the nod cross-check residual), the OCR call behind "read this frame", drag-to-crop for
+> pins, and posting `studio_events` to `session_sets`. See `poc/README.md`.
 
 Sequencing rules: S0's media budget is the riskiest assumption and is measured first; S3's import is
 founder-only and can slip behind P2 without blocking beta; nothing in the Studio is a prerequisite

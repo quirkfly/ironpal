@@ -1,0 +1,138 @@
+# AFTER ACTION — pins, the weight sheet and the menu (studio design §7.7, §7.2, §11.4).
+#
+# Pins are the Scout's tool and the vision side's input: a human-chosen, cropped frame beats the
+# frame the IMU happened to pick. This flow pins one, proves the roles and the crop toggle, and
+# proves that "read this frame" stays DISABLED until a pin exists — the OCR path is the only
+# thing that ever leaves the phone, so it must never be one stray tap away.
+#
+# Fixtures: split-squat-8reps (IMU) + studio-clip.mp4 (KB case 001 footage — 5 kg confirmed).
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-studio-open.yaml
+
+# --- the weight sheet before any pin: the OCR control exists but cannot fire ---
+- tapOn:
+    id: "studio-dock-weight"
+- assertVisible:
+    id: "studio-weight-sheet"
+- assertVisible:
+    id: "studio-ocr-frame"
+- assertVisible: ".*Pin a frame first.*"
+# Unit toggle and the two honest non-answers.
+- tapOn:
+    id: "studio-weight-unit"
+- assertVisible:
+    id: "studio-weight-unit"
+    text: "lb ⇄"
+- tapOn:
+    id: "studio-weight-unit"
+- assertVisible:
+    id: "studio-weight-unit"
+    text: "kg ⇄"
+# "Couldn't see it" is a first-class answer, and the closed cell has to show it — the sheet
+# covers the dock while it is open, so the cell is checked after Done.
+- tapOn:
+    id: "studio-weight-unreadable"
+- tapOn:
+    id: "studio-sheet-done"
+- assertVisible:
+    id: "studio-dock-weight"
+    text: ".*unreadable.*"
+# Then the real value: KB case 001 confirmed 5 kg per dumbbell.
+- tapOn:
+    id: "studio-dock-weight"
+- tapOn:
+    id: "studio-weight-input"
+- inputText: "5"
+- hideKeyboard
+- tapOn:
+    id: "studio-sheet-done"
+- assertVisible:
+    id: "studio-dock-weight"
+    text: ".*5 kg.*"
+
+# --- pins mode ---
+- tapOn:
+    id: "studio-mode-pins"
+- assertVisible:
+    id: "studio-pin-role"
+    text: "glance"
+- assertVisible:
+    id: "studio-pin-crop"
+    text: "crop"
+# The crop toggle: a pin is a tight implement crop by default, never a wide frame (PRD C9).
+- tapOn:
+    id: "studio-pin-crop"
+- assertVisible:
+    id: "studio-pin-crop"
+    text: "full"
+- tapOn:
+    id: "studio-pin-crop"
+- assertVisible:
+    id: "studio-pin-crop"
+    text: "crop"
+# Roles cycle glance → rep top → rep bottom → glance.
+- tapOn:
+    id: "studio-pin-role"
+- assertVisible:
+    id: "studio-pin-role"
+    text: "rep top"
+- tapOn:
+    id: "studio-pin-role"
+- assertVisible:
+    id: "studio-pin-role"
+    text: "rep bottom"
+- tapOn:
+    id: "studio-pin-role"
+- assertVisible:
+    id: "studio-pin-role"
+    text: "glance"
+
+# Pin the current frame (extraction goes to the master and writes an exemplar row).
+- tapOn:
+    id: "studio-step-rep-next"
+- tapOn:
+    id: "studio-pin"
+- extendedWaitUntil:
+    visible:
+        id: "studio-marks-caption"
+        text: ".*1 pins.*"
+    timeout: 30000
+
+# --- with a pin, the OCR control becomes live and says what leaves the phone ---
+- tapOn:
+    id: "studio-mode-review"
+- tapOn:
+    id: "studio-dock-weight"
+- assertVisible:
+    id: "studio-ocr-frame"
+- assertVisible: ".*Sends the pinned crop only.*"
+- tapOn:
+    id: "studio-sheet-done"
+
+# --- the menu: lane toggles, clip pinning (retention), export ---
+- tapOn:
+    id: "studio-menu"
+- assertVisible:
+    id: "studio-lane-glance"
+- assertVisible:
+    id: "studio-pin-clip"
+    optional: true
+- assertVisible:
+    id: "studio-export"
+- tapOn:
+    id: "studio-pin-clip"
+    optional: true
+# Pinning the clip closes the menu itself, so the explicit close is only needed when it did not.
+- tapOn:
+    id: "studio-sheet-close"
+    optional: true
+
+# --- save with the pin attached ---
+- tapOn:
+    id: "studio-save"
+- extendedWaitUntil:
+    visible:
+        id: "studio-outcome"
+        text: ".*(Clean set|not counted).*"
+    timeout: 30000

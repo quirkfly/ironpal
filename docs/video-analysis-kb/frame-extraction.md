@@ -22,6 +22,20 @@ wrong.) **Orientation verification rule:** un-rotate with `transpose=2`, then co
 text reads forward and (b) the watch is on the LEFT wrist. If text reads backward, you've added a
 spurious mirror — remove it. Do **not** hflip this rig.
 
+### CHECK FOR A DISPLAY MATRIX FIRST — ffmpeg may already have un-rotated for you (measured 2026-09-15)
+The A52 clips carry a container **Display Matrix with `rotation=-90`**, and current ffmpeg
+**auto-applies it on decode**. So `ffmpeg -i clip.mp4 ... frame.png` already comes out upright, and
+adding `transpose=2` on top rotates it a **second** time (verified while deriving the e2e video
+fixtures: raw = mat text forward + floor at the bottom ✅; `transpose=2` = mat text sideways ✗).
+Check first, then decide:
+```sh
+ffprobe -v error -show_streams -select_streams v:0 <clip> | grep -iE 'rotation|displaymatrix'
+```
+- **`rotation` present** → ffmpeg has handled it; add **no** transpose, and verify with the checks below.
+- **no rotation side data** (or autorotate disabled with `-noautorotate`) → apply the per-rig table.
+The orientation checks below are the authority either way — run them on one frame before judging any
+trajectory. The table remains correct for the *physical* mount; it is the extraction default that changed.
+
 ### PER-RIG rotation table — the rotation is a property of the RIG, not a constant (case 007)
 - **Galaxy A52 headband:** 90° → `transpose=2`.
 - **ELP USB fisheye headband (`IPS_*.mp4` from `/sdcard/DCIM/USBCamera/`):** **180°** → `transpose=1,transpose=1`

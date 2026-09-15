@@ -23,6 +23,8 @@ appId: com.twentydeka.ironpal
         id: "mission-arm"
     direction: DOWN
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 - tapOn:
     id: "mission-arm"
 - waitForAnimationToEnd:
@@ -41,15 +43,9 @@ appId: com.twentydeka.ironpal
 - hideKeyboard
 - tapOn:
     id: "labeling-exercise-triceps-cable-pushdown"
-- scrollUntilVisible:
-    element:
-        id: "labeling-save"
-    direction: DOWN
-    timeout: 20000
 - tapOn:
     id: "labeling-save"
-- scrollUntilVisible:
-    element:
+- extendedWaitUntil:
+    visible:
         id: "labeling-outcome"
-    direction: DOWN
     timeout: 30000

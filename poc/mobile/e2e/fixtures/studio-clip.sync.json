@@ -1,9 +1,0 @@
-{
- "note": "PTS 0 of the clip = tStartNs of the set it is attached to; the app sets pts0HostNs itself.",
- "rate": 1.0,
- "residual_ms": 0,
- "frames": 600,
- "fps": 30,
- "gop": 8,
- "duration_s": 20
-}

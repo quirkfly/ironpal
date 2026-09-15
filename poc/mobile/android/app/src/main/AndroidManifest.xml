@@ -2,6 +2,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Haptics: the Studio ticks on every jog detent, snap and frame step (studio design
+         §7.4/§7.5). Without this, Vibrator.vibrate throws SecurityException and kills the
+         process on the first tick — found by e2e flow 07 on an LG G7 (Android 10). Normal
+         permission, granted at install; no runtime request. -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Headband IMU over BLE (poc/firmware). Android split these at API 31:
          BLUETOOTH/BLUETOOTH_ADMIN cover <=30, SCAN/CONNECT cover >=31.

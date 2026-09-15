@@ -60,12 +60,21 @@ if [ "$DO_INSTALL" = 1 ]; then
   ok "built $(basename "$APK")"
   # Play Protect blocks sideloads behind a dialog; bypass for the install, restore straight after.
   PREV_VERIFY="$(adb -s "$DEVICE" shell settings get global verifier_verify_adb_installs | tr -d '\r')"
+  PREV_PKG_VERIFY="$(adb -s "$DEVICE" shell settings get global package_verifier_enable | tr -d '\r')"
   adb -s "$DEVICE" shell settings put global verifier_verify_adb_installs 0 >/dev/null 2>&1
+  # verifier_verify_adb_installs alone is not enough on every device: an LG G7 on Android 10 still
+  # raised the Play Protect dialog and the install hung until this one was cleared too.
+  adb -s "$DEVICE" shell settings put global package_verifier_enable 0 >/dev/null 2>&1
   adb -s "$DEVICE" install -r -d "$APK" >/dev/null 2>&1 || die "install failed"
   if [ "$PREV_VERIFY" = "null" ] || [ -z "$PREV_VERIFY" ]; then
     adb -s "$DEVICE" shell settings delete global verifier_verify_adb_installs >/dev/null 2>&1
   else
     adb -s "$DEVICE" shell settings put global verifier_verify_adb_installs "$PREV_VERIFY" >/dev/null 2>&1
+  fi
+  if [ "$PREV_PKG_VERIFY" = "null" ] || [ -z "$PREV_PKG_VERIFY" ]; then
+    adb -s "$DEVICE" shell settings delete global package_verifier_enable >/dev/null 2>&1
+  else
+    adb -s "$DEVICE" shell settings put global package_verifier_enable "$PREV_PKG_VERIFY" >/dev/null 2>&1
   fi
   ok "installed $APP_ID (install verification restored)"
 fi
@@ -100,10 +109,15 @@ declare -A FIXTURE=(
   [05-hard-class]=case003-pushdown-5reps
   [06-inspector-benchmark]=split-squat-8reps
   [07-studio-navigation]=split-squat-8reps
-  [08-studio-marks-relabel]=split-squat-8reps
-  [09-studio-reel]=split-squat-8reps
+  [08-studio-marks-bounds]=split-squat-8reps
+  [09-studio-exercise-relabel]=split-squat-8reps
+  [10-studio-pins-weight]=split-squat-8reps
+  [11-studio-reel]=split-squat-8reps
+  [12-studio-queue-import]=case001-curl-6reps
 )
-ORDER=(01-campaign-map 02-session-and-hud 03-labeling-round 04-quality-gates 05-hard-class 06-inspector-benchmark 07-studio-navigation 08-studio-marks-relabel 09-studio-reel)
+ORDER=(01-campaign-map 02-session-and-hud 03-labeling-round 04-quality-gates 05-hard-class 06-inspector-benchmark \
+       07-studio-navigation 08-studio-marks-bounds 09-studio-exercise-relabel 10-studio-pins-weight \
+       11-studio-reel 12-studio-queue-import)
 
 push_fixture() { # $1 = fixture basename
   local fx="$1"
@@ -117,11 +131,16 @@ push_fixture() { # $1 = fixture basename
   adb -s "$DEVICE" push "$src" "$DEVICE_FILES/e2e/replay.jsonl" >/dev/null 2>&1 || die "push failed"
   [ -f "$FIXTURES/$fx.meta.json" ] && \
     adb -s "$DEVICE" push "$FIXTURES/$fx.meta.json" "$DEVICE_FILES/e2e/meta.json" >/dev/null 2>&1
-  # The Studio's video fixture (studio design §17): attached to the set under test when the
-  # marker is present, so frame stepping can be asserted without a camera.
+  # The Studio's video fixtures (studio design §17) — REAL knowledge-base footage, derived by
+  # make_video_fixture.py and committed. Attached to the set under test when the marker is
+  # present, so frame stepping runs on real video without a camera.
   [ -f "$FIXTURES/studio-clip.mp4" ] || python3 "$ROOT/scripts/e2e/make_video_fixture.py" >/dev/null 2>&1 || true
-  [ -f "$FIXTURES/studio-clip.mp4" ] && \
-    adb -s "$DEVICE" push "$FIXTURES/studio-clip.mp4" "$DEVICE_FILES/e2e/studio-clip.mp4" >/dev/null 2>&1
+  for v in studio-clip studio-clip-hard; do
+    [ -f "$FIXTURES/$v.mp4" ] && \
+      adb -s "$DEVICE" push "$FIXTURES/$v.mp4" "$DEVICE_FILES/e2e/$v.mp4" >/dev/null 2>&1
+    [ -f "$FIXTURES/$v.meta.json" ] && \
+      adb -s "$DEVICE" push "$FIXTURES/$v.meta.json" "$DEVICE_FILES/e2e/$v.meta.json" >/dev/null 2>&1
+  done
   # The marker is what makes the app choose the REPLAY source at session start.
   local marker; marker="$(mktemp)"
   printf '{"file":"e2e/replay.jsonl","loop":true,"label":"%s"}\n' "$fx" > "$marker"

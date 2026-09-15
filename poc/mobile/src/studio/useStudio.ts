@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Vibration} from 'react-native';
 import {answersToConfirmed, evaluateGates, type DebriefAnswers, type DebriefContext} from '../controller/useDebrief';
+import {detent, offSnap, snapped as snapTick, tick} from './haptics';
 import {ImuModule} from '../native/ImuModule';
 import {SignalStudio} from '../native/SignalModule';
 import {attachClipToSet, clipDir, importClip, loadPtsTable} from '../model/clips';
@@ -177,18 +177,27 @@ export function useStudio(open: StudioOpen, opts: {names: Record<string, string>
           marksInit = row.repMarks.map((sec, i) => ({id: newMarkId(), tNs: origin + sec * 1e9, snapped: snappedInit ? snappedInit[i] : true, source: 'imu' as const, on: true}));
         }
         // E2E: attach the fixture clip so the flows can step frames without a camera (§17).
-        if (!clip && ImuModule.isAvailable?.() !== false) {
+        // `getE2eConfig().file` is ABSOLUTE (ImuModule resolves it against the external files
+        // dir), so the fixture sits next to it — take its directory, never re-prefix it.
+        let e2eError: string | null = null;
+        if (!clip && ImuModule.isAvailable()) {
           try {
             const e2e = await ImuModule.getE2eConfig();
             if (e2e.enabled && e2e.file) {
-              // The marker's path is relative to the app's external files dir; ClipModule
-              // reports `<externalFilesDir>/clips`, so strip that tail to get the base.
-              const base = (await clipDir('')).replace(/\/clips\/?$/, '');
-              const rel = e2e.file.slice(0, e2e.file.lastIndexOf('/'));
-              clip = await importClip({sessionId: result.sessionId ?? 'e2e', masterPath: `${base}/${rel}/studio-clip.mp4`, source: 'gallery', rotationDeg: 0, sync: {pts0HostNs: result.tStartNs, rate: 1, residualMs: 0, class: 'exact', source: 'session_json'}, labeledSetId: labeledSetId ?? undefined});
+              const dir = e2e.file.slice(0, e2e.file.lastIndexOf('/'));
+              clip = await importClip({
+                sessionId: result.sessionId ?? 'e2e',
+                masterPath: `${dir}/studio-clip.mp4`,
+                source: 'gallery',
+                rotationDeg: 0,
+                sync: {pts0HostNs: result.tStartNs, rate: 1, residualMs: 0, class: 'exact', source: 'session_json'},
+                labeledSetId: labeledSetId ?? undefined,
+              });
             }
-          } catch {
-            // no e2e marker: the normal case
+          } catch (e) {
+            // Only reachable with a marker present (i.e. in the harness). Surfacing it matters:
+            // a silently missing clip makes a video flow look like a product bug.
+            e2eError = `e2e clip not attached: ${(e as Error).message}`;
           }
         }
         if (marksInit.length === 0) {
@@ -220,11 +229,15 @@ export function useStudio(open: StudioOpen, opts: {names: Record<string, string>
         if (!alive) {
           return;
         }
-        const startNs = result.tOpenNs || t0Ns;
-        const endNs = result.tCloseNs || t1Ns;
+        // Clamp the bounds and the playhead into the window the timeline actually draws. A gate
+        // that opened before the analysed window starts would otherwise put the playhead at a
+        // NEGATIVE time, where stepping back clamps and a frame step stops being reversible.
+        const clamp = (t: number) => Math.min(t1Ns, Math.max(t0Ns, t));
+        const startNs = clamp(result.tOpenNs || t0Ns);
+        const endNs = clamp(result.tCloseNs || t1Ns);
         setS(prev => ({
           ...prev, loading: false, labeledSetId, sessionId: result.sessionId, result, clip, pts, t0Ns, t1Ns, playhead: startNs, marks: marksInit,
-          bounds: {startNs, endNs}, answers, explain, trace, ghost, syncClass, degraded: classLine(syncClass, clip, hasImu), pins,
+          bounds: {startNs, endNs}, answers, explain, trace, ghost, syncClass, degraded: e2eError ?? classLine(syncClass, clip, hasImu), pins,
           mode: open.focus === 'marks' ? 'marks' : open.focus === 'bounds' ? 'bounds' : 'review',
         }));
         void store.studioEvent({kind: 'open', labeledSetId, ms: Date.now() - openedAt.current});
@@ -312,7 +325,7 @@ export function useStudio(open: StudioOpen, opts: {names: Record<string, string>
         const near = nearestSnap(snapPoints, t, radiusNs);
         if (near != null && near !== prev.playhead) {
           t = near;
-          Vibration.vibrate(8);
+          snapTick();
         }
       }
       return t === prev.playhead ? prev : {...prev, playhead: t};
@@ -333,7 +346,7 @@ export function useStudio(open: StudioOpen, opts: {names: Record<string, string>
       t = Math.min(prev.t1Ns, Math.max(prev.t0Ns, t));
       return {...prev, playhead: t};
     });
-    Vibration.vibrate(10);
+    detent();
     const now = Date.now();
     if (now - lastStep.current > 20) {
       void store.studioEvent({kind: 'step', labeledSetId: s.labeledSetId, ms: now - t0});
@@ -377,7 +390,7 @@ export function useStudio(open: StudioOpen, opts: {names: Record<string, string>
   const addMark = useCallback(async (atNs?: number) => {
     const t = atNs ?? s.playhead;
     const snapped = await snapTo(t);
-    Vibration.vibrate(snapped.snapped ? 8 : [0, 8, 40, 8]);
+    if (snapped.snapped) { snapTick(); } else { offSnap(); }
     setS(prev => {
       if (prev.marks.some(m => Math.abs(m.tNs - snapped.tNs) < 50_000_000)) {
         return prev; // 50 ms: already a mark here
@@ -395,7 +408,7 @@ export function useStudio(open: StudioOpen, opts: {names: Record<string, string>
       return;
     }
     const snapped = await snapTo(toNs);
-    Vibration.vibrate(snapped.snapped ? 8 : [0, 8, 40, 8]);
+    if (snapped.snapped) { snapTick(); } else { offSnap(); }
     setS(prev => ({...prev, marks: prev.marks.map(m => (m.id === id ? {...m, tNs: snapped.tNs, snapped: snapped.snapped, source: 'user' as const} : m)).sort((a, b) => a.tNs - b.tNs), playhead: snapped.tNs}));
     void store.studioEvent({kind: 'mark_move', labeledSetId: s.labeledSetId});
   }, [snapTo, s.labeledSetId]);
@@ -450,7 +463,7 @@ export function useStudio(open: StudioOpen, opts: {names: Record<string, string>
     }
     const row = await pinFrame({labeledSetId: setId, clipId: s.clip.id, ptsUs: s.pts[frameIndex], role, crop});
     setS(prev => ({...prev, pins: [...prev.pins.filter(p => p.id !== row.id), row]}));
-    Vibration.vibrate(12);
+    tick(12);
     void store.studioEvent({kind: 'pin', labeledSetId: s.labeledSetId});
     return row;
   }, [s.clip, s.pts, frameIndex, s.labeledSetId, s.result]);

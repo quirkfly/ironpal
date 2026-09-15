@@ -1,0 +1,201 @@
+# AFTER ACTION — the queue and the import screen (studio design §7.9, §7.10).
+#
+# The queue is the model's voice: it asks about what it is least sure of, and every dismissal
+# costs a reason so the dismissal teaches too. The import screen is the founder path for rig
+# video; here it ingests the same real KB clip the other flows scrub, which exercises the ingest
+# job end to end (PTS table → proxy transcode → filmstrip) on the device rather than in theory.
+#
+# Fixture: case001-curl-6reps (IMU, the same KB case as studio-clip.mp4).
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+
+# A set that fails the rep-agreement gate is what puts an item in the queue: record the set, then
+# confirm a count the headband disagrees with by more than one.
+- tapOn:
+    id: "campaign-start-session"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-calibrate"
+    timeout: 20000
+- tapOn:
+    id: "campaign-calibrate"
+- extendedWaitUntil:
+    visible:
+        id: "session-imu-status"
+    timeout: 30000
+- tapOn:
+    id: "campaign-tab-vision"
+# Campaign 2 lists twenty exercises; the curl is well down the grid.
+- scrollUntilVisible:
+    element:
+        id: "level-dumbbell-biceps-curl"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "level-dumbbell-biceps-curl"
+- scrollUntilVisible:
+    element:
+        id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "mission-arm"
+- extendedWaitUntil:
+    notVisible: "WAITING FOR MOTION"
+    timeout: 45000
+- waitForAnimationToEnd:
+    timeout: 20000
+- tapOn:
+    id: "hud-end-set"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 30000
+# KB case 001 confirmed 6 reps per arm and 5 kg per dumbbell.
+- tapOn:
+    id: "labeling-reps-input"
+- eraseText
+- inputText: "6"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+        id: "labeling-weight-input"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "labeling-weight-input"
+- inputText: "5"
+- hideKeyboard
+- tapOn:
+    id: "labeling-save"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-outcome"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+        id: "labeling-back"
+    direction: UP
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "labeling-back"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "labeling-back"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "campaign-screen"
+    timeout: 15000
+
+# --- the queue ---
+- scrollUntilVisible:
+    element:
+        id: "campaign-after-action"
+    direction: DOWN
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "campaign-after-action"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "campaign-after-action"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "queue-screen"
+    timeout: 20000
+- assertVisible:
+    id: "queue-count"
+# Either the model has a question or it does not — both are legitimate, and the screen says which.
+- assertVisible:
+    id: "queue-empty"
+    optional: true
+- assertVisible:
+    id: "queue-item-.*"
+    optional: true
+
+# A long press offers the dismissal reasons; dismissing writes a decision row, never a silent drop.
+- longPressOn:
+    id: "queue-item-.*"
+    optional: true
+- tapOn:
+    id: "queue-dismiss-was_rest"
+    optional: true
+
+# --- the import screen (founder) ---
+- tapOn:
+    id: "queue-back"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "queue-back"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "home-screen"
+    timeout: 20000
+- scrollUntilVisible:
+    element:
+        id: "home-import"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "home-import"
+- extendedWaitUntil:
+    visible:
+        id: "import-screen"
+    timeout: 20000
+- assertVisible:
+    id: "import-master"
+- assertVisible:
+    id: "import-session-json"
+- assertVisible:
+    id: "import-rotation-180"
+- assertVisible:
+    id: "import-source-shenyao"
+
+# Import the real KB clip the runner pushed, as a gallery clip with no session.json — so it lands
+# as a video-only import with sync class `none`, which is the honest outcome without alignment.
+- tapOn:
+    id: "import-master"
+- eraseText
+- inputText: "/sdcard/Android/data/com.twentydeka.ironpal/files/e2e/studio-clip.mp4"
+- hideKeyboard
+- tapOn:
+    id: "import-source-gallery"
+- tapOn:
+    id: "import-rotation-0"
+- tapOn:
+    id: "import-run"
+# Ingest is PTS table → proxy transcode → filmstrip: real work on the device's own codecs, so the
+# wait is generous. A successful import navigates straight to the Reel for that session, which is
+# where the outcome is asserted — the import screen's own line is gone by then.
+- extendedWaitUntil:
+    visible:
+        id: "reel-screen"
+    timeout: 240000
+- scrollUntilVisible:
+    element:
+        id: "reel-clip-.*"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+# Imported without a session.json, so the honest sync class is `none` — the clip teaches exercise
+# and weight, not rep timing.
+- assertVisible: ".*gallery · ready · sync none.*"

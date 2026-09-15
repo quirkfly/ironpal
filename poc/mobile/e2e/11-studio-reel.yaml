@@ -1,0 +1,218 @@
+# AFTER ACTION — the Reel (studio design §7.8).
+#
+# The Reel is the session view: every set on one strip, untagged periodic motion as "?", and the
+# operations that only make sense across sets — split, merge, propagate — plus the clip list with
+# its sync class and the label export the KB scorers read.
+#
+# Fixture: split-squat-8reps (IMU) + studio-clip.mp4. The set is saved from the Debrief first so
+# the Reel has something to show.
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+- tapOn:
+    id: "campaign-start-session"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-calibrate"
+    timeout: 20000
+- tapOn:
+    id: "campaign-calibrate"
+- extendedWaitUntil:
+    visible:
+        id: "session-imu-status"
+    timeout: 30000
+- tapOn:
+    id: "level-bulgarian-split-squat"
+- scrollUntilVisible:
+    element:
+        id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "mission-arm"
+- extendedWaitUntil:
+    notVisible: "WAITING FOR MOTION"
+    timeout: 45000
+- extendedWaitUntil:
+    visible:
+        id: "hud-reps"
+        text: "[0-9]{2}"
+    timeout: 90000
+- tapOn:
+    id: "hud-end-set"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+        id: "labeling-exercise-bulgarian-split-squat"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "labeling-exercise-bulgarian-split-squat"
+- scrollUntilVisible:
+    element:
+        id: "labeling-weight-input"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "labeling-weight-input"
+- inputText: "24"
+- hideKeyboard
+# The keyboard closing re-lays out the screen; tapping into that is how the save gets lost.
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible:
+    id: "labeling-save"
+- tapOn:
+    id: "labeling-save"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-outcome"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+        id: "labeling-back"
+    direction: UP
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "labeling-back"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "labeling-back"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "campaign-screen"
+    timeout: 15000
+
+# --- into After Action, then the Reel ---
+- scrollUntilVisible:
+    element:
+        id: "campaign-after-action"
+    direction: DOWN
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- assertVisible:
+    id: "campaign-after-action-count"
+- tapOn:
+    id: "campaign-after-action"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "campaign-after-action"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "queue-screen"
+    timeout: 20000
+- tapOn:
+    id: "queue-open-reel"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "queue-open-reel"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "reel-screen"
+    timeout: 30000
+
+# --- the strip and the session picker ---
+- assertVisible:
+    id: "reel-strip"
+- assertVisible:
+    id: "reel-session-sess_[0-9]+"
+- assertVisible:
+    id: "reel-export"
+
+# --- the set is listed, with its label source and revision ---
+- extendedWaitUntil:
+    visible:
+        id: "reel-set-set_[0-9]+"
+    timeout: 30000
+- assertVisible: ".*debrief r1.*"
+
+# --- selecting a set offers split / merge (merge stays disabled with one set) ---
+- tapOn:
+    id: "reel-select-set_[0-9]+"
+- assertVisible:
+    id: "reel-split"
+- assertVisible:
+    id: "reel-merge"
+- tapOn:
+    id: "reel-split-later"
+- assertVisible:
+    id: "reel-split"
+    text: ".*60%.*"
+- tapOn:
+    id: "reel-split-earlier"
+- assertVisible:
+    id: "reel-split"
+    text: ".*50%.*"
+- tapOn:
+    id: "reel-select-set_[0-9]+"
+
+# --- untagged motion: the fixture loops, so a region may or may not be found. Both are correct;
+#     what matters is that the Reel states which, rather than staying silent. ---
+- scrollUntilVisible:
+    element:
+        id: "reel-regions-empty"
+    direction: DOWN
+    timeout: 20000
+    optional: true
+- waitForAnimationToEnd:
+    timeout: 3000
+- assertVisible:
+    id: "reel-region-.*"
+    optional: true
+
+# --- the clip list carries the sync class, so a misaligned clip is visible before it misleads ---
+- scrollUntilVisible:
+    element:
+        id: "reel-clip-.*"
+    direction: DOWN
+    timeout: 20000
+    optional: true
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# --- the set re-opens in the Studio on the relabel path ---
+- scrollUntilVisible:
+    element:
+        id: "reel-set-set_[0-9]+"
+    direction: UP
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "reel-set-set_[0-9]+"
+- extendedWaitUntil:
+    visible:
+        id: "studio-screen"
+    timeout: 30000
+- assertVisible:
+    id: "studio-save"
+    text: ".*SAVE CHANGES.*"
+- tapOn:
+    id: "studio-back"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "studio-back"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "reel-screen"
+    timeout: 20000

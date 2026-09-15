@@ -1,17 +1,20 @@
 import React, {useRef} from 'react';
-import {StyleSheet, View, Vibration} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Svg, {Circle, Line, Path} from 'react-native-svg';
 import {colors} from '../components/theme';
 import {STUDIO_COLORS} from './glyphs';
+import {detent} from './haptics';
 
 // The jog wheel (studio design §7.4, ledger Q15): a circular pan whose angular travel maps to
 // frames with detents — 12° per frame at rest, ×4 above 360°/s — each detent a haptic tick.
 // Final Cut Pro for iPad's wheel behaviour, calibrated to a phone thumb.
 
-const SIZE = 96;
+const SIZE = 76;
 const DEG_PER_FRAME = 12;
 const FAST_DEG_PER_SEC = 360;
+/** Inside this radius the angle is meaningless (it flips through the centre) — read dx instead. */
+const DEAD_ZONE_PX = 16;
 
 interface Props {
   onStep: (frames: number) => void;
@@ -20,15 +23,46 @@ interface Props {
 
 export function JogWheel({onStep, disabled}: Props) {
   const lastAngle = useRef<number | null>(null);
+  const lastX = useRef(0);
   const lastTime = useRef(0);
   const acc = useRef(0);
 
   const angleOf = (x: number, y: number) => (Math.atan2(y - SIZE / 2, x - SIZE / 2) * 180) / Math.PI;
+  const radiusOf = (x: number, y: number) => Math.hypot(x - SIZE / 2, y - SIZE / 2);
+
+  /**
+   * Degrees of travel for one pan step. Near the hub the angle is meaningless — it swings wildly
+   * and flips sign as the touch crosses the centre — so inside DEAD_ZONE_PX the wheel reads the
+   * HORIZONTAL travel instead, at a radius-equivalent rate. A thumb that starts on the hub and
+   * drags sideways therefore jogs, instead of doing nothing or jumping a dozen frames.
+   */
+  const travelDeg = (x: number, y: number): number => {
+    const r = radiusOf(x, y);
+    if (r < DEAD_ZONE_PX) {
+      const dx = x - lastX.current;
+      lastAngle.current = null; // re-seed the angle when the touch leaves the hub
+      return (dx / (SIZE / 2)) * (180 / Math.PI);
+    }
+    const a = angleOf(x, y);
+    if (lastAngle.current == null) {
+      lastAngle.current = a;
+      return 0;
+    }
+    let d = a - lastAngle.current;
+    if (d > 180) {
+      d -= 360;
+    } else if (d < -180) {
+      d += 360;
+    }
+    lastAngle.current = a;
+    return d;
+  };
 
   const pan = Gesture.Pan()
     .runOnJS(true)
     .onBegin(e => {
-      lastAngle.current = angleOf(e.x, e.y);
+      lastAngle.current = radiusOf(e.x, e.y) < DEAD_ZONE_PX ? null : angleOf(e.x, e.y);
+      lastX.current = e.x;
       lastTime.current = Date.now();
       acc.current = 0;
     })
@@ -36,21 +70,14 @@ export function JogWheel({onStep, disabled}: Props) {
       if (disabled) {
         return;
       }
-      const a = angleOf(e.x, e.y);
-      if (lastAngle.current == null) {
-        lastAngle.current = a;
-        return;
-      }
-      let d = a - lastAngle.current;
-      if (d > 180) {
-        d -= 360;
-      } else if (d < -180) {
-        d += 360;
-      }
-      lastAngle.current = a;
+      const d = travelDeg(e.x, e.y);
+      lastX.current = e.x;
       const now = Date.now();
       const dt = Math.max(1, now - lastTime.current) / 1000;
       lastTime.current = now;
+      if (d === 0) {
+        return;
+      }
       const speed = Math.abs(d) / dt;
       const perDetent = speed > FAST_DEG_PER_SEC ? 0.25 : 1;
       acc.current += d / DEG_PER_FRAME / perDetent;
@@ -58,7 +85,7 @@ export function JogWheel({onStep, disabled}: Props) {
       if (whole !== 0) {
         acc.current -= whole;
         onStep(whole);
-        Vibration.vibrate(10);
+        detent();
       }
     })
     .onFinalize(() => {

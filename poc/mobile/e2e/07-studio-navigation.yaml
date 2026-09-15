@@ -1,75 +1,91 @@
-# AFTER ACTION — frame navigation (studio design §7.2–§7.4, §17).
-# Fixture: split-squat-8reps IMU + studio-clip.mp4 (20 s, 30 fps, burned-in frame counter).
-# The Studio attaches the fixture clip when the e2e marker is present, so the flow can step
-# frames without a camera. Assertions read the Studio's own frame HUD, never the video pixels.
+# AFTER ACTION — navigation: the viewer, the frame HUD and every transport control.
+#
+# Fixtures: split-squat-8reps (IMU) + studio-clip.mp4 — the KB case-001 curl, real headband
+# footage with confirmed ground truth, trimmed and re-encoded at the proxy's 0.25 s GOP.
+# The clip is attached to the set under test when the e2e marker is present, so frame stepping
+# runs on real video on a phone with no camera.
+#
+# Every assertion reads the Studio's own frame HUD (`studio-frame`), never the video's pixels:
+# the frame index comes from the clip's PTS table, which is the thing under test. The burned-in
+# counter in the footage is for a human watching the run.
 appId: com.twentydeka.ironpal
 ---
-- runFlow: 00-launch.yaml
-- tapOn:
-    id: "campaign-start-session"
-- extendedWaitUntil:
-    visible:
-        id: "campaign-calibrate"
-    timeout: 20000
-- tapOn:
-    id: "campaign-calibrate"
-- tapOn:
-    id: "level-bulgarian-split-squat"
-- scrollUntilVisible:
-    element:
-        id: "mission-arm"
-    direction: DOWN
-    timeout: 20000
-- tapOn:
-    id: "mission-arm"
-- extendedWaitUntil:
-    notVisible: "WAITING FOR MOTION"
-    timeout: 45000
-- extendedWaitUntil:
-    visible:
-        id: "hud-reps"
-        text: "[0-9]{2}"
-    timeout: 90000
-- tapOn:
-    id: "hud-end-set"
-- extendedWaitUntil:
-    visible:
-        id: "labeling-screen"
-    timeout: 30000
+- runFlow: 00-studio-open.yaml
 
-# Open the round in After Action from the reps card.
-- assertVisible:
-    id: "labeling-open-studio-reps"
-- tapOn:
-    id: "labeling-open-studio-reps"
-- extendedWaitUntil:
-    visible:
-        id: "studio-screen"
-    timeout: 30000
+# --- the viewer is up with its overlays ---
 - assertVisible:
     id: "studio-frame"
 - assertVisible:
     id: "studio-sync"
+- assertVisible:
+    id: "studio-rep-counter"
+- assertVisible:
+    id: "studio-gate-pill"
+- assertVisible:
+    id: "studio-timeline"
+- assertVisible:
+    id: "studio-marks-caption"
 
-# Frame stepping is by PTS table: forward, back, and the wheel.
+# The clip is ingested asynchronously; wait for a real frame index rather than assuming one.
 - extendedWaitUntil:
     visible:
         id: "studio-frame"
         text: ".*· f [0-9]+ ·.*"
-    timeout: 20000
+    timeout: 60000
+
+# --- frame stepping by the PTS table ---
+# The starting frame is wherever the gate opened, so it is not asserted as a number. What IS
+# asserted is the property that matters: one step forward then one step back returns to exactly
+# the same frame, which is what "frame-accurate" means. The HUD's own text is the reference.
+# Step once first: the playhead starts wherever the gate opened, which is an arbitrary instant
+# BETWEEN two frames. One step lands it exactly on a frame's presentation time, and only from
+# there is "forward then back" expected to reproduce the HUD string character for character.
 - tapOn:
     id: "studio-step-frame-next"
-- tapOn:
-    id: "studio-step-frame-next"
-- assertVisible:
+- copyTextFrom:
     id: "studio-frame"
-    text: ".*· f 3 ·.*"
+- tapOn:
+    id: "studio-step-frame-next"
+- extendedWaitUntil:
+    notVisible:
+        id: "studio-frame"
+        text: "${maestro.copiedText}"
+    timeout: 10000
 - tapOn:
     id: "studio-step-frame-prev"
+- extendedWaitUntil:
+    visible:
+        id: "studio-frame"
+        text: "${maestro.copiedText}"
+    timeout: 10000
+# Two forward, two back — the same invariant over a longer run. The waits matter: a tap can be
+# delivered late (or swallowed) while the JS thread is busy, and asserting instantly turns that
+# into a false failure. Waiting for the HUD to actually leave the copied frame, and for it to
+# come back, tests the invariant without racing the bridge.
+- tapOn:
+    id: "studio-step-frame-next"
+- tapOn:
+    id: "studio-step-frame-next"
+- extendedWaitUntil:
+    notVisible:
+        id: "studio-frame"
+        text: "${maestro.copiedText}"
+    timeout: 10000
+- tapOn:
+    id: "studio-step-frame-prev"
+- tapOn:
+    id: "studio-step-frame-prev"
+- extendedWaitUntil:
+    visible:
+        id: "studio-frame"
+        text: "${maestro.copiedText}"
+    timeout: 10000
+# The HUD carries the LOCAL frame rate from the PTS table, not a header average (design §8.1).
 - assertVisible:
     id: "studio-frame"
-    text: ".*· f 2 ·.*"
-# The jog wheel: a swipe across it is a burst of detents; the frame must move.
+    text: ".*[0-9]+\\.[0-9] fps.*"
+
+# --- the jog wheel: travel across it becomes frames ---
 - swipe:
     from:
         id: "studio-jog"
@@ -77,30 +93,106 @@ appId: com.twentydeka.ironpal
     duration: 400
 - assertNotVisible:
     id: "studio-frame"
-    text: ".*· f 2 ·.*"
-# Rep stepping lands on the first mark.
+    text: "${maestro.copiedText}"
+
+# --- rep stepping lands on a mark ---
 - tapOn:
     id: "studio-step-rep-next"
 - assertVisible:
-    id: "rep-mark-1"
+    id: "studio-mark-1"
+
+# --- play / rate / loop ---
+- tapOn:
+    id: "studio-play"
+# Rates cycle 0.25 / 0.5 / 1 / 2 and start at 1×, so the next one is 2× (OnForm's two speeds).
 - assertVisible:
-    id: "studio-marks-caption"
-# Modes and the gesture sheet exist.
+    id: "studio-rate"
+    text: "1×"
+- tapOn:
+    id: "studio-rate"
+- assertVisible:
+    id: "studio-rate"
+    text: "2×"
+- tapOn:
+    id: "studio-rate"
+- assertVisible:
+    id: "studio-rate"
+    text: "0.25×"
+- tapOn:
+    id: "studio-rate"
+- assertVisible:
+    id: "studio-rate"
+    text: "0.5×"
+- tapOn:
+    id: "studio-loop-rep"
+- tapOn:
+    id: "studio-loop-rep"
+
+# --- scrubbing the timeline moves the playhead ---
+- swipe:
+    from:
+        id: "studio-timeline"
+    direction: RIGHT
+    duration: 300
+- assertVisible:
+    id: "studio-frame"
+
+# --- modes and their button twins ---
 - tapOn:
     id: "studio-mode-marks"
 - assertVisible:
     id: "studio-mark-add"
+- assertVisible:
+    id: "studio-mark-delete"
+- tapOn:
+    id: "studio-mode-bounds"
+- assertVisible:
+    id: "studio-bound-start"
+- assertVisible:
+    id: "studio-bound-end"
+- tapOn:
+    id: "studio-mode-pins"
+- assertVisible:
+    id: "studio-pin-role"
+- assertVisible:
+    id: "studio-pin-crop"
 - tapOn:
     id: "studio-mode-review"
-- longPressOn:
-    id: "studio-viewer"
+
+# --- the lanes menu, and the cheat sheet's button twin ---
+# The sheet also opens on a long press of the viewer, but a gesture must never be the only way in
+# (§7.5 / FR-A1) — and a long press onto a video surface is not reliable enough to assert on.
+- tapOn:
+    id: "studio-menu"
+- assertVisible:
+    id: "studio-lane-filmstrip"
+- assertVisible:
+    id: "studio-lane-trace"
+- assertVisible:
+    id: "studio-lane-reps"
+- assertVisible:
+    id: "studio-export"
+- tapOn:
+    id: "studio-lane-filmstrip"
+- tapOn:
+    id: "studio-lane-filmstrip"
+- tapOn:
+    id: "studio-controls"
 - assertVisible:
     id: "studio-gesture-sheet"
 - tapOn:
-    point: "50%,10%"
-# Back returns to the Debrief with the round still open.
+    id: "studio-sheet-close"
+- assertNotVisible:
+    id: "studio-gesture-sheet"
+
+# --- back returns to the Debrief with the round still open ---
 - tapOn:
     id: "studio-back"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "studio-back"
+    optional: true
 - extendedWaitUntil:
     visible:
         id: "labeling-screen"

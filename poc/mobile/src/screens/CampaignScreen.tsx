@@ -142,6 +142,9 @@ export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
             setAnswers(a);
           }
           setStudio(null);
+          // A Studio save never touches `debrief.outcome`, so the map would otherwise keep
+          // showing the levels as they were before the label was fixed.
+          void refresh();
         }}
       />
     );
@@ -166,6 +169,7 @@ export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
         onBack={() => {
           setLabeling(false);
           set.reset();
+          void refresh();
         }}
         outcome={outcome}
         onOpenStudio={ctx ? focus => setStudio({draft: {result: set.live.result!, clipId: set.live.clipId ?? null, answers, ctx}, focus}) : undefined}

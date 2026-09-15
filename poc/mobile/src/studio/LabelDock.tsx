@@ -29,18 +29,33 @@ interface Props {
 }
 
 export function LabelDock(p: Props) {
+  return (
+    <View style={styles.dock}>
+      <DockCells {...p} />
+    </View>
+  );
+}
+
+/** The three cells — always visible, in the fixed layout. */
+export function DockCells(p: Props) {
   const a = p.answers;
   const repsLabel = a.repsConfirmed == null ? '?' : String(a.repsConfirmed);
   const weightLabel = a.weightState === 'unreadable' ? 'unreadable' : a.weightState === 'unsure' ? 'not sure' : a.weight == null ? '—' : `${a.weight} ${a.weightUnit}`;
-  const agree = a.repsConfirmed != null && Math.abs(a.repsConfirmed - p.repsDetected) <= 1;
   return (
-    <View style={styles.dock}>
-      <View style={styles.cells}>
+    <View style={styles.cells}>
         <Cell testID="studio-dock-exercise" on={p.open === 'exercise'} label="Exercise" value={p.exerciseName || 'choose'} sub={p.confidence != null ? `${Math.round(p.confidence * 100)}%` : ''} onPress={() => p.onOpen(p.open === 'exercise' ? null : 'exercise')} />
         <Cell testID="studio-dock-reps" on={p.open === 'reps'} label="Reps" value={repsLabel} sub={p.marksVsCount === 'ok' ? `${p.marksOn} marks ✓` : `${p.marksOn} marks ≠`} onPress={() => p.onOpen(p.open === 'reps' ? null : 'reps')} />
-        <Cell testID="studio-dock-weight" on={p.open === 'weight'} label="Weight" value={weightLabel} sub={a.weightState === 'confirmed' && a.weight != null ? '✓' : ''} onPress={() => p.onOpen(p.open === 'weight' ? null : 'weight')} />
-      </View>
+      <Cell testID="studio-dock-weight" on={p.open === 'weight'} label="Weight" value={weightLabel} sub={a.weightState === 'confirmed' && a.weight != null ? '✓' : ''} onPress={() => p.onOpen(p.open === 'weight' ? null : 'weight')} />
+    </View>
+  );
+}
 
+/** The expanded sheet for the reps and weight cells. Rendered in a modal over the viewer. */
+export function LabelSheet(p: Props) {
+  const a = p.answers;
+  const agree = a.repsConfirmed != null && Math.abs(a.repsConfirmed - p.repsDetected) <= 1;
+  return (
+    <View style={styles.sheetWrap}>
       {p.open === 'reps' ? (
         <View testID="studio-reps-sheet" style={styles.sheet}>
           <Text style={styles.q}>How many reps?</Text>
@@ -117,6 +132,9 @@ export function LabelDock(p: Props) {
           </Pressable>
         </View>
       ) : null}
+      <Pressable testID="studio-sheet-done" style={styles.done} onPress={() => p.onOpen(null)}>
+        <Text style={styles.doneText}>Done</Text>
+      </Pressable>
     </View>
   );
 }
@@ -133,6 +151,9 @@ function Cell({testID, on, label, value, sub, onPress}: {testID: string; on: boo
 
 const styles = StyleSheet.create({
   dock: {gap: spacing.sm},
+  sheetWrap: {backgroundColor: '#0B0E12', borderTopLeftRadius: radii.lg, borderTopRightRadius: radii.lg, padding: spacing.md, gap: spacing.sm},
+  done: {alignSelf: 'flex-end', paddingHorizontal: spacing.lg, paddingVertical: spacing.sm},
+  doneText: {color: colors.accent, fontSize: 15, fontWeight: '700'},
   cells: {flexDirection: 'row', gap: spacing.sm},
   cell: {flex: 1, backgroundColor: '#161B22', borderRadius: radii.md, padding: spacing.sm, borderWidth: 1, borderColor: 'transparent', minHeight: 58},
   cellOn: {borderColor: colors.accent, backgroundColor: '#10222A'},

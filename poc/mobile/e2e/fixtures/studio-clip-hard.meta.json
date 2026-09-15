@@ -1,0 +1,37 @@
+{
+ "kind": "real",
+ "source_clip": "20260615_122213.mp4",
+ "source_info": {
+  "width": 3840,
+  "height": 2160,
+  "frames": 2640,
+  "codec": "hevc",
+  "duration_s": 88.069
+ },
+ "kb_case": "003",
+ "case_file": "docs/video-analysis-kb/cases/003-20260615_122213.md",
+ "rig": "Galaxy A52 headband",
+ "rotation_applied": "none (display matrix auto-applied on decode)",
+ "rotation_deg_in_source": -90,
+ "orientation_check": "mat text reads forward, floor at the bottom (frame-extraction.md)",
+ "trim_start_s": 20.0,
+ "trim_duration_s": 12.0,
+ "overlay": "frame index burned in at derivation (not present in the source)",
+ "imu_fixture": "case003-pushdown-5reps",
+ "ground_truth": {
+  "exercise": "triceps-cable-pushdown",
+  "exercise_name": "Triceps Cable Pushdown",
+  "reps": 5,
+  "reps_note": "axial stroke, head still — NOT vision-certifiable, and a headband cannot count it",
+  "weight_kg": 10.0,
+  "weight_note": "4 x 1.25 kg per side; lever rig, so plate mass != working weight",
+  "rep_signal": "hard"
+ },
+ "width": 360,
+ "height": 640,
+ "frames": 360,
+ "codec": "h264",
+ "duration_s": 12.0,
+ "fps": 30,
+ "gop": 8
+}

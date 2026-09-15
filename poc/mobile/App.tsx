@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   Pressable,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -125,7 +126,9 @@ function App(): React.JSX.Element {
         <ImportScreen onBack={() => setScreen('home')} onDone={sessionId => openReel({sessionId})} />
       ) : (
         <SafeAreaView style={styles.safe}>
-          <View style={styles.container}>
+          {/* Scrollable: the home list grew past one screen on a 1440x3120 phone once After
+              Action and Import were added, which pushed the brand off the top. */}
+          <ScrollView testID="home-screen" contentContainerStyle={styles.container}>
             <Text style={styles.brand}>IronPal</Text>
             <Text style={styles.tag}>POC v1 · {USER_ROLE}</Text>
 
@@ -171,7 +174,8 @@ function App(): React.JSX.Element {
                 Tester mode: live only. Templates are founder-authored (Q1).
               </Text>
             ) : null}
-          </View>
+            <View style={styles.tail} />
+          </ScrollView>
         </SafeAreaView>
       )}
       </GestureHandlerRootView>
@@ -181,7 +185,10 @@ function App(): React.JSX.Element {
 
 const styles = StyleSheet.create({
   safe: {flex: 1, backgroundColor: colors.bg},
-  container: {flex: 1, padding: spacing.xl, justifyContent: 'center', gap: spacing.lg},
+  // Top-aligned, not centred: centring content that is TALLER than the viewport clips it at
+  // both ends, which hid the brand on a 411x830 dp screen and failed the launch assertion.
+  container: {flexGrow: 1, padding: spacing.xl, paddingTop: spacing.xxl, gap: spacing.lg},
+  tail: {height: spacing.xl},
   brand: {color: colors.textPrimary, fontSize: 40, fontWeight: '900'},
   tag: {color: colors.textSecondary, fontSize: 15, marginBottom: spacing.xl},
   btn: {

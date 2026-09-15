@@ -12,7 +12,7 @@ import {hostNsForPts, localFps, repWindowNs, seekTargetSec} from '../model/timel
 import type {LevelState} from '../types/model';
 import {ExerciseSheet} from './ExerciseSheet';
 import {Icon, STUDIO_COLORS} from './glyphs';
-import {LabelDock, type DockCell} from './LabelDock';
+import {DockCells, LabelSheet, type DockCell} from './LabelDock';
 import type {StudioMode, StudioOpen} from './nav';
 import {Timeline} from './Timeline';
 import {RATES, Transport} from './Transport';
@@ -275,7 +275,11 @@ export function StudioScreen({open, names, levels, onBack, neighbours, onOpenSet
           {/* viewer */}
           <Pressable testID="studio-viewer" style={styles.viewer} onPress={() => (s.mode === 'pins' ? void onPinTap() : togglePlay())} onLongPress={() => setSheet('gestures')}>
             {videoUri ? (
+              // pointerEvents none: the Video surface otherwise swallows the viewer's tap and
+              // long press, so play/pause and the gesture sheet never fired (e2e flow 07).
+              // Every control is the transport or the timeline; the video itself is never touched.
               <Video
+                pointerEvents="none"
                 ref={video}
                 source={{uri: videoUri}}
                 style={styles.video}
@@ -391,7 +395,7 @@ export function StudioScreen({open, names, levels, onBack, neighbours, onOpenSet
 
           {/* dock */}
           <ScrollView style={styles.dockScroll} keyboardShouldPersistTaps="handled">
-            <LabelDock
+            <DockCells
               answers={s.answers}
               exerciseName={exerciseName}
               confidence={confidence}
@@ -410,16 +414,45 @@ export function StudioScreen({open, names, levels, onBack, neighbours, onOpenSet
                 st.setMode('marks');
               }}
             />
-            {/* save bar */}
-            <Pressable testID="studio-save" style={[styles.save, (s.busy || !s.answers.exerciseId) && styles.disabled]} disabled={s.busy || !s.answers.exerciseId} onPress={() => void st.save()}>
-              <Text style={styles.saveText}>{s.busy ? 'SAVING…' : s.labeledSetId ? 'SAVE CHANGES' : 'SAVE'}</Text>
-              <Text style={styles.saveSub}>{saveLine}</Text>
-            </Pressable>
-            {s.outcome ? <Text testID="studio-outcome" style={styles.outcome}>{s.outcome}</Text> : null}
-            <View style={{height: spacing.lg}} />
+            <View style={{height: spacing.sm}} />
           </ScrollView>
+
+          {/* Save bar: fixed, never scrolled to. The outcome sits above it — it answers the tap
+              the user just made, and inside the scroll view the press was lost to momentum. */}
+          {s.outcome ? <Text testID="studio-outcome" style={styles.outcome}>{s.outcome}</Text> : null}
+          <Pressable testID="studio-save" style={[styles.save, (s.busy || !s.answers.exerciseId) && styles.disabled]} disabled={s.busy || !s.answers.exerciseId} onPress={() => void st.save()}>
+            <Text style={styles.saveText}>{s.busy ? 'SAVING…' : s.labeledSetId ? 'SAVE CHANGES' : 'SAVE'}</Text>
+            <Text style={styles.saveSub}>{saveLine}</Text>
+          </Pressable>
         </View>
       </ImageBackground>
+
+      {/* reps / weight sheets — over the viewer, not squeezed into the dock (design §7.1) */}
+      <Modal visible={dock === 'reps' || dock === 'weight'} animationType="slide" transparent onRequestClose={() => setDock(null)}>
+        <Pressable style={styles.sheetDim} onPress={() => setDock(null)}>
+          <Pressable style={styles.sheetHolder} onPress={() => undefined}>
+            <LabelSheet
+              answers={s.answers}
+              exerciseName={exerciseName}
+              confidence={confidence}
+              marksOn={st.onMarks.length}
+              marksVsCount={st.marksVsCount}
+              repsDetected={s.result.repsDetected}
+              repSignal={st.repSignal}
+              pins={s.pins}
+              preview={s.preview}
+              open={dock}
+              onOpen={setDock}
+              onChange={st.setAnswers}
+              onUseMarksCount={st.useMarksCount}
+              onAddMarkHint={() => {
+                setDock(null);
+                st.setMode('marks');
+              }}
+            />
+          </Pressable>
+        </Pressable>
+      </Modal>
 
       {/* exercise sheet */}
       <Modal visible={dock === 'exercise'} animationType="slide" transparent onRequestClose={() => setDock(null)}>
@@ -444,6 +477,11 @@ export function StudioScreen({open, names, levels, onBack, neighbours, onOpenSet
       <Modal visible={sheet !== 'none'} animationType="fade" transparent onRequestClose={() => setSheet('none')}>
         <Pressable style={styles.modalDim} onPress={() => setSheet('none')}>
           <View style={styles.sheetBox}>
+            {/* An explicit close: dismissing by tapping the dim area is easy to miss, and a
+                coordinate tap can land on whatever is underneath. */}
+            <Pressable testID="studio-sheet-close" style={styles.sheetClose} onPress={() => setSheet('none')} hitSlop={10}>
+              <Text style={styles.sheetCloseText}>Close</Text>
+            </Pressable>
             {sheet === 'gestures' ? (
               <>
                 <Text style={styles.sheetTitle}>CONTROLS</Text>
@@ -475,6 +513,11 @@ export function StudioScreen({open, names, levels, onBack, neighbours, onOpenSet
                 <Pressable testID="studio-export" style={styles.menuItem} onPress={() => void exportLabels()}>
                   <Text style={styles.menuText}>Export this session's labels</Text>
                 </Pressable>
+                {/* A button twin for the long-press cheat sheet (§7.5 / FR-A1): a gesture the user
+                    has not discovered — or cannot perform — must never be the only way in. */}
+                <Pressable testID="studio-controls" style={styles.menuItem} onPress={() => setSheet('gestures')}>
+                  <Text style={styles.menuText}>Controls &amp; gestures</Text>
+                </Pressable>
               </>
             )}
           </View>
@@ -497,7 +540,7 @@ const styles = StyleSheet.create({
   syncOk: {color: colors.confHigh},
   syncWarn: {color: STUDIO_COLORS.warning},
   syncNone: {color: colors.textTertiary},
-  viewer: {aspectRatio: 16 / 9, backgroundColor: '#000', borderRadius: radii.md, overflow: 'hidden', justifyContent: 'center'},
+  viewer: {aspectRatio: 16 / 9, maxHeight: 220, flexShrink: 1, backgroundColor: '#000', borderRadius: radii.md, overflow: 'hidden', justifyContent: 'center'},
   video: {width: '100%', height: '100%'},
   dim: {opacity: 0.35, position: 'absolute'},
   noVideo: {flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.md},
@@ -513,25 +556,29 @@ const styles = StyleSheet.create({
   crosshair: {width: 72, height: 72, resizeMode: 'contain', opacity: 0.9},
   pinHint: {color: STUDIO_COLORS.glance, fontSize: 11, backgroundColor: 'rgba(0,0,0,0.5)', paddingHorizontal: 6, borderRadius: 6, overflow: 'hidden'},
   degraded: {color: STUDIO_COLORS.glance, fontSize: 11, paddingHorizontal: 4},
-  modeRow: {flexDirection: 'row', alignItems: 'center', gap: 4},
-  mode: {paddingHorizontal: 10, paddingVertical: 6, borderRadius: radii.md, backgroundColor: '#161B22'},
+  modeRow: {flexDirection: 'row', alignItems: 'center', gap: 4, flexWrap: 'wrap'},
+  mode: {paddingHorizontal: 9, paddingVertical: 6, borderRadius: radii.md, backgroundColor: '#161B22'},
   modeOn: {backgroundColor: colors.accent},
   modeText: {color: colors.textSecondary, fontSize: 12, fontWeight: '700'},
   modeTextOn: {color: '#0B0E12'},
   twin: {flexDirection: 'row', alignItems: 'center', gap: 2, paddingHorizontal: 8, paddingVertical: 6, borderRadius: radii.md, backgroundColor: '#21262D'},
   twinText: {color: colors.textPrimary, fontSize: 12, fontWeight: '800'},
   caption: {color: colors.textTertiary, fontSize: 10, paddingHorizontal: 4},
-  dockScroll: {flex: 1},
-  save: {backgroundColor: colors.accent, borderRadius: radii.lg, padding: spacing.md, alignItems: 'center', marginTop: spacing.sm},
+  dockScroll: {flexGrow: 0, flexShrink: 1},
+  save: {backgroundColor: colors.accent, borderRadius: radii.lg, padding: spacing.md, alignItems: 'center', marginBottom: spacing.xs},
   saveText: {color: '#0B0E12', fontSize: 15, fontWeight: '900', letterSpacing: 1},
   saveSub: {color: '#0B0E12', fontSize: 11, opacity: 0.75},
   disabled: {opacity: 0.4},
-  outcome: {color: colors.accent, fontSize: 13, textAlign: 'center', marginTop: spacing.sm},
+  outcome: {color: colors.accent, fontSize: 13, textAlign: 'center', marginTop: spacing.sm, marginBottom: 2},
   hint: {color: colors.textSecondary, fontSize: 14, padding: spacing.lg},
   warn: {color: STUDIO_COLORS.warning, fontSize: 14, padding: spacing.lg},
   modalWrap: {flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)', paddingTop: 80},
+  sheetDim: {flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.55)'},
+  sheetHolder: {width: '100%'},
   modalDim: {flex: 1, justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)', padding: spacing.lg},
   sheetBox: {backgroundColor: '#161B22', borderRadius: radii.lg, padding: spacing.lg, gap: spacing.sm},
+  sheetClose: {alignSelf: 'flex-end', paddingHorizontal: spacing.sm, paddingVertical: 2},
+  sheetCloseText: {color: colors.accent, fontSize: 14, fontWeight: '700'},
   sheetTitle: {color: colors.textPrimary, fontSize: 13, fontWeight: '900', letterSpacing: 2},
   sheetText: {color: colors.textSecondary, fontSize: 11, fontFamily: 'monospace', lineHeight: 16},
   laneRow: {flexDirection: 'row', flexWrap: 'wrap', gap: 6},

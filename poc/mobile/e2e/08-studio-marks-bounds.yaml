@@ -1,0 +1,125 @@
+# AFTER ACTION — marks, bounds and the reps sheet (studio design §7.6, §7.7, §9.1–§9.2).
+#
+# This is the flow that proves the Studio can do what the 20-second Debrief deliberately cannot:
+# place a rep mark the detector missed, drop one it invented, and trim the set's boundaries — then
+# save through the SAME gates and learner as the Debrief.
+#
+# Fixtures: split-squat-8reps (IMU) + studio-clip.mp4 (KB case 001 footage).
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-studio-open.yaml
+
+# --- marks mode ---
+- tapOn:
+    id: "studio-mode-marks"
+- assertVisible:
+    id: "studio-marks-caption"
+    text: ".*0 placed by you.*"
+
+# Toggling a detector mark off and on again: the "on" count follows, the total does not. Done
+# BEFORE the add, because tapping a mark selects it — and the delete twin acts on the selection.
+- tapOn:
+    id: "studio-mark-1"
+- assertVisible:
+    id: "studio-marks-caption"
+- tapOn:
+    id: "studio-mark-1"
+- assertVisible:
+    id: "studio-marks-caption"
+    text: ".*0 placed by you.*"
+
+# Land on a detector mark, then step a FIXED 15 frames (0.5 s at 30 fps) back from it. The
+# distance matters and a jog swipe cannot guarantee it: a mark within 150 ms of a peak snaps onto
+# that peak, and one within 50 ms of an existing mark is dropped as a duplicate — both correct,
+# and both would make this assertion flaky. At 0.5 s from either neighbour (the fixture's cadence
+# is 0.4 Hz, a 2.5 s cycle) the new mark is unambiguously one the detector missed.
+- tapOn:
+    id: "studio-step-rep-next"
+- repeat:
+    times: 15
+    commands:
+      - tapOn:
+          id: "studio-step-frame-prev"
+- tapOn:
+    id: "studio-mark-add"
+- assertVisible:
+    id: "studio-marks-caption"
+    text: ".*1 placed by you.*"
+
+# The add selects the new mark, so the delete twin removes exactly it — the count returns to what
+# the detector found and the ±1 rep gate still holds.
+- tapOn:
+    id: "studio-mark-delete"
+- assertVisible:
+    id: "studio-marks-caption"
+    text: ".*0 placed by you.*"
+
+# --- the reps sheet: the count, the detector's count, and the ±1 gate ---
+- tapOn:
+    id: "studio-dock-reps"
+- assertVisible:
+    id: "studio-reps-sheet"
+# The sheet opens OVER the viewer (design §7.1), so everything in it is on screen at once.
+- assertVisible:
+    id: "studio-detected-reps"
+- assertVisible:
+    id: "studio-rep-gate"
+# "Not sure" is a first-class answer (FR-T3) — and it clears the count, so the marks-vs-count
+# question correctly goes away with it.
+- tapOn:
+    id: "studio-reps-unsure"
+- assertNotVisible:
+    id: "studio-marks-vs-count"
+
+# Typing a count that disagrees with the marks raises the question the 20 s Debrief never asks,
+# and "keep N" resolves it by taking the marks as the truth.
+- tapOn:
+    id: "studio-reps-input"
+- eraseText
+- inputText: "3"
+- hideKeyboard
+- assertVisible:
+    id: "studio-marks-vs-count"
+- tapOn:
+    id: "studio-keep-marks"
+- assertNotVisible:
+    id: "studio-marks-vs-count"
+- tapOn:
+    id: "studio-sheet-done"
+
+# --- bounds mode: trim the set, and watch the gate summary re-evaluate ---
+- tapOn:
+    id: "studio-mode-bounds"
+- tapOn:
+    id: "studio-step-rep-next"
+- tapOn:
+    id: "studio-bound-start"
+- assertVisible:
+    id: "studio-save"
+- tapOn:
+    id: "studio-mode-review"
+
+# --- weight, then save: gates, integrity and XP are shown before the commit ---
+- tapOn:
+    id: "studio-dock-weight"
+- tapOn:
+    id: "studio-weight-input"
+- inputText: "24"
+- hideKeyboard
+- tapOn:
+    id: "studio-sheet-done"
+- tapOn:
+    id: "studio-save"
+- extendedWaitUntil:
+    visible:
+        id: "studio-outcome"
+    timeout: 30000
+# Either outcome is correct — what must NOT happen is a silent save. Trimming the bounds can
+# legitimately fail the motion gate, and the app has to say so.
+- assertVisible:
+    id: "studio-outcome"
+    text: ".*(Clean set|not counted).*"
+# A saved set becomes editable rather than re-committable.
+- assertVisible:
+    id: "studio-save"
+    text: ".*SAVE CHANGES.*"

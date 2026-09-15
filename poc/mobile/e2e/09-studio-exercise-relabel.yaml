@@ -1,0 +1,129 @@
+# AFTER ACTION — the exercise sheet and relabelling (studio design §7.7, §9.3, §10.3).
+#
+# Campaign 1 puts 14 of its 15 exercises in one motion bucket (PRD §5.2b), so choosing the
+# exercise is the hardest judgement in the loop. This flow proves the sheet offers evidence for
+# the choice — candidates with provenance, the Compare view, the field-guide line for the
+# confusable pair, search and browse — and that relabelling a SAVED set goes through `relabel`
+# and reports what it did to the store.
+#
+# Fixtures: split-squat-8reps (IMU) + studio-clip.mp4 (KB case 001 footage).
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-studio-open.yaml
+
+# Save first, so the relabel below is a real relabel (delete templates, re-commit, revision++).
+- tapOn:
+    id: "studio-dock-weight"
+- tapOn:
+    id: "studio-weight-input"
+- inputText: "24"
+- hideKeyboard
+- tapOn:
+    id: "studio-sheet-done"
+- tapOn:
+    id: "studio-save"
+- extendedWaitUntil:
+    visible:
+        id: "studio-outcome"
+    timeout: 30000
+
+# --- the exercise sheet ---
+- tapOn:
+    id: "studio-dock-exercise"
+- extendedWaitUntil:
+    visible:
+        id: "studio-exercise"
+    timeout: 15000
+
+# Candidates carry their provenance; on a first-ever set the index may be empty, so the block is
+# optional — an absent candidate list is correct behaviour, not a failure (e2e/README.md).
+- tapOn:
+    id: "studio-candidate-.*"
+    optional: true
+- tapOn:
+    id: "studio-compare-.*"
+    optional: true
+- assertVisible:
+    id: "studio-compare"
+    optional: true
+
+# Search narrows the browse list to a confusable neighbour of the split squat.
+- tapOn:
+    id: "studio-exercise-search"
+- inputText: "goblet"
+- hideKeyboard
+- extendedWaitUntil:
+    visible:
+        id: "studio-exercise-goblet-squat"
+    timeout: 15000
+- tapOn:
+    id: "studio-exercise-goblet-squat"
+# Choosing against the model's proposal runs the leave-one-out consistency check; it only has
+# something to say once the store holds templates for the exercise.
+- assertVisible:
+    id: "studio-consistency"
+    optional: true
+
+# The field guide for the pair (split squat vs goblet squat) ships in the model package.
+- tapOn:
+    id: "studio-compare-bulgarian-split-squat"
+    optional: true
+- assertVisible:
+    id: "studio-field-guide"
+    optional: true
+
+- tapOn:
+    id: "studio-exercise-done"
+- assertVisible:
+    id: "studio-exercise-chip"
+    text: ".*Goblet.*"
+
+# --- relabel: save again and report the change to the store ---
+- assertVisible:
+    id: "studio-save"
+    text: ".*SAVE CHANGES.*"
+- tapOn:
+    id: "studio-save"
+- extendedWaitUntil:
+    visible:
+        id: "studio-outcome"
+        text: ".*(Clean set|not counted).*"
+    timeout: 30000
+
+# --- the relabel reached the store: the inspector knows the new exercise ---
+- tapOn:
+    id: "studio-back"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "studio-back"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+        id: "labeling-back"
+    direction: UP
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "labeling-back"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "labeling-back"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "campaign-screen"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+        id: "inspector-level-goblet-squat"
+    direction: DOWN
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000

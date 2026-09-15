@@ -167,7 +167,15 @@ export function LabelingScreen({result, proposals, answers, onChange, exercises,
             {studioLink('weight', 'labeling-open-studio-weight')}
           </View>
 
-          {/* save */}
+          <View style={{height: spacing.xl}} />
+        </ScrollView>
+
+        {/* The save bar is a fixed footer, not the last card: the round is supposed to be one tap
+            (PRD §7.4), and a primary action you must scroll to is both slower and — with a list
+            still gliding — a press the scroll view steals. The outcome sits above it, where the
+            user is already looking. */}
+        <View style={styles.footer}>
+          {outcome ? <Text testID="labeling-outcome" style={styles.outcome}>{outcome}</Text> : null}
           <Pressable
             testID="labeling-save"
             style={[styles.save, (busy || !answers.exerciseId) && styles.disabled]}
@@ -175,9 +183,7 @@ export function LabelingScreen({result, proposals, answers, onChange, exercises,
             disabled={busy || !answers.exerciseId}>
             <Text style={styles.saveText}>{busy ? 'Saving…' : 'ALL CORRECT — SAVE'}</Text>
           </Pressable>
-          {outcome ? <Text testID="labeling-outcome" style={styles.outcome}>{outcome}</Text> : null}
-          <View style={{height: spacing.xl}} />
-        </ScrollView>
+        </View>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -217,6 +223,7 @@ const styles = StyleSheet.create({
   unreadable: {paddingHorizontal: spacing.md, paddingVertical: spacing.md, borderRadius: radii.lg, backgroundColor: '#0B0E12'},
   unreadableOn: {backgroundColor: '#3A2A18'},
   unreadableText: {color: colors.textSecondary, fontSize: 13},
+  footer: {paddingHorizontal: spacing.lg, paddingBottom: spacing.sm, paddingTop: spacing.sm, backgroundColor: 'rgba(11,14,18,0.96)', gap: spacing.xs},
   save: {backgroundColor: colors.accent, borderRadius: radii.lg, padding: spacing.lg, alignItems: 'center'},
   saveText: {color: '#0B0E12', fontSize: 16, fontWeight: '900', letterSpacing: 1},
   disabled: {opacity: 0.4},

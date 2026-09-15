@@ -8,6 +8,8 @@ appId: com.twentydeka.ironpal
         id: "inspector"
     direction: DOWN
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 - tapOn:
     id: "inspector-benchmark"
 - extendedWaitUntil:
@@ -22,6 +24,8 @@ appId: com.twentydeka.ironpal
         id: "inspector-bench-result"
     direction: DOWN
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 # The budgets come from design §5.1 and are shown beside the measurement, so a regression reads
 # as a number next to the bar it broke.
 - assertVisible: ".*budget 15.*"

@@ -1,0 +1,37 @@
+{
+ "kind": "real",
+ "source_clip": "20260614_125114.mp4",
+ "source_info": {
+  "width": 3840,
+  "height": 2160,
+  "frames": 2029,
+  "codec": "hevc",
+  "duration_s": 67.697
+ },
+ "kb_case": "001",
+ "case_file": "docs/video-analysis-kb/cases/001-20260614_125114.md",
+ "rig": "Galaxy A52 headband",
+ "rotation_applied": "none (display matrix auto-applied on decode)",
+ "rotation_deg_in_source": -90,
+ "orientation_check": "mat text reads forward, floor at the bottom (frame-extraction.md)",
+ "trim_start_s": 30.0,
+ "trim_duration_s": 15.0,
+ "overlay": "frame index burned in at derivation (not present in the source)",
+ "imu_fixture": "case001-curl-6reps",
+ "ground_truth": {
+  "exercise": "dumbbell-biceps-curl",
+  "exercise_name": "Dumbbell Biceps Curl",
+  "reps": 6,
+  "reps_note": "6 per arm, alternating (12 total lifts)",
+  "weight_kg": 5.0,
+  "weight_note": "2 x DOMYOS 2.5 kg plates per dumbbell; no handle mass",
+  "rep_signal": "vision"
+ },
+ "width": 360,
+ "height": 640,
+ "frames": 450,
+ "codec": "h264",
+ "duration_s": 15.0,
+ "fps": 30,
+ "gop": 8
+}

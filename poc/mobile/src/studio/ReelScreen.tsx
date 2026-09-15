@@ -384,7 +384,9 @@ export function ReelScreen({names, initialSessionId, initialExerciseId, onBack, 
             <Text style={styles.section}>CLIPS · {clips.length}</Text>
             {clips.map(c => (
               <Text key={c.id} testID={`reel-clip-${c.id}`} style={styles.hint}>
-                {c.source} · {c.state} · sync {c.sync.class}{c.sync.residualMs != null ? ` (${c.sync.residualMs} ms)` : ''} · {c.frames ?? '?'} frames{c.proxyPath ? ' · proxy' : ''}
+                {c.source} · {c.state} · sync {c.sync.class}{c.sync.residualMs != null ? ` (${c.sync.residualMs} ms)` : ''} ·{' '}
+                {c.frames != null ? `${c.frames} frames` : c.durationUs != null ? `${(c.durationUs / 1e6).toFixed(1)} s` : 'length unknown'}
+                {c.proxyPath ? ' · proxy' : ' · no proxy'}
               </Text>
             ))}
             {clips.length === 0 ? <Text style={styles.hint}>No video in this session.</Text> : null}

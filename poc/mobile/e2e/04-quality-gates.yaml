@@ -22,6 +22,8 @@ appId: com.twentydeka.ironpal
         id: "mission-arm"
     direction: DOWN
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 - tapOn:
     id: "mission-arm"
 
@@ -40,19 +42,20 @@ appId: com.twentydeka.ironpal
 # Zero reps detected, and the trace says there is nothing to label.
 - assertVisible:
     id: "labeling-detected-reps"
-- tapOn:
-    id: "labeling-exercise-barbell-back-squat"
 - scrollUntilVisible:
     element:
-        id: "labeling-save"
+        id: "labeling-exercise-barbell-back-squat"
     direction: DOWN
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "labeling-exercise-barbell-back-squat"
 - tapOn:
     id: "labeling-save"
-- scrollUntilVisible:
-    element:
+- extendedWaitUntil:
+    visible:
         id: "labeling-outcome"
-    direction: DOWN
     timeout: 30000
 # The quality gate refuses to count it — the honest outcome, not a silent pass.
 - assertVisible: ".*Set kept but not counted.*"
@@ -62,8 +65,15 @@ appId: com.twentydeka.ironpal
         id: "labeling-back"
     direction: UP
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 - tapOn:
     id: "labeling-back"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "labeling-back"
+    optional: true
 - extendedWaitUntil:
     visible:
         id: "campaign-screen"

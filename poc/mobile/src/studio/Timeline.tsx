@@ -14,7 +14,7 @@ import type {StudioMark, StudioState} from './useStudio';
 // thread through Reanimated shared values; JS is only told when something it must redraw
 // changed (playhead / view window), and the redraw is throttled to ~30 fps.
 
-const LANE_H = {filmstrip: 44, trace: 56, gate: 12, reps: 30, glance: 14, sync: 14};
+const LANE_H = {filmstrip: 40, trace: 46, gate: 10, reps: 28, glance: 12, sync: 12};
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 32;
 
@@ -283,9 +283,17 @@ export function Timeline({s, onMarks, frameThumbs, onScrub, onMarkPress, onMarkM
             {/* reps */}
             {lanes.rows.filter(r => r.key === 'reps').map(r => (
               <G key="reps" y={r.y}>
-                {explain?.rejected.map((p, i) => <MarkGlyph key={`rj${i}`} x={x(p.tNs)} h={r.h} n="⊘" state="rejected" />)}
-                {s.marks.map(m => (
-                  <MarkGlyph key={m.id} x={x(m.tNs)} h={r.h} n={m.on ? onMarks.indexOf(m) + 1 : '–'} state={m.on ? 'on' : 'off'} selected={s.selectedMark === m.id} />
+                {explain?.rejected.map((p, i) => <MarkGlyph key={`rj${i}`} testID={`studio-mark-rejected-${i + 1}`} x={x(p.tNs)} h={r.h} n="⊘" state="rejected" />)}
+                {s.marks.map((m, i) => (
+                  <MarkGlyph
+                    key={m.id}
+                    testID={`studio-mark-${i + 1}`}
+                    x={x(m.tNs)}
+                    h={r.h}
+                    n={m.on ? onMarks.indexOf(m) + 1 : '–'}
+                    state={m.on ? 'on' : 'off'}
+                    selected={s.selectedMark === m.id}
+                  />
                 ))}
               </G>
             ))}

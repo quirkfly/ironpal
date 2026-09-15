@@ -1,0 +1,67 @@
+# Shared entry for the labeling-studio flows: record one set off the IMU fixture, then open the
+# round in After Action from the Debrief's reps card.
+#
+# Kept in one place because the prefix is ~90 s of real-time fixture replay and every studio flow
+# needs the same starting point: a set with rep marks, a clip attached, and the Debrief still open
+# (so a Studio save is a first commit rather than a relabel).
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+- tapOn:
+    id: "campaign-start-session"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-calibrate"
+    timeout: 20000
+# Calibrate rather than skip: a clean set needs the rig gate, which needs calibration.
+# The nods step needs samples in the ring buffer, and the replay source takes a moment to start
+# feeding — so wait for the session to actually reach `ready` (its IMU status line) instead of
+# assuming the tap took. Without this the mission card never appears and the flow dies later,
+# far from the cause.
+- tapOn:
+    id: "campaign-calibrate"
+- extendedWaitUntil:
+    visible:
+        id: "session-imu-status"
+    timeout: 30000
+- tapOn:
+    id: "level-bulgarian-split-squat"
+- scrollUntilVisible:
+    element:
+        id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "mission-arm"
+- extendedWaitUntil:
+    notVisible: "WAITING FOR MOTION"
+    timeout: 45000
+# Wait for REPS, not for animation: the motion gate needs at least three, and a two-digit count
+# is unambiguously past it (e2e/README.md).
+- extendedWaitUntil:
+    visible:
+        id: "hud-reps"
+        text: "[0-9]{2}"
+    timeout: 90000
+- tapOn:
+    id: "hud-end-set"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 30000
+# Into the Studio from the Debrief's reps card (studio design §6).
+- assertVisible:
+    id: "labeling-open-studio-reps"
+- tapOn:
+    id: "labeling-open-studio-reps"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "labeling-open-studio-reps"
+    optional: true
+- extendedWaitUntil:
+    visible:
+        id: "studio-screen"
+    timeout: 30000

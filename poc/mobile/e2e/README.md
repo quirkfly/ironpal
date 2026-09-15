@@ -63,44 +63,112 @@ a build/install/tap cycle.
 | `04-quality-gates` | **real-stationary** | The paths that must not fire: gate stays shut, zero reps, set kept but **not counted**, level does not advance. |
 | `05-hard-class` | case003-pushdown | The taxonomy is honest: a `hard` exercise declines to count its own reps and asks the user. |
 | `06-inspector-benchmark` | split-squat | Inspector and the on-device benchmark against the design's §5 budgets. |
-| `07-studio-navigation` | split-squat + `studio-clip.mp4` | **After Action / the Studio**: the round opens in the Studio from the Debrief, frame stepping by PTS table (±1, jog wheel), rep stepping, modes, the gesture sheet, back to the Debrief. |
-| `08-studio-marks-relabel` | split-squat + `studio-clip.mp4` | Marks mode (add / delete with the caption following), a Studio save, then a relabel to another exercise with the outcome reported. |
-| `09-studio-reel` | split-squat | The After Action tile → queue → Reel: the session's set, no untagged region on a fully tagged fixture, export offered, the set re-opens in the Studio on the relabel path. |
+| `07-studio-navigation` | split-squat + `studio-clip` | **The Studio's viewer and transport**: the round opens in After Action from the Debrief, the frame HUD reports an index from the PTS table, ±1 frame / ±1 rep / the jog wheel / play-rate-loop / scrub all move it, the four modes show their button twins, the gesture sheet and the lanes menu open. |
+| `08-studio-marks-bounds` | split-squat + `studio-clip` | What the 20 s Debrief cannot do: **add a rep mark** the detector missed (snapped to the peak), toggle and delete marks, the reps sheet's marks-vs-count question and "not sure", **trim the set bounds**, then save through the same gates with the outcome reported. |
+| `09-studio-exercise-relabel` | split-squat + `studio-clip` | **The exercise sheet**: candidates with provenance, Compare, the package's field-guide line, search and browse, the consistency check — then a **relabel** of a saved set (`SAVE CHANGES`) that reaches the store and shows up in the inspector under the new exercise. |
+| `10-studio-pins-weight` | split-squat + `studio-clip` | **Pins and the weight sheet**: role cycling, the crop toggle, pinning a frame, and the rule that "read this frame" stays disabled until a pin exists — the OCR still is the only thing that leaves the phone. Also the menu's lane toggles, clip pinning and export. |
+| `11-studio-reel` | split-squat + `studio-clip` | **The Reel**: the session strip, the set with its label source and revision, split/merge controls, the untagged-motion verdict, the clip list with its sync class, export, and re-opening a saved set on the relabel path. |
+| `12-studio-queue-import` | **case001-curl-6reps** + `studio-clip` | **The queue and import**: a set labelled with KB case 001's confirmed 6 reps / 5 kg, the After Action queue with its count and dismissal reasons, then the founder **import** of the real KB clip — PTS table, proxy transcode and filmstrip run on the device's own codecs. |
 
-## The video fixture
+## The video fixtures — real knowledge-base footage
 
-`studio-clip.mp4` is **synthetic** (`scripts/e2e/make_video_fixture.py`): 20 s, 640×360, 30 fps,
-H.264 with a keyframe every 8 frames (the scrub proxy's GOP), a burned-in frame counter. When the
-e2e marker is present the Studio attaches it to the set under test with sync class `exact` and
-`pts0HostNs = tStartNs`, so the flows can step frames on a phone with no camera. The flows assert
-the Studio's own frame HUD (`studio-frame`), never the video's pixels — the counter is for the
-human watching the run.
+`studio-clip.mp4` and `studio-clip-hard.mp4` are **derived from the clips the knowledge base was
+built from** (`scripts/e2e/make_video_fixture.py`), not generated:
 
-## Bugs this harness caught
+| Fixture | Source | KB case | Confirmed ground truth | Paired IMU fixture |
+|---|---|---|---|---|
+| `studio-clip` | `20260614_125114.mp4` 30–45 s | 001 | dumbbell biceps curl · **6 reps/arm** · **5 kg** | `case001-curl-6reps` |
+| `studio-clip-hard` | `20260615_122213.mp4` 20–32 s | 003 | triceps cable pushdown · **5 reps** · 10 kg plates · `hard` class | `case003-pushdown-5reps` |
 
-Three, none of which manual tapping had found:
+Each is trimmed to the case's PERFORM window (from `motion_profile.sh`), scaled to 360 px on the
+short side and re-encoded H.264 at a **0.25 s GOP** — the same keyframe interval the app's scrub
+proxy uses, so frame stepping in a flow behaves like frame stepping in the product. A frame index
+is burned into the corner at derivation; the flows assert the app's own `studio-frame` HUD and
+never the pixels, but a human watching a run needs to see which frame is on screen. The sidecar
+`*.meta.json` records the provenance, the trim and the ground truth.
 
-1. **Every session start crashed the app** on Android 14+ unless a Bluetooth runtime permission
-   happened to be granted. `ImuForegroundService` declared foreground type `connectedDevice`, and
-   from API 34 the platform *validates* that claim — it requires the permission to be GRANTED, not
-   merely declared. With the phone IMU (the default for anyone without the headband) nothing ever
-   requests Bluetooth, so `startForeground` threw `SecurityException` and killed the process; the
-   app relaunched and died again. The service now picks its type from what it is actually doing:
-   `connectedDevice` only when a BLE session is genuinely permitted, else `dataSync`.
-2. **93 phantom reps from a motionless band** — see below.
-3. **`endSet` crashed on a set with no samples**, slicing a 1-element array over an empty window,
-   which rejected the bridge call and stranded the user on the live HUD with no route to the
-   debrief. Exactly what happens if you tap END SET without a headband connected.
+**Orientation, measured here:** these A52 clips carry a container **Display Matrix of −90°** which
+current ffmpeg auto-applies on decode, so the frames come out upright already and
+`frame-extraction.md`'s `transpose=2` would rotate them a **second** time (verified: raw = mat text
+forward ✅, `transpose=2` = sideways ✗). The generator therefore declares rotation per fixture and
+the derived frame is checked, rather than inheriting a rule that predates autorotate. The KB doc
+now carries the same caveat.
 
-### The phantom reps
+The source clips are gitignored (2 GB of footage); the derived fixtures are committed, so a fresh
+checkout runs the suite. Without the sources, `make_video_fixture.py` writes a clearly-labelled
+synthetic clip instead — a fixture never claims to be real footage it is not.
 
-`04-quality-gates` exists because of a real defect it found. The rep detector's amplitude
-threshold was purely relative (`0.35 × RMS`), so on a **motionless** band the RMS collapsed into
-sensor noise and the detector found peaks in it: the genuine stationary recording produced
-**93 phantom reps**. In the app the motion gate happened to mask it, but the primitive was unsafe
-on its own. Fixed with an absolute floor (`ModelParams.peakMinAbs`, 0.15 m/s² — far above the
-noise at 0.01–0.05, far below the lightest real rep at ~1.8), and both the JVM test and this flow
-now guard it.
+## Gotchas found on the LG G7 run (2026-09-15)
+
+These cost a red run each and are now encoded in the flows.
+
+**A tap issued right after a scroll is lost.** `scrollUntilVisible` returns while the list is
+still gliding, and React Native's touch responder cancels a press when the view under the finger
+moves. Every scroll in this suite is now followed by `waitForAnimationToEnd`.
+
+**A tap can be swallowed while the JS thread is busy.** Right after a save the thread is
+committing templates, re-scoring integrity and enqueueing — and a tap delivered in that window
+can simply never reach the handler (the same tap by `adb shell input tap` a second later works).
+Navigation taps are therefore followed by an `optional: true` retry of the same tap: when the
+first one took, the control is already gone and the retry is skipped, so it can never double-fire.
+Do NOT apply this to a save button — a second save is a second commit.
+
+**Do not put a primary action inside a long scroll view.** `labeling-save` and `studio-save` used
+to be the last card; both are now fixed footers. That removed two scroll steps per flow, removed
+the race above, and is better product behaviour — the round is meant to be one tap.
+
+**A modal covers the thing behind it.** With the reps and weight sheets moved over the viewer
+(design §7.1), the dock cell underneath cannot be asserted while its sheet is open — close the
+sheet with `studio-sheet-done` first, then assert the cell.
+
+**Dismiss modals with their control, not a coordinate.** `tapOn: point: "50%,8%"` dismissed a
+sheet and then landed on the exercise chip underneath, which opened a different sheet. Use
+`studio-sheet-close` / `studio-sheet-done`.
+
+**Place a new rep mark mid-cycle, with a counted number of frame steps.** A mark within 150 ms of
+a peak snaps onto it and one within 50 ms of an existing mark is dropped as a duplicate — both
+correct, both fatal to an assertion that expects a new mark. A jog-wheel swipe travels a
+non-deterministic distance; 15 taps of `studio-step-frame-prev` (0.5 s at 30 fps) does not.
+
+**Wait for the session to be `ready`, not for the calibrate tap.** The nods step needs samples in
+the ring buffer and the replay source takes a moment to start feeding; the flows wait for
+`session-imu-status` before choosing a level.
+
+## Bugs this harness caught (studio round)
+
+1. **No `VIBRATE` permission** — `Vibration.vibrate` throws `SecurityException` and **killed the
+   process** on the second frame step. Every haptic in the Studio (jog detent, snap, pin) would
+   have crashed the app for every user. Fixed in the manifest, and all haptics now go through
+   `src/studio/haptics.ts`, which swallows the failure and honours a mute setting.
+2. **The transport row overflowed a 411 dp screen** — `rep ▶` and `set ⏭` were off the right edge
+   and unreachable. The side groups now flex.
+3. **The dock and save bar were pushed off the bottom** once the mode row wrapped. The viewer now
+   shrinks (a portrait clip in a 16:9 box is mostly black bars anyway).
+4. **The home screen clipped its own title** — centring content taller than the viewport cuts both
+   ends; it is top-aligned and scrollable now.
+5. **The video surface swallowed the viewer's gestures** (`pointerEvents="none"` now), and the
+   gesture cheat sheet had no button twin — it is in the `⋯` menu as "Controls & gestures".
+6. **The campaign map showed stale levels after a Studio save** — it only refreshed on a Debrief
+   outcome, so a label fixed in After Action left the map showing the old state.
+7. **The e2e clip never attached**: `getE2eConfig` returns an absolute path and the attach code
+   treated it as relative, then swallowed the error. It now surfaces as the degraded line.
+
+## Known gaps the studio flows do NOT cover
+
+- **Two-finger gestures.** Pinch-to-zoom and the two-finger pan of the timeline, and the
+  two-finger tap that adds a mark, cannot be driven by Maestro. Their button twins are covered
+  instead (`studio-mark-add`, the zoom label `studio-zoom`).
+- **Dragging a mark or a bound handle.** Covered through the button twins and the jog wheel; the
+  drag path itself is exercised by hand.
+- **A region to tag.** The IMU fixture loops one continuous set, so `scanRegions` finds nothing
+  untagged and `reel-region-*` stays optional. A fixture with a deliberate second, un-armed block
+  would make it assertable — worth building next.
+- **The OCR call behind "read this frame".** The control and its copy are asserted; the request
+  is not implemented yet.
+- **`? frames` on an imported clip.** Flow 12's import reaches `ready` with a working PTS table,
+  but the frame count is sometimes absent on the row (the ingest took its fallback path). The Reel
+  now falls back to the duration rather than printing a bare `?`. Worth tracing when the proxy
+  path is measured on hardware.
 
 ## Adding a flow
 

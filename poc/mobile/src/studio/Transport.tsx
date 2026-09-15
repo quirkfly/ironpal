@@ -42,9 +42,13 @@ export function Transport(p: Props) {
 
   return (
     <View style={styles.row}>
-      <Btn testID="studio-step-set-prev" onPress={() => p.onStepSet(-1)} disabled={!p.canStepSet.prev}><Icon kind="set-prev" /></Btn>
-      <Btn testID="studio-step-rep-prev" onPress={() => p.onStepRep(-1)}><Icon kind="rep-prev" /></Btn>
-      <Btn testID="studio-step-frame-prev" onPress={() => p.onStepFrame(-1)} onLongPress={() => startShuttle(-1)} onPressOut={stopShuttle}><Icon kind="frame-prev" /></Btn>
+      {/* Side groups flex so six buttons plus the wheel always fit: at 411 dp the fixed-width
+          version pushed `rep ▶` and `set ⏭` off the right edge (found by e2e flow 07). */}
+      <View style={styles.side}>
+        <Btn testID="studio-step-set-prev" onPress={() => p.onStepSet(-1)} disabled={!p.canStepSet.prev}><Icon kind="set-prev" size={18} /></Btn>
+        <Btn testID="studio-step-rep-prev" onPress={() => p.onStepRep(-1)}><Icon kind="rep-prev" size={18} /></Btn>
+        <Btn testID="studio-step-frame-prev" onPress={() => p.onStepFrame(-1)} onLongPress={() => startShuttle(-1)} onPressOut={stopShuttle}><Icon kind="frame-prev" size={18} /></Btn>
+      </View>
       <View style={styles.centre}>
         <JogWheel onStep={p.onJog} />
         <View style={styles.playRow}>
@@ -59,9 +63,11 @@ export function Transport(p: Props) {
           </Pressable>
         </View>
       </View>
-      <Btn testID="studio-step-frame-next" onPress={() => p.onStepFrame(1)} onLongPress={() => startShuttle(1)} onPressOut={stopShuttle}><Icon kind="frame-next" /></Btn>
-      <Btn testID="studio-step-rep-next" onPress={() => p.onStepRep(1)}><Icon kind="rep-next" /></Btn>
-      <Btn testID="studio-step-set-next" onPress={() => p.onStepSet(1)} disabled={!p.canStepSet.next}><Icon kind="set-next" /></Btn>
+      <View style={styles.side}>
+        <Btn testID="studio-step-frame-next" onPress={() => p.onStepFrame(1)} onLongPress={() => startShuttle(1)} onPressOut={stopShuttle}><Icon kind="frame-next" size={18} /></Btn>
+        <Btn testID="studio-step-rep-next" onPress={() => p.onStepRep(1)}><Icon kind="rep-next" size={18} /></Btn>
+        <Btn testID="studio-step-set-next" onPress={() => p.onStepSet(1)} disabled={!p.canStepSet.next}><Icon kind="set-next" size={18} /></Btn>
+      </View>
     </View>
   );
 }
@@ -75,13 +81,14 @@ function Btn({testID, onPress, onLongPress, onPressOut, disabled, children}: {te
 }
 
 const styles = StyleSheet.create({
-  row: {flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, gap: 2},
-  btn: {width: 44, height: 44, borderRadius: radii.md, backgroundColor: '#161B22', alignItems: 'center', justifyContent: 'center'},
+  row: {flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.xs, gap: 2},
+  side: {flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', gap: 2},
+  btn: {flexShrink: 1, minWidth: 34, height: 38, paddingHorizontal: 2, borderRadius: radii.md, backgroundColor: '#161B22', alignItems: 'center', justifyContent: 'center'},
   btnOff: {opacity: 0.3},
-  centre: {alignItems: 'center', gap: 4},
-  playRow: {flexDirection: 'row', gap: 6, alignItems: 'center'},
-  play: {width: 36, height: 28, borderRadius: radii.md, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center'},
-  chip: {height: 28, minWidth: 40, paddingHorizontal: 8, borderRadius: radii.md, backgroundColor: '#161B22', alignItems: 'center', justifyContent: 'center'},
+  centre: {alignItems: 'center', gap: 2},
+  playRow: {flexDirection: 'row', gap: 4, alignItems: 'center'},
+  play: {width: 34, height: 28, borderRadius: radii.md, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center'},
+  chip: {height: 28, minWidth: 34, paddingHorizontal: 6, borderRadius: radii.md, backgroundColor: '#161B22', alignItems: 'center', justifyContent: 'center'},
   chipOn: {backgroundColor: colors.accent},
   chipText: {color: colors.textSecondary, fontSize: 12, fontWeight: '700'},
 });

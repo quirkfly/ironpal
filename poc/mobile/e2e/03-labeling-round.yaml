@@ -21,6 +21,8 @@ appId: com.twentydeka.ironpal
         id: "mission-arm"
     direction: DOWN
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 - tapOn:
     id: "mission-arm"
 
@@ -75,6 +77,13 @@ appId: com.twentydeka.ironpal
 # 2. Exercise: the model's proposal is explained, and the picker is a real choice.
 - assertVisible:
     id: "labeling-exercise-explain"
+- scrollUntilVisible:
+    element:
+        id: "labeling-exercise-bulgarian-split-squat"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 - tapOn:
     id: "labeling-exercise-bulgarian-split-squat"
 # "why?" only exists when the matcher had runner-up candidates to show. On a first-ever set the
@@ -89,6 +98,8 @@ appId: com.twentydeka.ironpal
         id: "labeling-weight-explain"
     direction: DOWN
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 - tapOn:
     id: "labeling-weight-input"
 - inputText: "24"
@@ -101,17 +112,11 @@ appId: com.twentydeka.ironpal
 - hideKeyboard
 
 # 4. Save — and the model must report what it learned.
-- scrollUntilVisible:
-    element:
-        id: "labeling-save"
-    direction: DOWN
-    timeout: 20000
 - tapOn:
     id: "labeling-save"
-- scrollUntilVisible:
-    element:
+- extendedWaitUntil:
+    visible:
         id: "labeling-outcome"
-    direction: DOWN
     timeout: 30000
 - assertVisible: ".*Clean set.*"
 - assertVisible: ".*XP.*"
@@ -122,8 +127,15 @@ appId: com.twentydeka.ironpal
         id: "labeling-back"
     direction: UP
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 - tapOn:
     id: "labeling-back"
+# A tap can be swallowed while the JS thread is busy committing a set; the retry is optional,
+# so it is skipped entirely when the first one took (the control is gone by then).
+- tapOn:
+    id: "labeling-back"
+    optional: true
 - extendedWaitUntil:
     visible:
         id: "campaign-screen"
@@ -134,4 +146,6 @@ appId: com.twentydeka.ironpal
         id: "inspector-level-bulgarian-split-squat"
     direction: DOWN
     timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
 - assertVisible: ".*recon.*"
