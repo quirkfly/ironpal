@@ -81,6 +81,14 @@ dependencies {
     implementation("androidx.camera:camera-camera2:${cameraxVersion}")
     implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
     implementation("androidx.camera:camera-view:${cameraxVersion}")
+    // Per-set clip recording (studio design §11.1).
+    implementation("androidx.camera:camera-video:${cameraxVersion}")
+
+    // Clip ingest (studio design §8.2): scrub proxy via Media3 Transformer, rotation via media3-effect.
+    def media3Version = "1.5.1"
+    implementation("androidx.media3:media3-transformer:${media3Version}")
+    implementation("androidx.media3:media3-effect:${media3Version}")
+    implementation("androidx.media3:media3-common:${media3Version}")
 
     // JVM unit tests for the pure-Kotlin signal engine (design §11 — no test source set existed).
     testImplementation("junit:junit:4.13.2")

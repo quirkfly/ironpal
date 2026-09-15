@@ -170,6 +170,8 @@ object ImuPipeline : SensorEventListener {
       if (count < CAPACITY) count++
       updateRate()
     }
+    // The session log keeps the WHOLE session, sliceable by host time (studio design §10.1).
+    SessionRecorder.append(ax, ay, az, gx, gy, gz, tsNs)
   }
 
   override fun onSensorChanged(event: SensorEvent) {
@@ -193,6 +195,9 @@ object ImuPipeline : SensorEventListener {
         head = (head + 1) % CAPACITY
         if (count < CAPACITY) count++
         updateRate()
+        SessionRecorder.append(
+          accel[i][0], accel[i][1], accel[i][2], gyro[i][0], gyro[i][1], gyro[i][2], event.timestamp,
+        )
       }
     }
   }

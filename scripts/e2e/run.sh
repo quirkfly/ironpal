@@ -99,8 +99,11 @@ declare -A FIXTURE=(
   [04-quality-gates]=real-stationary
   [05-hard-class]=case003-pushdown-5reps
   [06-inspector-benchmark]=split-squat-8reps
+  [07-studio-navigation]=split-squat-8reps
+  [08-studio-marks-relabel]=split-squat-8reps
+  [09-studio-reel]=split-squat-8reps
 )
-ORDER=(01-campaign-map 02-session-and-hud 03-labeling-round 04-quality-gates 05-hard-class 06-inspector-benchmark)
+ORDER=(01-campaign-map 02-session-and-hud 03-labeling-round 04-quality-gates 05-hard-class 06-inspector-benchmark 07-studio-navigation 08-studio-marks-relabel 09-studio-reel)
 
 push_fixture() { # $1 = fixture basename
   local fx="$1"
@@ -114,6 +117,11 @@ push_fixture() { # $1 = fixture basename
   adb -s "$DEVICE" push "$src" "$DEVICE_FILES/e2e/replay.jsonl" >/dev/null 2>&1 || die "push failed"
   [ -f "$FIXTURES/$fx.meta.json" ] && \
     adb -s "$DEVICE" push "$FIXTURES/$fx.meta.json" "$DEVICE_FILES/e2e/meta.json" >/dev/null 2>&1
+  # The Studio's video fixture (studio design §17): attached to the set under test when the
+  # marker is present, so frame stepping can be asserted without a camera.
+  [ -f "$FIXTURES/studio-clip.mp4" ] || python3 "$ROOT/scripts/e2e/make_video_fixture.py" >/dev/null 2>&1 || true
+  [ -f "$FIXTURES/studio-clip.mp4" ] && \
+    adb -s "$DEVICE" push "$FIXTURES/studio-clip.mp4" "$DEVICE_FILES/e2e/studio-clip.mp4" >/dev/null 2>&1
   # The marker is what makes the app choose the REPLAY source at session start.
   local marker; marker="$(mktemp)"
   printf '{"file":"e2e/replay.jsonl","loop":true,"label":"%s"}\n' "$fx" > "$marker"

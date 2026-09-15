@@ -1,4 +1,6 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
+import {beginSetClip, endSetClip} from '../model/clips';
+import {CameraModule} from '../native/CameraModule';
 import {SignalModule} from '../native/SignalModule';
 import type {GateEvent, LinkEvent, MatchEvent, RepEvent, SetResult} from '../types/model';
 
@@ -18,6 +20,16 @@ export interface LiveSet {
   link: LinkEvent | null;
   result: SetResult | null;
   error: string | null;
+  /** Per-set clip (studio design §11.1); null when the camera is unavailable or the clip failed. */
+  clipId: string | null;
+  /** Sharpest still seen during the glance window, base64 JPEG (from the clip's analysis stream). */
+  glanceJpegB64: string | null;
+}
+
+export interface ArmOptions {
+  sessionId: string | null;
+  rigId: string | null;
+  rotationDeg: number;
 }
 
 export interface SetCues {
@@ -28,7 +40,8 @@ export interface SetCues {
 }
 
 export function useSet(cues: SetCues = {}) {
-  const [live, setLive] = useState<LiveSet>({phase: 'idle', setId: null, exerciseHint: null, reps: 0, lastRepLatencyMs: null, provisionalLabel: null, provisionalConfidence: 0, link: null, result: null, error: null});
+  const [live, setLive] = useState<LiveSet>({phase: 'idle', setId: null, exerciseHint: null, reps: 0, lastRepLatencyMs: null, provisionalLabel: null, provisionalConfidence: 0, link: null, result: null, error: null, clipId: null, glanceJpegB64: null});
+  const clipRef = useRef<string | null>(null);
   const cuesRef = useRef(cues);
   cuesRef.current = cues;
 
@@ -62,13 +75,21 @@ export function useSet(cues: SetCues = {}) {
     return () => offs.forEach(f => f());
   }, []);
 
-  const arm = useCallback(async (exerciseHint: string | null) => {
+  const arm = useCallback(async (exerciseHint: string | null, opts?: ArmOptions) => {
     const setId = `set_${Date.now()}`;
     try {
       if (SignalModule.isAvailable()) {
         await SignalModule.startSet(setId, exerciseHint);
       }
-      setLive({phase: 'armed', setId, exerciseHint, reps: 0, lastRepLatencyMs: null, provisionalLabel: null, provisionalConfidence: 0, link: null, result: null, error: null});
+      // The clip starts at ARM so the glance and the pre-roll are inside it by construction
+      // (design §11.1). A clip failure never breaks the set.
+      let clipId: string | null = null;
+      if (opts?.sessionId && CameraModule.isAvailable()) {
+        const clip = await beginSetClip(opts.sessionId, setId, opts.rigId, opts.rotationDeg).catch(() => null);
+        clipId = clip?.id ?? null;
+      }
+      clipRef.current = clipId;
+      setLive({phase: 'armed', setId, exerciseHint, reps: 0, lastRepLatencyMs: null, provisionalLabel: null, provisionalConfidence: 0, link: null, result: null, error: null, clipId, glanceJpegB64: null});
     } catch (e) {
       setLive(s => ({...s, error: (e as Error).message}));
     }
@@ -78,17 +99,28 @@ export function useSet(cues: SetCues = {}) {
     if (!live.setId) {
       return null;
     }
+    // Stop the clip first so its post-roll ends where the user ended the set (the user presses
+    // END SET after the set; the gate closed earlier, so that IS the post-roll).
+    let glanceJpegB64: string | null = null;
+    const clipId = clipRef.current;
+    if (clipId) {
+      const stopped = await endSetClip(clipId, null).catch(() => null);
+      glanceJpegB64 = stopped?.glanceJpegB64 ?? null;
+    }
     try {
       const result = SignalModule.isAvailable() ? await SignalModule.endSet(live.setId) : null;
-      setLive(s => ({...s, phase: 'ended', result}));
+      setLive(s => ({...s, phase: 'ended', result, clipId, glanceJpegB64}));
       return result;
     } catch (e) {
-      setLive(s => ({...s, error: (e as Error).message}));
+      setLive(s => ({...s, error: (e as Error).message, clipId, glanceJpegB64}));
       return null;
     }
   }, [live.setId]);
 
-  const reset = useCallback(() => setLive(s => ({...s, phase: 'idle', setId: null, reps: 0, result: null, provisionalLabel: null})), []);
+  const reset = useCallback(() => {
+    clipRef.current = null;
+    setLive(s => ({...s, phase: 'idle', setId: null, reps: 0, result: null, provisionalLabel: null, clipId: null, glanceJpegB64: null}));
+  }, []);
 
   return {live, arm, end, reset};
 }

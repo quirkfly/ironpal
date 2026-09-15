@@ -1,0 +1,145 @@
+# AFTER ACTION — marks and relabel (studio design §7.6, §9.1, §10.3).
+# Fixture: split-squat-8reps. Add a mark at the playhead in Marks mode, save from the Studio
+# (this is the round's first save, so it is a commit), then re-open the set from the queue/Reel
+# path and relabel the exercise; the outcome line must report the store change.
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+- tapOn:
+    id: "campaign-start-session"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-calibrate"
+    timeout: 20000
+- tapOn:
+    id: "campaign-calibrate"
+- tapOn:
+    id: "level-bulgarian-split-squat"
+- scrollUntilVisible:
+    element:
+        id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "mission-arm"
+- extendedWaitUntil:
+    notVisible: "WAITING FOR MOTION"
+    timeout: 45000
+- extendedWaitUntil:
+    visible:
+        id: "hud-reps"
+        text: "[0-9]{2}"
+    timeout: 90000
+- tapOn:
+    id: "hud-end-set"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 30000
+- tapOn:
+    id: "labeling-open-studio-reps"
+- extendedWaitUntil:
+    visible:
+        id: "studio-screen"
+    timeout: 30000
+
+# Marks mode: step away from the detected marks, add one, the caption follows.
+- tapOn:
+    id: "studio-mode-marks"
+- tapOn:
+    id: "studio-step-frame-next"
+- tapOn:
+    id: "studio-step-frame-next"
+- tapOn:
+    id: "studio-step-frame-next"
+- tapOn:
+    id: "studio-mark-add"
+- assertVisible:
+    id: "studio-marks-caption"
+    text: ".*1 placed by you.*"
+# Delete it again so the count stays what the detector found (the ±1 gate must pass).
+- tapOn:
+    id: "studio-mark-delete"
+- assertVisible:
+    id: "studio-marks-caption"
+    text: ".*0 placed by you.*"
+
+# Weight, then save from the Studio.
+- tapOn:
+    id: "studio-dock-weight"
+- tapOn:
+    id: "studio-weight-input"
+- inputText: "24"
+- hideKeyboard
+- tapOn:
+    id: "studio-dock-weight"
+- scrollUntilVisible:
+    element:
+        id: "studio-save"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "studio-save"
+- extendedWaitUntil:
+    visible:
+        id: "studio-outcome"
+    timeout: 30000
+- assertVisible:
+    id: "studio-outcome"
+    text: ".*(Clean set|not counted).*"
+
+# Relabel: pick a different exercise in the sheet, save again, the outcome mentions the store.
+- tapOn:
+    id: "studio-dock-exercise"
+- extendedWaitUntil:
+    visible:
+        id: "studio-exercise"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+        id: "studio-exercise-goblet-squat"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "studio-exercise-goblet-squat"
+- tapOn:
+    id: "studio-exercise-done"
+- assertVisible:
+    id: "studio-exercise-chip"
+    text: ".*Goblet.*"
+- scrollUntilVisible:
+    element:
+        id: "studio-save"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "studio-save"
+- extendedWaitUntil:
+    visible:
+        id: "studio-outcome"
+        text: ".*(Clean set|not counted).*"
+    timeout: 30000
+
+# Back on the map the level for the relabelled exercise exists and the old one has no set.
+- tapOn:
+    id: "studio-back"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+        id: "labeling-back"
+    direction: UP
+    timeout: 20000
+- tapOn:
+    id: "labeling-back"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-screen"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+        id: "inspector-level-goblet-squat"
+    direction: DOWN
+    timeout: 20000

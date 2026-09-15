@@ -11,5 +11,7 @@ module.exports = {
         allowUndefined: true,
       },
     ],
+    // react-native-reanimated/plugin must be listed last (same setup as ../reddy).
+    'react-native-reanimated/plugin',
   ],
 };

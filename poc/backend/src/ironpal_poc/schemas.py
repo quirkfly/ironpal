@@ -115,7 +115,9 @@ class SessionIn(BaseModel):
     llm_calls: int = 0
     llm_cost_estimate: float = 0.0
     notes: str | None = None
-    model_metrics: dict | None = None  # design §10: metrics only, never windows or frames
+    # design §10: metrics only, never windows or frames. Studio (design §12) adds the keys
+    # label_source ("debrief"/"studio"/"live"), studio_ms and marks_edited — counts and timings only.
+    model_metrics: dict | None = None
 
 
 class SessionOut(SessionIn):

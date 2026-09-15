@@ -11,6 +11,10 @@ import * as store from '../model/store';
 import {SignalModule} from '../native/SignalModule';
 import type {LevelProgress, LevelState} from '../types/model';
 import {LabelingScreen} from './LabelingScreen';
+import {IMU_SOURCE} from '../config';
+import type {StudioDraft} from '../studio/nav';
+import {StudioScreen} from '../studio/StudioScreen';
+import type {QueueFocus} from '../types/model';
 
 // The Campaign — the self-training loop wearing the game layer (design §17).
 // BRIEF (campaign map + mission card) → ARM (crosshair) → FIRE (rep HUD) → DEBRIEF (the
@@ -18,6 +22,8 @@ import {LabelingScreen} from './LabelingScreen';
 
 interface Props {
   onBack: () => void;
+  onOpenQueue?: () => void;
+  onOpenReel?: (exerciseId: string | null) => void;
 }
 
 const CAMPAIGN_ORDER: CampaignKey[] = ['imu', 'vision', 'hard'];
@@ -54,7 +60,7 @@ function imuStatusLine(
   return 'IMU: —';
 }
 
-export function CampaignScreen({onBack}: Props) {
+export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
   const session = useSession();
   const set = useSet();
   const debrief = useDebrief();
@@ -64,6 +70,8 @@ export function CampaignScreen({onBack}: Props) {
   const [levels, setLevels] = useState<LevelProgress[]>([]);
   const [bench, setBench] = useState<{tickMs: number; matchMs: number; templates: number; memMb: number} | null>(null);
   const [labeling, setLabeling] = useState(false);
+  const [studio, setStudio] = useState<{draft: StudioDraft; focus: QueueFocus} | null>(null);
+  const [queueCount, setQueueCount] = useState(0);
 
   const pkg = session.state.pkg;
   const names = useMemo(() => ((pkg as unknown as {exercise_names?: Record<string, string>})?.exercise_names ?? {}), [pkg]);
@@ -80,14 +88,20 @@ export function CampaignScreen({onBack}: Props) {
   const xp = levels.reduce((a, l) => a + l.xp, 0);
   const rank = rankFor(xp);
 
-  const refresh = useCallback(async () => setLevels(await store.allLevelProgress()), []);
+  const refresh = useCallback(async () => {
+    setLevels(await store.allLevelProgress());
+    setQueueCount(await store.openQueueCount().catch(() => 0));
+  }, []);
   useEffect(() => {
     void refresh();
   }, [refresh, debrief.outcome]);
 
   const ctx = pkg && session.state.params && session.state.sessionId
-    ? {pkg, params: session.state.params, sessionId: session.state.sessionId, gymId: session.gymId, rotation: session.state.rotation, calibrated: session.state.calibration != null}
+    ? {pkg, params: session.state.params, sessionId: session.state.sessionId, gymId: session.gymId, rotation: session.state.rotation, calibrated: session.state.calibration != null, clipId: set.live.clipId ?? null}
     : null;
+
+  // The phone-on-the-headband rig records sideways (frame-extraction.md: 90°); the BLE rig has no app camera.
+  const armOpts = session.state.sessionId ? {sessionId: session.state.sessionId, rigId: IMU_SOURCE === 'BLE' ? 'elp-nano' : 'phone', rotationDeg: 90} : undefined;
 
   const endSet = async () => {
     const result = await set.end();
@@ -116,6 +130,23 @@ export function CampaignScreen({onBack}: Props) {
     }
   };
 
+  // ---------------------------------------------------------------- After Action on the open round
+  if (studio) {
+    return (
+      <StudioScreen
+        open={{kind: 'draft', draft: studio.draft, focus: studio.focus}}
+        names={names}
+        levels={Object.fromEntries(levels.map(l => [l.exerciseId, l.state]))}
+        onBack={a => {
+          if (a) {
+            setAnswers(a);
+          }
+          setStudio(null);
+        }}
+      />
+    );
+  }
+
   // ---------------------------------------------------------------- labeling round
   if (labeling && set.live.result && debrief.proposals) {
     const outcome = debrief.outcome
@@ -137,6 +168,7 @@ export function CampaignScreen({onBack}: Props) {
           set.reset();
         }}
         outcome={outcome}
+        onOpenStudio={ctx ? focus => setStudio({draft: {result: set.live.result!, clipId: set.live.clipId ?? null, answers, ctx}, focus}) : undefined}
       />
     );
   }
@@ -271,20 +303,37 @@ export function CampaignScreen({onBack}: Props) {
               <Text style={styles.missionLine}>
                 Two different weights are required to certify · {Math.max(0, 5 - (levels.find(l => l.exerciseId === exerciseId)?.cleanSets ?? 0))} clean sets to go.
               </Text>
-              <Pressable testID="mission-arm" style={styles.armBtn} onPress={() => void set.arm(exerciseId)}>
+              <Pressable testID="mission-arm" style={styles.armBtn} onPress={() => void set.arm(exerciseId, armOpts)}>
                 <Image source={HUD.crosshairIdle} style={styles.armIcon} />
                 <Text style={styles.armText}>ARM SET</Text>
               </Pressable>
             </ImageBackground>
           ) : null}
 
+          <Pressable testID="campaign-after-action" style={styles.card} onPress={onOpenQueue}>
+            <View style={styles.afterAction}>
+              <Image source={EMBLEM.scout} style={styles.afterActionEmblem} />
+              <View style={{flex: 1}}>
+                <Text style={styles.section}>AFTER ACTION</Text>
+                <Text testID="campaign-after-action-count" style={styles.hint}>{queueCount ? `${queueCount} to review` : 'nothing to review'} · replay any set frame by frame</Text>
+              </View>
+            </View>
+          </Pressable>
+
           <View style={styles.card}>
             <Text testID="inspector" style={styles.section}>INSPECTOR</Text>
             {levels.length === 0 ? <Text style={styles.hint}>No levels yet — finish a set to start one.</Text> : null}
             {levels.map(l => (
-              <Text testID={`inspector-level-${l.exerciseId}`} key={`${l.exerciseId}:${l.gymId}`} style={styles.hint}>
-                {names[l.exerciseId] ?? l.exerciseId}: {l.state} · {l.cleanSets} sets · {l.distinctWeights} weights · integrity {Math.round(l.integrity * 100)}%
-              </Text>
+              <View key={`${l.exerciseId}:${l.gymId}`} style={styles.inspectorRow}>
+                <Text testID={`inspector-level-${l.exerciseId}`} style={[styles.hint, {flex: 1}]}>
+                  {names[l.exerciseId] ?? l.exerciseId}: {l.state} · {l.cleanSets} sets · {l.distinctWeights} weights · integrity {Math.round(l.integrity * 100)}%
+                </Text>
+                {onOpenReel ? (
+                  <Pressable testID={`inspector-replay-${l.exerciseId}`} onPress={() => onOpenReel(l.exerciseId)} hitSlop={8}>
+                    <Text style={styles.why}>replay</Text>
+                  </Pressable>
+                ) : null}
+              </View>
             ))}
             <Pressable testID="inspector-benchmark" onPress={() => void SignalModule.benchmark().then(setBench)}>
               <Text style={styles.why}>run benchmark</Text>
@@ -316,6 +365,9 @@ const styles = StyleSheet.create({
   rankName: {color: colors.textPrimary, fontSize: 12, fontWeight: '700'},
   rankXp: {color: colors.textSecondary, fontSize: 11},
   card: {backgroundColor: 'rgba(20,25,32,0.92)', borderRadius: radii.lg, padding: spacing.lg, gap: spacing.sm},
+  afterAction: {flexDirection: 'row', alignItems: 'center', gap: spacing.md},
+  afterActionEmblem: {width: 40, height: 40, resizeMode: 'contain'},
+  inspectorRow: {flexDirection: 'row', alignItems: 'center', gap: spacing.sm},
   section: {color: colors.textSecondary, fontSize: 12, fontWeight: '800', letterSpacing: 1},
   hint: {color: colors.textSecondary, fontSize: 13, lineHeight: 18},
   warn: {color: '#FF6B35', fontSize: 13, lineHeight: 18},

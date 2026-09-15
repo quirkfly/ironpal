@@ -99,6 +99,8 @@ class SignalModule(private val reactContext: ReactApplicationContext) :
     try {
       ImuPipeline.start()
       sessionId = id; negatives.clear(); lastNegativeNs = 0L
+      // The whole-session sample log the Studio slices by host time (studio design §10.1).
+      try { SessionRecorder.start(reactContext, id) } catch (_: Exception) {}
       tickTask?.cancel(false)
       tickTask = executor.scheduleWithFixedDelay({ tick() }, 300, params.tickMs, TimeUnit.MILLISECONDS)
       promise.resolve(null)
@@ -110,6 +112,7 @@ class SignalModule(private val reactContext: ReactApplicationContext) :
     try {
       tickTask?.cancel(false); tickTask = null
       ImuPipeline.stop()
+      SessionRecorder.stop()
       val out = Arguments.createMap()
       out.putString("sessionId", sessionId)
       out.putDouble("seqGaps", BleImuSource.seqGaps.toDouble())
@@ -195,53 +198,176 @@ class SignalModule(private val reactContext: ReactApplicationContext) :
         val rollNs = 10_000_000_000L
         val fromNs = maxOf(setStartNs, openNs - rollNs)
         val toNs = minOf(nowNs, closeNs + rollNs)
-        val seconds = (nowNs - fromNs) / 1e9
-        val win = ImuPipeline.snapshot(seconds.coerceAtLeast(4.0))
-        val rate = params.canonicalRateHz
-        // Trim to [fromNs, toNs] using the window's end timestamp.
-        val n = win.accel.size
-        fun idxAt(t: Long): Int = (n - 1 - ((win.endNs - t) / 1e9 * rate)).toInt().coerceIn(0, maxOf(0, n - 1))
-        // A set with NO samples is a normal outcome, not an error: the headband can be
-        // disconnected, or the phone IMU can be denied. Slice defensively so the debrief still
-        // opens and can say "no samples" (design §14) instead of the bridge call rejecting and
-        // stranding the user on the live HUD.
-        val i0 = if (n == 0) 0 else idxAt(fromNs)
-        val i1 = if (n == 0) -1 else idxAt(toNs)
-        val count = if (n == 0) 0 else (i1 - i0 + 1).coerceIn(0, n - i0)
-        val accelRaw = Array(count) { k -> win.accel[i0 + k] }
-        val gyroRaw = win.gyro?.takeIf { it.size >= i0 + count }?.let { g -> Array(count) { k -> g[i0 + k] } }
-        val accel = rHead.apply(accelRaw)
-        val gyro = gyroRaw?.let { rHead.apply(it) }
-        val ex = params.exercise(exerciseHint)
-        val res = if (accel.size >= 8) SetAnalyzer.analyze(accel, gyro, index, params, ex) else null
-
-        val out = JSONObject()
-        out.put("setId", id); out.put("sessionId", sessionId)
-        out.put("tStartNs", fromNs); out.put("tEndNs", toNs); out.put("tOpenNs", openNs); out.put("tCloseNs", closeNs)
-        out.put("gateState", gate.state.name)
-        out.put("rateHz", rate); out.put("samples", accel.size)
-        // Combined [N][6] window (gyro zeros when absent) as float16 base64 — the store's format.
-        val combined = Array(accel.size) { k -> DoubleArray(6) { c -> if (c < 3) accel[k][c] else (gyro?.getOrNull(k)?.getOrNull(c - 3) ?: 0.0) } }
-        out.put("windowF16", F16.encode(combined)); out.put("channels", 6)
-        out.put("hasGyro", gyro != null)
-        // Confirmed reps from the streaming clock, relative to the window start.
-        val reps = JSONArray()
-        for (r in clock.all) reps.put(JSONObject().apply {
-          put("n", r.n); put("tPeakSec", (r.tPeakNs - fromNs) / 1e9); put("amplitude", r.amplitude); put("tConfirmedSec", (r.tConfirmedNs - fromNs) / 1e9)
-        })
-        out.put("reps", reps); out.put("repsDetected", clock.count)
-        if (res != null) {
-          out.put("features", res.features.toJson())
-          out.put("match", res.match.toJson())
-          out.put("peaksZeroPhase", JSONArray(res.peaks.map { it / rate }))
-          out.put("cadenceHz", res.cadenceHz); out.put("periodicity", res.periodicity); out.put("energy", res.energy)
-          out.put("dominantChannel", res.dominantChannel)
+        // Recorder first (the whole session, sliced by host time); ring buffer when the recorder
+        // does not reach back to the range (e.g. a session started before the recorder existed).
+        val sid = sessionId
+        val log = sid?.let { SessionRecorder.get(it) }
+        val win: ImuPipeline.Window = if (log != null && log.covers(fromNs) && log.count >= 8) {
+          log.slice(fromNs, toNs, params.canonicalRateHz)
+        } else {
+          ringSlice(fromNs, toNs, nowNs)
         }
-        out.put("seqGaps", BleImuSource.seqGaps); out.put("saturated", BleImuSource.saturated)
+        val json = buildSetResult(id, sid, fromNs, toNs, openNs, closeNs, gate.state.name, win, clock.all, params.exercise(exerciseHint))
         setId = null
-        promise.resolve(out.toString())
+        promise.resolve(json.toString())
       } catch (e: Exception) { promise.reject("SIGNAL_SET_END", e.message, e) }
     }
+  }
+
+  /** The P0 slice: trim the ring-buffer snapshot to [fromNs, toNs] by the window's end timestamp. */
+  private fun ringSlice(fromNs: Long, toNs: Long, nowNs: Long): ImuPipeline.Window {
+    val seconds = (nowNs - fromNs) / 1e9
+    val win = ImuPipeline.snapshot(seconds.coerceAtLeast(4.0))
+    val rate = params.canonicalRateHz
+    val n = win.accel.size
+    fun idxAt(t: Long): Int = (n - 1 - ((win.endNs - t) / 1e9 * rate)).toInt().coerceIn(0, maxOf(0, n - 1))
+    // A set with NO samples is a normal outcome, not an error: the headband can be
+    // disconnected, or the phone IMU can be denied. Slice defensively so the debrief still
+    // opens and can say "no samples" (design §14) instead of the bridge call rejecting and
+    // stranding the user on the live HUD.
+    val i0 = if (n == 0) 0 else idxAt(fromNs)
+    val i1 = if (n == 0) -1 else idxAt(toNs)
+    val count = if (n == 0) 0 else (i1 - i0 + 1).coerceIn(0, n - i0)
+    val accelRaw = Array(count) { k -> win.accel[i0 + k] }
+    val gyroRaw = win.gyro?.takeIf { it.size >= i0 + count }?.let { g -> Array(count) { k -> g[i0 + k] } }
+    val endNs = if (n == 0) win.endNs else win.endNs - (((n - 1 - i1) / rate) * 1e9).toLong()
+    return ImuPipeline.Window(accelRaw, gyroRaw, win.nativeRateHz, endNs)
+  }
+
+  /**
+   * The SetResult JSON (design §2.2) from a raw (device-frame) window, the confirmed reps and the
+   * set's timing. Shared by endSet and analyzeRange so both tiers of labeling analyse identically.
+   */
+  private fun buildSetResult(
+    id: String, sid: String?, fromNs: Long, toNs: Long, openNs: Long, closeNs: Long, gateState: String,
+    win: ImuPipeline.Window, reps: List<RepClock.Rep>, ex: ExerciseParams?,
+  ): JSONObject {
+    val rate = params.canonicalRateHz
+    val accel = rHead.apply(win.accel)
+    val gyro = win.gyro?.let { rHead.apply(it) }
+    val res = if (accel.size >= 8) SetAnalyzer.analyze(accel, gyro, index, params, ex) else null
+    val out = JSONObject()
+    out.put("setId", id); out.put("sessionId", sid ?: JSONObject.NULL)
+    out.put("tStartNs", fromNs); out.put("tEndNs", toNs); out.put("tOpenNs", openNs); out.put("tCloseNs", closeNs)
+    out.put("gateState", gateState)
+    out.put("rateHz", rate); out.put("samples", accel.size)
+    // Combined [N][6] window (gyro zeros when absent) as float16 base64 — the store's format.
+    val combined = Array(accel.size) { k -> DoubleArray(6) { c -> if (c < 3) accel[k][c] else (gyro?.getOrNull(k)?.getOrNull(c - 3) ?: 0.0) } }
+    out.put("windowF16", F16.encode(combined)); out.put("channels", 6)
+    out.put("hasGyro", gyro != null)
+    // Confirmed reps from the streaming clock, relative to the window start.
+    val arr = JSONArray()
+    for (r in reps) arr.put(JSONObject().apply {
+      put("n", r.n); put("tPeakSec", (r.tPeakNs - fromNs) / 1e9); put("amplitude", r.amplitude); put("tConfirmedSec", (r.tConfirmedNs - fromNs) / 1e9)
+    })
+    out.put("reps", arr); out.put("repsDetected", reps.size)
+    if (res != null) {
+      out.put("features", res.features.toJson())
+      out.put("match", res.match.toJson())
+      out.put("peaksZeroPhase", JSONArray(res.peaks.map { it / rate }))
+      out.put("cadenceHz", res.cadenceHz); out.put("periodicity", res.periodicity); out.put("energy", res.energy)
+      out.put("dominantChannel", res.dominantChannel)
+    }
+    out.put("seqGaps", BleImuSource.seqGaps); out.put("saturated", BleImuSource.saturated)
+    return out
+  }
+
+  // ---------------------------------------------------------------- Studio (studio design §10.2)
+
+  /** The session log for [sid]: live, already loaded, or loaded from disk now. */
+  private fun logFor(sid: String): SampleLog {
+    SessionRecorder.get(sid)?.let { return it }
+    if (!SessionRecorder.load(reactContext, sid)) throw IllegalStateException("no sample log for session $sid")
+    return SessionRecorder.get(sid) ?: throw IllegalStateException("no sample log for session $sid")
+  }
+
+  /** Host time of sample 0 of a Window whose endNs is the last sample. */
+  private fun windowT0(win: ImuPipeline.Window): Long =
+    if (win.accel.isEmpty()) win.endNs else win.endNs - (((win.accel.size - 1) / params.canonicalRateHz) * 1e9).toLong()
+
+  /** Full set analysis over an arbitrary host-time range; same JSON as endSet. */
+  @ReactMethod
+  fun analyzeRange(sid: String, t0Ns: Double, t1Ns: Double, hint: String?, promise: Promise) {
+    executor.execute {
+      try {
+        val t0 = t0Ns.toLong(); val t1 = t1Ns.toLong()
+        val log = logFor(sid)
+        val raw = log.slice(t0, t1, params.canonicalRateHz)
+        val ex = params.exercise(hint?.takeIf { it.isNotBlank() })
+        // Offline rep clock + gate over the rotated range: the reps and bounds the live path would have produced.
+        val rotated = ImuPipeline.Window(rHead.apply(raw.accel), raw.gyro?.let { rHead.apply(it) }, raw.nativeRateHz, raw.endNs)
+        val sim = RangeAnalysis.simulate(rotated, params, ex, windowT0(rotated), null, rearm = false)
+        val openNs = sim.spans.firstOrNull()?.openNs ?: t0
+        val closeNs = sim.spans.lastOrNull()?.closeNs ?: t1
+        val json = buildSetResult("range_${t0}", sid, t0, t1, openNs, closeNs, if (sim.spans.isEmpty()) "IDLE" else "CLOSED", raw, sim.reps, ex)
+        promise.resolve(json.toString())
+      } catch (e: Exception) { promise.reject("SIGNAL_ANALYZE_RANGE", e.message, e) }
+    }
+  }
+
+  @ReactMethod
+  fun explainRange(sid: String, t0Ns: Double, t1Ns: Double, promise: Promise) {
+    executor.execute {
+      try {
+        val log = logFor(sid)
+        val raw = log.slice(t0Ns.toLong(), t1Ns.toLong(), params.canonicalRateHz)
+        val rotated = ImuPipeline.Window(rHead.apply(raw.accel), raw.gyro?.let { rHead.apply(it) }, raw.nativeRateHz, raw.endNs)
+        promise.resolve(RangeAnalysis.explain(rotated, params, params.exercise(exerciseHint), windowT0(rotated), index).toString())
+      } catch (e: Exception) { promise.reject("SIGNAL_EXPLAIN_RANGE", e.message, e) }
+    }
+  }
+
+  @ReactMethod
+  fun scanRegions(sid: String, promise: Promise) {
+    executor.execute {
+      try {
+        val log = logFor(sid)
+        val raw = log.all(params.canonicalRateHz)
+        val rotated = ImuPipeline.Window(rHead.apply(raw.accel), raw.gyro?.let { rHead.apply(it) }, raw.nativeRateHz, raw.endNs)
+        promise.resolve(RangeAnalysis.scanRegions(rotated, params, windowT0(rotated)).toString())
+      } catch (e: Exception) { promise.reject("SIGNAL_SCAN_REGIONS", e.message, e) }
+    }
+  }
+
+  @ReactMethod
+  fun previewIntegrity(exerciseId: String, windowF16: String, channels: Double, featuresJson: String, campaignJson: String, promise: Promise) {
+    executor.execute {
+      try {
+        val window = F16.decode(windowF16, channels.toInt().coerceAtLeast(3))
+        val accel = Array(window.size) { i -> DoubleArray(3) { c -> window[i][c] } }
+        val features = FeatureVector.fromJson(JSONObject(featuresJson))
+        val camp = HashSet<String>(); val a = JSONArray(campaignJson); for (i in 0 until a.length()) camp.add(a.getString(i))
+        promise.resolve(RangeAnalysis.previewIntegrity(index, exerciseId, features, accel, params, camp).toString())
+      } catch (e: Exception) { promise.reject("SIGNAL_PREVIEW_INTEGRITY", e.message, e) }
+    }
+  }
+
+  /** Snap-to-peak: host time of the rep channel's local maximum within ±windowMs of tNs. */
+  @ReactMethod
+  fun peakNear(sid: String, tNs: Double, windowMs: Double, promise: Promise) {
+    executor.execute {
+      try {
+        val t = tNs.toLong()
+        val log = logFor(sid)
+        // Slice generously so the band-pass has settled by the time it reaches the window.
+        val marginNs = (windowMs * 1e6).toLong() + 3_000_000_000L
+        val raw = log.slice(t - marginNs, t + marginNs, params.canonicalRateHz)
+        val rotated = ImuPipeline.Window(rHead.apply(raw.accel), raw.gyro?.let { rHead.apply(it) }, raw.nativeRateHz, raw.endNs)
+        promise.resolve(RangeAnalysis.peakNear(rotated, params, params.exercise(exerciseHint), t, windowMs, windowT0(rotated)).toDouble())
+      } catch (e: Exception) { promise.reject("SIGNAL_PEAK_NEAR", e.message, e) }
+    }
+  }
+
+  @ReactMethod
+  fun recorderInfo(sid: String, promise: Promise) {
+    try {
+      if (SessionRecorder.get(sid) == null) SessionRecorder.load(reactContext, sid)
+      val i = SessionRecorder.info(sid)
+      val out = Arguments.createMap()
+      out.putInt("samples", i.samples); out.putDouble("t0Ns", i.t0Ns.toDouble()); out.putDouble("t1Ns", i.t1Ns.toDouble())
+      out.putDouble("rateHz", i.rateHz); out.putBoolean("loaded", i.loaded)
+      promise.resolve(out)
+    } catch (e: Exception) { promise.reject("SIGNAL_RECORDER_INFO", e.message, e) }
   }
 
   /** Non-periodic windows collected this session (design §4.1), as [{windowF16, channels}]. Clears the ring. */

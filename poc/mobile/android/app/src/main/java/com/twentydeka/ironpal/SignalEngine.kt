@@ -356,3 +356,186 @@ object SetAnalyzer {
     return Result(features, match, peaks.peaks, per.cadenceHz, per.score, energy, ch)
   }
 }
+
+// ---------------------------------------------------------------------------
+// RangeAnalysis — offline analysis of an arbitrary host-time range (studio design §10.2)
+// ---------------------------------------------------------------------------
+
+/**
+ * Pure, JVM-testable. A [ImuPipeline.Window] plus its start time `t0Ns` (host time of sample 0:
+ * `endNs − (N−1)/rate`) is replayed through the SAME GateMachine / RepClock the live tick loop
+ * runs, so what the Studio shows is what the engine would have done — nothing is re-derived
+ * with different rules. Windows are expected already rotated into the head frame.
+ */
+object RangeAnalysis {
+  data class Tick(val tNs: Long, val energy: Double, val periodicity: Double, val gateState: String, val provisionalLabel: String?, val confidence: Double)
+  data class Span(val openNs: Long, val closeNs: Long, val cycles: Int, val periodicity: Double)
+  data class Simulation(val ticks: List<Tick>, val reps: List<RepClock.Rep>, val spans: List<Span>)
+
+  private fun sampleTimeNs(t0Ns: Long, i: Int, rate: Double): Long = t0Ns + (i / rate * 1e9).toLong()
+
+  /**
+   * Replay the tick loop over [win]. The gate is armed at the start and re-armed after every
+   * CLOSED so a whole session can be scanned in one pass; `rearm=false` stops after the first
+   * close (a single set). Mirrors SignalModule.tick: cadence EMA, clock only while the gate is
+   * ACTIVE/CLOSING, provisional match only while ACTIVE.
+   */
+  fun simulate(win: ImuPipeline.Window, p: ModelParams, ex: ExerciseParams?, t0Ns: Long, index: TemplateIndex? = null, rearm: Boolean = true): Simulation {
+    val rate = p.canonicalRateHz
+    val accel = win.accel
+    val n = accel.size
+    val windowN = (p.windowSec * rate).toInt()
+    val tickN = (p.tickMs / 1000.0 * rate).toInt().coerceAtLeast(1)
+    val ticks = ArrayList<Tick>()
+    val reps = ArrayList<RepClock.Rep>()
+    val spans = ArrayList<Span>()
+    if (n < 8) return Simulation(ticks, reps, spans)
+    val gate = GateMachine(p); gate.arm()
+    val clock = RepClock(p, ex); clock.reset(t0Ns)
+    var lastCadenceHz = ex?.let { e -> ((e.cadenceLowHz ?: p.repBandLowHz) + (e.cadenceHighHz ?: p.repBandHighHz)) / 2 } ?: 0.8
+    var openNs = 0L
+    var perAccum = 0.0; var perCount = 0
+    var end = min(windowN, n)
+    var closedOnce = false
+    while (end <= n) {
+      val start = max(0, end - windowN)
+      val slice = Array(end - start) { k -> accel[start + k] }
+      val gSlice = win.gyro?.takeIf { it.size >= end }?.let { g -> Array(end - start) { k -> g[start + k] } }
+      val (_, sig) = SetAnalyzer.repChannel(slice, p, ex)
+      val per = Dsp.autocorrelationPeriodicity(sig, rate, ex?.cadenceLowHz ?: p.repBandLowHz, ex?.cadenceHighHz ?: p.repBandHighHz)
+      var e = 0.0; for (v in sig) e += v * v
+      val energy = if (sig.isEmpty()) 0.0 else e / sig.size
+      if (per.score > 0.2 && per.cadenceHz > 0) lastCadenceHz = 0.7 * lastCadenceHz + 0.3 * per.cadenceHz
+      val nowNs = sampleTimeNs(t0Ns, end - 1, rate)
+      if (gate.state == GateMachine.State.ACTIVE || gate.state == GateMachine.State.CLOSING) {
+        reps.addAll(clock.update(sig, rate, nowNs, lastCadenceHz, nowNs))
+      }
+      val tr = gate.tick(energy, per.score, lastCadenceHz, clock.lastPeakNs, nowNs)
+      if (tr != null) {
+        if (tr.to == GateMachine.State.ACTIVE && tr.from == GateMachine.State.ARMING) { openNs = tr.atNs; perAccum = 0.0; perCount = 0 }
+        if (tr.to == GateMachine.State.CLOSED) {
+          val closeNs = tr.atNs
+          val cycles = reps.count { it.tPeakNs >= openNs - (0.5e9 / max(0.2, lastCadenceHz)).toLong() && it.tPeakNs <= closeNs }
+          spans.add(Span(openNs, closeNs, cycles, if (perCount > 0) perAccum / perCount else 0.0))
+          closedOnce = true
+          if (rearm) { gate.arm(); clock.reset(closeNs) } 
+        }
+      }
+      if (gate.state == GateMachine.State.ACTIVE) { perAccum += per.score; perCount++ }
+      var label: String? = null; var conf = 0.0
+      if (index != null && gate.state == GateMachine.State.ACTIVE) {
+        val f = Dsp.extractFeatures(slice, rate, gSlice)
+        val m = index.match(f, null, null, provisional = true)
+        label = m.label; conf = m.confidence
+      }
+      ticks.add(Tick(nowNs, energy, per.score, gate.state.name, label, conf))
+      if (!rearm && closedOnce) break
+      if (end == n) break
+      end = min(n, end + tickN)
+    }
+    // A set still open at the end of the range closes there.
+    if (gate.state == GateMachine.State.ACTIVE || gate.state == GateMachine.State.CLOSING) {
+      val closeNs = sampleTimeNs(t0Ns, n - 1, rate)
+      val cycles = reps.count { it.tPeakNs >= openNs && it.tPeakNs <= closeNs }
+      spans.add(Span(openNs, closeNs, cycles, if (perCount > 0) perAccum / perCount else 0.0))
+    }
+    return Simulation(ticks, reps, spans)
+  }
+
+  /** The `RangeExplanation` JSON (src/types/model.ts). */
+  fun explain(win: ImuPipeline.Window, p: ModelParams, ex: ExerciseParams?, t0Ns: Long, index: TemplateIndex? = null): JSONObject {
+    val rate = p.canonicalRateHz
+    val sim = simulate(win, p, ex, t0Ns, index, rearm = true)
+    val out = JSONObject()
+    val ticks = JSONArray()
+    for (t in sim.ticks) ticks.put(JSONObject().apply {
+      put("tNs", t.tNs); put("energy", t.energy); put("periodicity", t.periodicity); put("gateState", t.gateState)
+      put("provisionalLabel", t.provisionalLabel ?: JSONObject.NULL); put("confidence", t.confidence)
+    })
+    out.put("ticks", ticks)
+    val peaks = JSONArray(); val rejected = JSONArray()
+    val n = win.accel.size
+    if (n >= 8) {
+      val (_, sig) = SetAnalyzer.repChannel(win.accel, p, ex)
+      val det = Dsp.detectPeaksDetailed(sig, rate, ex?.cadenceHighHz ?: p.repBandHighHz, ex?.aMin, p.peakHeightRmsFactor, p.peakMinAbs)
+      val sConfSec = p.sConfMsMax / 1000.0
+      for (i in det.peaks) {
+        val ageSec = (n - 1 - i) / rate
+        if (ageSec < sConfSec) rejected.put(JSONObject().apply { put("tNs", sampleTimeNs(t0Ns, i, rate)); put("amplitude", sig[i]); put("reason", "unconfirmed") })
+        else peaks.put(JSONObject().apply { put("tNs", sampleTimeNs(t0Ns, i, rate)); put("amplitude", sig[i]) })
+      }
+      for (r in det.rejected) rejected.put(JSONObject().apply { put("tNs", sampleTimeNs(t0Ns, r.index, rate)); put("amplitude", r.amplitude); put("reason", r.reason) })
+      out.put("trace", traceJson(sig, t0Ns, rate))
+    } else {
+      out.put("trace", JSONObject().apply { put("t0Ns", t0Ns); put("t1Ns", t0Ns); put("values", JSONArray()) })
+    }
+    out.put("peaks", peaks); out.put("rejected", rejected)
+    out.put("gaps", JSONArray()); out.put("saturated", JSONArray())
+    return out
+  }
+
+  /** Downsample to ≤ [maxPoints] keeping the extreme value per bucket so peaks survive. */
+  fun traceJson(sig: DoubleArray, t0Ns: Long, rate: Double, maxPoints: Int = 2000): JSONObject {
+    val n = sig.size
+    val per = max(1, Math.ceil(n.toDouble() / maxPoints).toInt())
+    val vals = JSONArray()
+    var i = 0
+    while (i < n) {
+      var best = sig[i]
+      var k = i
+      while (k < min(n, i + per)) { if (abs(sig[k]) > abs(best)) best = sig[k]; k++ }
+      vals.put(best)
+      i += per
+    }
+    return JSONObject().apply { put("t0Ns", t0Ns); put("t1Ns", sampleTimeNs(t0Ns, max(0, n - 1), rate)); put("values", vals) }
+  }
+
+  /** Periodic spans ≥ 3 cycles across the whole window (the Reel's "?" candidates). */
+  fun scanRegions(win: ImuPipeline.Window, p: ModelParams, t0Ns: Long): JSONArray {
+    val sim = simulate(win, p, null, t0Ns, null, rearm = true)
+    val out = JSONArray()
+    for (s in sim.spans) if (s.cycles >= 3) out.put(JSONObject().apply {
+      put("t0Ns", s.openNs); put("t1Ns", s.closeNs); put("cycles", s.cycles); put("periodicity", s.periodicity)
+    })
+    return out
+  }
+
+  /** Host time of the local maximum of the rep channel within ±[windowMs] of [tNs]; [tNs] when empty. */
+  fun peakNear(win: ImuPipeline.Window, p: ModelParams, ex: ExerciseParams?, tNs: Long, windowMs: Double, t0Ns: Long): Long {
+    val n = win.accel.size
+    if (n < 8) return tNs
+    val rate = p.canonicalRateHz
+    val (_, sig) = SetAnalyzer.repChannel(win.accel, p, ex)
+    val halfNs = (windowMs * 1e6).toLong()
+    var best = -1; var bestV = Double.NEGATIVE_INFINITY
+    for (i in 0 until n) {
+      val t = sampleTimeNs(t0Ns, i, rate)
+      if (t < tNs - halfNs || t > tNs + halfNs) continue
+      if (sig[i] > bestV) { bestV = sig[i]; best = i }
+    }
+    return if (best < 0) tNs else sampleTimeNs(t0Ns, best, rate)
+  }
+
+  /** The `IntegrityPreview` JSON: what adding this set would do (studio design §7.7). */
+  fun previewIntegrity(index: TemplateIndex, exerciseId: String, features: FeatureVector, accel: Array<DoubleArray>, p: ModelParams, campaign: Set<String>): JSONObject {
+    val liveMag = if (accel.size >= 8) Dsp.bandPass(Dsp.magnitudeSeries(accel), p.canonicalRateHz, p.repBandLowHz, p.repBandHighHz) else null
+    val m = index.match(features, liveMag, null, provisional = false)
+    val winner = m.candidates.firstOrNull()
+    val selfHit = winner != null && winner.exerciseId == exerciseId && m.label != "unknown"
+    val selfConfidence = if (selfHit) m.confidence else 0.0
+    val other = m.candidates.firstOrNull { it.exerciseId != exerciseId && (campaign.isEmpty() || it.exerciseId in campaign || it.exerciseId == "unknown") }
+    val rows = index.scoreAll(setOf(exerciseId))
+    var n = 0; var hits = 0
+    for (i in 0 until rows.length()) {
+      val r = rows.getJSONObject(i)
+      if (r.optString("kind") != "set" || r.optString("exerciseId") != exerciseId) continue
+      n++
+      if (r.optString("label") == exerciseId) hits++
+    }
+    val out = JSONObject()
+    out.put("integrityIfAdded", if (n == 0) JSONObject.NULL else (hits + (if (selfHit) 1 else 0)).toDouble() / (n + 1))
+    out.put("nearestOther", if (other == null) JSONObject.NULL else JSONObject().apply { put("exerciseId", other.exerciseId); put("dFused", other.dFused) })
+    out.put("selfConfidence", selfConfidence)
+    return out
+  }
+}

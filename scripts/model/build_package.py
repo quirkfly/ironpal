@@ -5,6 +5,8 @@ Sources:
   - params:       poc/model/package/params.json        (engine + level defaults; POC constants)
   - campaign map: docs/video-analysis-kb/ontology.json  (Tier-1 exercises by rep_signal)
   - explanations: poc/model/package/explanations.json
+  - field guide:  poc/model/package/field_guide.json    (studio design §7.7: one line per
+                  confusable pair, keyed "a|b" with the ids sorted)
   - priors:       poc/model/package/priors/*.json       (optional; founder templates as
                   {id, exercise_id, features, window_f16, channels})
 Output:
@@ -77,6 +79,8 @@ def main():
 
     params = json.load(open(os.path.join(PKG_DIR, "params.json")))
     explanations = json.load(open(os.path.join(PKG_DIR, "explanations.json")))
+    fg_path = os.path.join(PKG_DIR, "field_guide.json")
+    field_guide = json.load(open(fg_path)) if os.path.exists(fg_path) else {}
     cmap, names = campaign_map()
     priors = []
     for f in sorted(glob.glob(os.path.join(PKG_DIR, "priors", "*.json"))):
@@ -85,7 +89,7 @@ def main():
     pkg = {
         "package_version": args.version,
         "engine_min": "1.0.0",
-        "store_schema_version": 1,
+        "store_schema_version": 2,
         "extractor_version": "fx-1",
         "signed_at": int(time.time()),
         "params": params,
@@ -94,6 +98,7 @@ def main():
         "ontology_ref": "docs/video-analysis-kb/ontology.json",
         "priors": priors,
         "explanations": explanations,
+        "field_guide": field_guide,
         "smoke": [],
     }
     payload = canonical(pkg).encode("utf-8")

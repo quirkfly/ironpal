@@ -2,7 +2,7 @@
 // database as the POC tables (store/db.ts). Encryption (op-sqlite/SQLCipher, ledger Q11) is
 // the D6 spike; until it lands the file is app-private and the manifest disables backup.
 
-export const MODEL_SCHEMA_VERSION = 1;
+export const MODEL_SCHEMA_VERSION = 2;
 
 export const MODEL_SCHEMA: string[] = [
   `CREATE TABLE IF NOT EXISTS model_templates (
@@ -70,4 +70,51 @@ export const MODEL_SCHEMA: string[] = [
    );`,
   `CREATE TABLE IF NOT EXISTS quarantine (row_ref TEXT PRIMARY KEY, reason TEXT NOT NULL, at INTEGER NOT NULL);`,
   `CREATE TABLE IF NOT EXISTS model_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);`,
+  // ---- schema v2: the Studio / After Action (studio design §12) ----
+  `CREATE TABLE IF NOT EXISTS clips (
+     id TEXT PRIMARY KEY, session_id TEXT NOT NULL, labeled_set_id TEXT,
+     rig_id TEXT, source TEXT NOT NULL CHECK (source IN ('app','module','shenyao','gallery')),
+     master_path TEXT, proxy_path TEXT, pts_path TEXT, thumbs_path TEXT,
+     rotation_deg INTEGER NOT NULL DEFAULT 0, width INTEGER, height INTEGER, frames INTEGER, duration_us INTEGER,
+     sync_json TEXT NOT NULL,
+     state TEXT NOT NULL CHECK (state IN ('recording','ingesting','ready','reduced','pinned','deleted')),
+     created_at INTEGER NOT NULL
+   );`,
+  `CREATE INDEX IF NOT EXISTS clips_session ON clips(session_id);`,
+  `CREATE TABLE IF NOT EXISTS regions (
+     id TEXT PRIMARY KEY, session_id TEXT NOT NULL, t0_ns INTEGER NOT NULL, t1_ns INTEGER NOT NULL,
+     cycles INTEGER NOT NULL DEFAULT 0, state TEXT NOT NULL CHECK (state IN ('open','tagged','dismissed')),
+     reason TEXT, labeled_set_id TEXT, updated_at INTEGER NOT NULL
+   );`,
+  `CREATE INDEX IF NOT EXISTS regions_session ON regions(session_id);`,
+  `CREATE TABLE IF NOT EXISTS queue (
+     id TEXT PRIMARY KEY, kind TEXT NOT NULL, priority INTEGER NOT NULL, labeled_set_id TEXT, region_id TEXT,
+     clip_id TEXT, focus TEXT NOT NULL, text TEXT NOT NULL,
+     state TEXT NOT NULL CHECK (state IN ('open','resolved','dismissed')), created_at INTEGER NOT NULL, resolved_at INTEGER
+   );`,
+  `CREATE TABLE IF NOT EXISTS studio_events (
+     id INTEGER PRIMARY KEY AUTOINCREMENT, at INTEGER NOT NULL, labeled_set_id TEXT, kind TEXT NOT NULL, ms INTEGER, n INTEGER
+   );`,
+  `CREATE TABLE IF NOT EXISTS studio_drafts (labeled_set_id TEXT PRIMARY KEY, answers_json TEXT NOT NULL, updated_at INTEGER NOT NULL);`,
+];
+
+/**
+ * Column additions for existing tables (SQLite has no ADD COLUMN IF NOT EXISTS). Each is applied
+ * once and its failure ("duplicate column") is swallowed by the migrator in store/db.ts.
+ */
+export const MODEL_MIGRATIONS_V2: string[] = [
+  `ALTER TABLE labeled_sets ADD COLUMN label_source TEXT NOT NULL DEFAULT 'debrief';`,
+  `ALTER TABLE labeled_sets ADD COLUMN revision INTEGER NOT NULL DEFAULT 1;`,
+  `ALTER TABLE labeled_sets ADD COLUMN imu_available INTEGER NOT NULL DEFAULT 1;`,
+  `ALTER TABLE labeled_sets ADD COLUMN clip_id TEXT;`,
+  `ALTER TABLE labeled_sets ADD COLUMN t_start_host_ns INTEGER;`,
+  `ALTER TABLE labeled_sets ADD COLUMN t_end_host_ns INTEGER;`,
+  `ALTER TABLE labeled_sets ADD COLUMN window_f16 TEXT;`,
+  `ALTER TABLE labeled_sets ADD COLUMN channels INTEGER;`,
+  `ALTER TABLE labeled_sets ADD COLUMN rate_hz REAL;`,
+  `ALTER TABLE labeled_sets ADD COLUMN result_json TEXT;`,
+  `ALTER TABLE exemplar_frames ADD COLUMN source TEXT NOT NULL DEFAULT 'auto';`,
+  `ALTER TABLE exemplar_frames ADD COLUMN crop_json TEXT;`,
+  `ALTER TABLE exemplar_frames ADD COLUMN pts_us INTEGER;`,
+  `ALTER TABLE exemplar_frames ADD COLUMN clip_id TEXT;`,
 ];

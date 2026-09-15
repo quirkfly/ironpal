@@ -82,7 +82,9 @@ export async function apply(pkg: ModelPackage): Promise<{applied: boolean; reaso
 /** Ensure the bundled package is recorded on first run. */
 export async function ensureBundled(): Promise<ModelPackage> {
   const active = await store.getMeta('active_package');
-  if (!active) {
+  // A newer bundled package (an app update) replaces an older active one; versions are
+  // `YYYY.MM.N` so a plain string compare orders them.
+  if (!active || active < BUNDLED.package_version) {
     await apply(BUNDLED);
   }
   return activePackage();

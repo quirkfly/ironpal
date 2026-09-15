@@ -2,6 +2,7 @@
  * @format
  */
 
+import 'react-native-gesture-handler';
 import {AppRegistry, LogBox} from 'react-native';
 import {name as appName} from './app.json';
 import App from './App';
@@ -12,6 +13,7 @@ LogBox.ignoreLogs([
   '[ImuModule]',
   '[SignalModule]',
   '[CameraModule]',
+  '[ClipModule]',
 ]);
 
 AppRegistry.registerComponent(appName, () => App);

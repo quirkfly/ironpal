@@ -63,6 +63,18 @@ a build/install/tap cycle.
 | `04-quality-gates` | **real-stationary** | The paths that must not fire: gate stays shut, zero reps, set kept but **not counted**, level does not advance. |
 | `05-hard-class` | case003-pushdown | The taxonomy is honest: a `hard` exercise declines to count its own reps and asks the user. |
 | `06-inspector-benchmark` | split-squat | Inspector and the on-device benchmark against the design's §5 budgets. |
+| `07-studio-navigation` | split-squat + `studio-clip.mp4` | **After Action / the Studio**: the round opens in the Studio from the Debrief, frame stepping by PTS table (±1, jog wheel), rep stepping, modes, the gesture sheet, back to the Debrief. |
+| `08-studio-marks-relabel` | split-squat + `studio-clip.mp4` | Marks mode (add / delete with the caption following), a Studio save, then a relabel to another exercise with the outcome reported. |
+| `09-studio-reel` | split-squat | The After Action tile → queue → Reel: the session's set, no untagged region on a fully tagged fixture, export offered, the set re-opens in the Studio on the relabel path. |
+
+## The video fixture
+
+`studio-clip.mp4` is **synthetic** (`scripts/e2e/make_video_fixture.py`): 20 s, 640×360, 30 fps,
+H.264 with a keyframe every 8 frames (the scrub proxy's GOP), a burned-in frame counter. When the
+e2e marker is present the Studio attaches it to the set under test with sync class `exact` and
+`pts0HostNs = tStartNs`, so the flows can step frames on a phone with no camera. The flows assert
+the Studio's own frame HUD (`studio-frame`), never the video's pixels — the counter is for the
+human watching the run.
 
 ## Bugs this harness caught
 

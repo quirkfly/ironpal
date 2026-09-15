@@ -219,6 +219,44 @@ object Dsp {
   }
 
   // -------------------------------------------------------------------------
+  // Peak detection with rejects (studio design §7.3 — the reps lane shows WHY a candidate
+  // was not counted). Same rules as detectPeaks; the kept peaks are identical to it.
+  // -------------------------------------------------------------------------
+  data class RejectedPeak(val index: Int, val amplitude: Double, val reason: String)
+  data class DetailedPeaks(val peaks: IntArray, val rejected: List<RejectedPeak>, val minHeight: Double, val minSpacing: Int)
+
+  fun detectPeaksDetailed(
+    signal: DoubleArray,
+    rateHz: Double = CANONICAL_RATE_HZ,
+    maxCadenceHz: Double = REP_BAND_HIGH_HZ,
+    minHeightAbs: Double? = null,
+    heightRmsFactor: Double = 0.35,
+    minAbs: Double = 0.15,
+  ): DetailedPeaks {
+    val n = signal.size
+    if (n < 3) return DetailedPeaks(IntArray(0), emptyList(), 0.0, 1)
+    val rms = sqrt(energy(signal) / n)
+    val minHeight = max(minHeightAbs ?: (heightRmsFactor * rms), minAbs)
+    val minSpacing = max(1, Math.floor(rateHz / maxCadenceHz).toInt())
+    val peaks = ArrayList<Int>()
+    val rejected = ArrayList<RejectedPeak>()
+    var lastPeak = -minSpacing
+    for (i in 1 until n - 1) {
+      val isMax = signal[i] >= signal[i - 1] && signal[i] > signal[i + 1]
+      if (!isMax) continue
+      if (signal[i] <= minHeight) {
+        // Only "nearly a rep" maxima are worth showing; the noise floor is not.
+        if (signal[i] >= 0.5 * minHeight) rejected.add(RejectedPeak(i, signal[i], "below_a_min"))
+        continue
+      }
+      if (i - lastPeak < minSpacing) { rejected.add(RejectedPeak(i, signal[i], "too_close")); continue }
+      peaks.add(i)
+      lastPeak = i
+    }
+    return DetailedPeaks(peaks.toIntArray(), rejected, minHeight, minSpacing)
+  }
+
+  // -------------------------------------------------------------------------
   // Feature extraction (design §5.4) — invariant features; accel-only baseline,
   // gyro optional (D5).
   // -------------------------------------------------------------------------

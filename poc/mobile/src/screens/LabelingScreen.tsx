@@ -7,7 +7,7 @@ import {RepTrace} from '../game/RepTrace';
 import {decodeF16} from '../model/f16';
 import type {DebriefAnswers} from '../controller/useDebrief';
 import type {Proposals} from '../model/decide';
-import type {LevelState, SetResult} from '../types/model';
+import type {LevelState, QueueFocus, SetResult} from '../types/model';
 
 // The exercise labeling UI — the debrief / tagging round (design §7.4, §17.2).
 //
@@ -26,9 +26,17 @@ interface Props {
   onSave: () => void;
   onBack: () => void;
   outcome: string | null;
+  /** Studio design §6: each card links to After Action, positioned on that card. */
+  onOpenStudio?: (focus: QueueFocus) => void;
 }
 
-export function LabelingScreen({result, proposals, answers, onChange, exercises, busy, onSave, onBack, outcome}: Props) {
+export function LabelingScreen({result, proposals, answers, onChange, exercises, busy, onSave, onBack, outcome, onOpenStudio}: Props) {
+  const studioLink = (focus: QueueFocus, id: string) =>
+    onOpenStudio ? (
+      <Pressable testID={id} onPress={() => onOpenStudio(focus)} hitSlop={8} style={styles.studioLink}>
+        <Text style={styles.why}>Open in After Action ›</Text>
+      </Pressable>
+    ) : null;
   const [disabled, setDisabled] = useState<Set<number>>(new Set());
   const [showEvidence, setShowEvidence] = useState<string | null>(null);
 
@@ -77,6 +85,7 @@ export function LabelingScreen({result, proposals, answers, onChange, exercises,
               tEnd={tEnd}
             />
             <Text testID="labeling-reps-explain" style={styles.explain}>{proposals.reps.explanation.summary}</Text>
+            {studioLink('marks', 'labeling-open-studio-reps')}
             <View style={styles.row}>
               <View style={styles.field}>
                 <Text style={styles.label}>confirmed reps</Text>
@@ -128,6 +137,7 @@ export function LabelingScreen({result, proposals, answers, onChange, exercises,
                   </Text>
                 ))
               : null}
+            {studioLink('exercise', 'labeling-open-studio-exercise')}
           </View>
 
           {/* 3 — weight */}
@@ -154,6 +164,7 @@ export function LabelingScreen({result, proposals, answers, onChange, exercises,
                 <Text style={styles.unreadableText}>Couldn't see it</Text>
               </Pressable>
             </View>
+            {studioLink('weight', 'labeling-open-studio-weight')}
           </View>
 
           {/* save */}
@@ -201,6 +212,7 @@ const styles = StyleSheet.create({
   exNameOn: {color: colors.textPrimary, fontWeight: '700'},
   exBadge: {width: 16, height: 16, resizeMode: 'contain'},
   why: {color: colors.accent, fontSize: 12},
+  studioLink: {alignSelf: 'flex-start', paddingVertical: 2},
   alt: {color: colors.textTertiary, fontSize: 12},
   unreadable: {paddingHorizontal: spacing.md, paddingVertical: spacing.md, borderRadius: radii.lg, backgroundColor: '#0B0E12'},
   unreadableOn: {backgroundColor: '#3A2A18'},

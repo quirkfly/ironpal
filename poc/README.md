@@ -62,6 +62,38 @@ or a few own sets exist.
 - Negatives, rep templates and the `T_reject` fit are in; the **incremental** integrity re-score is a full campaign re-score (≤ 300 templates, fine at P0 scale).
 - OCR reconcile, the failure catalogue, the replay CLI and package fetch/rollback are P1–P2 per the design.
 
+## Video labeling studio ("After Action") — status (2026-09-15)
+
+Implements [`../docs/ironpal-video-labeling-studio-design.md`](../docs/ironpal-video-labeling-studio-design.md)
+build plan **S0–S3** in one pass, S4 partially. Two-tier labeling on one store: the ≤ 20 s
+Debrief is unchanged in shape (three "Open in After Action" links added); the Studio is the deep
+surface. What exists and how it was verified:
+
+| Layer | What | Verified by |
+|---|---|---|
+| Session recorder (`SessionRecorder.kt`) | whole-session sample log for every IMU source, `samples.bin` on disk, sliceable by host time; `endSet` slices from it when it covers the range (closes the P0 ring-buffer deviation) | `SessionRecorderTest` (4) |
+| Range analysis (`SignalEngine.kt` `RangeAnalysis`) | `explain` (ticks, peaks, rejected candidates with reasons, trace), `scanRegions` (periodic spans ≥ 3 cycles), `peakNear` (snap-to-peak), `previewIntegrity` — the same GateMachine/RepClock the live loop runs, replayed offline | `RangeAnalysisTest` (5) on the e2e fixtures: split-squat → 1 region of 7–9 cycles, stationary → 0 |
+| Bridge (`SignalModule.kt`) | `analyzeRange`, `explainRange`, `scanRegions`, `previewIntegrity`, `peakNear`, `recorderInfo` | compiles; on-device pending |
+| Clip recording (`CameraModule.kt`) | `startClip`/`stopClip`: CameraX `VideoCapture` 720p30 H.264 bound with `ImageAnalysis` (falls back to video alone if the device refuses the pair — ledger Q34); PTS 0 pinned to the first analysed frame's sensor timestamp when it is on `CLOCK_BOOTTIME`, else to the Start event; sharpest still of the first 4 s returned as the glance | compiles; **not yet run on the A52** |
+| Clip ingest (`ClipModule.kt`) | PTS table (`pts.u32`), scrub proxy via Media3 `Transformer` (640×360, H.264, GOP 0.25 s, rotation baked in), filmstrip sprite (`thumbs.jpg` + `thumbs.json` grid), `extractFrame`, `motionEnergy`, `benchmark`, `fileSizes`, `readTextFile` | compiles; **not yet run on the A52** |
+| Model layer (`src/model/`) | `timeline.ts` (PTS↔host, frame index, 1 ms seek rule, snap, region subtraction, propagate, offset detector), `repShape.ts`, `queue.ts` (the model's questions), `clips.ts` (lifecycle, retention, storage meter), `exportLabels.ts` (`predictions.json` for `score_reps.py`/`score_weights.py`), learner `relabel`/`split`/`merge`/`tagRegion`/`dismissRegion`/`pinFrame` | `npx jest` — **43** (20 new); `npx tsc --noEmit` clean |
+| Screens (`src/studio/`) | `StudioScreen` (viewer on `react-native-video`, `Timeline` lanes on `react-native-svg` + gesture-handler + Reanimated, `JogWheel`, `Transport`, modes, `LabelDock`, `ExerciseSheet` with Compare and the package `field_guide`, save bar with integrity preview), `ReelScreen` (sets, regions, split/merge/propagate, export), `QueueScreen`, `ImportScreen` (founder) | type-checked; Maestro flows `07`–`09` written, **not yet run** (no device attached) |
+| Package | `2026.09.1`: `field_guide` (33 confusable pairs from the KB), queue templates, `store_schema_version` 2; the bundled package now upgrades an older active one | built + signed |
+| Schema | v2: `clips`, `regions`, `queue`, `studio_events`, `studio_drafts`; `labeled_sets` gains `label_source`, `revision`, `imu_available`, `clip_id`, host-ns bounds, the analysed window and the SetResult JSON; `rep_marks` accepts `{t, snapped}` or legacy seconds | migrations are idempotent (`duplicate column` swallowed) |
+
+**Deliberate simplifications (to revisit):**
+- Pins crop to the centre 60 % or the full frame — no drag-to-crop rectangle yet.
+- "Read this frame" (OCR of a pinned crop) is present but disabled until a pin exists and does not
+  yet call the OCR path.
+- Split/merge in the Reel re-commit both halves under the original label; the user relabels each
+  in the Studio. The split point is chosen by a coarse 10 % slider, not by the playhead.
+- ShenYao alignment stays on the laptop (`session.json`, ledger Q36); import reads it through
+  `ClipModule.readTextFile` — paths are typed, there is no document picker.
+- `relabel` is sequential, not one transaction (audited); the studio metrics are recorded locally
+  (`studio_events`) and not yet posted to `session_sets`.
+- The A52 measurements the design gates on (frame step ≤ 50 ms p95, proxy transcode ratio, the
+  nod cross-check residual) have **not** been taken — no device was attached in this session.
+
 ## Dev-stack registration (antinloop `rnctl`)
 
 Registered in the multi-RN-app registry (`~/.config/rn-devstack/registry.json`, serial-bearing so

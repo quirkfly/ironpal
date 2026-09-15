@@ -1,6 +1,9 @@
 import {NativeModules, NativeEventEmitter} from 'react-native';
 import type {FeatureVector, MatchResult, Template} from '../types/domain';
 import type {
+  IntegrityPreview,
+  RangeExplanation,
+  ScannedRegion,
   GateEvent,
   LinkEvent,
   MatchEvent,
@@ -140,4 +143,47 @@ export const SignalModule = {
     return JSON.parse(await assertNative().finishEnroll());
   },
   onResult: (cb: (r: MatchResult) => void) => on<MatchResult>('SignalResult', cb),
+};
+
+// ---------------------------------------------------------------------------
+// Studio bridge additions (studio design §10.2). All ranges are HOST time (elapsedRealtimeNanos).
+// ---------------------------------------------------------------------------
+
+interface SignalStudioNative {
+  analyzeRange(sessionId: string, t0Ns: number, t1Ns: number, hint: string | null): Promise<string>;
+  explainRange(sessionId: string, t0Ns: number, t1Ns: number): Promise<string>;
+  scanRegions(sessionId: string): Promise<string>;
+  previewIntegrity(exerciseId: string, windowF16: string, channels: number, featuresJson: string, campaignJson: string): Promise<string>;
+  peakNear(sessionId: string, tNs: number, windowMs: number): Promise<number>;
+  recorderInfo(sessionId: string): Promise<{samples: number; t0Ns: number; t1Ns: number; rateHz: number; loaded: boolean}>;
+}
+
+const studioNative = NativeModules.SignalModule as (SignalStudioNative & SignalNative) | undefined;
+
+function assertStudio(): SignalStudioNative {
+  if (!studioNative) {
+    throw new Error('[SignalModule] Native module not linked.');
+  }
+  return studioNative;
+}
+
+export const SignalStudio = {
+  isAvailable: () => !!studioNative,
+  /** Full set analysis over an arbitrary host-time range of the session recorder (same shape as endSet). */
+  async analyzeRange(sessionId: string, t0Ns: number, t1Ns: number, hint: string | null): Promise<SetResult> {
+    return JSON.parse(await assertStudio().analyzeRange(sessionId, t0Ns, t1Ns, hint)) as SetResult;
+  },
+  async explainRange(sessionId: string, t0Ns: number, t1Ns: number): Promise<RangeExplanation> {
+    return JSON.parse(await assertStudio().explainRange(sessionId, t0Ns, t1Ns)) as RangeExplanation;
+  },
+  /** Periodic windows (≥ 3 cycles) in the whole session — the Reel's candidate untagged sets. */
+  async scanRegions(sessionId: string): Promise<ScannedRegion[]> {
+    return JSON.parse(await assertStudio().scanRegions(sessionId)) as ScannedRegion[];
+  },
+  async previewIntegrity(exerciseId: string, windowF16: string, channels: number, features: unknown, campaign: string[]): Promise<IntegrityPreview> {
+    return JSON.parse(await assertStudio().previewIntegrity(exerciseId, windowF16, channels, JSON.stringify(features), JSON.stringify(campaign))) as IntegrityPreview;
+  },
+  /** Host time of the local maximum of the rep channel within ±windowMs of tNs (snap-to-peak). */
+  peakNear: (sessionId: string, tNs: number, windowMs: number) => assertStudio().peakNear(sessionId, tNs, windowMs),
+  recorderInfo: (sessionId: string) => assertStudio().recorderInfo(sessionId),
 };

@@ -809,6 +809,13 @@ string and glyph.
 | **S3 — pins, import, export** | Pins mode with crop, `extractFrame`, "read this frame" via the OCR path, Import & sync with `session.json`, per-set proxy segmentation of a continuous clip, video-only sets, scorer export | one ShenYao visit imported and labelled in-app; `score_reps.py` clean on the export; pins feed the exemplar set | ~1 wk |
 | **S4 — polish and measure** | degraded states, large type, haptics settings, `studio_events` metrics to `session_sets`, battery run with ingest | §16 metrics collected on the founder for two weeks; go/no-go for beta exposure in P3 | ~0.5 wk |
 
+> **Status (2026-09-15):** S0–S3 implemented in one pass (recorder, range analysis, clip
+> recording and ingest, the model layer, the four screens, the three e2e flows); S4 partially
+> (degraded states, drafts, metrics recorded locally). JVM 22 / Jest 43 / `tsc` clean; the release
+> APK builds. **Not done:** every on-device measurement (frame step, proxy ratio, nod cross-check),
+> the Maestro runs of `07`–`09`, the OCR call behind "read this frame", drag-to-crop for pins, and
+> posting `studio_events` to `session_sets`. See `poc/README.md` "Video labeling studio — status".
+
 Sequencing rules: S0's media budget is the riskiest assumption and is measured first; S3's import is
 founder-only and can slip behind P2 without blocking beta; nothing in the Studio is a prerequisite
 for the Debrief shipping in P1.

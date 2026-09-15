@@ -207,9 +207,18 @@ export interface ConfirmedSet {
   weightState: 'confirmed' | 'unreadable' | 'unsure';
   gymId: string | null;
   stationId: string | null;
+  // ---- Studio (design §10.3); all optional so the Debrief keeps compiling ----
+  /** Parallel to repTopsSec: whether each mark sits on the snapped IMU peak. */
+  repTopsSnapped?: boolean[];
+  labelSource?: 'debrief' | 'studio' | 'live';
+  clipId?: string | null;
+  tStartHostNs?: number | null;
+  tEndHostNs?: number | null;
+  /** false for a video-only set (no IMU): no templates are written (design §10.6). */
+  imuAvailable?: boolean;
 }
 
-export type DecisionKind = 'exercise' | 'reps' | 'weight' | 'gate' | 'level';
+export type DecisionKind = 'exercise' | 'reps' | 'weight' | 'gate' | 'level' | 'queue' | 'dismiss';
 
 /** A decision with its explanation, generated at decision time (design §5). */
 export interface Decision<T = unknown> {
@@ -239,4 +248,122 @@ export interface LevelProgress {
   lastChange: number;
   consecutiveCorrections: number;
   sessionsWithHardMode: number;
+}
+
+// ---------------------------------------------------------------------------
+// Studio / After Action (studio design §5, §8, §10, §12)
+// ---------------------------------------------------------------------------
+
+export type ClipSource = 'app' | 'module' | 'shenyao' | 'gallery';
+export type ClipState = 'recording' | 'ingesting' | 'ready' | 'reduced' | 'pinned' | 'deleted';
+export type SyncClass = 'exact' | 'accept' | 'flag' | 'reject' | 'none';
+
+/** How a clip's PTS maps onto host time: host_ns(pts) = pts0HostNs + ptsNs × rate (design §8.1). */
+export interface ClipSync {
+  pts0HostNs: number;
+  rate: number;
+  residualMs: number | null;
+  class: SyncClass;
+  source: 'camera_start' | 'sensor_timestamps' | 'session_json' | 'none';
+}
+
+export interface ClipRow {
+  id: string;
+  sessionId: string;
+  labeledSetId: string | null;
+  rigId: string | null;
+  source: ClipSource;
+  masterPath: string | null;
+  proxyPath: string | null;
+  ptsPath: string | null;
+  thumbsPath: string | null;
+  rotationDeg: number;
+  width: number | null;
+  height: number | null;
+  frames: number | null;
+  durationUs: number | null;
+  sync: ClipSync;
+  state: ClipState;
+  createdAt: number;
+}
+
+/** One rep mark as stored from the Studio; legacy rows store plain seconds (design §10.3). */
+export interface RepMarkStored {
+  t: number;
+  snapped: boolean;
+}
+
+export type RegionState = 'open' | 'tagged' | 'dismissed';
+export interface RegionRow {
+  id: string;
+  sessionId: string;
+  t0Ns: number;
+  t1Ns: number;
+  cycles: number;
+  state: RegionState;
+  reason: string | null;
+  labeledSetId: string | null;
+  updatedAt: number;
+}
+
+export type QueueKind = 'gate_fixable' | 'low_margin' | 'region' | 'ocr_disagree' | 'live_correction' | 'imported';
+export type QueueFocus = 'review' | 'marks' | 'bounds' | 'exercise' | 'weight' | 'reel';
+export type QueueState = 'open' | 'resolved' | 'dismissed';
+export interface QueueItem {
+  id: string;
+  kind: QueueKind;
+  priority: number;
+  labeledSetId: string | null;
+  regionId: string | null;
+  clipId: string | null;
+  focus: QueueFocus;
+  text: string;
+  state: QueueState;
+  createdAt: number;
+  resolvedAt: number | null;
+}
+
+/** One tick of `explainRange` (design §10.2): what the gate and matcher saw over a range. */
+export interface ExplainTick {
+  tNs: number;
+  energy: number;
+  periodicity: number;
+  gateState: string;
+  provisionalLabel: string | null;
+  confidence: number;
+}
+export interface RejectedPeak {
+  tNs: number;
+  amplitude: number;
+  reason: 'below_a_min' | 'too_close' | 'unconfirmed';
+}
+export interface RangeExplanation {
+  ticks: ExplainTick[];
+  peaks: {tNs: number; amplitude: number}[];
+  rejected: RejectedPeak[];
+  gaps: {t0Ns: number; t1Ns: number}[];
+  saturated: {t0Ns: number; t1Ns: number}[];
+  /** The band-passed rep channel, downsampled to ≤ 2000 points for drawing. */
+  trace: {t0Ns: number; t1Ns: number; values: number[]};
+}
+
+export interface ScannedRegion {
+  t0Ns: number;
+  t1Ns: number;
+  cycles: number;
+  periodicity: number;
+}
+
+export interface IntegrityPreview {
+  integrityIfAdded: number | null;
+  nearestOther: {exerciseId: string; dFused: number} | null;
+  /** Leave-one-out confidence the candidate set gets against its own exercise. */
+  selfConfidence: number;
+}
+
+export interface StudioEvent {
+  kind: 'open' | 'step' | 'scrub' | 'mark_add' | 'mark_move' | 'mark_delete' | 'bounds' | 'relabel' | 'save' | 'pin' | 'queue_resolve' | 'queue_dismiss';
+  labeledSetId?: string | null;
+  ms?: number;
+  n?: number;
 }
