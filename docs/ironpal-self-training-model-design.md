@@ -1,8 +1,26 @@
 # IronPal Self-Training Model — Technical Design
 
-**Status:** Draft v1.3 · 2026-09-17 — design review complete (auto mode); **§17 game layer**
-(feel, engagement, assets) and **§18 anatomy** (how training works, how an unseen video is handled,
+**Status:** Draft v1.3 · 2026-09-17 — **recognition engine SUPERSEDED**, see the banner below;
+§17 game layer (feel, engagement, assets) and §18 anatomy (training, the unseen-video question,
 how the labeling studio closes the loop) added
+
+> ## ⚠ The exercise matcher in this document is superseded
+>
+> Sections 3.4, 3.5 and 18.1–18.5 describe recognition as kNN + DTW over nine hand-crafted IMU
+> features. **That cannot work for two thirds of the exercise list, and this repo already proves
+> it:** 22 of 37 Tier-1 exercises are `head_motion_class: still`, 20 are `rep_signal: vision`, and
+> the KB's own case files show the deciding cues are grip supination (case 002), elbow flexion and
+> implement proximity (case 001) and whether a cable runs off the bar (case 003). None of those
+> reach an accelerometer on the skull.
+>
+> The replacement is **[`ironpal-neural-model-design.md`](ironpal-neural-model-design.md)**
+> (IronPal-Net): a multimodal network over **raw pixels**, 2D pose and IMU, pretrained centrally
+> and personalised on the phone.
+>
+> **What in this document still stands:** the signal engine's gate machine, streaming rep clock,
+> session recorder and range analysis (§3.1–§3.3, §10.2); the store, levels, integrity, drift,
+> decisions and package machinery (§4.4–§8); the studio integration (§18.6); and every constraint
+> and budget. Only `TemplateIndex.match` and the feature vector it compares are retired.
 **Owner:** founder (solo)
 
 > **Decisions from the design review are in
@@ -729,8 +747,11 @@ Three consequences follow, and they explain most of the design:
 2. **Accuracy is a property of the store, not of a fit.** Whether the model is any good is measured
    by asking it to re-identify its own examples with each one removed in turn (§4.4's integrity),
    which is a question you can ask after every single set.
-3. **The matcher never reads pixels.** It consumes IMU windows. Video earns its place in three
-   other roles (§18.5), and confusing those roles is the fastest way to misunderstand the system.
+3. **This matcher never read pixels** — and that is precisely why it is being replaced. It
+   consumed IMU windows only, which is defensible for the 13 head-moving exercises and indefensible
+   for the 22 head-still ones. §18.5 below describes the three roles video played *around* the
+   matcher; [`ironpal-neural-model-design.md`](ironpal-neural-model-design.md) makes video an input
+   *to* it.
 
 ### 18.2 Anatomy — the five parts, and where each one lives
 
@@ -842,8 +863,9 @@ has three cases, and the difference between them is the whole design.
 | **(b) Video alone** — a KB clip, a gallery import, the ShenYao rig before alignment | pixels and nothing else | it becomes a **video-only set** (`imu_available = 0`): it writes exemplar frames and a weight prior, and **writes no templates at all** | it can never certify reps, and never counts toward Campaign-1 certification. `learner.commit` returns early, by design |
 | **(c) IMU alone** — phone in a pocket, clip reduced after 7 days | a window and a trace | the full training path of §18.4 | no exemplars, no weight OCR |
 
-So: **the model does not "watch" an unseen video and decide what it is.** Nothing in the matcher
-reads a frame. A video's contribution is (i) one still that the cloud OCR may read a number from,
+So: **this matcher does not "watch" an unseen video and decide what it is.** Nothing in it
+reads a frame — the limitation that motivated IronPal-Net, whose case (b) is exactly this and is
+served by the video and pose streams. A video's contribution is (i) one still that the cloud OCR may read a number from,
 (ii) crops kept as visual exemplars for the future vision arbiter and the gym pack, and (iii) a
 surface a human can scrub to place the labels the model learns from. That is why case (b) teaches
 the equipment side and nothing about the body — exactly the split the feature PRD's §1.4 table

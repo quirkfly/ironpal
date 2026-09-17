@@ -252,6 +252,13 @@ validated.
 
 ### 6.1 Definition
 
+> **Superseded for exercise recognition (2026-09-17).** The recogniser is no longer a distance over
+> IMU templates — it is a multimodal network over pixels, pose and IMU
+> ([`ironpal-neural-model-design.md`](ironpal-neural-model-design.md)). The *per-user* part of the
+> model below survives in changed form: the user's confirmed sets become 256-d embeddings and,
+> above ~20 sets, an on-device LoRA adapter. Everything else in this section — exemplars, weight
+> priors, rig calibration, the lifecycle, the cap, the erasure guarantees — is unchanged.
+
 The per-user model is a **store of confirmed, labelled examples plus derived priors**, all local:
 
 | Component | Contents | Used by |
