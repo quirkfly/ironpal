@@ -1,6 +1,8 @@
 # IronPal Self-Training Model — Technical Design
 
-**Status:** Draft v1.2 · 2026-09-13 — design review complete (auto mode); **§17 game layer added** (feel, engagement, assets)
+**Status:** Draft v1.3 · 2026-09-17 — design review complete (auto mode); **§17 game layer**
+(feel, engagement, assets) and **§18 anatomy** (how training works, how an unseen video is handled,
+how the labeling studio closes the loop) added
 **Owner:** founder (solo)
 
 > **Decisions from the design review are in
@@ -41,6 +43,12 @@ maths and changes its shape in seven places:
 
 Everything else — ring buffer, resampling, band-pass, periodicity, feature vector, DTW, fusion ladder,
 offline queues, OCR peer — is reused as is.
+
+> **New reader, or coming back to this after a while? Start at [§18](#18-anatomy--how-the-model-is-trained-and-what-happens-to-an-unseen-video).**
+> It answers the four questions this document otherwise spreads across ten sections: what the model
+> *is* (a searchable memory of your own confirmed sets, not a network with weights), what goes in
+> and comes out, what one confirmed set actually changes, and what happens to a video the model has
+> never seen — including the case that surprises people, where a clip arrives **without** any IMU.
 
 ---
 
@@ -696,3 +704,233 @@ Targets are plates, pins and dumbbells.
 - Engagement KPIs added to §12 of the feature PRD's spirit: debrief completion rate ≥ 85 %, median
   debrief ≤ 20 s, sessions per week per active user ≥ 2, certifications per user per month ≥ 2,
   "all correct" rate rising session over session.
+
+---
+
+## 18. Anatomy — how the model is trained, and what happens to an unseen video
+
+> Added 2026-09-17 on the founder's request: a single place that answers "what *is* the model,
+> what goes into it, what comes out, and where does the labeling studio fit". Everything here
+> describes code that exists in `poc/mobile/`; the constants are the shipped package's
+> (`2026.09.1`), not aspirations.
+
+### 18.1 The one sentence, and why it matters
+
+**The model is a searchable memory of the user's own confirmed sets, not a network with weights.**
+Recognition is a nearest-neighbour lookup: the phone compares the set just performed against every
+set the user has already confirmed, and the closest match is the answer. "Training" is therefore
+**writing a row**, not running an optimiser — which is why an update is instant, cannot forget,
+can be explained ("this matched your set from 12 May"), and can be deleted one set at a time.
+
+Three consequences follow, and they explain most of the design:
+
+1. **There is no training run.** No epochs, no loss curve, no checkpoint. Adding the fifth goblet
+   squat takes the same milliseconds as adding the first.
+2. **Accuracy is a property of the store, not of a fit.** Whether the model is any good is measured
+   by asking it to re-identify its own examples with each one removed in turn (§4.4's integrity),
+   which is a question you can ask after every single set.
+3. **The matcher never reads pixels.** It consumes IMU windows. Video earns its place in three
+   other roles (§18.5), and confusing those roles is the fastest way to misunderstand the system.
+
+### 18.2 Anatomy — the five parts, and where each one lives
+
+| # | Part | What it physically is | Written by | Read by |
+|---|---|---|---|---|
+| 1 | **Template store** | rows in `model_templates`: the feature vector of §3.4 (axis energy split, cadence, motion duty, peak asymmetry, spectral flatness, jerk, plus the gyro energy split) + a `float16` IMU window, 6 channels at 50 Hz; kind `set` / `rep` / `negative` / `prior` | `learner.commit` | `TemplateIndex` (native), via `loadTemplates` |
+| 2 | **Fitted parameters** | rows in `fitted_params`: per exercise cadence band, amplitude floor `A_min`, dominant channel, set-duration prior; per user `T_reject` | `learner.fit` after ≥ 3 sets | `params.compose` → `SignalModule.configure` |
+| 3 | **Visual side** | `exemplar_frames` (glance / rep-top / rep-bottom crops, `auto` or user-pinned) + `weight_priors` | `learner.commit`, `learner.pinFrame` | the weight pre-fill, the Studio's Compare view, the future vision arbiter |
+| 4 | **Claims** | `level_progress` (locked → recon → provisional → certified → veteran) + `integrity_history` | `levels.apply` | the live HUD's automation rule, the campaign map |
+| 5 | **The package** | `assets/model_package.json`: engine defaults, thresholds, level bars, campaign map, explanation strings, the 33-pair `field_guide`, founder priors | `scripts/model/build_package.py`, signed ECDSA P-256 | everything, as the floor under the fitted values |
+
+Parts 1–4 are the **user's model** and never leave the phone. Part 5 is the **shipped prior**, the
+same for everyone, and is deliberately down-weighted as the user's own store fills (§3.5's
+`kindPenalty`: a prior's distance is multiplied by `1 + n_own/3`, so it is ignored once the
+exercise is certified).
+
+**Size, in practice.** One set at 0.5 Hz for 40 s produces one set template (2 000 samples × 6
+channels × 2 bytes = 24 kB) plus about 20 rep templates of one cycle each (≈ 24 kB together) —
+call it 48 kB of `float16`, or ~65 kB once base64-encoded into the row. The store is capped at 20
+set templates per exercise (§4.5), so a fully-trained exercise lands near 1.3 MB and all 37 Tier-1
+exercises together stay far under the 2 GB feature cap, which is dominated by video, not by the
+model.
+
+### 18.3 What goes in and what comes out
+
+**Two streams in.** Everything else is derived.
+
+| Stream | Shape | Where it is made canonical |
+|---|---|---|
+| **IMU** | 6 channels (linear accel m/s², gyro rad/s) at the source's native rate — 50 Hz phone, 60 Hz headband — resampled to a canonical 50 Hz, rotated into the head frame by the session's calibration | `ImuPipeline` → `Dsp.resample` → `Rotation.apply` |
+| **Video** | one clip per set (720p30 when the app owns the camera), plus the sharpest still of the ~2 s staging glance | `CameraModule.startClip`, `ClipModule.ingest` |
+
+**Four answers out**, each with the evidence that produced it (`decide.ts` writes an explanation
+object at decision time, so the reason is stored, not reconstructed later):
+
+| Answer | Source | Confidence | What it is allowed to do |
+|---|---|---|---|
+| **Exercise** | the two-stage match (§18.4) | `1 / (1 + d_fused)` | auto-log only at Certified; below that it proposes |
+| **Reps** | the streaming rep clock | periodicity-derived | certify only for `imu` / `fusion` exercises |
+| **Weight** | prior, then OCR of the glance still | OCR's own | pre-fill; ask when the two disagree |
+| **Gate / unknown** | energy and periodicity against their thresholds | the periodicity itself | refuse to answer, with the numbers that made it refuse |
+
+### 18.4 Training — what one confirmed set actually does
+
+This is `learner.commit`, in order. Nothing here is asynchronous magic; it is ten writes.
+
+```
+confirmed set (exercise, bounds, rep tops, weight)
+  │
+  1. persist the labelled set ──────────► labeled_sets  (+ the window, the SetResult JSON,
+  │                                        host-time bounds, label source, revision)
+  2. gates all pass? ──── no ───────────► stop. The set is KEPT and visible, but teaches nothing.
+  │                                        (studio design §7.5 — a failed gate is explained, never silent)
+  3. IMU present? ─────── no ───────────► video-only set: exemplars + weight prior only (§18.5c)
+  │
+  4. slice the set window [tStart,tEnd] ─► one `set` template
+  5. slice ±½ cycle around each rep top ─► N `rep` templates  (a 40 s set at 0.5 Hz → ~20)
+  6. harvest rest windows ──────────────► ≤ 5 `negative` templates per session, 4 s each,
+  │                                        ≥ 30 s apart, and ONLY where the gate never opened
+  │                                        and periodicity stayed below P_off (R11)
+  7. closed-form fits over this exercise's counted sets (needs ≥ 3):
+  │      cadence band = [p10·0.8, p90·1.2]      A_min = 0.4 × median rep amplitude
+  │      dominant channel = modal axis          set duration = median + IQR
+  8. leave-one-out integrity over the whole campaign, natively (`scoreAll`)
+  9. level transition from (clean sets, distinct weights, integrity)
+ 10. prune above 20 sets, audit row, hot-reload the engine (`loadTemplates` delta + `configure`)
+```
+
+Two details are worth dwelling on because they are where the honesty lives.
+
+**Step 6 — negatives are the reject class.** Without them a nearest-neighbour matcher answers
+*something* for every input, including scratching your nose. The rest windows between sets are
+harvested automatically, labelled `unknown`, and compete in the match on equal terms; a live window
+that lands nearest a negative is reported as unknown rather than as a lift. They cost the user
+nothing. The rule that a *periodic* window is never harvested exists so an untagged real set cannot
+be turned into a permanent example of "not exercise".
+
+**Step 8 — integrity is the model grading itself.** For every own `set` template of the campaign,
+the engine re-runs the match with that template excluded and asks whether it still lands on the
+right exercise. The hit rate is the exercise's integrity, and it is the gate for every claim the
+game makes (§6.1: 0.80 for Provisional, 0.90 for Certified). It is computed after **every** set, so
+the answer to "is this working" is never older than one set.
+
+### 18.5 Inference — an unseen set, and an unseen *video*
+
+**The live path** (`SignalModule.tick`, every 400 ms over the last 4 s):
+
+```
+window → head frame → rep channel (fitted dominant axis, band-passed 0.2–1.5 Hz)
+   ├─ energy + periodicity ──► GateMachine   (P_on 0.35 / P_off 0.25, hysteresis, 2 qualifying ticks)
+   ├─ per-sample causal peaks ► RepClock     (confirmed after ¼ cycle, 150–400 ms; that delay IS the
+   │                                          cue latency floor)
+   └─ features + kNN only ───► provisional label (no DTW on a tick — that is the §12 budget)
+
+at gate close: SetAnalyzer.finish
+   stage 1  kNN over ≤ ~740 feature vectors, weighted (axis 2.0, cadence 0.8 log-ratio, duty 1.2,
+            asymmetry 1.0, flatness 1.0, jerk 0.8, gyro 1.5) → top 8
+   stage 2  banded DTW (band 0.2) on the z-normalised band-passed magnitude of those 8
+   fuse     d = 0.6·d_knn + 0.4·d_dtw ;  confidence = 1/(1+d) ;  below T_reject 0.45 → unknown
+   → SetResult: candidates[3] with distances and provenance, peaks, periodicity, the window itself
+```
+
+**Now the question the founder actually asked: what happens to an unseen video?** The honest answer
+has three cases, and the difference between them is the whole design.
+
+| Case | What the app has | What the model does with it | What it can never do |
+|---|---|---|---|
+| **(a) Video + IMU, same session** — the product path | a per-set clip whose PTS maps onto the IMU's host clock | the **IMU** answers exercise and reps; the video supplies the glance still for weight OCR, the exemplar crops, and the Studio's replay surface for checking the answer | — |
+| **(b) Video alone** — a KB clip, a gallery import, the ShenYao rig before alignment | pixels and nothing else | it becomes a **video-only set** (`imu_available = 0`): it writes exemplar frames and a weight prior, and **writes no templates at all** | it can never certify reps, and never counts toward Campaign-1 certification. `learner.commit` returns early, by design |
+| **(c) IMU alone** — phone in a pocket, clip reduced after 7 days | a window and a trace | the full training path of §18.4 | no exemplars, no weight OCR |
+
+So: **the model does not "watch" an unseen video and decide what it is.** Nothing in the matcher
+reads a frame. A video's contribution is (i) one still that the cloud OCR may read a number from,
+(ii) crops kept as visual exemplars for the future vision arbiter and the gym pack, and (iii) a
+surface a human can scrub to place the labels the model learns from. That is why case (b) teaches
+the equipment side and nothing about the body — exactly the split the feature PRD's §1.4 table
+draws between what transfers between people and what does not.
+
+The e2e harness now demonstrates case (b) with real footage: the knowledge base's case-001 clip
+(a confirmed 6-rep, 5 kg dumbbell curl) is imported as a gallery clip with sync class `none`, and
+the app says so rather than pretending it aligned.
+
+### 18.6 How the labeling studio closes the loop
+
+The Studio (`docs/ironpal-video-labeling-studio-design.md`) is not a viewer bolted on the side. It
+is the **correction surface of the training loop**, and every one of its actions is a write into
+the five parts of §18.2 through the same gates the 20-second Debrief uses.
+
+```
+     ┌──────────────────────────────────────────────────────────────────┐
+     │  SET  ──► engine ──► proposals ──► DEBRIEF (≤ 20 s, one tap)     │
+     │                            │                                     │
+     │                            └──► "Open in After Action"            │
+     │                                        │                         │
+     │   STUDIO ◄── queue (what the model is least sure of) ◄───────────┤
+     │     │                                                            │
+     │     ├─ move / add / delete a rep mark  ──► rep templates change   │
+     │     ├─ trim the bounds                ──► the set template changes│
+     │     ├─ relabel the exercise           ──► templates move store    │
+     │     ├─ tag an untagged region         ──► a whole new set appears │
+     │     ├─ pin a frame                    ──► exemplar_frames         │
+     │     └─ save ──► same gates ──► learner ──► integrity ──► level ───┘
+```
+
+What each Studio action does to the model, precisely:
+
+| Studio action | Bridge call | Effect on the store |
+|---|---|---|
+| Scrub / step a frame | — (PTS table only) | none: navigation never writes |
+| Add or move a rep mark | `peakNear` to snap | changes which windows become `rep` templates, and the fitted `A_min` / cadence band that follow from them |
+| Trim the set bounds | — | changes the `set` template's window, and the `set_duration` fit |
+| Relabel the exercise | `previewIntegrity` first, then `learner.relabel` | deletes the set's templates and its *auto* exemplars (user pins survive), re-commits under the new exercise, bumps `revision`, recomputes campaign integrity, then re-evaluates the level of **both** the old and the new exercise — because `commit` only ever moves a level up, and a set leaving an exercise can legitimately take its certification with it. The sheet warns before the write |
+| Tag an untagged region | `scanRegions` → `analyzeRange` | a set that was never recorded becomes a first-class labelled set |
+| Dismiss a region | — | the region row goes to `dismissed` with its reason, plus a `decisions` row; the Reel's next scan recognises it and does not raise it again. (It is not *also* excluded from negative harvesting — it does not need to be: a region is periodic by definition, and the harvester only ever takes non-periodic windows, R11.) |
+| Pin a frame | `extractFrame` | a user exemplar that outranks the IMU-chosen one for that role |
+
+Two of these deserve emphasis:
+
+**`previewIntegrity` is a dry run of step 8.** Before the user commits a label, the engine matches
+the candidate against the campaign index and reports what the exercise's integrity *would become*.
+That is why the exercise sheet can say "saving this label would drop goblet squat below its
+certified bar" — the model is asked the consequence before the consequence happens.
+
+**`relabel` is a delete-and-recommit, not an edit.** The templates carry the label implicitly
+(they live under an exercise id), so changing the label has to move the data, not rename it.
+Doing it any other way would leave the store holding windows filed under an exercise the user
+already corrected — the single most damaging thing that can happen to a nearest-neighbour model.
+
+### 18.7 Worked example — KB case 001, end to end
+
+The clip the e2e harness uses, followed through the whole system.
+
+| Stage | What happens | What the model gains |
+|---|---|---|
+| Record | headband films 68 s; the IMU logs the whole session | a session log sliceable by host time |
+| Gate | periodicity crosses 0.35 for two ticks ~30 s in | a set boundary, and a set id |
+| Count | the rep clock confirms peaks ¼ cycle after each | a provisional count |
+| Propose | kNN + DTW against the store; on a cold store the top candidate is a **founder prior**, so the proposal says so in as many words | nothing yet |
+| Debrief | the user confirms "dumbbell biceps curl", **6 reps**, **5 kg** | — |
+| Commit | gates pass → 1 set template, ~6 rep templates, up to 5 negatives, the weight prior 5 kg | the store's first curl |
+| Integrity | leave-one-out over Campaign 2 | a number, probably 1.0 on a single example — which is *why* the bar needs 3 and 5 sets, not 1 |
+| Level | locked → **recon** | the exercise now appears as a suggestion |
+| Studio | the user re-opens it, finds the detector missed a rep at 41 s, adds the mark, saves | one more `rep` template, a corrected `A_min` fit, integrity re-run |
+
+And what it still cannot do after all that: certify the rep count. The curl is `rep_signal: vision`
+in the ontology — the head barely moves — so the level says "recognised and weight-primed", never
+"counted by the headband". The model is prevented from making the claim by the campaign map, not by
+good intentions.
+
+### 18.8 The limits, stated plainly
+
+- **No cross-body truth.** Another person's IMU templates enter only as priors, down-weighted from
+  the follower's first own set and retired at Certified. An IMU trace is a property of a body.
+- **No rep certification outside `imu` / `fusion`.** 22 of 37 Tier-1 exercises keep the head still.
+- **No pixels in the matcher.** Vision arbitration against the user's own exemplars is designed
+  (`sensor-fusion.md`) but not built; today the visual side is exemplars, the glance still and
+  weight priors.
+- **Cold start is priors, and says so.** Every proposal records whether it matched a prior or the
+  user's own template, which is how the POC's open question about cross-user generalisation gets
+  answered from logs rather than from opinion.
+- **Nothing here is validated on a body yet.** The integrity bars (0.80 / 0.90) remain the
+  assumption the feature PRD flagged: P0 must publish the measured distribution before they are
+  trusted.
