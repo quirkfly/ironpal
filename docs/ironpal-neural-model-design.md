@@ -280,26 +280,281 @@ data and a class of input the product can actually serve.
 
 ---
 
-## 7. Data — the real constraint
+## 7. Leveraging the knowledge base — the asset this model is built on
 
-A solo founder cannot label a 37-class video dataset. The strategy is therefore borrowed
-supervision first, own supervision second:
+A solo founder cannot label a 37-class egocentric video dataset. What the founder *does* have is a
+year of accumulated, human-confirmed analysis in `docs/video-analysis-kb/`, and it is worth far more
+than its size suggests — provided it is used as six different things rather than treated as "some
+clips".
 
-| Stage | Source | Rough scale | Buys |
-|---|---|---|---|
-| **P0 pretrain** | Kinetics-600 → distil an Ego4D/EPIC-pretrained teacher | public | generic motion + egocentric priors |
-| **P1 fitness adapt** | public gym/fitness video datasets, third-person included (with a domain-adaptation loss) | thousands of clips | exercise-shaped priors |
-| **P2 own data** | the founder's three-visit capture plan + the existing KB cases, Claude-pre-labelled and human-confirmed as the repo already does | ~200–400 sets | the egocentric, this-rig, this-ontology fit |
-| **P3 beta** | testers' opt-in confirmed sets | grows | the long tail and cross-body evidence |
+| Asset | Size | Used as |
+|---|---|---|
+| `ontology.json` | 37 Tier-1 entries, 8 structured attributes each | the label space **and** auxiliary supervision (§7.1) |
+| `exercises/*.md` | 7 hand-authored cards with *ranked* egocentric cues | the engineered-feature spec and the hard-pair mining set (§7.2) |
+| `cases/*.md` + `INDEX.md` | 6 analysed clips, each with a *diagnosed* failure | the diagnostic regression suite (§7.3) |
+| `ground_truth.json` + `score_{weights,reps}.py` | machine-readable truth + a four-state scorer | the CI gate, unchanged (§7.3) |
+| `frame-extraction.md`, `autonomous-frame-selection.md` | the extraction and routing recipes | the frame sampler (§7.4) |
+| `input/kb/clips/` + `input/kb/sessions/` | ~9 min of real 4K egocentric footage, 1 real IMU session | the in-domain fine-tuning set (§7.5) |
+| the `/exercise-recognition`, `/repetition-counting`, `/weight-lifted-analysis` skills | the KB method, executable | the pre-labelling engine (§7.6) |
 
-**Honest expectation for v1:** a reliable closed set covering the 15 Campaign-1 exercises and the
-most common Campaign-2 ones, with everything else served by prototypes at lower confidence and an
-`unknown` class that is used rather than avoided. Claiming 37-way accuracy off 300 sets would be
-the same overreach this document is replacing.
+### 7.1 The ontology is supervision, not just a list of names
+
+Every Tier-1 entry carries eight attributes that are free labels on every clip:
+
+| Attribute | Vocabulary | Why the model should predict it |
+|---|---|---|
+| `equipment_class` | barbell 10 · dumbbell 11 · cable 5 · machine 7 · bodyweight 4 | **case 003's failure exactly**: a cable straight-bar looks like a barbell until you trace the cable. A 5-way head is far easier to learn than 37-way and fixes the most damaging confusion class |
+| `motion_plane` | sagittal 31 · frontal 4 · transverse 2 | separates pull-up from the sagittal crowd |
+| `force` | push 21 · pull 14 | cheap, highly learnable, halves the candidate set |
+| `mechanic` | compound 24 · isolation 11 | correlates with whole-body vs limb motion |
+| `head_motion_class` | still 22 · moving 15 | lets the model predict *which sensor should be trusted for this set* |
+| `rep_signal` | imu 13 · vision 20 · fusion 2 · hard 2 | gates which rep head may certify |
+| `egocentric_visibility` | visible 25 · partial 7 · occluded 4 · floor_reference 1 | caps the confidence a class may claim from vision alone |
+| `weight_read_strategy` | 5 values | routes the weight path (plate faces vs pin stack vs not applicable) |
+
+Three concrete uses:
+
+**Auxiliary heads.** Add one small linear head per attribute on the fused `[SET]` token. With a few
+hundred training sets, multi-task supervision is the difference between a model that memorises and
+one that generalises: each clip teaches seven cheap facts instead of one hard one.
+
+**A structured loss.** Confusing two exercises that share every attribute (front raise vs lateral
+raise) is a small error; confusing across `equipment_class` (cable pushdown vs deadlift) is the
+error that embarrassed the KB. Weight the classification loss by attribute distance so the model is
+punished in proportion to how wrong the mistake actually is.
+
+**Inference-time constraints.** The attribute heads are not decoration — they constrain the answer.
+If the equipment head says `cable` with high confidence, the 5 cable exercises are boosted and the
+10 barbell ones suppressed. If `egocentric_visibility` for the argmax class is `occluded`, the
+confidence is capped and the set routes to the Debrief for confirmation rather than auto-logging.
+This is the same honesty rule the campaign map already enforces at the product level (PRD §5.3),
+applied one layer down.
+
+### 7.2 The exercise cards name the features — so compute them explicitly
+
+The cards do not say "use vision". They say, ranked by what a headband can actually see:
+
+> 1. **"Looming" — apparent size / proximity (best cue)** … the weight appears large and looming,
+>    entering from the bottom/near side, growing as it rises … **never small/distant out over the
+>    room**. ← used to call case 001.
+> 2. Bottom of rep: dumbbell drops **out of frame toward the hip**.
+> 3. Forearm **supination** if the hand is catchable.
+> 4. Elbow flexion — cleanest in theory but usually an **egocentric blind spot**.
+
+A learned encoder *may* discover proximity-from-apparent-size on its own, given enough data. With
+~300 sets it will not. So these become **named geometric channels** computed per frame and
+concatenated to the pose stream before the TCN:
+
+| Channel | Computation | The card it comes from |
+|---|---|---|
+| implement looming | area of the tracked implement box ÷ frame area, and its time derivative | `dumbbell-biceps-curl.md` cue 1 |
+| hand-to-torso distance | wrist-to-shoulder-midpoint, normalised by shoulder width | curl vs raise |
+| hand height vs chin | wrist y minus nose y, normalised | "tops near face, not over" |
+| elbow angle | shoulder–elbow–wrist, with a visibility flag | cue 4, honestly flagged as often absent |
+| wrist pronation proxy | hand-landmark orientation | cue 3 |
+| out-of-frame-low fraction | proportion of the cycle the wrist is below the frame | cue 2 |
+
+These are ~8 numbers per frame against a 128-d learned pose embedding: negligible cost, and they
+encode a year of human observation the network would otherwise have to rediscover.
+
+**The "Distinguish from" sections are the hard-negative set.** They already exist in machine
+form — `poc/model/package/field_guide.json`, 33 confusable pairs, built for the Studio's Compare
+view. The same file drives **hard-pair mining** for the contrastive loss: sample batches so that
+confusable pairs appear together, which is where the margin actually matters.
+
+### 7.3 The case files are the regression suite, and they force calibrated abstention
+
+Six cases is not a test set. It is something more useful: **six named failure modes with diagnoses**.
+
+| Case | The failure | What the model must demonstrate |
+|---|---|---|
+| 001 | called it at 0.40 confidence, right for weak reasons; added a phantom 2 kg handle | proximity cue drives the call; weight = plate sum |
+| 002 | grip misread → upright row instead of curl | supinated vs pronated changes the answer |
+| 003 | cable machine read as a barbell deadlift | `equipment_class` head says cable |
+| 004 | two different plate sizes called "the same" | per-plate reading, not a global guess |
+| 005 | eyeballed a pin stack four times, all high | count empty holes, or abstain |
+| 007 | 180° rotation made a curl look like an overhead press | rig rotation applied before inference |
+
+These run as **`kb_eval`, never in training**, and they are scored by the *existing* harness —
+`score_weights.py` and `score_reps.py`, with their four states (CORRECT / WRONG / IMPRECISE /
+ABSTAIN) and their rule that **a confident-wrong answer fails the build**.
+
+That rule has an architectural consequence, and it is the most important thing the KB imposes on
+this model: **the network must be able to abstain, and its confidence must be calibrated.** An
+argmax over a softmax is not enough. So:
+
+- temperature scaling fitted on a held-out split, so the reported confidence means something;
+- an explicit `unknown` class trained on the harvested rest/walk windows;
+- an **abstention rule** that fires on low margin, on attribute disagreement between streams (video
+  says cable, IMU says free weight), or on an `occluded` class predicted from vision alone;
+- the four-state scorer as a CI gate on every model build, exactly as it gates the KB today.
+
+IMPRECISE is deliberately not counted as wrong — a wide rep range is a soft abstention, and it
+costs coverage rather than accuracy. The model inherits that semantics rather than inventing one.
+
+### 7.4 The method docs are the frame sampler
+
+`autonomous-frame-selection.md` already solved frame routing without a detector: pixel motion
+energy segments a clip into STILL and PERFORM windows, and each question gets its own extraction.
+That is exactly the sampling policy this model needs, and it is cheaper than uniform sampling:
+
+```
+KbSampler(clip, imu)
+  PERFORM window  ← IMU gate ACTIVE span (better than the KB's pixel proxy — we have the sensor)
+      → exercise + rep heads sample here, ≥ 5 fps, denser at turnarounds
+  STILL troughs   ← low motion energy adjacent to the perform span
+      → legibility + OCR sample here, full resolution, NO downscale (weight numbers die under
+        compression — frame-extraction.md)
+  rotation        ← per-rig, and CHECK for a container display matrix first (measured 2026-09-15;
+                    applying the rig table on top of ffmpeg's autorotate double-rotates)
+```
+
+The fps rules come from the KB too: ≥ 3 fps for rep counting (2 fps aliased case 002's turnarounds
+into a miscount), 4–6 fps for ballistic lifts.
+
+### 7.5 The clips are small, in-domain, and the only ones that exist
+
+Eight clips, about nine minutes, one real IMU session. As a training set that is nothing; as a
+**fine-tuning and domain-adaptation** set after egocentric pretraining it is the most valuable data
+in the project, because it is the founder's own rig, the product's own ontology, and human-confirmed.
+
+Treated accordingly: temporal crops and stride augmentation, rotation jitter around the rig's
+nominal, brightness/blur matching the gym, and — critically — **never** augmented across the
+distinctions the KB says are decisive (no horizontal flip: it inverts the grip and the watch-side
+check that `frame-extraction.md` uses to verify orientation).
+
+### 7.6 The KB skills are the pre-labelling engine
+
+The repo already has the KB method as executable skills: `/exercise-recognition`,
+`/repetition-counting`, `/weight-lifted-analysis`. They emit structured predictions with confidence
+and honest abstention, and they were built to be run blind.
+
+That is the bootstrap loop:
+
+```
+unlabelled clip ──► KB skill (LLM + the KB method) ──► candidate label + confidence
+                                                          │
+                                     the Studio shows it as a proposal to confirm or correct
+                                                          │
+                                          confirmed ──────► training example
+                                          corrected ──────► training example, weighted higher
+```
+
+The founder's labelling cost drops from "watch and annotate" to "confirm or fix", which is exactly
+what the Studio was built for. Pseudo-labels are never trained on unconfirmed.
+
+### 7.7 Provenance — the label space must not drift
+
+The package already carries `ontology_ref: sha256`. Extend it: a training run records the ontology
+hash, the hashes of the KB method docs it followed, and the `kb_eval` case-set version, and the app
+**refuses to apply a model whose ontology hash does not match its own campaign map**. A recogniser
+and a campaign map that disagree about what "goblet squat" means is a silent, total failure, and it
+costs one comparison to make impossible.
+
+### 7.8 Honest expectation for v1
+
+A reliable closed set covering the 15 Campaign-1 exercises and the most common Campaign-2 ones;
+everything else served by prototypes at lower confidence, with the `unknown` class used rather than
+avoided. Claiming 37-way accuracy off ~300 sets would be the same overreach this document replaces.
 
 ---
 
-## 8. Migration — nothing collected is wasted
+## 8. Integration with the labeling studio and the app
+
+The second half of the requirement: the model must not be a component bolted to the side. It is the
+recognition engine *inside* an app whose capture, labelling, storage, gating and packaging already
+exist — and, luckily, the labeling studio already emits exactly what a network needs to train on.
+
+### 8.1 What the Studio already produces, and what it trains
+
+No new capture work is required. Every column the Studio writes maps to a training target:
+
+| Studio / Debrief output | Schema | Trains |
+|---|---|---|
+| confirmed `exercise_id` | `labeled_sets.exercise_id` | the 37-way head, the embedding, and all seven attribute heads (looked up from the ontology) |
+| trimmed bounds | `t_start_host_ns` / `t_end_host_ns` | the set segmentation, and which frames are sampled |
+| per-rep marks, with `snapped` flags | `rep_marks` (`{t, snapped}`) | the **rep density map** — a user-placed, off-peak mark is a *harder* and more informative label than a snapped one |
+| pinned frames with crops and roles | `exemplar_frames` (`source='user'`) | the **legibility head** (a human chose this frame as readable) and hard examples for the implement detector |
+| declared weight + state | `weight_declared`, `weight_state` | the weight path end to end, scored by `score_weights.py` |
+| `counted` and `gates_json` | | sample weighting: only gate-passing sets train the certifying heads |
+| `label_source` and `revision` | | a **corrected** label (`studio`, revision ≥ 2) outranks a first-pass confirmation — the user looked twice |
+| dismissed regions with reasons | `regions.state='dismissed'` | negatives for the `unknown` class, with a reason that says which kind of negative |
+
+That last pair is the quiet win. `revision` and `label_source` were added for the Studio's audit
+trail; they turn out to be exactly the sample-weighting signal a noisy-label training run needs.
+
+### 8.2 What the model gives back to the Studio
+
+| Model output | Studio surface |
+|---|---|
+| top-3 with calibrated confidence | the exercise sheet's candidate list, ordered, with the confusable neighbour always shown |
+| **attribute heads** | the *explanation*: "equipment: cable (0.94)" is why it is not a barbell row — a far better reason than a distance |
+| rep density map → timestamps | the proposed rep marks in the reps lane, **including for the 22 head-still exercises that have none today** |
+| nearest own set by embedding | "closest to your goblet squat from 12 May" in the Compare view, with that set's clip one tap away |
+| legibility head | which frame Pins mode suggests, and which crop "read this frame" sends |
+| per-frame confidence | the timeline's trace lane gains a confidence band, so a user can see *where* the model got lost |
+
+### 8.3 The queue becomes real active learning
+
+The After Action queue already orders work by what the model is least sure of. With a calibrated
+network that stops being a heuristic and becomes standard uncertainty sampling:
+
+| Queue priority | Signal |
+|---|---|
+| 1 | low margin between top-1 and top-2 |
+| 2 | **stream disagreement** — video says one equipment class, IMU says another |
+| 3 | attribute inconsistency (predicted `rep_signal: imu` but the IMU stream is silent) |
+| 4 | high-entropy rep density (the count is a guess) |
+| 5 | an untagged region the model thinks is a set |
+| 6 | a live correction on a certified exercise |
+
+Every resolved item is a labelled example chosen because it was maximally informative. That is the
+whole self-training premise, now with a principled sampler instead of a rule of thumb.
+
+### 8.4 The closed loop
+
+```
+   capture ──► IronPal-Net (rest period) ──► proposals ──► DEBRIEF (≤ 20 s)
+                     ▲                                          │
+                     │                                    "Open in After Action"
+                     │                                          ▼
+          adapter / prototypes                        STUDIO: fix marks, bounds,
+          (charging + idle, rollback)                 exercise, pins
+                     ▲                                          │
+                     │                                          ▼
+              embedding store ◄── learner.commit / relabel ── gates
+                     │                                          │
+                     └──────── integrity, levels, campaign map ◄┘
+                                          │
+                     queue (uncertainty) ─┘ ──► back to the Studio
+```
+
+### 8.5 What each existing component does under the new engine
+
+| Component | Change |
+|---|---|
+| `ImuPipeline`, `SessionRecorder`, `GateMachine`, `RepClock` | **none** — still the live, screen-free path |
+| `CameraModule`, `ClipModule` | none; the clip and PTS table the Studio needs are the model's input too |
+| `SignalModule.analyzeRange` / `explainRange` / `scanRegions` / `peakNear` | none — the Studio depends on them and they are IMU-side |
+| `TemplateIndex.match` | **retired** |
+| `learner.commit` | stores a 256-d embedding instead of `float16` windows; everything else identical |
+| `integrity` | leave-one-out over embeddings — same contract, cheaper |
+| `levels`, `drift`, `decide` | unchanged; `decide` gains the attribute evidence in its explanation objects |
+| `packageManager` | unchanged mechanism; the package gains model binaries, `model_arch` and the ontology-hash check |
+| the Studio | **no change required** — it already emits what the model trains on |
+| `exportSessionLabels` | already emits `predictions.json`-compatible rows, so the KB scorers can grade device-collected labels with the same CI gate |
+
+### 8.6 Runtime placement
+
+The model runs where the app already has a natural pause. `useSet.end()` closes the gate and starts
+the clip ingest; the same job chain adds an inference step, and `useDebrief.open()` waits on it with
+the trace already on screen. If inference has not finished — a long set, a cold GPU — the Debrief
+shows the IMU-only proposal immediately and upgrades it when the video result lands, which is the
+behaviour the Studio's degraded-state copy already describes.
+
+---
+
+## 9. Migration — nothing collected is wasted
 
 1. Every stored `float16` IMU window, exemplar frame and retained clip in the current store is
    **labelled training data** for P2. The kNN store's whole contents convert into the new model's
@@ -319,15 +574,16 @@ a network. That is the one piece of luck in this rewrite.
 
 ---
 
-## 9. Build plan
+## 10. Build plan
 
 | Phase | Deliverable | Exit | Est. |
 |---|---|---|---|
 | **N0 — feasibility, measure first** | MoViNet-A1-Stream + BlazePose running on the A52 over a recorded clip; the §4.2 table replaced with measurements | ≤ 8 s per 40 s set, or the architecture is re-cut | 1 wk |
-| **N1 — train v0** | pretrain/distil, fine-tune on KB + founder data, 15-class closed set + embedding | beats the current matcher on a held-out founder split — a low bar, and it must clear it | 3 wk |
-| **N2 — on device** | export (ExecuTorch + TFLite), package integration, rest-period inference wired into `useSet` → `useDebrief` | proposals appear in the Debrief from video, on the phone | 2 wk |
-| **N3 — rep head** | density-map rep counting, marks fed to the Studio | vision rep proposals on a head-still exercise, ±1 against human count | 2 wk |
-| **N4 — personalization** | prototypes, then the LoRA adapter job with rollback | a user's fifth set measurably improves their own accuracy | 2 wk |
+| **N0.5 — the KB as a dataset** | `scripts/kb/build_dataset.py`: ontology attributes → multi-label targets, `KbSampler` (§7.4), the 6 case files frozen as `kb_eval`, the four-state scorers wired as the CI gate, the pre-labelling loop (§7.6) run over the 8 clips | a dataset builder that regenerates from the repo, and a red CI on a deliberately confident-wrong model | 1 wk |
+| **N1 — train v0** | pretrain/distil, fine-tune on KB + founder data, 15-class closed set + embedding + the seven attribute heads | beats the current matcher on a held-out founder split, and `kb_eval` shows **zero confident-wrong** | 3 wk |
+| **N2 — on device** | export (ExecuTorch + TFLite), package integration with the ontology-hash check, rest-period inference wired into `useSet` → `useDebrief` | proposals appear in the Debrief from video, on the phone | 2 wk |
+| **N3 — rep head** | density-map rep counting, marks fed to the Studio's reps lane | vision rep proposals on a **head-still** exercise, ±1 against the human count | 2 wk |
+| **N4 — personalization** | prototypes, then the LoRA adapter job with rollback; the queue switched to uncertainty sampling (§8.3) | a user's fifth set measurably improves their own accuracy | 2 wk |
 
 Sequencing rule, same as the old design's: **N0 is measured before N1 starts.** If a 40 s set costs
 30 s of compute on the A52, the frame rate, the backbone or the "every set" assumption changes, and
@@ -335,7 +591,7 @@ it is far cheaper to learn that in week one.
 
 ---
 
-## 10. Risks
+## 11. Risks
 
 | # | Risk | Mitigation |
 |---|---|---|
@@ -346,10 +602,13 @@ it is far cheaper to learn that in week one.
 | V5 | Battery and thermals across a 60-minute session | inference is per set, not continuous; defer below 30 % battery; the existing storage/battery prechecks extend to it |
 | V6 | A neural net is a black box, and the product promises explanations | keep the evidence surface: top-3 with confidences, the nearest own set by embedding distance ("closest to your set from 12 May"), the pose overlay on the rep frame, and Grad-CAM on the glance frame for the weight path |
 | V7 | Regression against a matcher that at least worked for squats | the 13 `imu` classes are a fixed benchmark; the new model must not lose to the old one on them, and the IMU stream exists so it should not |
+| V8 | **`kb_eval` is six cases** — it characterises failure modes, it does not measure accuracy | treat it as a gate, never as a score; real accuracy comes from the held-out founder split and, later, beta users. Grow the case set as clips are analysed |
+| V9 | Pseudo-labels from the KB skills drift the model toward the LLM's mistakes | never train on unconfirmed labels; corrected labels (`revision ≥ 2`) outweigh confirmations; the case files exist precisely because the skills *did* get 001–003 wrong at first |
+| V10 | The ontology changes and silently invalidates a trained model | the ontology hash is in the package and checked at apply time (§7.7) |
 
 ---
 
-## 11. What this does not change
+## 12. What this does not change
 
 The PRD's promises, the game layer, the gym pack, the privacy envelope (video never leaves the
 phone; one cropped still to OCR, deleted after inference), the level machine, the quality gates,
