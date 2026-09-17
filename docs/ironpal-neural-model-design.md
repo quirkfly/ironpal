@@ -8,6 +8,427 @@ matcher over nine hand-crafted IMU features. The gate, the rep clock, the sessio
 store, the level machine, the package pipeline and the labeling studio are **kept as they are**.
 **Reason:** the matcher is blind exactly where the product needs to see.
 
+### How to read this document
+
+It is written for two readers at once. If neural networks are new to you, the first two sections are
+for you and are enough on their own:
+
+| Start here | Section | What it gives you |
+|---|---|---|
+| **1st** | **[§A — a primer](#a-a-primer--what-this-model-is-for-someone-new-to-neural-networks)** | every idea the design uses, built from scratch: weights, training, encoders, embeddings, attention, transfer learning, prototypes, calibration. Ends with a glossary |
+| **2nd** | **[§B — one set, end to end](#b-one-set-end-to-end--every-phase-with-real-numbers)** | a single real set followed through all seven phases — capture, preprocessing, feature extraction, fusion, proposal, confirmation, learning — with the file that does each job and the cost of each step |
+| then | §0–§6 | the specification: why the old matcher fails, the architecture, the encoders, the heads, the phone budget, personalisation |
+| then | §7–§8 | how the knowledge base is used as six different assets, and how the model and the labeling studio feed each other |
+| last | §9–§12 | migration, build plan, risks, and what deliberately does not change |
+
+§A and §B repeat each other on purpose: §A explains the concepts with analogies, §B shows the same
+machinery working on a real clip with real numbers. Nothing in §0 onward assumes you read them.
+
+---
+
+## A. A primer — what this model is, for someone new to neural networks
+
+> Written for the founder, who is new to NN design. It builds the ideas from scratch, in the order
+> the model actually uses them, and every analogy is cashed out against the real components later
+> in the document. If a term appears here in **bold**, it is defined here and used unchanged from
+> §1 onward. Skip this section once it is familiar — nothing below depends on reading it twice.
+
+### A.1 The problem, before any machine learning
+
+A user finishes a set. The phone has two recordings of it: a **video** from the headband camera and
+a **motion trace** from the accelerometer and gyroscope on the same headband. The app must answer
+three questions:
+
+1. Which exercise was that? (one of 37)
+2. When did each repetition happen?
+3. Which video frame shows the weight clearly enough to read a number off it?
+
+The old approach answered question 1 by boiling the motion trace down to nine hand-chosen numbers
+(how much energy on each axis, how fast the rhythm was, how jerky it was, and so on) and then
+finding the most similar set the user had recorded before. That is a reasonable engineering idea,
+and it works for squats, where the head bobs up and down half a metre. It cannot work for a biceps
+curl, because during a curl **the head does not move at all** — the nine numbers are nearly
+identical for a curl, a lateral raise and a shoulder press. Two thirds of the exercise list is in
+that situation. The information needed to tell them apart is in the pixels: is the elbow bending,
+is the palm turning, is the dumbbell close to the chest or out at arm's length.
+
+So the model has to look at video. Everything below follows from that.
+
+### A.2 What a neural network actually is, in one paragraph
+
+A neural network is a very large mathematical function with millions of adjustable numbers in it,
+called **weights**. You feed it an input (here: some frames and some sensor samples) and it produces
+an output (here: "this is a goblet squat, 82 % confident"). At the start the weights are random and
+the output is nonsense. **Training** means: show it an example whose correct answer you know,
+measure how wrong the output is (this measure is the **loss**), and then nudge every weight a tiny
+amount in the direction that would have made the loss smaller. Repeat a few hundred thousand times.
+The nudging procedure is called **gradient descent**, and it is the only thing "learning" means in
+this context.
+
+Two things follow that matter for this product:
+
+- **Training needs a lot of examples.** Nudging weights from random to useful takes tens of
+  thousands of labelled examples at minimum. IronPal has about nine minutes of labelled footage.
+  §A.6 explains how the design gets around that; it is the single most important idea in the
+  document.
+- **Training is expensive, inference is cheap.** Running the finished function forward to get an
+  answer costs a fraction of what it cost to find the weights. That asymmetry is why training
+  happens on a workstation and inference happens on the phone.
+
+### A.3 Encoders and embeddings — the one idea to take away
+
+The central concept of the whole design is the **embedding**.
+
+An embedding is a list of numbers — here, 256 of them — that summarises something complicated. The
+network learns to produce these summaries so that **similar things get similar lists**. If you
+imagine each list as a point in space, then all the goblet squats end up clustered in one region,
+all the biceps curls in another, and the distance between two points means "how different are these
+two sets".
+
+The part of the network that turns raw input into an embedding is called an **encoder**. A video
+encoder turns a clip into a list of numbers; a motion encoder turns sensor samples into a list of
+numbers. The word "encode" is literal: it compresses something large and messy (200 video frames)
+into something small and comparable (256 numbers).
+
+Why this matters here: once sets are points in a space where distance means similarity, "which
+exercise was this?" becomes "which cluster is this point in?" — and crucially, you can answer that
+for a *new* exercise the network was never trained on, just by having one or two examples of it to
+compare against. That is what makes per-user personalisation possible at all.
+
+**The contrast with the old approach.** The old matcher also measured distance between sets. The
+difference is where the numbers came from. The old nine numbers were *chosen by a human* who
+guessed which properties would matter. An embedding is *learned*: the training process discovers
+which properties distinguish the exercises, including properties nobody would think to write down.
+Same shape of question, incomparably better answer — the way a face-recognition system is not just
+a better version of comparing two photographs pixel by pixel.
+
+### A.4 Why three encoders instead of one
+
+The model has three separate encoders, one per input type, because the three inputs are different
+kinds of data and the mathematics that works for one is wrong for the others.
+
+| Stream | What it is | Encoder | Why this kind |
+|---|---|---|---|
+| **Video** | ~200 images, 5 per second | a **convolutional** video network | convolutions are built to find local visual patterns (an edge, a hand, a plate) and to notice how they move between frames |
+| **Pose** | where the joints are in each frame — 2D coordinates of shoulder, elbow, wrist, hands | a small **temporal** network over those coordinates | the input is already a handful of numbers per frame, so it needs a small, cheap network, not an image network |
+| **Motion (IMU)** | 6 sensor channels, 50 samples per second | a **1D convolutional** network | the same idea as the video convolutions but along time only — it finds rhythms and shapes in a waveform |
+
+Separating them also means each can be **missing**. A clip imported from the gallery has no motion
+trace; a set recorded with the phone in a pocket has no video. Because each stream is encoded
+independently and then combined, the model can work with whatever it has, instead of failing.
+
+### A.5 Fusion — how the three are combined
+
+The three encoders produce three sets of numbers. Something has to combine them into one answer,
+and it needs to do so *adaptively*: for a squat the motion trace is the reliable evidence, for a
+curl the pixels are, and the model should learn that by itself rather than being told.
+
+The component that does this is a **transformer**. The only property you need to know about it is
+**attention**: when producing its output, a transformer learns how much to weight each piece of its
+input, and that weighting depends on the input itself. So for a set whose motion trace is flat and
+featureless, the transformer learns to lean on the video; for one where the camera is pointed at
+the ceiling, it learns to lean on the motion. Nobody writes that rule — it emerges from training.
+
+There is one deliberate trick here, called **modality dropout**. During training, the model is
+randomly shown examples with one of the three streams deleted. This forces it to cope, and it means
+the "video only" and "motion only" cases at inference time are situations it has already practised
+thousands of times rather than surprises.
+
+### A.6 The data problem, and the two ideas that solve it
+
+Training a video network from scratch needs tens of thousands of clips. IronPal has eight. The
+design solves this with two standard techniques, and understanding them is the key to why the whole
+thing is feasible for one person.
+
+**Idea 1 — transfer learning.** Do not start from random weights. Start from a network somebody
+else already trained on an enormous public video dataset. Such a network has already learned what
+hands, objects, motion and occlusion look like; it simply does not know about exercises. Adapting
+it to a new task with a small dataset is called **fine-tuning**, and it works because the hard,
+generic part of the learning is already done. The plan goes further and starts from a network
+trained on **egocentric** video — footage shot from a camera on someone's head — because that is
+exactly what a headband produces, and the visual statistics are very different from ordinary video.
+
+**Idea 2 — few-shot learning by prototype.** Even after fine-tuning, a user's individual style is
+unknown. Rather than retrain for each user, the model uses the embedding space from §A.3: each
+confirmed set becomes a point, and the average of a user's points for one exercise is called its
+**prototype**. Classifying a new set means finding the nearest prototype. This needs *one* example
+to start working, and it improves with every set the user confirms.
+
+So there are two levels of learning, on very different timescales:
+
+| | Where | How often | What changes |
+|---|---|---|---|
+| **Pretraining + fine-tuning** | a workstation | once per release | millions of weights, using public data plus the founder's clips |
+| **Personalisation** | the user's phone | after every confirmed set | one prototype (a 256-number average), instantly |
+
+And a third level, once a user has enough data: **adapter training** on the phone. Rather than
+retrain millions of weights — impossible on a phone, and hopeless from 100 examples — a few thousand
+extra weights are inserted into the frozen network and only those are trained. This is called a
+**LoRA adapter**. It runs while the phone is charging, takes minutes, and is rolled back
+automatically if it makes the model worse on a held-out check.
+
+### A.7 The three outputs, and why the model produces all three at once
+
+The network ends in three **heads** — small final layers that each produce a different answer from
+the same shared understanding of the set.
+
+| Head | Output | How it works, informally |
+|---|---|---|
+| **Exercise** | one of 37, with a confidence, plus the 256-number embedding | a scoring layer over the classes, and the embedding for prototypes |
+| **Reps** | the count, and the timestamp of each rep | it compares every moment of the set to every other moment; repetitions make a visible striped pattern, and the model reads the stripes |
+| **Legibility** | for each frame, "is the weight readable here" | a single score per frame, used to choose which frame gets sent for text recognition |
+
+Training all three together is deliberate and is called **multi-task learning**. The three tasks
+share the same encoders, so what the model learns about recognising a curl also helps it find the
+curl's repetitions. With a small dataset this sharing is worth a great deal: every labelled set
+teaches three things instead of one.
+
+The same reasoning extends further. The exercise list carries attributes for each entry — whether
+it uses a barbell or a cable, whether it pushes or pulls, which plane it moves in. The model is
+trained to predict those too. Predicting "this uses a cable" is a much easier problem than naming
+the exact exercise, and getting it right rules out ten alternatives at a stroke. That one addition
+directly fixes a real failure in the knowledge base, where a cable machine was read as a barbell.
+
+### A.8 Confidence, and the right to say "I don't know"
+
+A network will always output something. Asked to classify a photograph of a sandwich, an exercise
+classifier will confidently name an exercise. Preventing that is a design requirement here, not a
+nicety, because the product's promise is that it never asserts a number it is not sure of — the
+existing scoring harness fails the build if the model is ever confidently wrong.
+
+Three mechanisms, all standard:
+
+- an explicit **"unknown" class**, trained on real recordings of resting and walking, so "none of
+  these" is an answer the model can actively give rather than the absence of one;
+- **calibration** — a post-training adjustment so that "80 % confident" is right about 80 % of the
+  time, which raw networks are notoriously bad at;
+- an **abstention rule**: if the top two answers are close, or the video and motion streams
+  disagree, the model declines and asks the user instead.
+
+### A.9 Where it all runs — the two clocks
+
+The model is not fast enough to run on live video while the user is lifting, and it does not need
+to be. The design uses two separate timescales:
+
+- **During the set**, only the cheap motion path runs: it detects that a set has started, ticks
+  once per repetition for the audio cue, and does no video work at all. This is the existing code
+  and it is unchanged.
+- **After the set**, during the rest period, the full model runs over the recorded clip — a handful
+  of seconds — and its answers populate the confirmation screen the user is about to look at.
+
+This split is why a mid-range phone is enough. It also explains the whole architecture of the app:
+the tagging round happens in the rest period precisely because that is when there is time.
+
+### A.10 The loop the whole product is built around
+
+Putting it together, the life of one set:
+
+```
+1. RECORD      the headband films; the IMU streams; the motion path detects the set live
+2. INFER       (rest period) the model reads clip + pose + motion → exercise, reps, glance frame
+3. PROPOSE     the confirmation screen shows those answers WITH their evidence
+4. CONFIRM     the user taps once, or corrects — in the labeling studio if it needs real work
+5. LEARN       the confirmed answer becomes a labelled example: a prototype updates immediately,
+               and the example joins the pool that trains the on-device adapter later
+6. REPEAT      the next set is recognised slightly better than the last
+```
+
+Step 4 is the labeling studio, and it is worth seeing why it matters so much. A neural network is
+only as good as its labels, and labels are expensive — normally you pay people to draw them. Here
+the user produces them as a by-product of confirming their own workout, in a surface built to make
+that fast and accurate. The studio is not a debugging tool bolted on the side; it is the annotation
+front end of the training pipeline, and the reason this model can improve without a labelling
+budget.
+
+### A.11 Glossary
+
+| Term | Meaning here |
+|---|---|
+| **weights** | the millions of adjustable numbers inside the network |
+| **training** | adjusting those numbers so the outputs get less wrong |
+| **loss** | the number that measures how wrong an output was |
+| **inference** | running the trained network forward to get an answer |
+| **encoder** | the part that turns raw input into a compact summary |
+| **embedding** | that summary — 256 numbers where distance means similarity |
+| **transformer / attention** | the component that combines the streams, learning how much to trust each |
+| **modality dropout** | training with a stream deleted, so missing inputs are normal |
+| **transfer learning / fine-tuning** | starting from a network trained on public data and adapting it |
+| **prototype** | the average embedding of a user's confirmed sets for one exercise |
+| **LoRA adapter** | a few thousand extra weights trained on the phone while the rest stays frozen |
+| **head** | a small final layer producing one specific output |
+| **multi-task learning** | training several heads together so they share what they learn |
+| **calibration** | making the reported confidence match the real hit rate |
+| **quantisation** | storing weights in fewer bits so the model is smaller and faster |
+
+---
+
+## B. One set, end to end — every phase with real numbers
+
+> §A explained the ideas; this section follows a single set through the machine, in order, naming
+> the file that does each job. The set is the knowledge base's **case 001**: a standing alternating
+> dumbbell biceps curl, human-confirmed at **6 reps per arm** with **5 kg** dumbbells, filmed on the
+> A52 headband. It is `head_motion_class: still` and `rep_signal: vision` — precisely the case the
+> old matcher could not do — and it is already a committed e2e fixture, so every number below is
+> checkable.
+
+### B.0 The phases at a glance
+
+```
+   ┌ PHASE 1 ───────┐ ┌ PHASE 2 ──────┐ ┌ PHASE 3 ─────────┐ ┌ PHASE 4 ──────┐
+   │ capture        │ │ preprocess    │ │ encode           │ │ fuse + decide │
+   │ live, 0 ms     │►│ rest period   │►│ ~7 s on the A52  │►│ ~0.2 s        │
+   └────────────────┘ └───────────────┘ └──────────────────┘ └───────────────┘
+                                                                      │
+   ┌ PHASE 7 ───────┐ ┌ PHASE 6 ──────┐ ┌ PHASE 5 ─────────┐          │
+   │ learn          │◄│ confirm       │◄│ propose          │◄─────────┘
+   │ instant + idle │ │ the user, ≤20s│ │ Debrief / Studio │
+   └────────────────┘ └───────────────┘ └──────────────────┘
+```
+
+### Phase 1 — Capture (live, during the set)
+
+Nothing neural runs here. The phone is in a pocket and the user is lifting.
+
+| What | Where | Detail |
+|---|---|---|
+| Video | `CameraModule.startClip` | 1280×720 at 30 fps, H.264, recording from ARM (before the first rep) so the staging glance is inside the clip by construction |
+| Motion | `ImuPipeline` → `SessionRecorder` | 6 channels, resampled to 50 Hz, rotated into a head-fixed frame using the session's calibration |
+| Set boundaries | `GateMachine` | opens when rhythmic motion is detected, closes after silence — this is the cheap signal-processing path, not the network |
+| Live rep cue | `RepClock` | ticks per detected peak. **On this set it will under-report**, because the head barely moves during a curl. That is expected, and it is what the video rep head exists to fix |
+
+Cost: about 4.4 ms per 400 ms tick, measured. The user gets audio feedback with no perceptible delay
+and the screen stays dark.
+
+### Phase 2 — Preprocessing (rest period begins)
+
+Now the set is over and the model's inputs must be built. Three jobs, none of them neural.
+
+**2a. Where to look.** Rather than sample the whole clip uniformly, the sampler uses the motion
+trace to find the interesting parts — the knowledge base's own routing idea, but with a real sensor
+instead of pixel motion energy:
+
+```
+PERFORM window  = the span the gate held open           → exercise + reps sample here
+STILL troughs   = low-motion spans adjacent to it       → legibility + weight sample here
+```
+
+For case 001 the perform span is roughly 30–45 s into the clip; the staging glance sits just before
+it, which is exactly where the knowledge base found the only legible view of the plates.
+
+**2b. Frames.** From the perform window, 64 frames at 5 fps, each resized to 172×172.
+
+- *Why 5 fps and not 30?* Repetitions happen between 0.2 and 1.5 times per second. Sampling at 5 fps
+  is more than three times the fastest rep rate, which is enough to see every turnaround, and it is
+  a sixth of the decoding cost. The knowledge base independently found that 2 fps is too slow — it
+  aliased case 002's turnarounds into a wrong count — and that 3+ fps is required.
+- *Why 172×172?* It is the input size the chosen video network was designed and pretrained for.
+- **Rotation is applied first.** The A52 rig records sideways. Getting this wrong is not cosmetic:
+  case 007 was read as an overhead press instead of a curl purely because the frames were upside
+  down. There is a measured subtlety here — these clips carry a rotation flag that modern decoders
+  apply automatically, so applying the rig's rotation on top rotates it a second time.
+
+**2c. Joints.** The same 64 frames go through a pose estimator, giving the 2D position of shoulders,
+elbows, wrists and hands, each with a confidence. From those, six geometric quantities the knowledge
+base names as decisive are computed explicitly — how close the dumbbell is to the torso, the elbow
+angle, the hand height relative to the chin, and so on.
+
+Then everything is normalised: pixels scaled to a fixed range, sensor channels divided by their
+training-set standard deviation, joint coordinates expressed relative to shoulder width so that a
+tall user and a short one look the same.
+
+### Phase 3 — Feature extraction (the three encoders)
+
+Each stream is compressed into numbers that mean something. This is the expensive phase.
+
+| Encoder | Input | Output | Cost on the A52 | What it contributes for case 001 |
+|---|---|---|---|---|
+| **Video** | 64 frames × 172² | 64 per-frame vectors | ~20 ms/frame → ~4.0 s | the dumbbell growing large as it rises and hugging the body — the "looming" cue that decides curl vs raise |
+| **Pose** | 64 frames × joints | 64 vectors, 128-d | ~12 ms/frame → ~2.4 s | elbow angle collapsing from ~165° to ~45° while the upper arm stays still |
+| **Motion** | 6 × 50 Hz over the set | one 128-d vector | < 0.1 s | very little here — and reporting *that* is useful: a flat trace is evidence for a head-still exercise |
+
+Total roughly 7 s for a 40-second set, against an 8-second budget. These are estimates to be
+measured in phase N0 before anything is trained; the repo's convention is to publish measurements,
+and this table is the hypothesis they will test.
+
+### Phase 4 — Fusion and the four answers
+
+All those vectors go into the transformer together, plus one extra slot called the `[SET]` token
+whose only job is to accumulate a summary of the whole set. Attention decides what to trust: on this
+set, the motion stream carries almost no information, and the model — having seen thousands of
+head-still examples in training — leans on video and pose.
+
+Out come four things:
+
+| Output | For case 001 | Notes |
+|---|---|---|
+| **Exercise** | `dumbbell-biceps-curl`, plus a confidence | from the 37-way scoring layer |
+| **Attributes** | equipment `dumbbell`, force `pull`, isolation, sagittal plane | the cheap extra predictions; they narrow the answer and explain it |
+| **Embedding** | 256 numbers | compared against the user's own prototypes |
+| **Reps** | 6, with a timestamp for each | from the striped pattern of repeated moments |
+| **Glance frame** | the frame just before the lift, where the plates face the camera | sent for weight reading |
+
+Then the safety layer. If the top two candidates are close, or the streams disagree, or the chosen
+exercise is one the ontology marks as poorly visible from a headband, the model lowers its
+confidence or declines outright. Declining is a valid outcome; being confidently wrong fails the
+build.
+
+### Phase 5 — Proposal
+
+The answers become the four questions on the confirmation screen, each with its evidence: the
+candidate list with confidences, the rep marks drawn on the trace, the weight pre-filled, and a
+plain-language reason. Because the attribute heads ran, the reason can be specific — "dumbbell,
+pulling, isolation" is a far better explanation than a distance number.
+
+**This is the moment the rewrite pays for itself.** Under the old matcher this set produced an empty
+rep lane and a near-random exercise guess, because a motionless head carries neither. Now it
+produces six timestamped marks and a named exercise.
+
+### Phase 6 — Confirmation (the user, and the labeling studio)
+
+One tap if everything is right. If not, the labeling studio is where it gets fixed, and every fix is
+a better training label than a confirmation:
+
+| The user does | The model gains |
+|---|---|
+| taps "all correct" | a confirmed label |
+| drags a rep mark off a peak onto where the rep really was | a *hard* label — the model was wrong here, which is the most informative kind |
+| relabels the exercise | a correction, weighted higher in training than a first-pass confirmation |
+| pins a frame as the readable one | a direct label for the legibility head |
+| tags a stretch of motion that was never recorded as a set | an entirely new example |
+| dismisses a stretch with a reason | a typed negative example |
+
+The studio was designed as a correction surface. It happens to be exactly an annotation tool, and
+that is what makes this model trainable without a labelling budget.
+
+### Phase 7 — Learning
+
+Two timescales, as in §A.6.
+
+**Immediately.** The confirmed set's 256-number embedding is stored, and the user's prototype for
+that exercise is updated. Next time they curl, that set is in the comparison. This costs
+milliseconds and needs no training.
+
+**Later, while charging.** Once enough sets have accumulated, a small adapter is trained on the
+phone against the stored embeddings, then validated against held-out sets of the user's own. If it
+does not improve them, it is discarded. The heavy encoders never change on the phone.
+
+**And centrally, between releases.** Confirmed sets that the user opted to contribute join the pool
+for the next fine-tune, which ships as a new signed model package.
+
+### B.1 What this set teaches, and what it still cannot
+
+Case 001 is `rep_signal: vision`, which in the app's own rules means the headband may *recognise*
+this exercise and *prime the weight*, but may not *certify the rep count* the way it does for a
+squat. The model respects that: it proposes six marks, the user confirms them, and the exercise
+level says "recognised and weight-primed" rather than "counted". The constraint lives in the
+exercise list, not in anyone's good intentions.
+
+And one honest note on the weight. The model does not read "5 kg" — it chooses the frame most likely
+to show the number, and a separate text-recognition step reads it. The knowledge base's case 001 is
+a caution here: the plates were read correctly and the answer was still wrong, because a 2 kg handle
+was added that does not exist. Weight remains the least-validated part of the system, and the
+product's language reflects that.
+
 ---
 
 ## 0. Why the current matcher cannot work, in numbers from this repo
