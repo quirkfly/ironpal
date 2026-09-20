@@ -1,0 +1,36 @@
+Pri nakladacích jednoručkách alebo olympijských činkách, kde sú na seba naukladané viaceré kotúče, čisté textové OCR narazí na tvrdú stenu. Čísla na vnútorných kotúčoch sú prekryté tými vonkajšími, sú otočené hore nohami, alebo sú pod uhlom, z ktorého ich kamera z čelenky fyzicky nemá šancu prečítať.
+Ak vaše oči (a teda aj model) vidia iba vonkajší kotúč, OCR prečíta napríklad len číslo „5 kg“, hoci na oske sú naložené tri takéto kotúče a reálna váha je 15 kg.
+Aby IronPal zvládol tento prípad na úrovni State-of-the-Art, musíte OCR skombinovať s Objektovou detekciou hrán a hĺbky (Contour / Thickness Detection). SOTA pipeline pre tento špecifický problém sa skladá z troch krokov:
+## 1. Detekcia a segmentácia osky činky (Barbell/Dumbbell Profiling)
+Namiesto hľadania čísel model (napr. upravené YOLOv12-Segment alebo Segment Anything v2 (SAM 2) pre video) lokalizuje celú hlavu činky ako jeden objekt.
+
+* Model identifikuje šírku/hrúbku bloku kotúčov na oske.
+* Každý kotúč, bez ohľadu na to, či je na ňom vidno číslo, zanecháva viditeľnú čiaru (hranu) a pridáva činke na objeme.
+
+## 2. Algoritmus počítania vrstiev a hrúbky (Plate Counting & Width Regression)
+Akonáhle model vie, kde sa nachádza balík kotúčov, aplikujú sa dva vizuálne prístupy:
+
+* Detekcia hrán (Edge Detection): Algoritmus analyzuje frekvenciu vertikálnych línií. Ak na profile hlavy činky deteguje 3 jasné prechody (kontúry), znamená to, že sú tam naložené 3 kotúče.
+* Regresia šírky (Width-to-Diameter Ratio): Štandardizované kotúče majú fixnú hrúbku. Model porovná celkovú šírku naložených kotúčov s priemerom najväčšieho kotúča. Z tohto pomeru dokáže presne vypočítať, koľko kotúčov danej veľkosti sa na oske nachádza.
+
+## 3. Fúzia OCR a Geometrie (The SOTA Fusion Layer)
+Finálny výpočet váhy prebehne prepojením geometrických dát a textového OCR:
+
+[OCR detekcia] ────➔ Prečítané číslo na vonkajšom kotúči: "5 kg"
+                                    │
+                                    ▼
+[Fúzna vrstva] ────➔ (Hmotnosť kotúča: 5 kg) × (Počet detegovaných vrstiev: 3) + Váha osky (2 kg)
+                                    │
+                                    ▼
+[Finálny výstup] ──➔ Celková predpovedaná váha jednoručky = 17 kg
+
+
+   1. OCR určí nominálnu hodnotu: Model prečíta číslo na jedinom viditeľnom (najvonkajšom) kotúči – napr. 5.
+   2. Geometria určí násobok: Detektor kontúr povie: „Vidím tu 3 rovnaké vrstvy kovu.“
+   3. Kontextová matematika: Systém vie, že ak je vonku 5 kg kotúč, tie za ním budú s 99% pravdepodobnosťou rovnaké (nikto nenkladá 2.5 kg kotúč za 5 kg kotúč, dáva sa to opačne). Vynásobí 5 kg × 3 a pripočíta štandardnú váhu samotnej osky činky.
+
+## Ako to vyriešiť pri farebných "Bumper" kotúčoch?
+Ak vyvíjate prémiový produkt, toto je pre vás obrovská výhoda. Moderné crossfitové a vzpieračské kotúče (Bumper plates) sú farebne kódované podľa medzinárodných štandardov IWF (zelená = 10 kg, žltá = 15 kg, modrá = 20 kg, červená = 25 kg).
+V tomto prípade model vôbec nepotrebuje OCR. Stačí mu jednoduchá farebná segmentácia (Color Histogram Analysis), kde spočíta farebné pruhy vedľa seba. Tri zelené pruhy vedľa seba na olympijskej tyči znamenajú okamžitú a neomylnú predikciu 30 kg na jednej strane, aj keby boli činky totálne obúchané a špinavé.
+Dáva vám táto kombinácia OCR (na zistenie hodnoty) a detekcie hrán/farieb (na zistenie počtu kotúčov) zmysel pre technické riešenie IronPalu? Ak chcete, môžeme sa pozrieť na to, ako napísať OpenCV skript na detekciu hrán a počítanie naložených kotúčov z testovacieho videa.
+
