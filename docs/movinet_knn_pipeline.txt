@@ -1,36 +1,60 @@
-Pri nakladacích jednoručkách alebo olympijských činkách, kde sú na seba naukladané viaceré kotúče, čisté textové OCR narazí na tvrdú stenu. Čísla na vnútorných kotúčoch sú prekryté tými vonkajšími, sú otočené hore nohami, alebo sú pod uhlom, z ktorého ich kamera z čelenky fyzicky nemá šancu prečítať.
-Ak vaše oči (a teda aj model) vidia iba vonkajší kotúč, OCR prečíta napríklad len číslo „5 kg“, hoci na oske sú naložené tri takéto kotúče a reálna váha je 15 kg.
-Aby IronPal zvládol tento prípad na úrovni State-of-the-Art, musíte OCR skombinovať s Objektovou detekciou hrán a hĺbky (Contour / Thickness Detection). SOTA pipeline pre tento špecifický problém sa skladá z troch krokov:
-## 1. Detekcia a segmentácia osky činky (Barbell/Dumbbell Profiling)
-Namiesto hľadania čísel model (napr. upravené YOLOv12-Segment alebo Segment Anything v2 (SAM 2) pre video) lokalizuje celú hlavu činky ako jeden objekt.
+Otázka licencie je pre hardvérový a softvérový startup ako IronPal absolútne kľúčová. Ak omylom zakomponujete model so zlou licenciou do komerčnej aplikácie, môžete byť legálne donútený zverejniť (open-sourcnúť) celý váš proprietárny kód, alebo čeliť žalobám.
+V posilňovacom priemysle a počítačovom videní sa modely delia na Permisívne (zadarmo pre biznis) a Copyleft/Komerčné (rizikové alebo platené). [1, 2] 
+Nasleduje právny rozbor licencií pre jednotlivé modely, ktoré sme spomínali:
+## 1. MoViNet-A1-Stream (Google) — 🟢 ZADARMO
 
-* Model identifikuje šírku/hrúbku bloku kotúčov na oske.
-* Každý kotúč, bez ohľadu na to, či je na ňom vidno číslo, zanecháva viditeľnú čiaru (hranu) a pridáva činke na objeme.
+* 
+* Licencia: Apache 2.0
+* Komerčné využitie: Áno, úplne bez obmedzení.
+* Podmienky: Apache 2.0 je extrémne otvorená (permisívna) licencia. Môžete model zobrať, upraviť ho, predávať ho vo svojej aplikácii a váš vlastný kód zostáva prísne tajný (closed-source). Jedinou podmienkou je ponechať v kóde pôvodnú informáciu o copyrighte od Google (Attribution). [1, 2, 3, 4, 5] 
+* 
 
-## 2. Algoritmus počítania vrstiev a hrúbky (Plate Counting & Width Regression)
-Akonáhle model vie, kde sa nachádza balík kotúčov, aplikujú sa dva vizuálne prístupy:
+## 2. Google MediaPipe (Pose / Hands) — 🟢 ZADARMO
 
-* Detekcia hrán (Edge Detection): Algoritmus analyzuje frekvenciu vertikálnych línií. Ak na profile hlavy činky deteguje 3 jasné prechody (kontúry), znamená to, že sú tam naložené 3 kotúče.
-* Regresia šírky (Width-to-Diameter Ratio): Štandardizované kotúče majú fixnú hrúbku. Model porovná celkovú šírku naložených kotúčov s priemerom najväčšieho kotúča. Z tohto pomeru dokáže presne vypočítať, koľko kotúčov danej veľkosti sa na oske nachádza.
+* 
+* Licencia: Apache 2.0
+* Komerčné využitie: Áno, zadarmo.
+* Podmienky: Rovnaké ako pri MoViNete. Google uvoľnil MediaPipe pre biznis. Môžete ho nasadiť do čelenky a do aplikácie, predávať predplatné klientom a nemusíte platiť žiadne poplatky ani zverejňovať kód IronPalu. [2, 6, 7, 8] 
+* 
 
-## 3. Fúzia OCR a Geometrie (The SOTA Fusion Layer)
-Finálny výpočet váhy prebehne prepojením geometrických dát a textového OCR:
+## 3. MobileNetV4 — 🟢 ZADARMO
 
-[OCR detekcia] ────➔ Prečítané číslo na vonkajšom kotúči: "5 kg"
-                                    │
-                                    ▼
-[Fúzna vrstva] ────➔ (Hmotnosť kotúča: 5 kg) × (Počet detegovaných vrstiev: 3) + Váha osky (2 kg)
-                                    │
-                                    ▼
-[Finálny výstup] ──➔ Celková predpovedaná váha jednoručky = 17 kg
+* 
+* Licencia: Apache 2.0 alebo MIT (v závislosti od konkrétnej implementácie na GitHube, napr. timm alebo oficiálny Google repo).
+* Komerčné využitie: Áno, úplne bezpečné pre komerčné produkty.
+* Podmienky: MIT aj Apache 2.0 sú najlepšie licencie pre startupy. Umožňujú vám uzavrieť kód do komerčnej distribúcie bez akýchkoľvek licenčných poplatkov (royalty-free). [1, 2, 3, 4, 9, 10] 
+* 
 
+## 4. ⚠️ POZOR NA YOLO (YOLOv8, YOLOv11 atď.) — 🔴 RIZIKO / PLATENÉ
+Ak by ste chceli použiť YOLOv8-Pose alebo YOLOv8-Segment na detekciu kotúčov či postáv, tu narazíte na tvrdú stenu:
 
-   1. OCR určí nominálnu hodnotu: Model prečíta číslo na jedinom viditeľnom (najvonkajšom) kotúči – napr. 5.
-   2. Geometria určí násobok: Detektor kontúr povie: „Vidím tu 3 rovnaké vrstvy kovu.“
-   3. Kontextová matematika: Systém vie, že ak je vonku 5 kg kotúč, tie za ním budú s 99% pravdepodobnosťou rovnaké (nikto nenkladá 2.5 kg kotúč za 5 kg kotúč, dáva sa to opačne). Vynásobí 5 kg × 3 a pripočíta štandardnú váhu samotnej osky činky.
+* 
+* Licencia: AGPL-3.0 (spoločnosť Ultralytics) [11, 12] 
+* Komerčné využitie: Iba ak si kúpite drahú Enterprise licenciu. [11, 13] 
+* Prečo je to problém: AGPL-3.0 je tzv. silná copyleft licencia. Ak použijete YOLOv8 vo vašej aplikácii alebo ho spustíte na serveri (SaaS), zákon vám prikazuje zverejniť kompletný zdrojový kód vašej aplikácie IronPal pod rovnakou licenciou AGPL. [11, 12] 
+* Ako to obísť: Ak trváte na architektúre YOLO, musíte použiť verzie s permisívnou licenciou. Napríklad staršie YOLOX alebo novšie YOLO-NAS a LibreYOLO používajú licenciu Apache 2.0 / MIT, ktoré sú pre vás zadarmo. [11, 14] 
+* 
 
-## Ako to vyriešiť pri farebných "Bumper" kotúčoch?
-Ak vyvíjate prémiový produkt, toto je pre vás obrovská výhoda. Moderné crossfitové a vzpieračské kotúče (Bumper plates) sú farebne kódované podľa medzinárodných štandardov IWF (zelená = 10 kg, žltá = 15 kg, modrá = 20 kg, červená = 25 kg).
-V tomto prípade model vôbec nepotrebuje OCR. Stačí mu jednoduchá farebná segmentácia (Color Histogram Analysis), kde spočíta farebné pruhy vedľa seba. Tri zelené pruhy vedľa seba na olympijskej tyči znamenajú okamžitú a neomylnú predikciu 30 kg na jednej strane, aj keby boli činky totálne obúchané a špinavé.
-Dáva vám táto kombinácia OCR (na zistenie hodnoty) a detekcie hrán/farieb (na zistenie počtu kotúčov) zmysel pre technické riešenie IronPalu? Ak chcete, môžeme sa pozrieť na to, ako napísať OpenCV skript na detekciu hrán a počítanie naložených kotúčov z testovacieho videa.
+## Summary pre vašu stratégiu (IronPal Tech Stack)
+Pre bezpečný štart bez právnikov a poplatkov zvoľte tento 100% legálny a bezplatný stack:
 
+   1. Sledovanie cvikov a kĺbov: Google MediaPipe Pose (Apache 2.0) + váš lokálny KNN klasifikátor (váš vlastný kód).
+   2. Snímanie činky/kotúčov pre váhu: [MobileNetV4](https://github.com/huggingface/pytorch-image-models) ako chrbtica cez knižnicu timm (Apache 2.0).
+   3. OCR pre text na činkách: [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) (Apache 2.0) – taktiež úplne zadarmo pre komerčné aplikácie. [3, 7] 
+
+Chcete pripraviť základnú schému architektúry postavenú čisto na týchto Apache 2.0 / MIT modeloch, aby sme mali istotu, že do aplikácie nepretečie žiadny AGPL kód?
+
+[1] [https://www.ayautomate.com](https://www.ayautomate.com/blog/free-ai-models-commercial-use)
+[2] [https://latitude.so](https://latitude.so/blog/how-to-check-llm-licenses-for-commercial-use)
+[3] [https://www.libreyolo.com](https://www.libreyolo.com/docs/models/mobilenetv4)
+[4] [https://github.com](https://github.com/Zehaos/MobileNet/blob/master/LICENSE)
+[5] [https://www.mindstudio.ai](https://www.mindstudio.ai/blog/gemma-4-apache-2-license-commercial-use)
+[6] [https://quickpose.ai](https://quickpose.ai/faqs/can-mediapipe-be-used-commercially/)
+[7] [https://github.com](https://github.com/google-ai-edge/mediapipe/blob/master/LICENSE)
+[8] [https://github.com](https://github.com/google-ai-edge/mediapipe/issues/4764)
+[9] [https://github.com](https://github.com/jiaowoguanren0615/MobileNetV4/blob/main/LICENSE)
+[10] [https://softwareengineering.stackexchange.com](https://softwareengineering.stackexchange.com/questions/134802/which-licenses-are-free-for-commercial-use)
+[11] [https://www.libreyolo.com](https://www.libreyolo.com/articles/yolo-commercial-license)
+[12] [https://playground.roboflow.com](https://playground.roboflow.com/models/ultralytics/yolov8)
+[13] [https://github.com](https://github.com/ultralytics/ultralytics/issues/7634)
+[14] [https://medium.com](https://medium.com/@bingbai.jp/yolo-model-licenses-a-developers-guide-da722767b6f8)
