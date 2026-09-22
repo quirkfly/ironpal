@@ -21,6 +21,102 @@ heads are deferred until v2 has produced the data they need.
 
 ---
 
+## A. The embedding in plain language
+
+> Written for the founder, who is new to neural-network design. It explains the one formula the rest
+> of the document is built on, before any of the engineering around it. Every term introduced here
+> in **bold** is used unchanged from §1 onward. §3 says the same things again, precisely, in tables.
+
+The formula at the centre of this design is one recipe plus one ruler:
+
+```
+EMBED(window) = [ video: MoViNet-A0-Stream pooled feature → whiten → 128-d ]
+              ⊕ [ pose:  MediaPipe Pose Lite → 8 geometric channels → stats → 48-d ]
+              ⊕ [ IMU:   the engine's window → 9 features + 32-bin spectrum → 41-d ]
+  each block L2-normalised; distance = Σ_m w_m · (1 − cos_m), w_m per candidate exercise
+```
+
+The **recipe** turns a few seconds of recorded set into a single fingerprint. The **ruler** says how
+far that fingerprint sits from one the user already labelled. Recognition is nothing more than
+running the recipe on live sensor data and asking the ruler which stored fingerprint is nearest.
+
+### A.1 The recipe: three blocks over one window
+
+`EMBED(window)` takes a **window**, roughly four seconds of synchronised video frames, pose landmarks
+and IMU samples, and returns one vector of 217 numbers. It is built from three independent blocks.
+The `⊕` is concatenation, so the blocks are stacked, never mixed.
+
+**Video, 128 numbers.** MoViNet-A0-Stream is a small video network Google trained to name 600
+everyday actions. We discard the final naming layer and keep the layer beneath it. That layer is a
+numeric summary of what kind of motion just happened, and it is far more general than the 600 labels
+it was trained to produce. **Pooled** means the network's grid of spatial responses is averaged down
+to one vector for the whole frame.
+
+**Whitening** is the step that makes that vector usable as a fingerprint, and it is worth
+understanding because the whole no-training claim rests on it. A feature trained for classification
+has a few directions that vary enormously across any footage, such as overall lighting and
+background clutter. Cosine distance treats every direction as equally important, so those loud
+directions would drown out the quiet ones that actually separate a curl from a raise. Whitening
+rescales each direction by how much it varies, removes the correlation between directions, and keeps
+the 128 most informative. It is fitted once from unlabelled footage, so it costs no training data.
+
+**Pose, 48 numbers.** MediaPipe finds body joints in each frame. We do not feed raw joint
+coordinates into anything. We compute eight human-meaningful measurements per frame, such as elbow
+angle and wrist height relative to the nose, each divided by shoulder width so body size cancels.
+Then each of those eight channels is summarised over the window by six statistics: mean, standard
+deviation, minimum, maximum, range and dominant period. Eight channels times six statistics is 48.
+Nothing here is learned. This block is the **discriminator**, because the video block knows "arm
+moving rhythmically" while this block knows "elbow swept through 110 degrees with the upper arm
+pinned".
+
+**IMU, 41 numbers.** The nine orientation-invariant features the engine already computes, plus a
+32-bin spectrum of the rep channel between 0.1 and 3 Hz. The spectrum is the cadence signature,
+which separates a slow grind from a bounce.
+
+### A.2 Why each block is normalised on its own
+
+**L2-normalising** a vector means dividing it by its own length, so it lands on the unit sphere with
+length 1. Done per block, it puts the three blocks on comparable footing even though they have
+different dimensions and different natural scales. It also makes the cosine of two blocks a plain
+dot product, which is cheap. The decisive reason is the next section: when a block is missing, the
+other two keep their meaning unchanged, because nothing was ever normalised jointly.
+
+### A.3 The ruler, and the part that matters most
+
+`cos` is cosine similarity, which is 1 when two vectors point the same way and falls toward 0 as they
+diverge. So `1 − cos` is a distance that starts at 0 for a perfect match. The sum runs over the three
+modalities.
+
+The subtle piece is `w_m(c)`. The weight depends on `c`, the **candidate exercise** being tested, not
+only on the recorded window. The same window is scored against a barbell squat using mostly video and
+pose, and against a kettlebell swing with the IMU counting fully. The weights come from the ontology,
+which already records for each of the 37 Tier-1 exercises whether the head moves and how visible the
+lift is from a headband camera.
+
+| Modality | Condition on the candidate | Weight |
+|---|---|---|
+| IMU | head moving | 1.00 |
+| IMU | head still | 0.15 |
+| Pose | lift visible | 1.00 |
+| Pose | partial | 0.60 |
+| Pose | occluded | 0.30 |
+| Video | always | 1.00 |
+
+That table is the fix for what sank the earlier matcher. Twenty-two of the 37 exercises are
+head-still, so for those the headband IMU carries almost no information, and any distance that
+weighted it equally was voting on noise.
+
+`a_m` is **availability**, either 1 or 0 for this particular window. An imported clip with no sensor
+data sets the IMU term to zero. A phone left in a pocket sets video and pose to zero. The surviving
+weights are renormalised to sum to 1, which keeps distances on the same scale no matter how many
+modalities were present. That is what lets a single reject threshold work across all of them.
+
+One consequence worth naming: because `w` depends on the candidate, this is a **scoring function per
+candidate**, not a distance metric. Comparing two fingerprints without saying which exercise you are
+asking about is not a defined operation here, and no part of the system does it.
+
+---
+
 ## 0. The goal, verbatim, and what it forces
 
 The end-user goal for the model, as stated:
@@ -126,6 +222,10 @@ sufficient in that regime:
 ---
 
 ## 3. Model anatomy
+
+> [§A](#a-the-embedding-in-plain-language) explains these three blocks and the distance in
+> plain language. This section is the precise version: the same decisions, with the numbers,
+> the vendor constraints and the reason each choice was made.
 
 ### 3.1 Video block — MoViNet-A0-Stream, frozen
 
