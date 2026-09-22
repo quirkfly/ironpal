@@ -1,6 +1,14 @@
 # IronPal Neural Model — Technical Design (IronPal-Net v1)
 
-**Status:** Draft v0.1 · 2026-09-17 — architecture proposal, not yet reviewed
+**Status:** Draft v0.1 · 2026-09-17 — architecture proposal; **roadmap, not the ship-first route**
+
+> **Read [`ironpal-neural-model-design-v2.md`](ironpal-neural-model-design-v2.md) first.** v2
+> (2026-09-22) is the training-free route that ships first: frozen MoViNet-A0-Stream + MediaPipe
+> Pose Lite + the IMU block, per-user embeddings enrolled from the labeling studio and matched by
+> weighted nearest-neighbour. This document (v1, IronPal-Net) is the trained escalation — the fusion
+> transformer, the learned heads and on-device personalisation — for when v2 has collected enough
+> labelled embeddings to train on. §A and §B remain the beginner's primer for both; the component
+> names shared with v2 (`EmbedModule`, `embed.ts`, the `embeddings` table) are defined in v2.
 **Owner:** founder (solo)
 **Supersedes:** the exercise-recognition half of
 [`ironpal-self-training-model-design.md`](ironpal-self-training-model-design.md) — its kNN + DTW
