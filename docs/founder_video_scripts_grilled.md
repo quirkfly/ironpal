@@ -1,6 +1,6 @@
 # Grilled — Founder video scripts (auto mode)
 
-Decisions resolved on **2026-09-25**, revised **2026-09-27** for the Flow structure (five clips, then eight for the 60 s window), against [`founder_video_scripts.md`](founder_video_scripts.md),
+Decisions resolved on **2026-09-25**, revised **2026-09-27** three times — for the Flow structure (five clips, then eight for the 60 s window), then rewritten to the comedy rubric — against [`founder_video_scripts.md`](founder_video_scripts.md),
 **without user interaction**: each question was posed and answered by walking the decision tree, one
 branch at a time, in order.
 
@@ -13,24 +13,24 @@ Provenance tags:
 - **OPEN** — not mine to settle (a public claim, a fact I cannot verify). Recommendation stated; the
   scripts stay conditional on it.
 
-**Tally: 41 questions — 25 EVIDENCE · 14 ASSUMED · 2 OPEN.**
+**Tally: 48 questions — 29 EVIDENCE · 16 ASSUMED · 3 OPEN.**
 
 **Worth a veto first:**
 
-1. **Q15 — the site says “Zero taps, ever” and the app asks for one confirming tap after the first
+1. **Q45 — seven joke lines are facts about Peter or his gym, not the product, and render only
+   with his yes.** ‘Three years, the receptionist still asks my name’; ‘eight companies’; the
+   tripods and the ceiling camera. Each is true or it is cut.
+2. **Q15 — the site says “Zero taps, ever” and the app asks for one confirming tap after the first
    sets.** The scripts side with the app and never say “zero taps”. The site copy is the founder’s
-   call; until it changes, the site and the videos disagree on one word.
-2. **Q27 — the band Peter wears in every generated clip carries no logo.** Logos float in generated
-   video and text renders as scribble, so the product’s mark appears only in the composited live
-   reveal. If the mark must be on his head in a talking clip, that clip has to be filmed.
-3. **Q32 — the gym is invented from words.** There is no photograph of Peter in a gym, so nothing
-   pins the room across five clips except the scene tokens. The first render will show whether
-   Flow holds it; the fix is one live still.
-4. **Q33 — geggen rotates personas by design; these need a fixed cast.** A small engine change, or
-   six hand-run refpack jobs. Either is a decision.
+   call.
+3. **Q27 — the band Peter wears in every generated clip carries no logo.** The product’s mark
+   appears only in the composited live reveal. If it must be on his head in a talking clip, that
+   clip has to be filmed.
+4. **Q32 — the gym is invented from words.** No photograph of Peter in a gym pins the room across
+   eight clips. The first render will show whether Flow holds it.
 5. **Q38 — the 60 s window rests on shots running at speech length, not the full 8 s slot.** If
-   the assembler pads clips, every script is 66.5 s. And Q34: 480 credits now, with no account
-   holding even 50 on the last count — render F1 alone first.
+   the assembler pads clips, every script is 66.5 s. And Q34: 480 credits, no account holding 50
+   on the last count — render F1 alone first.
 
 ---
 
@@ -362,3 +362,66 @@ correction-loop lines (“I fix it right there, and it learns from that”; “w
 so”) resolve to `learner.relabel` in the POC, which re-evaluates a corrected set and keeps it as an
 example, and to the reject rule in `ironpal-neural-model-design-v2.md` §5.3, where a low-confidence
 set is asked about rather than guessed. Both are added to the allowlist in §9 of the document.
+
+---
+
+## Branch H — Revision 4: genuinely funny (2026-09-27)
+
+### Q42 — Which comedy register?
+
+**EVIDENCE — geggen’s `comedic` register: lead with the joke.** `creative.py` `_COMEDY["comedic"]`:
+“This is a comedy piece that happens to sell something. If it isn’t funny it has failed. Build ONE
+joke across the whole promo … escalating beat to beat, landing on the last line.” The brief says
+“genuinely funny”; the `dry` register (“exhale through the nose, not laugh”) is the floor, not the
+target.
+
+### Q43 — One joke per script, or a joke per line?
+
+**EVIDENCE — one joke per script.** The rubric in both `_COMEDY` and `jokes.py`: “a joke is a
+PREMISE plus a PAYOFF across two beats, not a line”; “Do not write four unrelated quips.” Each
+script now states its premise in K1, escalates it through the middle clips and pays it on K8,
+which also carries the CTA. The document’s §0.1 table lists premise and punchline per script.
+
+### Q44 — Who is the target?
+
+**EVIDENCE — the situation and Peter himself; never the viewer, a group or a named competitor.**
+`jokes.py` `RUBRIC["safety"]` is a hard floor (`GATE_MIN`). The receptionist, the tripods, the
+mirrors and the ceiling camera are the gym; the elbow, the squat, the rounded-up reps and the
+eight companies are Peter. The Compare lines keep no brand names (Q16 stands).
+
+### Q45 — Lines that are jokes about Peter rather than claims about the product: who approves them?
+
+**OPEN — the founder, before render.** In geggen a joke’s wording is frozen in the brief and
+approved by a human at GATE 1; an unapproved joke “widens NOTHING and must pass the plain allowlist
+like any other line” (`jokes.py` `approved()`). Seven lines here are facts about Peter or his gym
+that the allowlist cannot cover — the receptionist and three years (F2 K8), “I’m bad at it”
+(F1 K1), “eight companies” (F5 K8), “nobody asked” (F5 K1), the tripods and ceiling camera (F4 K2,
+K8), “some I’d have left out” and “rounded up, generously” (F6 K1, K2). *Recommendation:* approve
+the ones that are true of him and strike the rest; a joke that is not true is the one kind the
+rubric forbids.
+
+### Q46 — Which premise per script?
+
+**ASSUMED — the six in the §0.1 table.** Each is the angle the script already had, turned into a
+claim about Peter that the product answers: logging as a fourth exercise he is bad at; the one
+thing at the gym that listened the first time; the worst guesser in a gym full of guessers; the only
+camera that deletes; the man who builds a tool for every problem; the complete log that flatters
+him less. No two share a premise (`jokes.py` `dedupe`: same premise is one joke used twice).
+*Against:* the premises are all self-deprecating. A sixth built on the world alone (the tripod
+guy, the gym’s own cameras) would vary the register.
+
+### Q47 — Does every line carry a joke?
+
+**ASSUMED — no; the honesty beats stay straight.** The rubric says each line should do both, but
+the weight hedge and the privacy spine are the two places where a joke reads as mocking the hedge
+— which is exactly what the claim guardrails exist to prevent. F4 K3, F2 K7, F3 K7 and F5 K7 are
+straight so the punchline has room and the hedges stay unmistakable.
+*Against:* a straight line is “a wasted line” by the rubric’s own words. Four of forty-eight is
+the price of the guardrails.
+
+### Q48 — Do the jokes claim anything the allowlist does not support?
+
+**EVIDENCE — no.** Every product statement inside a joke line resolves to §9: the band counts reps
+(F6 K8 uses reps, never a weight, for exactly this reason); one frame is deleted (F4 K8); no screen
+(F1 K4, F4 K5); levels are named Recon and Provisional (F4 K7, F6 K7). Where a line is only a
+joke, it asserts nothing about the product and is a `claim_refs: []` line under Q45.
