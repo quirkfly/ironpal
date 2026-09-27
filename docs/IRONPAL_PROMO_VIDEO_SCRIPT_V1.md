@@ -1,6 +1,6 @@
 # IronPal promo video — script V1: the opening pitch
 
-**Status:** V1 · 2026-09-27 — research and prompts delivered, **the line is not yet chosen**  
+**Status:** V1 · 2026-09-27 — **K1 line chosen (C)**; the character it needs is not minted yet  
 **Scope:** clip K1 only. The other seven clips are unchanged and live in [`founder_video_final.md`](founder_video_final.md).  
 **The six scripts this came from:** [`founder_video_scripts.md`](founder_video_scripts.md) · **the machine form:** [`founder_video_promo_config.json`](founder_video_promo_config.json) · **how to drive Flow:** [`founder_video_flow_runbook.md`](founder_video_flow_runbook.md)
 
@@ -45,7 +45,9 @@ Do not quote the fitness-app market. The 2026 estimates run from $9.1 bn to $22.
 | **E** | 13 | 6.4 s | 7.6 s | The fitness industry is worth a hundred and forty billion dollars. Every year. |
 | **F** | 14 | 6.9 s | 8.2 s **overruns** | Nearly two hundred million gym members. A hundred and forty billion dollars a year. |
 
-**Recommended: C — gyms plus trackers — fits a slow delivery.** It carries two figures rather than one, which is what makes it an argument instead of a statistic, it names fitness explicitly through “fitness trackers”, and it is one of the few that still fits if the delivery is slow. The tracker number is what earns K2: fifty billion dollars spent on things you strap on, and not one of them can tell you what you lifted.
+**CHOSEN 2026-09-27: C.**  “Gyms, a hundred and forty billion a year. Fitness trackers, fifty billion more.”
+
+**Why C — gyms plus trackers — fits a slow delivery.** It carries two figures rather than one, which is what makes it an argument instead of a statistic, it names fitness explicitly through “fitness trackers”, and it is one of the few that still fits if the delivery is slow. The tracker number is what earns K2: fifty billion dollars spent on things you strap on, and not one of them can tell you what you lifted.
 
 A note on the arithmetic, in case it is ever challenged. The two figures are **separate markets**, not a whole and its part — health clubs are $142.6 bn, fitness trackers are $51.3 bn alongside them. So “fifty billion more” is correct and “fifty billion of that” would not be. Do not add them into a single number either; the categories are drawn by different firms and the sum would be yours, not theirs.
 
@@ -120,7 +122,7 @@ Keep exactly that gym setting. Natural, healthy, realistic skin tone. Sharp and 
 
 Recorded, not yet applied. The committed config still holds the original eight clips.
 
-1. **K1 is replaced** by the chosen line above.
+1. **K1 is replaced** by option C: *“Gyms, a hundred and forty billion a year. Fitness trackers, fifty billion more.”* — 13 words, 7.6 s at a slow delivery.
 2. **K2 becomes the catch.** The old K2 (*“my thumb kept the log, badly, while three tripods filmed everyone else”*) is the same complaint at personal scale, so it is absorbed rather than kept: something like *“All of it still needs you to type the set in, or wear something ridiculous.”* Clip count stays at eight and the script stays inside 60 s.
 3. **K8’s punchline breaks and must be rewritten.** *“Six mirrors, three tripods, a ceiling camera. Mine’s the only one that deletes”* pays off tripods planted in the old K2. Remove those and the callback lands on nothing. The replacement has to pay off the new premise instead — the candidate is *“The smartest thing here is the one I forgot I was wearing.”* at 15 words, which answers both the AI framing and the cumbersome-device framing.
 4. **The register shifts.** The old opening put a person and an objection in the first second; this one opens on a category. Slower to grab, but it does the job the brief asks for — explaining the world before the product arrives.
@@ -129,7 +131,7 @@ Recorded, not yet applied. The committed config still holds the original eight c
 
 ## 6. Open — needs your decision before anything is written or rendered
 
-- **Which line.** B is recommended; any of the five fits.
+- ~~Which line.~~ **Settled: C.**
 - **The industry observations are not product claims.** *“Everyone still types”* and *“wear something ridiculous”* are statements about the market, outside the claims allowlist, the same way the tripods were. None names a competitor, which keeps them safe, but they need your yes.
 - **The revenue figures go on the record.** Quoting a market size in a founder video is a claim about the world; the rounding rules in §1 are there to keep it defensible.
 - **K8’s new punchline**, once K2 is settled.
