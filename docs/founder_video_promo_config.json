@@ -1,0 +1,425 @@
+{
+  "video_id": "ironpal-camera-on-my-head",
+  "product_id": "ironpal",
+  "product_name": "IronPal",
+  "language": "en",
+  "angle": "The founder answers the objection first: yes, there is a camera on his head, and here is exactly what it sends. The joke is that the gym is already full of cameras and his is the only one that deletes anything.",
+  "output": "runs/ironpal-camera-on-my-head/master.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "transition": {
+    "type": "cut",
+    "duration": 0.0
+  },
+  "structure_signature": "F4|hook:full,old_way:pip,device:cutaway,stays:pip,goes:cutaway,worn:pip,progress:pip,close:full,cta:card|cut|long|end:card|caps:kinetic|music:off",
+  "holding": "none",
+  "scene_tokens": "a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm",
+  "flow_account": null,
+  "flow_project_title": "ironpal-founder-1",
+  "variant": {
+    "id": "F4",
+    "name": "Yes, there’s a camera on my head",
+    "length_bucket": "long",
+    "transitions": [
+      "cut"
+    ],
+    "end_treatment": "card",
+    "arc": "The objection is owned in the first clip, the gym's existing cameras are the premise, the device and what it does and does not send are the middle, and the last line pays the premise with the privacy fact.",
+    "beats": [
+      {
+        "beat": "hook",
+        "layout": "full",
+        "options": {},
+        "clip": "K1",
+        "cast_slot": "founder"
+      },
+      {
+        "beat": "old_way",
+        "layout": "pip",
+        "options": {
+          "pip_pos": "lower-right"
+        },
+        "clip": "K2",
+        "cast_slot": "founder",
+        "segment": "old_log_typing"
+      },
+      {
+        "beat": "the_device",
+        "layout": "cutaway",
+        "options": {
+          "head_seconds": 1.2
+        },
+        "clip": "K3",
+        "cast_slot": "founder",
+        "segments": [
+          "reveal",
+          "band_in_hand"
+        ]
+      },
+      {
+        "beat": "what_stays",
+        "layout": "pip",
+        "options": {
+          "pip_pos": "lower-right"
+        },
+        "clip": "K4",
+        "cast_slot": "founder",
+        "segment": "hud_live_set"
+      },
+      {
+        "beat": "what_goes",
+        "layout": "cutaway",
+        "options": {
+          "head_seconds": 1.8
+        },
+        "clip": "K5",
+        "cast_slot": "founder",
+        "segment": "frame_privacy"
+      },
+      {
+        "beat": "worn",
+        "layout": "pip",
+        "options": {
+          "pip_pos": "lower-right"
+        },
+        "clip": "K6",
+        "cast_slot": "founder",
+        "segments": [
+          "worn_male",
+          "debrief_confirm"
+        ]
+      },
+      {
+        "beat": "progress",
+        "layout": "pip",
+        "options": {
+          "pip_pos": "lower-right"
+        },
+        "clip": "K7",
+        "cast_slot": "founder",
+        "segment": "levels_progress"
+      },
+      {
+        "beat": "close",
+        "layout": "full",
+        "options": {},
+        "clip": "K8",
+        "cast_slot": "founder"
+      },
+      {
+        "beat": "cta",
+        "layout": "card",
+        "options": {},
+        "clip": null,
+        "cast_slot": null
+      }
+    ]
+  },
+  "concept": {
+    "interaction": "solo",
+    "cast": [
+      {
+        "slot": "founder",
+        "role": "the founder of the product, playing himself",
+        "relationship": "speaks to camera"
+      }
+    ],
+    "scenario": "The founder is between sets in his own gym, wearing the band, answering the question everyone asks him about it.",
+    "product_placement": "worn on his head in every clip; the real product footage and stills are composited by layout",
+    "invented_by": "human"
+  },
+  "characters": [
+    {
+      "slot": "founder",
+      "display_name": "Peter",
+      "gender": "man",
+      "age_years": 46,
+      "is_customer": false,
+      "wardrobe": "a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side",
+      "persona": "a lean, athletic 46-year-old White man with a closely shaved head, light stubble with a moustache and a short greying chin beard, fair skin, defined shoulders and arms; calm, a slight dry smile; natural HEALTHY skin tone with realistic warmth and subsurface detail (NOT grey, NOT pale-green, NOT gaunt, NOT waxy or zombie-like), a real photorealistic human face",
+      "portrait_prompt": "Photorealistic portrait of Peter, a lean, athletic 46-year-old White man with a closely shaved head, light stubble with a moustache and a short greying chin beard, fair skin, defined shoulders and arms; calm, a slight dry smile; natural HEALTHY skin tone with realistic warmth and subsurface detail (NOT grey, NOT pale-green, NOT gaunt, NOT waxy or zombie-like), a real photorealistic human face, wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side. Plain warm-grey wall behind him, soft natural daylight from a window, sharp focus on the face, shot on a 50mm lens.",
+      "reference_photo": "products/ironpal/reference/peter_01_tanktop_x4.png",
+      "reference_photos": [
+        "products/ironpal/reference/peter_face_colour_x4.png"
+      ],
+      "seed": 960091
+    }
+  ],
+  "flow_cast": [
+    {
+      "character": "Peter",
+      "lead": true,
+      "portrait": "products/ironpal/reference/peter_01_tanktop_x4.png",
+      "body": "products/ironpal/reference/peter_face_colour_x4.png",
+      "description": "a lean, athletic 46-year-old White man with a closely shaved head, light stubble with a moustache and a short greying chin beard, fair skin, defined shoulders and arms; calm, a slight dry smile; natural HEALTHY skin tone with realistic warmth and subsurface detail (NOT grey, NOT pale-green, NOT gaunt, NOT waxy or zombie-like), a real photorealistic human face",
+      "scene": "a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm"
+    }
+  ],
+  "clips": [
+    {
+      "id": "K1",
+      "cast_slot": "founder",
+      "action": "stands on the gym floor between sets, squared to camera, calm, with a slight dry smile",
+      "vo": "Yes, there’s a camera on my head at the gym. Here’s exactly what it sends.",
+      "claim_refs": [
+        0,
+        7
+      ],
+      "seed": 8717,
+      "caption": "Yes, there’s a camera on my head at the gym. Here’s exactly what it sends.",
+      "reference_images": {
+        "references": [
+          {
+            "role": "identity_anchor",
+            "file": "products/ironpal/reference/peter_01_tanktop_x4.png",
+            "why": "the clearest facial structure available; see that directory's README"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K2",
+      "cast_slot": "founder",
+      "action": "sits on the flat bench, shoulders down, deadpan, delivering it in three short beats",
+      "vo": "Before, my thumb kept the log, badly, while three tripods filmed everyone else.",
+      "claim_refs": [
+        2
+      ],
+      "seed": 16434,
+      "caption": "Before, my thumb kept the log, badly, while three tripods filmed everyone else.",
+      "reference_images": {
+        "references": [
+          {
+            "role": "identity_anchor",
+            "file": "products/ironpal/reference/peter_01_tanktop_x4.png",
+            "why": "the clearest facial structure available; see that directory's README"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K3",
+      "cast_slot": "founder",
+      "action": "stands at the dumbbell rack, matter-of-fact, explaining something simple",
+      "vo": "It’s a headband. Fabric, a pea-sized lens, one teal light. That’s the whole device.",
+      "claim_refs": [
+        6
+      ],
+      "seed": 24151,
+      "caption": "It’s a headband. Fabric, a pea-sized lens, one teal light. That’s the whole device.",
+      "reference_images": {
+        "references": [
+          {
+            "role": "identity_anchor",
+            "file": "products/ironpal/reference/peter_01_tanktop_x4.png",
+            "why": "the clearest facial structure available; see that directory's README"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K4",
+      "cast_slot": "founder",
+      "action": "stands at the rack, precise and level, in no hurry",
+      "vo": "Reps and exercise are detected on the band, offline. That part never leaves.",
+      "claim_refs": [
+        3
+      ],
+      "seed": 31868,
+      "caption": "Reps and exercise are detected on the band, offline. That part never leaves.",
+      "reference_images": {
+        "references": [
+          {
+            "role": "identity_anchor",
+            "file": "products/ironpal/reference/peter_01_tanktop_x4.png",
+            "why": "the clearest facial structure available; see that directory's README"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K5",
+      "cast_slot": "founder",
+      "action": "leans back against the rack, calm, laying it out plainly",
+      "vo": "Reading the weight sends one frame, processed in seconds, deleted. My form was in it. Good.",
+      "claim_refs": [
+        4,
+        5
+      ],
+      "seed": 39585,
+      "caption": "Reading the weight sends one frame, processed in seconds, deleted. My form was in it. Good.",
+      "reference_images": {
+        "references": [
+          {
+            "role": "identity_anchor",
+            "file": "products/ironpal/reference/peter_01_tanktop_x4.png",
+            "why": "the clearest facial structure available; see that directory's README"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K6",
+      "cast_slot": "founder",
+      "action": "stands at the rack, easy and unbothered, with one small nod of the head",
+      "vo": "You lift with it on. After the set, one question, one tap. Ideal.",
+      "claim_refs": [
+        0,
+        9
+      ],
+      "seed": 47302,
+      "caption": "You lift with it on. After the set, one question, one tap. Ideal.",
+      "reference_images": {
+        "references": [
+          {
+            "role": "identity_anchor",
+            "file": "products/ironpal/reference/peter_01_tanktop_x4.png",
+            "why": "the clearest facial structure available; see that directory's README"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K7",
+      "cast_slot": "founder",
+      "action": "sits on the bench between sets, unhurried and quietly pleased",
+      "vo": "I train, the set is logged, each exercise earns its level. My deadlift is Provisional.",
+      "claim_refs": [
+        1,
+        10
+      ],
+      "seed": 55019,
+      "caption": "I train, the set is logged, each exercise earns its level. My deadlift is Provisional.",
+      "reference_images": {
+        "references": [
+          {
+            "role": "identity_anchor",
+            "file": "products/ironpal/reference/peter_01_tanktop_x4.png",
+            "why": "the clearest facial structure available; see that directory's README"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K8",
+      "cast_slot": "founder",
+      "action": "stands back on the gym floor, framed as in the first clip, lands the last line and holds the look",
+      "vo": "Six mirrors, three tripods, a ceiling camera. Mine’s the only one that deletes. Reserve a spot.",
+      "claim_refs": [
+        5,
+        11
+      ],
+      "seed": 62736,
+      "caption": "Six mirrors, three tripods, a ceiling camera. Mine’s the only one that deletes. Reserve a spot.",
+      "reference_images": {
+        "references": [
+          {
+            "role": "identity_anchor",
+            "file": "products/ironpal/reference/peter_01_tanktop_x4.png",
+            "why": "the clearest facial structure available; see that directory's README"
+          }
+        ]
+      }
+    }
+  ],
+  "segments": {
+    "old_log_typing": {
+      "_status": "TO RECORD",
+      "shows": "a generic manual workout log being thumb-typed: exercise picked from a menu, 3 by 8, 80 entered",
+      "source": null,
+      "_note": "Burgundy on charcoal, its own layout. Never a Fitbod screenshot and never the name — docs/video-production-execution-plan.md lines 68-76."
+    },
+    "hud_live_set": {
+      "_status": "TO RECORD",
+      "shows": "the POC live HUD during a real set: exercise name and rep count",
+      "source": null,
+      "_note": "poc/mobile LiveHudScreen on the A52. Money frame in the first 2.5s: start recording as the gate opens."
+    },
+    "debrief_confirm": {
+      "_status": "TO RECORD",
+      "shows": "the post-set debrief proposing exercise, reps and weight, ending on ALL CORRECT — SAVE",
+      "source": null
+    },
+    "levels_progress": {
+      "_status": "TO RECORD",
+      "shows": "per-exercise level progress on the campaign screen",
+      "source": null,
+      "_note": "Start on the exercise furthest along."
+    },
+    "frame_privacy": {
+      "_status": "TO BUILD",
+      "shows": "one frame leaving the band, a seconds counter, the frame dissolving",
+      "source": null,
+      "_note": "Motion graphic built from the product still; carries no UI claim."
+    },
+    "reveal": {
+      "_status": "HAVE",
+      "shows": "the real fabric band lifted out of a gym bag on a gym floor",
+      "source": "../ironpal/web/public/assets/reveal.mp4",
+      "start": 0.0,
+      "end": 4.0,
+      "_note": "The only footage of the physical band. It is UNBRANDED — frame-checked at six points; no ring, no LED."
+    },
+    "band_in_hand": {
+      "_status": "HAVE",
+      "shows": "the branded band held over the open bag: ring, wordmark, lit LED, teal stripe",
+      "source": "../ironpal/input/kickstarter/storyboarding/S3/selected.jpg",
+      "_note": "A still. Cut straight after the reveal so the logo lands in the same beat."
+    },
+    "worn_male": {
+      "_status": "HAVE",
+      "shows": "an athlete bench-pressing with the band on, the lockup legible",
+      "source": "../ironpal/web/public/assets/worn-headband-male.jpg",
+      "_note": "The site's own gallery image. NOT Peter — used only under 'you', never under 'I'."
+    }
+  },
+  "end_card": {
+    "lines": [
+      "A camera on your head. Handled honestly."
+    ],
+    "url": "ironpal.co",
+    "seconds": 2.5,
+    "accent": "#00E5CC"
+  },
+  "claims_allowlist": [
+    "IronPal is a headband that watches your set from your point of view and logs the exercise, your reps and the weight.",
+    "You type nothing; the log fills itself in.",
+    "The old way is thumb-typing sets into a phone between sets, and the numbers get fudged or skipped.",
+    "Reps and exercise recognition run on the band itself, offline, and never leave it.",
+    "Reading the weight sends a single frame off-device; it is processed in seconds and deleted immediately.",
+    "IronPal does not store your footage.",
+    "The band has an 8 mm flush camera lens, a single teal LED and no screen.",
+    "It is a first-person view: it sees what you see.",
+    "Reading arbitrary free weights from a first-person camera is the hard problem being built, not a finished or guaranteed feature.",
+    "After a set the app proposes the exercise, reps and weight, and one tap confirms it.",
+    "Each exercise accumulates clean sets and earns a level: Recon, then Provisional, then Certified.",
+    "IronPal is pre-launch; reserving early-bird access costs nothing today and locks the price and a 48-hour head start.",
+    "Early-bird is up to about 50% off the launch price, limited to the first 200 spots.",
+    "IronPal is built in the open by a solo founder.",
+    "ironpal.co is where you reserve a spot."
+  ],
+  "targets": [
+    "youtube",
+    "tiktok"
+  ],
+  "_source_of_truth": "../ironpal/docs/founder_video_final.md — the script; this file is its machine form.",
+  "_caps_asserted": {
+    "words_per_clip_max": 16,
+    "words_total_max": 117,
+    "words_per_clip": [
+      15,
+      13,
+      14,
+      13,
+      16,
+      13,
+      15,
+      16
+    ],
+    "words_total": 115,
+    "speech_seconds_est": 56.4,
+    "with_card_seconds_est": 58.9,
+    "wps_measured_on": "handlr-eve-11, four rendered beats"
+  }
+}

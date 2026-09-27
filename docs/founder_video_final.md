@@ -50,7 +50,8 @@ The generated clips are where the band has to be prominent, and it is the hard p
 
 - **Wardrobe belongs to the character and is stated in every prompt.** So the band is part of Peter’s outfit in all eight clips, described once, identically. The description below is the canonical one from `docs/body-mounted-image-prompts-updated.md` (the printed-headband spec, lines 587 and 620) condensed to a wardrobe clause.
 - **No letters in a generated frame.** The pipeline’s first instruction bans writing, and the Kling runs showed why: text on a moving band renders as scribble. So the band Peter wears carries the **teal ring icon only**, never the wordmark. The prop-branding plan already made the same call for the physical band: “a take never fails on the wordmark alone — icon is the priority.” The full lockup appears in the composited stills.
-- **Give Flow the picture, not just the words.** The character is minted from Peter’s photographs; the band should be an **ingredient** too: upload `headband-hero.jpg` as a second reference named *IronPal headband* and refer to it by that name in the prompt. Flow’s reference-to-video path takes more than one reference; geggen’s cast stage holds one character per slot and does not attach an object today, so this is either one manual step in Flow or a small engine change (ledger Q51).
+- **The band arrives through the minted character, not through a second reference.** Measured in the code: a clip carries exactly one reference photograph (`cast.py _reference_for`, `flow_client.generate_clip`), so there is no slot for a product image. What there is instead is better — `mint_character` is passed the character’s **wardrobe**, so the band is generated onto Peter once, at mint time, and every clip resolves against that character. The wardrobe clause is therefore the whole mechanism, and it is free to test: minting costs no credits.
+- **No hands, no props, no gestures — the pipeline forbids them and a dry run proved it.** Building the real prompts from the config showed the first draft’s stage directions (touching the band, taking it off, holding it up) sitting inside a clause that reads *“their hands are empty … they never pick anything up … hands stay relaxed and still”*. The actions are now posture and expression only. The band does not need a gesture to be prominent: it is on his head, and five of the eight clips are close-ups.
 
 **Wardrobe clause, verbatim in every prompt:**
 
@@ -81,160 +82,112 @@ K7 0:48.0–0:56.0  K8 0:56.0–1:04.0  CARD 1:04.0–1:06.5
 > **Peter:** “Yes, there’s a camera on my head at the gym. Here’s exactly what it sends.”
 
 - **layout:** `full` · options: —
-- **action:** Peter stands on the gym floor between sets, squared to camera, and touches the band on his forehead once.
+- **action:** Peter stands on the gym floor between sets, squared to camera, calm, with a slight dry smile.
 - **product on screen:** the band on Peter, full frame
 - **band in the generated clip:** on his forehead, full body
 
 **Why:** The objection, owned in the first second, and the product on his head from the first frame — that is why this script and not the others. Full body, but he is close enough that the band reads.
 
-<details><summary>Paste-ready Flow prompt (the short form; the pipeline composes the long form from the same parts)</summary>
-
-```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter stands on the gym floor between sets, squared to camera, and touches the band on his forehead once in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Full body, standing back from camera, the whole figure and the band on his forehead clearly visible. He faces the camera and delivers the line straight to camera, eyes on the lens. He is wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side — the exact same outfit in every shot. He is alone in the shot. Natural, healthy, photorealistic skin. His clothing is plain, with nothing clipped or attached to it, and nothing worn in or over his ears; no screens, phones or devices anywhere. Audio: one clear man’s voice, lip-synced to him, spoken at a natural conversational pace with genuine expression, one single take: “Yes, there’s a camera on my head at the gym. Here’s exactly what it sends.” Those words are spoken aloud only — they are audio, not a caption; do not write or display them anywhere in the picture. Say the line exactly once and stop.
-```
-
-</details>
+- **Flow prompt:** composed by `pipeline/promo/cast.py build_prompt` from the action, the layout’s framing, the wardrobe and the scene. Verified to build at 3306 characters with the band clause present and no duplicated name.
 
 ### K2 · old way · 0:08.0–0:16.0 · 13 words ≈ 6.4 s
 
 > **Peter:** “Before, my thumb kept the log, badly, while three tripods filmed everyone else.”
 
 - **layout:** `pip` · options: pip_pos: lower-right
-- **action:** Peter sits on the flat bench, deadpan, three short beats, the band on.
+- **action:** Peter sits on the flat bench, shoulders down, deadpan, delivering it in three short beats.
 - **product on screen (composited):**
   - `old_log_typing` — (new recording)
-- **band in the generated clip:** on his forehead in the close-up
+- **band in the generated clip:** on his forehead, in frame throughout the close-up
 
 **Why:** The before, and the premise: the gym was already full of cameras. The manual log fills the frame; Peter is a corner close-up, band in shot.
 
-<details><summary>Paste-ready Flow prompt (the short form; the pipeline composes the long form from the same parts)</summary>
-
-```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter sits on the flat bench, deadpan, three short beats, the band on in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Tight head-and-shoulders close-up, face filling the frame, the band on his forehead fully in shot, plain background. He faces the camera and delivers the line straight to camera, eyes on the lens. He is wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side — the exact same outfit in every shot. He is alone in the shot. Natural, healthy, photorealistic skin. His clothing is plain, with nothing clipped or attached to it, and nothing worn in or over his ears; no screens, phones or devices anywhere. Audio: one clear man’s voice, lip-synced to him, spoken at a natural conversational pace with genuine expression, one single take: “Before, my thumb kept the log, badly, while three tripods filmed everyone else.” Those words are spoken aloud only — they are audio, not a caption; do not write or display them anywhere in the picture. Say the line exactly once and stop.
-```
-
-</details>
+- **Flow prompt:** composed by `pipeline/promo/cast.py build_prompt` from the action, the layout’s framing, the wardrobe and the scene. Verified to build at 3330 characters with the band clause present and no duplicated name.
 
 ### K3 · the device · 0:16.0–0:24.0 · 14 words ≈ 6.9 s
 
 > **Peter:** “It’s a headband. Fabric, a pea-sized lens, one teal light. That’s the whole device.”
 
 - **layout:** `cutaway` · options: head_seconds: 1.2
-- **action:** Peter takes the band off, holds it up at chest height for a moment, then puts it back on.
+- **action:** Peter stands at the dumbbell rack, matter-of-fact, explaining something simple.
 - **product on screen (composited):**
   - `reveal` — web/public/assets/reveal.mp4
   - `band_in_hand` — input/kickstarter/storyboarding/S3/selected.jpg
-- **band in the generated clip:** in his hands, then back on
+- **band in the generated clip:** on his forehead, in frame throughout the close-up
 
-**Why:** 1.2 s of Peter with the band in his hands, then the real reveal footage takes the frame under his voice, then the branded still that carries the logo the footage lacks. The site’s Hardware section: 8 mm lens, one teal LED, no screen. This is the one clip where Peter holds anything — the pipeline’s most common rejection is a held prop that vanishes between frames — so the head is the shortest allowed (1.2 s) and the vision gate checks the band is in his hands for all of it; if it fails twice, the action becomes a touch on the forehead and the footage carries the rest.
+**Why:** 1.2 s of Peter with the band on his head, then the real reveal footage takes the frame under his voice, then the branded still that carries the logo the footage lacks. The site’s Hardware section: 8 mm lens, one teal LED, no screen. He does not hold the band: the pipeline’s prompt forbids a held prop and empty, still hands in the same breath, and a dry run showed the action contradicting the clause it sits inside. The footage does the showing.
 
-<details><summary>Paste-ready Flow prompt (the short form; the pipeline composes the long form from the same parts)</summary>
-
-```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter takes the band off, holds it up at chest height for a moment, then puts it back on in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Medium waist-up shot, upper body and face clearly in frame, the band in his hands and clearly visible before it goes back on his forehead. He faces the camera and delivers the line straight to camera, eyes on the lens. He is wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side — the exact same outfit in every shot. He is alone in the shot. Natural, healthy, photorealistic skin. His clothing is plain, with nothing clipped or attached to it, and nothing worn in or over his ears; no screens, phones or devices anywhere. Audio: one clear man’s voice, lip-synced to him, spoken at a natural conversational pace with genuine expression, one single take: “It’s a headband. Fabric, a pea-sized lens, one teal light. That’s the whole device.” Those words are spoken aloud only — they are audio, not a caption; do not write or display them anywhere in the picture. Say the line exactly once and stop.
-```
-
-</details>
+- **Flow prompt:** composed by `pipeline/promo/cast.py build_prompt` from the action, the layout’s framing, the wardrobe and the scene. Verified to build at 3342 characters with the band clause present and no duplicated name.
 
 ### K4 · what stays · 0:24.0–0:32.0 · 13 words ≈ 6.4 s
 
 > **Peter:** “Reps and exercise are detected on the band, offline. That part never leaves.”
 
 - **layout:** `pip` · options: pip_pos: lower-right
-- **action:** Peter stands at the rack, precise, one hand flat as if to say: this part, here.
+- **action:** Peter stands at the rack, precise and level, in no hurry.
 - **product on screen (composited):**
   - `hud_live_set` — (POC recording)
-- **band in the generated clip:** on his forehead in the close-up
+- **band in the generated clip:** on his forehead, in frame throughout the close-up
 
 **Why:** Scoped precisely. The live HUD is real; Peter is a corner close-up, band in shot. Straight line — the privacy spine is not joked with.
 
-<details><summary>Paste-ready Flow prompt (the short form; the pipeline composes the long form from the same parts)</summary>
-
-```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter stands at the rack, precise, one hand flat as if to say: this part, here in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Tight head-and-shoulders close-up, face filling the frame, the band on his forehead fully in shot, plain background. He faces the camera and delivers the line straight to camera, eyes on the lens. He is wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side — the exact same outfit in every shot. He is alone in the shot. Natural, healthy, photorealistic skin. His clothing is plain, with nothing clipped or attached to it, and nothing worn in or over his ears; no screens, phones or devices anywhere. Audio: one clear man’s voice, lip-synced to him, spoken at a natural conversational pace with genuine expression, one single take: “Reps and exercise are detected on the band, offline. That part never leaves.” Those words are spoken aloud only — they are audio, not a caption; do not write or display them anywhere in the picture. Say the line exactly once and stop.
-```
-
-</details>
+- **Flow prompt:** composed by `pipeline/promo/cast.py build_prompt` from the action, the layout’s framing, the wardrobe and the scene. Verified to build at 3294 characters with the band clause present and no duplicated name.
 
 ### K5 · what goes · 0:32.0–0:40.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “Reading the weight sends one frame, processed in seconds, deleted. My form was in it. Good.”
 
 - **layout:** `cutaway` · options: head_seconds: 1.8
-- **action:** Peter leans on the rack, calm, laying it out plainly.
+- **action:** Peter leans back against the rack, calm, laying it out plainly.
 - **product on screen (composited):**
   - `frame_privacy` — (motion graphic)
-- **band in the generated clip:** on his forehead in the close-up
+- **band in the generated clip:** on his forehead, in frame throughout the close-up
 
 **Why:** The Privacy section in spirit, then relief that the evidence of his form is gone. The graphic shows one frame leaving the band drawn from the hero still. No face-blurring claim.
 
-<details><summary>Paste-ready Flow prompt (the short form; the pipeline composes the long form from the same parts)</summary>
-
-```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter leans on the rack, calm, laying it out plainly in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Medium waist-up shot, upper body and face clearly in frame, the band on his forehead clearly visible. He faces the camera and delivers the line straight to camera, eyes on the lens. He is wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side — the exact same outfit in every shot. He is alone in the shot. Natural, healthy, photorealistic skin. His clothing is plain, with nothing clipped or attached to it, and nothing worn in or over his ears; no screens, phones or devices anywhere. Audio: one clear man’s voice, lip-synced to him, spoken at a natural conversational pace with genuine expression, one single take: “Reading the weight sends one frame, processed in seconds, deleted. My form was in it. Good.” Those words are spoken aloud only — they are audio, not a caption; do not write or display them anywhere in the picture. Say the line exactly once and stop.
-```
-
-</details>
+- **Flow prompt:** composed by `pipeline/promo/cast.py build_prompt` from the action, the layout’s framing, the wardrobe and the scene. Verified to build at 3334 characters with the band clause present and no duplicated name.
 
 ### K6 · worn · 0:40.0–0:48.0 · 13 words ≈ 6.4 s
 
 > **Peter:** “You lift with it on. After the set, one question, one tap. Ideal.”
 
 - **layout:** `pip` · options: pip_pos: lower-right
-- **action:** Peter stands at the rack, explaining something simple, one small nod.
+- **action:** Peter stands at the rack, easy and unbothered, with one small nod of the head.
 - **product on screen (composited):**
   - `worn_male` — web/public/assets/worn-headband-male.jpg
   - `debrief_confirm` — (POC recording)
-- **band in the generated clip:** on his forehead in the close-up
+- **band in the generated clip:** on his forehead, in frame throughout the close-up
 
 **Why:** The band on an athlete mid-press fills the frame for the first half, the real debrief for the second; ‘Ideal’ is the character. The athlete is not Peter — it is the site’s own gallery image, used as product imagery under ‘you’.
 
-<details><summary>Paste-ready Flow prompt (the short form; the pipeline composes the long form from the same parts)</summary>
-
-```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter stands at the rack, explaining something simple, one small nod in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Tight head-and-shoulders close-up, face filling the frame, the band on his forehead fully in shot, plain background. He faces the camera and delivers the line straight to camera, eyes on the lens. He is wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side — the exact same outfit in every shot. He is alone in the shot. Natural, healthy, photorealistic skin. His clothing is plain, with nothing clipped or attached to it, and nothing worn in or over his ears; no screens, phones or devices anywhere. Audio: one clear man’s voice, lip-synced to him, spoken at a natural conversational pace with genuine expression, one single take: “You lift with it on. After the set, one question, one tap. Ideal.” Those words are spoken aloud only — they are audio, not a caption; do not write or display them anywhere in the picture. Say the line exactly once and stop.
-```
-
-</details>
+- **Flow prompt:** composed by `pipeline/promo/cast.py build_prompt` from the action, the layout’s framing, the wardrobe and the scene. Verified to build at 3304 characters with the band clause present and no duplicated name.
 
 ### K7 · progress · 0:48.0–0:56.0 · 15 words ≈ 7.4 s
 
 > **Peter:** “I train, the set is logged, each exercise earns its level. My deadlift is Provisional.”
 
 - **layout:** `pip` · options: pip_pos: lower-right
-- **action:** Peter sits on the bench, unhurried, watching something add up.
+- **action:** Peter sits on the bench between sets, unhurried and quietly pleased.
 - **product on screen (composited):**
   - `levels_progress` — (POC recording)
-- **band in the generated clip:** on his forehead in the close-up
+- **band in the generated clip:** on his forehead, in frame throughout the close-up
 
 **Why:** Levels are real; a real level name as a verdict on himself. Corner close-up, band in shot.
 
-<details><summary>Paste-ready Flow prompt (the short form; the pipeline composes the long form from the same parts)</summary>
-
-```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter sits on the bench, unhurried, watching something add up in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Tight head-and-shoulders close-up, face filling the frame, the band on his forehead fully in shot, plain background. He faces the camera and delivers the line straight to camera, eyes on the lens. He is wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side — the exact same outfit in every shot. He is alone in the shot. Natural, healthy, photorealistic skin. His clothing is plain, with nothing clipped or attached to it, and nothing worn in or over his ears; no screens, phones or devices anywhere. Audio: one clear man’s voice, lip-synced to him, spoken at a natural conversational pace with genuine expression, one single take: “I train, the set is logged, each exercise earns its level. My deadlift is Provisional.” Those words are spoken aloud only — they are audio, not a caption; do not write or display them anywhere in the picture. Say the line exactly once and stop.
-```
-
-</details>
+- **Flow prompt:** composed by `pipeline/promo/cast.py build_prompt` from the action, the layout’s framing, the wardrobe and the scene. Verified to build at 3315 characters with the band clause present and no duplicated name.
 
 ### K8 · close · 0:56.0–1:04.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “Six mirrors, three tripods, a ceiling camera. Mine’s the only one that deletes. Reserve a spot.”
 
 - **layout:** `full` · options: —
-- **action:** Peter back on the gym floor, framed as in the first clip, lands the last line and holds the look, then taps the band once.
+- **action:** Peter stands back on the gym floor, framed as in the first clip, lands the last line and holds the look.
 - **product on screen:** the band on Peter, full frame
 - **band in the generated clip:** on his forehead, full body
 
 **Why:** The punchline pays K2 and restates the privacy fact in the same breath. Full frame, rhyming with K1, ending on the band.
 
-<details><summary>Paste-ready Flow prompt (the short form; the pipeline composes the long form from the same parts)</summary>
-
-```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter back on the gym floor, framed as in the first clip, lands the last line and holds the look, then taps the band once in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Full body, standing back from camera, the whole figure and the band on his forehead clearly visible. He faces the camera and delivers the line straight to camera, eyes on the lens. He is wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side — the exact same outfit in every shot. He is alone in the shot. Natural, healthy, photorealistic skin. His clothing is plain, with nothing clipped or attached to it, and nothing worn in or over his ears; no screens, phones or devices anywhere. Audio: one clear man’s voice, lip-synced to him, spoken at a natural conversational pace with genuine expression, one single take: “Six mirrors, three tripods, a ceiling camera. Mine’s the only one that deletes. Reserve a spot.” Those words are spoken aloud only — they are audio, not a caption; do not write or display them anywhere in the picture. Say the line exactly once and stop.
-```
-
-</details>
+- **Flow prompt:** composed by `pipeline/promo/cast.py build_prompt` from the action, the layout’s framing, the wardrobe and the scene. Verified to build at 3338 characters with the band clause present and no duplicated name.
 
 ### CARD · 1:04.0–1:06.5 · no VO
 
@@ -265,4 +218,79 @@ The pipeline’s card is text on the brand colour. If the engine gains a backgro
 - **The reveal clip has no logo on the band.** If the logo must be visible on the real, moving band, that is the physical-prop re-shoot from `s3-physical-prop-branding-plan.md`, and the brief said no time and no budget. The branded still directly after it is the compromise; it is recorded as open in the ledger.
 - **Two stills show a man who is not Peter** (`worn_male`, `hero_bench`). They appear only under ‘you lift with it on’, the way the site itself uses them. If that reads as a cheat next to the founder, replace K6’s first half with `worn_neck` or with the reveal again.
 - **K3 is the only clip where Peter holds the band**, and a held object is the pipeline’s most common rejection. The head is 1.2 s for that reason; two failed rolls and the hold becomes a touch.
+
+---
+
+## 7. Production — the geggen pipeline, wired and waiting on one login
+
+The handlr process, applied. Everything that costs nothing is built and verified; the render is blocked on a Google sign-in only you can do.
+
+### 7.1 What is in place
+
+| what | where | state |
+|---|---|---|
+| product entry | `../geggen/products/ironpal.json` | written. Cast is **fixed** to the founder rather than a rotating persona; `holding: none`; accent `#00E5CC`; the avoid-list carries the claim guardrails. |
+| identity references | `../geggen/products/ironpal/reference/` | four of Peter’s photographs copied from the handlr refpack with a README recording provenance and the quality ceiling. The anchor is the B&W tank-top portrait. |
+| the config | [`founder_video_promo_config.json`](founder_video_promo_config.json), mirrored to `../geggen/runs/ironpal-camera-on-my-head/promo_config.json` | the machine form of §4: eight clips, nine beats, the cast, the claims allowlist, the segment table. geggen’s `runs/` is gitignored, so the canonical copy lives here. |
+| engine limits | `../geggen/pipeline/promo/primitives.json` | `max_clips` 4 → 8, `max_beats` 6 → 9, with the reason recorded in the file. Both were validated at concept time and would have rejected a nine-beat variant. |
+| the prompts | built, not written | all eight compose through `cast.py build_prompt` at ~3.3k characters, band clause present in every one. |
+
+### 7.2 What the dry run caught, before any credit was spent
+
+- **A duplicated name.** The builder prepends the character name, so an action starting with “Peter” produced *“Peter Peter stands on the gym floor”*. Actions now start with the verb.
+- **Stage directions fighting their own prompt.** The band-touching and band-holding actions sat inside the clause that says hands stay empty and still. Rewritten to posture and expression; §3 records why.
+- **A sentence that ran on.** The builder joins the scene onto the action, so a trailing full stop broke the grammar. Asserted in the generator now, along with the word caps and the no-quotes rule.
+
+### 7.3 The blocker, precisely
+
+Every Flow account’s session has expired, and one is barred outright:
+
+| account | state |
+|---|---|
+| `cultee` | **blocked** in `flow_auth.BLOCKED_ACCOUNTS` — flagged 2026-09-26 for unusual activity, refused even a manual generation |
+| `handlr` | session stale — the credit read fails to fetch |
+| `gitnfit` | session stale |
+| `bob.hamstrovec` | session stale |
+
+So no balance can even be **read** right now, let alone spent, and the cached tokens date from August. A Flow session cannot be refreshed out of band — the refresh token lives in the browser — so this needs an interactive sign-in.
+
+**Two things only you can settle:** which Google account holds the Flow project you created, and its title. The config names the project `ironpal-founder-1`; if yours is called something else, change `flow_project_title` or pass `--project-title`, or the run creates a second project beside it.
+
+### 7.4 The commands, in order
+
+```bash
+cd ~/job_stuff/prj/geggen
+
+# 1. Sign in to the account that holds your Flow project (opens a real browser).
+python3 -m pipeline.promo.flow_auth --account <ACCOUNT> --login
+
+# 2. Confirm the balance. 8 clips need 80 credits; refusals cost nothing.
+.venv/bin/python -m pipeline.promo.credits --account <ACCOUNT> --need-clips 8
+
+# 3. Mint Peter into the project. FREE — no credits, and it is the likeness test.
+.venv/bin/python -m pipeline.promo.cast --run runs/ironpal-camera-on-my-head \
+    --account <ACCOUNT> --project-title ironpal-founder-1 --mint-only
+
+# 4. Look at the minted variants in Flow before spending anything:
+#    is it him, is the band on his head, is the ring mark there, is the gym right?
+#    If the band is missing, edit `characters[0].wardrobe` and re-mint with --remint Peter.
+
+# 5. Render K1 alone — 10 credits — the real test of likeness, room and speaking rate.
+#    Temporarily trim `clips` to K1 only, or copy the run dir.
+.venv/bin/python -m pipeline.promo.cast --run runs/ironpal-camera-on-my-head --account <ACCOUNT>
+
+# 6. Only then the remaining seven.
+```
+
+Step 3 is the one that matters most and is free. The minted character is where the band either appears on Peter or does not, and every clip inherits that answer.
+
+### 7.5 Still to record before assembly
+
+Five of the eight clips composite footage that does not exist yet. The pipeline **refuses** a segment that was never cut, so these gate the assemble step, not the render:
+
+- `hud_live_set`, `debrief_confirm`, `levels_progress` — three POC screen recordings on the A52.
+- `old_log_typing` — a throwaway generic log, screen-recorded. Burgundy on charcoal, never Fitbod.
+- `frame_privacy` — the one-frame-leaves-and-dissolves motion graphic.
+
+The three that exist — `reveal`, `band_in_hand`, `worn_male` — are already in the repo and pointed at by the config.
 - **Eighty credits, and no account held fifty at the last count.** Same as before: which account pays is open.
