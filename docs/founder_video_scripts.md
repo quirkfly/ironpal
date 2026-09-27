@@ -1,26 +1,39 @@
-# IronPal — six founder video scripts
+# IronPal — six founder video scripts (Google Flow, 5 × 8 s)
 
-**Status:** Draft v1.0 · 2026-09-25 — design review complete (auto mode)  
-**On camera:** Peter, 46, the founder, in every hero shot, face visible  
-**Format:** vertical 9:16, 1080×1920, 30 fps, six beats plus a 2.5 s card, ≈ 48 s each  
-**Pace:** 2.04 words per second, the rate measured on the handlr English cut; every timecode below is computed from that, not guessed  
-**Reference:** the handlr promo script v2 (`/tmp/h`, geggen `products/handlr/`) — beats with the screen behind every line, a claims allowlist, and flags before anything renders  
+**Status:** Draft v2.0 · 2026-09-27 — restructured to five 8 s clips per script; design review complete (auto mode)  
+**On camera:** Peter, 46, the founder — one Flow character minted from his reference photographs, speaking every clip  
+**Format:** vertical 9:16, 1080×1920, 30 fps; **five Flow clips of ≤ 8 s + a 2.5 s card ≈ 42 s**  
+**Word budget:** ≤ 16 words per clip (8 s × 2.04 words/s, the rate measured across the four rendered beats of `handlr-eve-11`); every count and estimate below is computed, and the 8 s cap is asserted before this file is written  
+**Reference:** the handlr Eve onboarding promo, `handlr-eve-11` → `-17` (geggen `docs/video_script_redesign_v1.md`, `pipeline/promo/`) — five 8 s beats, the screen behind every line, one character speaking all of it, the last clip dropping to the character full frame  
 
-> **Decisions from the design review are in [`founder_video_scripts_grilled.md`](founder_video_scripts_grilled.md) (Q1–Q24) and are folded in below.** The review ran **without user interaction**: 13 decisions rest on evidence in the repo, the site or the geggen pipeline, 9 are assumptions tagged for veto, 2 are open (a site claim the scripts contradict, and whether the branded prop is finished). The assumptions most worth a veto are at the top of the ledger.
+> **Decisions from the design review are in [`founder_video_scripts_grilled.md`](founder_video_scripts_grilled.md) (Q1–Q36) and are folded in below.** The review ran **without user interaction**: 21 decisions rest on evidence in the repo, the site or the geggen pipeline, 13 are assumptions tagged for veto, 2 are open (a site claim the scripts contradict, and which Flow account pays the credits). The assumptions most worth a veto are at the top of the ledger.
 
 ---
 
-## 0. What every script has to do
+## 0. The shape every script follows — and why it is this shape
 
-Each of the six scripts, independently:
+The geggen pipeline renders one **8 s** Google Flow clip per speaking beat, with the line **baked in and lip-synced** to a minted character; the product is never in the generated clip but is **composited** from real recordings by layout. The handlr Eve promo, after fourteen renders, settled on five such clips plus a card, and that is the structure here:
 
-- **Explains what the site says**, in Peter’s voice: a headband that watches the set from your eyes and logs the exercise, the reps and the weight; reps and exercise on the band, offline; weight from a single frame that is deleted; pre-launch, reserve early-bird access, it costs nothing today. Every spoken claim maps to the allowlist in §8.
-- **Is set in the gym, naturally.** Peter is on the floor, at a bench or a rack, between sets. No studio, no desk, no talking-head wall. One gym day covers all six.
-- **Explains how the app helps track and improve**: the log fills itself, so it is complete; sets accumulate into levels; the trend becomes visible. Where the POC has the screen, the screen is recorded. Where it does not, the overlay is labelled *product interface concept*.
-- **Has a before and an after.** K2 is always the old way, filmed live: gloves off, phone out, thumbs on a generic manual log. K3 is always the new way: headband on, same bench, the POC’s live HUD in picture-in-picture.
-- **Keeps the claim guardrails.** Weight-reading is “the hard part”, “my bet”, “still being built”, never a shipped feature. Privacy is the hybrid architecture, never “nothing leaves the phone”. No face-blurring claim, because none is built.
+| clip | job | layout | the character | what fills the frame |
+|---|---|---|---|---|
+| **K1** | hook — never names the product | `full` (or `cutaway` when the hook *is* a picture) | Peter, whole gym scene | nothing, or one cutaway |
+| **K2** | **the old way** | `pip` | Peter, corner close-up | a generic manual log being thumb-typed |
+| **K3** | **the new way** | `pip` | Peter, corner close-up | the POC’s live HUD during a real set |
+| **K4** | the honest beat: weight, privacy, or how | `cutaway` | Peter for 1.8 s, then voice only | stack POV, the privacy frame graphic, or the live reveal |
+| **K5** | progress, then the close | `pip` + `tail_full_seconds: 3.0` | corner, then **full frame for the last 3 s**, rhyming with K1 | the POC’s levels screen |
+| card | CTA | `card` | — | three lines and the URL |
 
-What makes them six and not one: the hook. Each opens on a different true sentence, and the rest of the script is the shortest path from that sentence to the card.
+Rules carried over from the handlr runs, each one paid for:
+
+- **≤ 16 words per line.** 8 s at 2.04 words/s is 16.3; the first handlr draft ran 22–28 words a line and could not have rendered. The last clause of each 16-word line is the droppable one.
+- **The `action` is a short, declarative stage direction naming the character** — “Peter stands on the gym floor…”. A 3,587-character prompt was refused nine times as “prominent people”; “Eve is doing biceps curl.” rendered immediately. No quotation marks inside an action: a quoted fragment gets painted into the picture as a caption (“5ive steps”, “vetted.”).
+- **Nothing held, nothing on screen, nothing written** in a generated clip. A held phone vanishes between frames; a screen renders as scribble; a word becomes a burned-in caption. The old way is therefore carried by the composited log footage, not by Peter holding a phone.
+- **One wardrobe, stated in words, in every clip**: the character owns the outfit, so it cannot change between beats. Peter’s includes a **plain matte-black headband with nothing printed on it** — logos in generated video float off the object (the Kling lesson), so the branded band exists only in live footage that is composited in.
+- **The setting is named in words in every prompt**, because there is no photograph of Peter in a gym to pin it to; a body variant with an unstated scene came back in a different invented gym per clip.
+- **Every claim maps to the allowlist** (§8); the pipeline’s validator fails a run that says anything else, and there is no human review before publishing.
+- **Credits:** 10 per clip, refusals free, minting free. **50 credits per script, 300 for all six.**
+
+What makes them six and not one: the hook. Each opens on a different true sentence about Peter, and the rest is the shortest path from that sentence to the card.
 
 | Script | Opens on | The one thing it explains that the others don’t |
 |---|---|---|
@@ -28,78 +41,93 @@ What makes them six and not one: the hook. Each opens on a different true senten
 | F2 · I told it once | “My headband didn’t know what a curl was. I told it once. It hasn’t asked since.” | The app’s actual mechanism as the story: the band does not come knowing your exercises, you tell it once, and from then on it knows. |
 | F3 · Nobody reads the bar | “Your watch guesses your weight from your body mass. Mine is trying to read the bar.” | Leads with the hard problem. |
 | F4 · Yes, there’s a camera on my head | “Yes, there’s a camera on my head at the gym. Here’s exactly what it sends.” | Answers the objection first. |
-| F5 · I put a trainer in my code editor | “I put a personal trainer inside a code editor. Then I got tired of typing at the gym.” | Origin story and credibility: Peter already shipped a desk-exercise trainer inside VS Code, and is a hybrid athlete. |
+| F5 · I put a trainer in my code editor | “I put a trainer inside a code editor. Then I got tired of typing between sets.” | Origin story and credibility: Peter already shipped a desk-exercise trainer inside VS Code, and is a hybrid athlete. |
 | F6 · A month I never logged | “This is every set I did this month. I logged none of them.” | Opens on the result: a full month of sets, none of them typed. |
 
 ---
 
-## 1. F1 — The fourth exercise
+## 1. The cast — one character, minted once
+
+| field | value |
+|---|---|
+| slot / name | `founder` / **Peter**, 46, man |
+| persona (the portrait prompt is built around this) | a lean, athletic 46-year-old White man with a closely shaved head, light stubble with a moustache and a short greying chin beard, fair skin, defined shoulders and arms; calm, a slight dry smile |
+| wardrobe (stated in every clip prompt) | a plain black tank top and a plain matte-black fabric headband with nothing printed on it |
+| identity anchor | `../geggen/products/handlr/reference/peter_01_tanktop_x4.png` — the B&W tank-top portrait, the clearest facial structure available |
+| identity support | `../geggen/products/handlr/reference/peter_face_colour_x4.png` — the only colour information (skin tone, facial hair), un-mirrored |
+| scene tokens (in every clip prompt) | in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm |
+| holding | none — no phone in any clip |
+
+The reference photographs are third-generation (a compressed dating-app upload, screen-recorded at 124 kb/s, 466 px a side). The refpack README in geggen says the upscales add no detail; the likeness prompt exists to keep the face and the age, not to invent either. **There is no photograph of Peter in a gym**, so the scene has no reference image and lives entirely in the scene tokens — see the ledger, and §9.
+
+---
+
+## 2. F1 — The fourth exercise
 
 **Angle.** Every set has a hidden fourth exercise: typing it in. Peter names it, shows it, then shows the band doing it for him.
 
-**48.6 s total** · **94 words** · 6 beats + card · Peter speaks every beat · music off · kinetic captions on · ends on a card
+**42.5 s as slotted** (5 × 8 s + card) · **75 words**, speech ≈ 36.8 s at 2.04 w/s · Peter speaks every clip · music off · kinetic captions · ends on a card
 
 ```
-K1 0:00.0–0:06.9  K2 0:06.9–0:14.7  K3 0:14.7–0:22.5
-K4 0:22.5–0:30.4  K5 0:30.4–0:38.7  K6 0:38.7–0:46.1  CARD 0:46.1–0:48.6
+K1 0:00.0–0:08.0  K2 0:08.0–0:16.0  K3 0:16.0–0:24.0
+K4 0:24.0–0:32.0  K5 0:32.0–0:40.0  CARD 0:40.0–0:42.5
 ```
 
-### K1 · hook · 0:00.0–0:06.9 · 14 words
+### K1 · hook · 0:00.0–0:08.0 · 14 words ≈ 6.9 s
 
 > **Peter:** “Every set I do at the gym has a fourth exercise. Typing it in.”
 
-**On screen:**
-- live — Peter, full frame, gym floor, no product in shot
+- **layout:** `full` · options: —
+- **action (the Flow prompt’s stage direction):** Peter stands on the gym floor between sets, squared to camera, calm, a slight dry smile.
+- **product footage composited:** none — Peter, full frame
 
-**Why:** No product for the first seven seconds, on purpose. Nobody has heard the name, so it buys nothing; the line buys the whole video. “Fourth exercise” is the frame every later beat pays off.
+**Why:** No product for the first clip, on purpose. Nobody has heard the name, so it buys nothing; the line buys the whole video. The band on his head reads as gym wear, not a product — nothing is printed on it.
 
-### K2 · old way · 0:06.9–0:14.7 · 16 words
+### K2 · old way · 0:08.0–0:16.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “Gloves off. Phone out. Three by eight at eighty. Half of it never makes it in.”
 
-**On screen:**
-- live + screen comp — Peter thumbing a generic manual log (burgundy on charcoal; never the Fitbod UI)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter sits on the flat bench, shoulders down, tired of a routine, and says it flatly.
+- **product footage composited:**
+  - `old_log_typing` — screen recording — a generic manual workout log being filled in: exercise picked from a menu, 3×8, 80 typed
 
-**Why:** The before clip. Filmed live: bench, phone, thumbs. The log UI is composited and deliberately generic — the video plan’s legal note forbids the Fitbod look. “Half of it never makes it in” is the site’s Problem section, said out loud.
+**Why:** The before. The manual log fills the frame and gets typed into while he talks; he is a corner PIP. No phone in his hand — a held prop is the most common way a clip gets rejected, and the footage carries the thumb-typing anyway. ‘Half of it never makes it in’ is the site’s Problem section.
 
-### K3 · new way · 0:14.7–0:22.5 · 16 words
+### K3 · new way · 0:16.0–0:24.0 · 14 words ≈ 6.9 s
 
-> **Peter:** “Now a headband watches the set from my eyes. The exercise and the reps log themselves.”
+> **Peter:** “Now a headband watches the set from my eyes. Exercise and reps log themselves.”
 
-**On screen:**
-- live — Peter, headband on (physical branded prop; LED composited in post)
-- screen recording — POC LiveHudScreen (● live · Exercise · Reps)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter stands at the dumbbell rack, alert, a little pleased with himself.
+- **product footage composited:**
+  - `hud_live_set` — screen recording — POC `LiveHudScreen` on the A52 during a real set: ● live · Exercise · Reps
 
-**Why:** The after clip. Same bench, same lift, headband on, and the POC’s live HUD in picture-in-picture as the set runs. Only the two things the band does today are claimed here: exercise and reps.
+**Why:** The after. The POC’s live HUD fills the frame during a real set. Only the two things the band does today are claimed.
 
-### K4 · the weight · 0:22.5–0:30.4 · 16 words
+### K4 · the weight · 0:24.0–0:32.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “The weight is the hard part. Nobody reads it off a bar yet. That’s my bet.”
 
-**On screen:**
-- AI cutaway — first-person weight-stack POV (storyboard S4d) with the weight overlay labelled 'product interface concept'
+- **layout:** `cutaway` · options: head_seconds: 1.8
+- **action (the Flow prompt’s stage direction):** Peter leans on the rack, level and honest, no sell in it.
+- **product footage composited:**
+  - `stack_pov_concept` — AI cutaway — first-person hand reaching to a weight-stack pin (storyboard S4d), weight overlay labelled ‘product interface concept’
 
-**Why:** The site’s FAQ, in Peter’s mouth. Weight-reading is the headline and is not shipped, so it is stated as the bet, not the feature. The overlay carries the ‘interface concept’ label.
+**Why:** J-cut: he talks for 1.8 s, then the stack POV takes the frame under the same voice. The site’s FAQ in his mouth — weight-reading is the bet, not the feature; the overlay carries the concept label.
 
-### K5 · progress · 0:30.4–0:38.7 · 17 words
+### K5 · progress + close · 0:32.0–0:40.0 · 15 words ≈ 7.4 s
 
-> **Peter:** “Weeks in, every set is there. I typed nothing, so now I can actually see the trend.”
+> **Peter:** “I typed nothing, and the log is full. Reserve a spot. It costs nothing today.”
 
-**On screen:**
-- overlay on a real POV clip — a weeks-over-weeks trend, labelled 'product interface concept' (the POC has no trend view)
+- **layout:** `pip` · options: pip_pos: lower-right, tail_full_seconds: 3.0
+- **action (the Flow prompt’s stage direction):** Peter back on the gym floor, framed as in the first clip, lands the last line and holds the look.
+- **product footage composited:**
+  - `levels_progress` — screen recording — POC `CampaignScreen`, per-exercise level progress
 
-**Why:** What the log is for. The trend overlay is labelled a concept because the POC has levels but no history view. “Typed nothing” is literally true: the first sets are confirmed with a tap, not typed.
+**Why:** Levels screen for the first ~4 s, then the product drops away and Peter fills the frame for the last 3 s, rhyming with K1. ‘Typed nothing’ is literally true: the first sets are confirmed with a tap. No price is spoken.
 
-### K6 · close · 0:38.7–0:46.1 · 15 words
-
-> **Peter:** “I’m one guy building it in the open. Reserve a spot. It costs nothing today.”
-
-**On screen:**
-- live — Peter, full frame, gym floor, no product in shot
-
-**Why:** Back to the K1 frame. The site’s Founder section and its Pricing section compressed to two sentences; no price figure is spoken, matching the landing-page decision.
-
-### CARD · 0:46.1–0:48.6 · no VO
+### CARD · 0:40.0–0:42.5 · no VO
 
 - Stop logging. Just lift.
 - ironpal.co
@@ -107,73 +135,72 @@ K4 0:22.5–0:30.4  K5 0:30.4–0:38.7  K6 0:38.7–0:46.1  CARD 0:46.1–0:48.6
 
 ---
 
-## 2. F2 — I told it once
+## 3. F2 — I told it once
 
 **Angle.** The app’s actual mechanism as the story: the band does not come knowing your exercises, you tell it once, and from then on it knows. Honest about the first session.
 
-**51.0 s total** · **99 words** · 6 beats + card · Peter speaks every beat · music off · kinetic captions on · ends on a card
+**42.5 s as slotted** (5 × 8 s + card) · **77 words**, speech ≈ 37.7 s at 2.04 w/s · Peter speaks every clip · music off · kinetic captions · ends on a card
 
 ```
-K1 0:00.0–0:07.8  K2 0:07.8–0:15.7  K3 0:15.7–0:24.0
-K4 0:24.0–0:31.9  K5 0:31.9–0:40.7  K6 0:40.7–0:48.5  CARD 0:48.5–0:51.0
+K1 0:00.0–0:08.0  K2 0:08.0–0:16.0  K3 0:16.0–0:24.0
+K4 0:24.0–0:32.0  K5 0:32.0–0:40.0  CARD 0:40.0–0:42.5
 ```
 
-### K1 · hook · 0:00.0–0:07.8 · 16 words
+### K1 · hook · 0:00.0–0:08.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “My headband didn’t know what a curl was. I told it once. It hasn’t asked since.”
 
-**On screen:**
-- live — Peter, full frame, gym floor, no product in shot
+- **layout:** `full` · options: —
+- **action (the Flow prompt’s stage direction):** Peter stands on the gym floor, squared to camera, and says it like a plain fact about his week.
+- **product footage composited:** none — Peter, full frame
 
-**Why:** The only script that leads with how the model learns, because that is the true answer to “how does it know?”. The claim is the self-training loop from the model design: enrol on the first visit, recognise on the next.
+**Why:** Leads with how the model learns, because that is the true answer to ‘how does it know?’. The claim is the self-training loop from the model design: enrol on the first visit, recognise on the next.
 
-### K2 · old way · 0:07.8–0:15.7 · 16 words
+### K2 · old way · 0:08.0–0:16.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “The old way, I told an app everything. Every set, every rep, thumbs between sets, forever.”
 
-**On screen:**
-- live + screen comp — Peter thumbing a generic manual log (burgundy on charcoal; never the Fitbod UI)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter sits on the bench, patient and a little weary, counting it off on nothing.
+- **product footage composited:**
+  - `old_log_typing` — screen recording — a generic manual workout log being filled in: exercise picked from a menu, 3×8, 80 typed
 
-**Why:** Before: “forever” is the contrast to “once”. Live thumbing over the generic log comp.
+**Why:** ‘Forever’ is the contrast to ‘once’. The manual log fills the frame.
 
-### K3 · first session · 0:15.7–0:24.0 · 17 words
+### K3 · first session · 0:16.0–0:24.0 · 16 words ≈ 7.8 s
 
-> **Peter:** “First session, I lift, it watches, and asks one question after the set: was that a curl?”
+> **Peter:** “First session, I lift, it watches, then asks one question: was that a curl? One tap.”
 
-**On screen:**
-- live — Peter, headband on (physical branded prop; LED composited in post)
-- screen recording — POC LabelingScreen debrief → 'ALL CORRECT — SAVE'
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter stands at the rack, explaining something simple, one small nod.
+- **product footage composited:**
+  - `debrief_confirm` — screen recording — POC `LabelingScreen` after the set, ending on ‘ALL CORRECT — SAVE’
 
-**Why:** The debrief screen is real: the POC asks after the set, not during it, and one tap confirms. Showing this is what makes the “once” credible instead of magical.
+**Why:** The debrief screen is real: the POC asks after the set, not during, and one tap confirms. Showing it is what makes ‘once’ credible instead of magical.
 
-### K4 · next session · 0:24.0–0:31.9 · 16 words
+### K4 · next session · 0:24.0–0:32.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “Next session it just knows. Same rack, same me, exercise and reps, logged while I rest.”
 
-**On screen:**
-- screen recording — POC LiveHudScreen (● live · Exercise · Reps)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter leans on the rack between sets, relaxed, as if it is no longer his job.
+- **product footage composited:**
+  - `hud_live_set` — screen recording — POC `LiveHudScreen` on the A52 during a real set: ● live · Exercise · Reps
 
 **Why:** The recognise-by-embedding promise, scoped to the regime where it holds: one user, one gym. Only exercise and reps are claimed.
 
-### K5 · progress · 0:31.9–0:40.7 · 18 words
+### K5 · progress + close · 0:32.0–0:40.0 · 13 words ≈ 6.4 s
 
-> **Peter:** “A few clean sets and it’s certified. From then on my log fills in, and the trend shows.”
+> **Peter:** “A few clean sets and it’s certified. Reserve early-bird. It costs nothing today.”
 
-**On screen:**
-- screen recording — POC CampaignScreen, per-exercise level progress
+- **layout:** `pip` · options: pip_pos: lower-right, tail_full_seconds: 3.0
+- **action (the Flow prompt’s stage direction):** Peter back on the gym floor, framed as in the first clip, lands the last line and holds the look.
+- **product footage composited:**
+  - `levels_progress` — screen recording — POC `CampaignScreen`, per-exercise level progress
 
-**Why:** The level machine is real and on screen: sets accumulate into Recon, Provisional, Certified. “The trend shows” is the only concept claim in this script and rides on the levels screen, not a mock-up.
+**Why:** The level machine is real and on screen; then he fills the frame for the close.
 
-### K6 · close · 0:40.7–0:48.5 · 16 words
-
-> **Peter:** “A camera on the band, one founder in the open. Reserve early-bird. It costs nothing today.”
-
-**On screen:**
-- live — Peter, full frame, gym floor, no product in shot
-
-**Why:** Names the camera before the card so the privacy question is not dodged; F4 answers it in full.
-
-### CARD · 0:48.5–0:51.0 · no VO
+### CARD · 0:40.0–0:42.5 · no VO
 
 - Teach it once. Then just lift.
 - ironpal.co
@@ -181,74 +208,73 @@ K4 0:24.0–0:31.9  K5 0:31.9–0:40.7  K6 0:40.7–0:48.5  CARD 0:48.5–0:51.0
 
 ---
 
-## 3. F3 — Nobody reads the bar
+## 4. F3 — Nobody reads the bar
 
 **Angle.** Leads with the hard problem. The credible half (exercise and reps) carries the trust, the weight carries the why. Every hedge from the site’s FAQ is kept.
 
-**48.6 s total** · **94 words** · 6 beats + card · Peter speaks every beat · music off · kinetic captions on · ends on a card
+**42.5 s as slotted** (5 × 8 s + card) · **75 words**, speech ≈ 36.8 s at 2.04 w/s · Peter speaks every clip · music off · kinetic captions · ends on a card
 
 ```
-K1 0:00.0–0:07.8  K2 0:07.8–0:15.7  K3 0:15.7–0:23.0
-K4 0:23.0–0:30.9  K5 0:30.9–0:38.2  K6 0:38.2–0:46.1  CARD 0:46.1–0:48.6
+K1 0:00.0–0:08.0  K2 0:08.0–0:16.0  K3 0:16.0–0:24.0
+K4 0:24.0–0:32.0  K5 0:32.0–0:40.0  CARD 0:40.0–0:42.5
 ```
 
-### K1 · hook · 0:00.0–0:07.8 · 16 words
+### K1 · hook · 0:00.0–0:08.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “Your watch guesses your weight from your body mass. Mine is trying to read the bar.”
 
-**On screen:**
-- live — Peter, full frame, gym floor, no product in shot
+- **layout:** `full` · options: —
+- **action (the Flow prompt’s stage direction):** Peter stands on the gym floor, squared to camera, dry, glancing once at his own wrist.
+- **product footage composited:** none — Peter, full frame
 
-**Why:** The Compare section’s first row, without naming a brand. “Trying” is the hedge and the hook at once.
+**Why:** The Compare section’s first row, without naming a brand. ‘Trying’ is the hedge and the hook at once.
 
-### K2 · old way · 0:07.8–0:15.7 · 16 words
+### K2 · old way · 0:08.0–0:16.0 · 15 words ≈ 7.4 s
 
-> **Peter:** “Old way: I’d finish a set and type eighty kilos from memory. Sometimes it was seventy-five.”
+> **Peter:** “Old way, I’d finish a set and type eighty from memory. Sometimes it was seventy-five.”
 
-**On screen:**
-- live + screen comp — Peter thumbing a generic manual log (burgundy on charcoal; never the Fitbod UI)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter sits on the bench, remembering a number badly, a small shrug.
+- **product footage composited:**
+  - `old_log_typing` — screen recording — a generic manual workout log being filled in: exercise picked from a menu, 3×8, 80 typed
 
-**Why:** Before: the fudged number. Live, bench, phone, generic log comp with the number being edited.
+**Why:** The fudged number. The manual log fills the frame and the number gets edited while he says it.
 
-### K3 · the easy half · 0:15.7–0:23.0 · 15 words
+### K3 · the easy half · 0:16.0–0:24.0 · 15 words ≈ 7.4 s
 
 > **Peter:** “The band already does the easy half. Exercise and reps, detected on the band, offline.”
 
-**On screen:**
-- live — Peter, headband on (physical branded prop; LED composited in post)
-- screen recording — POC LiveHudScreen (● live · Exercise · Reps)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter stands at the rack, matter-of-fact, this part is not in doubt.
+- **product footage composited:**
+  - `hud_live_set` — screen recording — POC `LiveHudScreen` on the A52 during a real set: ● live · Exercise · Reps
 
-**Why:** After: the part that works, with the live HUD behind it. “Offline” is the site’s exact privacy wording for these two.
+**Why:** The part that works, with the live HUD behind it. ‘Offline’ is the site’s exact privacy wording for these two.
 
-### K4 · the bet · 0:23.0–0:30.9 · 16 words
+### K4 · the bet · 0:24.0–0:32.0 · 14 words ≈ 6.9 s
 
-> **Peter:** “The weight is one frame, sent, read, deleted in seconds. Not finished. Not guaranteed. In progress.”
+> **Peter:** “The weight is one frame, sent, read, deleted in seconds. Not finished. In progress.”
 
-**On screen:**
-- AI cutaway — first-person weight-stack POV (storyboard S4d) with the weight overlay labelled 'product interface concept'
-- graphic — one frame leaving the band, a timer, then the frame dissolving (privacy beat)
+- **layout:** `cutaway` · options: head_seconds: 1.8
+- **action (the Flow prompt’s stage direction):** Peter leans on the rack, level and honest, counting the three fragments off with small nods.
+- **product footage composited:**
+  - `stack_pov_concept` — AI cutaway — first-person hand reaching to a weight-stack pin (storyboard S4d), weight overlay labelled ‘product interface concept’
+  - `frame_privacy` — motion graphic — one still frame leaves the band, a seconds counter runs, the frame dissolves
 
-**Why:** Three fragments are the FAQ’s three hedges. The frame graphic shows the single upload and its deletion; the stack POV carries the concept label.
+**Why:** The FAQ’s hedges as fragments. J-cut to the stack POV and the frame graphic, each half of the cutaway; the POV carries the concept label.
 
-### K5 · progress · 0:30.9–0:38.2 · 15 words
+### K5 · progress + close · 0:32.0–0:40.0 · 15 words ≈ 7.4 s
 
-> **Peter:** “When it lands, the log I never typed shows the weight moving, week after week.”
+> **Peter:** “When it lands, the log I never typed shows the weight moving. Reserve a spot.”
 
-**On screen:**
-- overlay on a real POV clip — a weeks-over-weeks trend, labelled 'product interface concept' (the POC has no trend view)
+- **layout:** `pip` · options: pip_pos: lower-right, tail_full_seconds: 3.0
+- **action (the Flow prompt’s stage direction):** Peter back on the gym floor, framed as in the first clip, lands the last line and holds the look.
+- **product footage composited:**
+  - `trend_concept` — overlay on a real first-person clip — a weeks-over-weeks trend, labelled ‘product interface concept’
 
-**Why:** Conditional on purpose: “when it lands”. The trend overlay is a labelled concept.
+**Why:** Conditional on purpose: ‘when it lands’. The trend overlay is a labelled concept; then Peter fills the frame.
 
-### K6 · close · 0:38.2–0:46.1 · 16 words
-
-> **Peter:** “I’m building it on camera. Reserve early-bird access, pay nothing today, and watch me get there.”
-
-**On screen:**
-- live — Peter, full frame, gym floor, no product in shot
-
-**Why:** “Watch me get there” is the build-in-public promise from the Founder section, and it is the honest CTA for a feature that is a bet.
-
-### CARD · 0:46.1–0:48.6 · no VO
+### CARD · 0:40.0–0:42.5 · no VO
 
 - The hard problem. Being built.
 - ironpal.co
@@ -256,73 +282,73 @@ K4 0:23.0–0:30.9  K5 0:30.9–0:38.2  K6 0:38.2–0:46.1  CARD 0:46.1–0:48.6
 
 ---
 
-## 4. F4 — Yes, there’s a camera on my head
+## 5. F4 — Yes, there’s a camera on my head
 
 **Angle.** Answers the objection first. The privacy architecture, stated exactly as the site states it: two things stay on the band, one frame leaves and is deleted.
 
-**46.1 s total** · **89 words** · 6 beats + card · Peter speaks every beat · music off · kinetic captions on · ends on a card
+**42.5 s as slotted** (5 × 8 s + card) · **72 words**, speech ≈ 35.3 s at 2.04 w/s · Peter speaks every clip · music off · kinetic captions · ends on a card
 
 ```
-K1 0:00.0–0:07.4  K2 0:07.4–0:13.7  K3 0:13.7–0:21.1
-K4 0:21.1–0:28.4  K5 0:28.4–0:36.3  K6 0:36.3–0:43.6  CARD 0:43.6–0:46.1
+K1 0:00.0–0:08.0  K2 0:08.0–0:16.0  K3 0:16.0–0:24.0
+K4 0:24.0–0:32.0  K5 0:32.0–0:40.0  CARD 0:40.0–0:42.5
 ```
 
-### K1 · hook · 0:00.0–0:07.4 · 15 words
+### K1 · hook · 0:00.0–0:08.0 · 15 words ≈ 7.4 s
 
 > **Peter:** “Yes, there’s a camera on my head at the gym. Here’s exactly what it sends.”
 
-**On screen:**
-- live — Peter, headband on (physical branded prop; LED composited in post)
+- **layout:** `full` · options: —
+- **action (the Flow prompt’s stage direction):** Peter stands on the gym floor, squared to camera, and touches the band on his forehead once.
+- **product footage composited:** none — Peter, full frame
 
-**Why:** The one script where the product is in shot from the first frame, because the product is the objection. “Exactly” is the promise the rest keeps.
+**Why:** The one script where the band is the subject from the first frame, because the band is the objection. It is plain black with nothing on it; the branded band appears in the composited reveal footage, never in a generated clip.
 
-### K2 · old way · 0:07.4–0:13.7 · 13 words
+### K2 · old way · 0:08.0–0:16.0 · 13 words ≈ 6.4 s
 
 > **Peter:** “Before, the only thing recording my workout was my thumb. Between sets. Badly.”
 
-**On screen:**
-- live + screen comp — Peter thumbing a generic manual log (burgundy on charcoal; never the Fitbod UI)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter sits on the bench, deadpan, three short beats.
+- **product footage composited:**
+  - `old_log_typing` — screen recording — a generic manual workout log being filled in: exercise picked from a menu, 3×8, 80 typed
 
-**Why:** Before, in one beat, so the privacy beats get the time.
+**Why:** Before, in one clip, so the privacy clips get the time.
 
-### K3 · what stays · 0:13.7–0:21.1 · 15 words
+### K3 · what stays · 0:16.0–0:24.0 · 15 words ≈ 7.4 s
 
 > **Peter:** “Reps and the exercise are detected on the band itself, offline. That part never leaves.”
 
-**On screen:**
-- screen recording — POC LiveHudScreen (● live · Exercise · Reps)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter stands at the rack, precise, one hand flat as if to say: this part, here.
+- **product footage composited:**
+  - `hud_live_set` — screen recording — POC `LiveHudScreen` on the A52 during a real set: ● live · Exercise · Reps
 
-**Why:** Scoped precisely: “that part” never leaves. A blanket “nothing leaves” would be false and is banned by the claim guardrails.
+**Why:** Scoped precisely: ‘that part’ never leaves. A blanket ‘nothing leaves’ would be false and is banned by the claim guardrails.
 
-### K4 · what goes · 0:21.1–0:28.4 · 15 words
+### K4 · what goes · 0:24.0–0:32.0 · 15 words ≈ 7.4 s
 
 > **Peter:** “Reading the weight sends one frame. Processed in seconds, then deleted. I don’t store footage.”
 
-**On screen:**
-- graphic — one frame leaving the band, a timer, then the frame dissolving (privacy beat)
+- **layout:** `cutaway` · options: head_seconds: 1.8
+- **action (the Flow prompt’s stage direction):** Peter leans on the rack, calm, laying it out plainly.
+- **product footage composited:**
+  - `frame_privacy` — motion graphic — one still frame leaves the band, a seconds counter runs, the frame dissolves
+  - `reveal` — campaign footage — `web/dist/assets/reveal.mp4`, the branded headband, live-shot
 
-**Why:** The Privacy section verbatim in spirit: single frame, seconds, deleted, no stored footage. No face-blurring claim, because it is not built.
+**Why:** The Privacy section in spirit: single frame, seconds, deleted, no stored footage. No face-blurring claim, because it is not built. J-cut to the frame graphic, then the live reveal of the real band.
 
-### K5 · progress · 0:28.4–0:36.3 · 16 words
+### K5 · progress + close · 0:32.0–0:40.0 · 14 words ≈ 6.9 s
 
-> **Peter:** “So I train, the set is logged, and I can see what changed since last month.”
+> **Peter:** “No vague promises. One founder, in the open. Reserve a spot. It costs nothing.”
 
-**On screen:**
-- screen recording — POC CampaignScreen, per-exercise level progress
-- overlay on a real POV clip — a weeks-over-weeks trend, labelled 'product interface concept' (the POC has no trend view)
+- **layout:** `pip` · options: pip_pos: lower-right, tail_full_seconds: 3.0
+- **action (the Flow prompt’s stage direction):** Peter back on the gym floor, framed as in the first clip, lands the last line and holds the look.
+- **product footage composited:**
+  - `levels_progress` — screen recording — POC `CampaignScreen`, per-exercise level progress
 
-**Why:** The payoff of trusting the band: the log exists. Levels screen is real; the month-over-month is a labelled concept.
+**Why:** ‘No vague promises’ is the Privacy section’s last line. Ending a privacy script on the founder’s face is the point.
 
-### K6 · close · 0:36.3–0:43.6 · 15 words
-
-> **Peter:** “No vague promises. One founder, building this in the open. Reserve a spot. Costs nothing.”
-
-**On screen:**
-- live — Peter, full frame, gym floor, no product in shot
-
-**Why:** “No vague promises” is the Privacy section’s last line. Ending a privacy script on the founder’s face is the point.
-
-### CARD · 0:43.6–0:46.1 · no VO
+### CARD · 0:40.0–0:42.5 · no VO
 
 - A camera on your head. Handled honestly.
 - ironpal.co
@@ -330,74 +356,73 @@ K4 0:21.1–0:28.4  K5 0:28.4–0:36.3  K6 0:36.3–0:43.6  CARD 0:43.6–0:46.1
 
 ---
 
-## 5. F5 — I put a trainer in my code editor
+## 6. F5 — I put a trainer in my code editor
 
-**Angle.** Origin story and credibility: Peter already shipped a desk-exercise trainer inside VS Code, and is a hybrid athlete. Uses the gitnfit exercise clips as the only outside visuals.
+**Angle.** Origin story and credibility: Peter already shipped a desk-exercise trainer inside VS Code, and is a hybrid athlete. The gitnfit clip is the only outside footage.
 
-**50.5 s total** · **98 words** · 6 beats + card · Peter speaks every beat · music off · kinetic captions on · ends on a card
+**42.5 s as slotted** (5 × 8 s + card) · **78 words**, speech ≈ 38.2 s at 2.04 w/s · Peter speaks every clip · music off · kinetic captions · ends on a card
 
 ```
-K1 0:00.0–0:08.8  K2 0:08.8–0:16.2  K3 0:16.2–0:24.5
-K4 0:24.5–0:32.4  K5 0:32.4–0:41.2  K6 0:41.2–0:48.0  CARD 0:48.0–0:50.5
+K1 0:00.0–0:08.0  K2 0:08.0–0:16.0  K3 0:16.0–0:24.0
+K4 0:24.0–0:32.0  K5 0:32.0–0:40.0  CARD 0:40.0–0:42.5
 ```
 
-### K1 · hook · 0:00.0–0:08.8 · 18 words
+### K1 · hook · 0:00.0–0:08.0 · 16 words ≈ 7.8 s
 
-> **Peter:** “I put a personal trainer inside a code editor. Then I got tired of typing at the gym.”
+> **Peter:** “I put a trainer inside a code editor. Then I got tired of typing between sets.”
 
-**On screen:**
-- cutaway — ../gitnfit/gitnfit-vscode/exercises/desk-assisted-lunge.mp4 (1280×720, 14 s; Peter as the desk trainer) + output/screenshots/03-routine-video-playing.png
+- **layout:** `cutaway` · options: head_seconds: 2.4
+- **action (the Flow prompt’s stage direction):** Peter stands on the gym floor, squared to camera, amused at himself.
+- **product footage composited:**
+  - `gitnfit_desk_lunge` — cutaway — `../gitnfit/gitnfit-vscode/exercises/desk-assisted-lunge.mp4` (1280×720, 14 s), Peter as the desk trainer
 
-**Why:** The gitnfit clip is real footage of Peter as the trainer, so the first beat is proof, not a claim. It is 16:9; crop to the standing figure for 9:16.
+**Why:** J-cut: 2.4 s of Peter, then the real gitnfit footage of him as the desk trainer takes the frame under his voice. The first clip is proof, not a claim.
 
-### K2 · old way · 0:08.8–0:16.2 · 15 words
+### K2 · old way · 0:08.0–0:16.0 · 15 words ≈ 7.4 s
 
 > **Peter:** “Every set: phone, gloves, thumbs, three by eight at eighty. The rhythm breaks every time.”
 
-**On screen:**
-- live + screen comp — Peter thumbing a generic manual log (burgundy on charcoal; never the Fitbod UI)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter sits on the bench, listing it off with a flat rhythm, the last word heavier.
+- **product footage composited:**
+  - `old_log_typing` — screen recording — a generic manual workout log being filled in: exercise picked from a menu, 3×8, 80 typed
 
-**Why:** Before. “The rhythm breaks” is the site’s Problem copy.
+**Why:** ‘The rhythm breaks’ is the site’s Problem copy. The manual log fills the frame.
 
-### K3 · new way · 0:16.2–0:24.5 · 17 words
+### K3 · new way · 0:16.0–0:24.0 · 16 words ≈ 7.8 s
 
-> **Peter:** “So I built a headband that watches from my eyes. Exercise and reps, logged while I lift.”
+> **Peter:** “I built a headband that watches from my eyes. Exercise and reps, logged while I lift.”
 
-**On screen:**
-- live — Peter, headband on (physical branded prop; LED composited in post)
-- screen recording — POC LiveHudScreen (● live · Exercise · Reps)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter stands at the rack, quietly proud, a builder showing a thing that works.
+- **product footage composited:**
+  - `hud_live_set` — screen recording — POC `LiveHudScreen` on the A52 during a real set: ● live · Exercise · Reps
 
-**Why:** After, with the live HUD. The build verb matters in this script: he built the last thing too.
+**Why:** The after, with the live HUD. The build verb matters in this script: he built the last thing too.
 
-### K4 · how · 0:24.5–0:32.4 · 16 words
+### K4 · how · 0:24.0–0:32.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “Motion and camera together. Free weights and machines, no setup, validated one exercise at a time.”
 
-**On screen:**
-- AI cutaway — first-person weight-stack POV (storyboard S4d) with the weight overlay labelled 'product interface concept'
+- **layout:** `cutaway` · options: head_seconds: 1.8
+- **action (the Flow prompt’s stage direction):** Peter leans on the rack, explaining plainly, one small hand gesture for together.
+- **product footage composited:**
+  - `reveal` — campaign footage — `web/dist/assets/reveal.mp4`, the branded headband, live-shot
 
-**Why:** Capability grid, hedged with the FAQ’s own words: “validating exercise by exercise”. The stack POV carries the concept label; weight is not claimed in this script.
+**Why:** Capability grid, hedged with the FAQ’s own words. J-cut to the live reveal footage of the real band; weight is not claimed in this script.
 
-### K5 · progress · 0:32.4–0:41.2 · 18 words
+### K5 · progress + close · 0:32.0–0:40.0 · 15 words ≈ 7.4 s
 
-> **Peter:** “The log fills itself. So the only thing I think about is the next set, and the trend.”
+> **Peter:** “The log fills itself. I’m one founder, on camera. Reserve a spot. Costs nothing today.”
 
-**On screen:**
-- screen recording — POC CampaignScreen, per-exercise level progress
-- overlay on a real POV clip — a weeks-over-weeks trend, labelled 'product interface concept' (the POC has no trend view)
+- **layout:** `pip` · options: pip_pos: lower-right, tail_full_seconds: 3.0
+- **action (the Flow prompt’s stage direction):** Peter back on the gym floor, framed as in the first clip, lands the last line and holds the look.
+- **product footage composited:**
+  - `levels_progress` — screen recording — POC `CampaignScreen`, per-exercise level progress
 
-**Why:** Improvement as attention: the numbers stop being his job. Levels real, trend labelled.
+**Why:** Levels real, then the founder fills the frame — the site’s Founder section: back the person.
 
-### K6 · close · 0:41.2–0:48.0 · 14 words
-
-> **Peter:** “I’m one founder, on camera, in public. Reserve early-bird access. It costs nothing today.”
-
-**On screen:**
-- live — Peter, full frame, gym floor, no product in shot
-
-**Why:** Same close as the site’s Founder section: back the person.
-
-### CARD · 0:48.0–0:50.5 · no VO
+### CARD · 0:40.0–0:42.5 · no VO
 
 - Built by the guy wearing it.
 - ironpal.co
@@ -405,74 +430,74 @@ K4 0:24.5–0:32.4  K5 0:32.4–0:41.2  K6 0:41.2–0:48.0  CARD 0:48.0–0:50.5
 
 ---
 
-## 6. F6 — A month I never logged
+## 7. F6 — A month I never logged
 
 **Angle.** Opens on the result: a full month of sets, none of them typed. The improvement story leads; the old way is what would be missing.
 
-**44.2 s total** · **85 words** · 6 beats + card · Peter speaks every beat · music off · kinetic captions on · ends on a card
+**42.5 s as slotted** (5 × 8 s + card) · **72 words**, speech ≈ 35.3 s at 2.04 w/s · Peter speaks every clip · music off · kinetic captions · ends on a card
 
 ```
-K1 0:00.0–0:06.4  K2 0:06.4–0:12.7  K3 0:12.7–0:20.1
-K4 0:20.1–0:27.9  K5 0:27.9–0:35.3  K6 0:35.3–0:41.7  CARD 0:41.7–0:44.2
+K1 0:00.0–0:08.0  K2 0:08.0–0:16.0  K3 0:16.0–0:24.0
+K4 0:24.0–0:32.0  K5 0:32.0–0:40.0  CARD 0:40.0–0:42.5
 ```
 
-### K1 · hook · 0:00.0–0:06.4 · 13 words
+### K1 · hook · 0:00.0–0:08.0 · 13 words ≈ 6.4 s
 
 > **Peter:** “This is every set I did this month. I logged none of them.”
 
-**On screen:**
-- overlay on a real POV clip — a weeks-over-weeks trend, labelled 'product interface concept' (the POC has no trend view)
+- **layout:** `cutaway` · options: head_seconds: 1.2
+- **action (the Flow prompt’s stage direction):** Peter stands on the gym floor, squared to camera, quietly satisfied.
+- **product footage composited:**
+  - `trend_concept` — overlay on a real first-person clip — a weeks-over-weeks trend, labelled ‘product interface concept’
 
-**Why:** Opens on the screen, not the face: the log is the hero. The month view is a labelled concept over a real POV clip, because the POC stores sets but has no month view.
+**Why:** 1.2 s of Peter, then the month view takes the frame: the log is the hero. It is a labelled concept over a real POV clip, because the POC stores sets but has no month view.
 
-### K2 · old way · 0:06.4–0:12.7 · 13 words
+### K2 · old way · 0:08.0–0:16.0 · 13 words ≈ 6.4 s
 
 > **Peter:** “The old way, half of these wouldn’t exist. Skipped, fudged, forgotten between sets.”
 
-**On screen:**
-- live + screen comp — Peter thumbing a generic manual log (burgundy on charcoal; never the Fitbod UI)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter sits on the bench, shaking his head slightly at the memory.
+- **product footage composited:**
+  - `old_log_typing` — screen recording — a generic manual workout log being filled in: exercise picked from a menu, 3×8, 80 typed
 
-**Why:** Before as absence: what the old log would not contain.
+**Why:** Before as absence: what the old log would not contain. The manual log fills the frame with gaps in it.
 
-### K3 · new way · 0:12.7–0:20.1 · 15 words
+### K3 · new way · 0:16.0–0:24.0 · 15 words ≈ 7.4 s
 
 > **Peter:** “A headband watched each set. Exercise and reps, detected on the band, while I rested.”
 
-**On screen:**
-- live — Peter, headband on (physical branded prop; LED composited in post)
-- screen recording — POC LiveHudScreen (● live · Exercise · Reps)
+- **layout:** `pip` · options: pip_pos: lower-right
+- **action (the Flow prompt’s stage direction):** Peter stands at the rack, relaxed, as if describing the weather.
+- **product footage composited:**
+  - `hud_live_set` — screen recording — POC `LiveHudScreen` on the A52 during a real set: ● live · Exercise · Reps
 
-**Why:** After, with the live HUD. “While I rested” places the recognition where the app does it: after the set, during rest.
+**Why:** The after, with the live HUD. ‘While I rested’ places the recognition where the app does it: after the set, during rest.
 
-### K4 · the weight · 0:20.1–0:27.9 · 16 words
+### K4 · the weight · 0:24.0–0:32.0 · 16 words ≈ 7.8 s
 
 > **Peter:** “The weight it reads from one frame, sent and deleted. That part is still being built.”
 
-**On screen:**
-- AI cutaway — first-person weight-stack POV (storyboard S4d) with the weight overlay labelled 'product interface concept'
-- graphic — one frame leaving the band, a timer, then the frame dissolving (privacy beat)
+- **layout:** `cutaway` · options: head_seconds: 1.8
+- **action (the Flow prompt’s stage direction):** Peter leans on the rack, honest, no sell in it.
+- **product footage composited:**
+  - `stack_pov_concept` — AI cutaway — first-person hand reaching to a weight-stack pin (storyboard S4d), weight overlay labelled ‘product interface concept’
+  - `frame_privacy` — motion graphic — one still frame leaves the band, a seconds counter runs, the frame dissolves
 
-**Why:** Weight is hedged and the privacy fact rides along in the same sentence.
+**Why:** Weight hedged and the privacy fact in the same sentence. J-cut to the stack POV and the frame graphic.
 
-### K5 · progress · 0:27.9–0:35.3 · 15 words
+### K5 · progress + close · 0:32.0–0:40.0 · 15 words ≈ 7.4 s
 
-> **Peter:** “So the numbers are real, and the trend is real. That’s what I train against.”
+> **Peter:** “So the numbers are real, and the trend is real. Reserve a spot. Costs nothing.”
 
-**On screen:**
-- screen recording — POC CampaignScreen, per-exercise level progress
+- **layout:** `pip` · options: pip_pos: lower-right, tail_full_seconds: 3.0
+- **action (the Flow prompt’s stage direction):** Peter back on the gym floor, framed as in the first clip, lands the last line and holds the look.
+- **product footage composited:**
+  - `levels_progress` — screen recording — POC `CampaignScreen`, per-exercise level progress
 
-**Why:** “Real” is earned by K3 and K4 having said what is and isn’t done. Levels screen is the real progress artefact.
+**Why:** ‘Real’ is earned by K3 and K4 having said what is and isn’t done. Levels screen, then the founder fills the frame.
 
-### K6 · close · 0:35.3–0:41.7 · 13 words
-
-> **Peter:** “One founder. In the open. Reserve your early-bird spot. It costs nothing today.”
-
-**On screen:**
-- live — Peter, full frame, gym floor, no product in shot
-
-**Why:** Shortest close of the six; the month view already made the argument.
-
-### CARD · 0:41.7–0:44.2 · no VO
+### CARD · 0:40.0–0:42.5 · no VO
 
 - Every set. None of them typed.
 - ironpal.co
@@ -480,28 +505,29 @@ K4 0:20.1–0:27.9  K5 0:27.9–0:35.3  K6 0:35.3–0:41.7  CARD 0:41.7–0:44.2
 
 ---
 
-## 7. Shot inventory — one gym day plus the POC on the A52
+## 8. Product footage — every segment, its source, and whether it is real
 
-| Shot | Used by | How it is made |
+The pipeline cuts product footage from recordings and refuses a segment that was never cut; it never fabricates UI. A segment may carry its own `source` file (geggen commit `8b9c786`), so these do not have to come from one recording.
+
+| segment id | what the viewer sees | source and status |
 |---|---|---|
-| live — Peter, full frame, gym floor, no product in shot | K1/K6 of F1, F2, F3, F5, F6; K6 of F4 | A52 on a tripod, eye level, Peter square to camera, one take per script. Same framing for K1 and K6 so the close rhymes with the hook. |
-| live + screen comp — Peter thumbing a generic manual log (burgundy on charcoal; never the Fitbod UI) | K2 of all six | Film Peter’s hand and phone live at the bench; composite the generic log UI in post. Burgundy accent on charcoal, distinct type, different layout, per the video plan’s legal note. Never a Fitbod screenshot, never the Fitbod name. |
-| live — Peter, headband on (physical branded prop; LED composited in post) | K3 of all six; K1 of F4 | Peter lifting with the physical branded headband. The teal LED is composited in post, as the founder-led strategy already plans for S4a–S4c. |
-| screen recording — POC LiveHudScreen (● live · Exercise · Reps) | K3 of F1, F3, F5, F6; K4 of F2; K3 of F4 | Screen-record the POC on the A52 during a real set. Exercise and reps are what it shows; that is all these beats claim. |
-| screen recording — POC LabelingScreen debrief → 'ALL CORRECT — SAVE' | K3 of F2 | Real recording of the debrief that follows a set, ending on the save button. |
-| screen recording — POC CampaignScreen, per-exercise level progress | K5 of F2, F4, F5, F6 | Real recording of the campaign screen’s per-exercise level progress. |
-| overlay on a real POV clip — a weeks-over-weeks trend, labelled 'product interface concept' (the POC has no trend view) | K5 of F1, F3, F4, F5; K1 of F6 | An overlay on a real first-person clip. The POC stores sets but has no trend or month view, so the label is mandatory, exactly as the landing page’s overlay demo is labelled. |
-| AI cutaway — first-person weight-stack POV (storyboard S4d) with the weight overlay labelled 'product interface concept' | K4 of F1, F3, F5, F6; K4 of F4 via the frame graphic | AI cutaway, first-person hand reaching to a stack pin (storyboard S4d). Weight overlay labelled *product interface concept*. |
-| graphic — one frame leaving the band, a timer, then the frame dissolving (privacy beat) | K4 of F3, F4, F6 | A motion graphic: one still frame leaves the band, a seconds counter, the frame dissolves. Shows the privacy architecture instead of asserting it. |
-| cutaway — ../gitnfit/gitnfit-vscode/exercises/desk-assisted-lunge.mp4 (1280×720, 14 s; Peter as the desk trainer) + output/screenshots/03-routine-video-playing.png | K1 of F5 | Existing 1280×720 footage of Peter as the desk trainer. Crop to the standing figure for 9:16; the routine-panel screenshot can sit as a brief inset. |
+| `old_log_typing` | screen recording — a generic manual workout log being filled in: exercise picked from a menu, 3×8, 80 typed | NEW asset. Build a throwaway mock (burgundy accent on charcoal, its own layout) and screen-record it. Never a Fitbod screenshot, never the name — the video plan’s legal note. |
+| `hud_live_set` | screen recording — POC `LiveHudScreen` on the A52 during a real set: ● live · Exercise · Reps | Real. Record on the phone while a set runs; the HUD shows exercise and reps, which is all any line over it claims. |
+| `debrief_confirm` | screen recording — POC `LabelingScreen` after the set, ending on ‘ALL CORRECT — SAVE’ | Real. The one question after the set, and the one tap. |
+| `levels_progress` | screen recording — POC `CampaignScreen`, per-exercise level progress | Real. Sets accumulating into Recon → Provisional → Certified. |
+| `trend_concept` | overlay on a real first-person clip — a weeks-over-weeks trend, labelled ‘product interface concept’ | Concept. The POC stores sets but has no trend or month view, so the label is mandatory (landing-page decision Q3). |
+| `stack_pov_concept` | AI cutaway — first-person hand reaching to a weight-stack pin (storyboard S4d), weight overlay labelled ‘product interface concept’ | Concept. The founder-led strategy keeps S4d AI-generated; the overlay is not shipped UI. |
+| `frame_privacy` | motion graphic — one still frame leaves the band, a seconds counter runs, the frame dissolves | Graphic. Shows the hybrid privacy architecture instead of asserting it. |
+| `reveal` | campaign footage — `web/dist/assets/reveal.mp4`, the branded headband, live-shot | Real. The only place the logo appears on the band: it was filmed, not generated. |
+| `gitnfit_desk_lunge` | cutaway — `../gitnfit/gitnfit-vscode/exercises/desk-assisted-lunge.mp4` (1280×720, 14 s), Peter as the desk trainer | Real footage of Peter. 16:9 → crop to the standing figure for 9:16. |
 
-**Continuity.** Plain black tank top in every live shot, matching the founder reference stills the geggen pipeline already uses (`../geggen/products/handlr/reference/peter_01_tanktop_x4.png`). One gym, one lighting setup, one day. Captions are kinetic and carry the exact VO text; music stays off so the delivery is the only sound, as in the handlr cut.
+Each joined beat plays only the **head** of each cut segment, so every recording must carry its money frame in its first ~2.5 s. Record the HUD from the moment the gate opens; start the levels recording on the exercise that is furthest along.
 
 ---
 
-## 8. Claims allowlist — every spoken sentence resolves to one of these
+## 9. Claims allowlist — every spoken sentence resolves to one of these
 
-Taken from the live site (`web/src/components/*.astro`, `https://ironpal.co`) and, for the app mechanics, from the model design and the POC code. A line that cannot be traced here does not go in a script.
+Taken from the live site (`web/src/components/*.astro`, `https://ironpal.co`) and, for the app mechanics, from the model design and the POC code. The pipeline’s `validate_claims` fails a run whose line cannot be traced here.
 
 1. **Site · Hero** — A headband watches your set and logs the exercise, your reps and the weight on the bar; you type nothing.
 2. **Site · Problem** — Phone out, gloves off, thumb-typing 3×8 @ 80 kg between sets; the rhythm breaks, numbers get fudged, half never make it in.
@@ -520,15 +546,27 @@ Taken from the live site (`web/src/components/*.astro`, `https://ironpal.co`) an
 15. **App · `LiveHudScreen.tsx`** — A live HUD shows the recognised exercise and the rep count during a set.
 16. **Founder · gitnfit** — Peter built and shipped git & fit, a VS Code extension with 20+ desk exercises, and appears in its exercise videos as the trainer.
 
-**Not on the list, therefore not said:** “no cloud”, “nothing leaves your device”, “faces blurred”, any brand name in the Compare row, any dollar figure, any ship date, any duration Peter has worn the band.
+**Not on the list, therefore not said:** “no cloud”, “nothing leaves your device”, “faces blurred”, any brand name in the Compare row, any dollar figure, any ship date, any duration Peter has worn the band beyond “this month” and “weeks”.
 
 ---
 
-## 9. Worth your eye before anything renders
+## 10. Pipeline handoff — what geggen needs to run these
 
-- **The site says “Zero taps, ever”; the app asks for one tap after the first sets.** The scripts never say “zero taps”. F2 tells the truth as the story (“I told it once”), and the others say “typed nothing”, which is literally true because confirming is a tap. Whether the site’s copy softens to “nothing to type” is a marketing call recorded as open in the ledger.
-- **The trend and month views do not exist in the POC.** F1, F3, F4, F5 (K5) and F6 (K1) show them as labelled overlays. If the label reads as weak on screen, the fallback in every case is the real levels screen.
-- **2.04 words per second was measured on a generated voice, not on Peter.** Record F1 first, measure, and rescale every timecode before locking any edit. Slovak versions, if wanted, need their own measurement; Slovak runs longer.
-- **The physical headband prop must be the branded one.** The scripts assume the DTF-transferred band from the prop-branding plan is finished. If it is not, K3 of every script is blocked, not workable-around: the logo is the product.
-- **F5 crops 16:9 footage into 9:16.** The desk-lunge clip is wide; a centre crop on the standing figure loses the laptop. Check one frame before committing to it as the hook.
-- **Everything is one gym day.** Six scripts share the same K2 and K3 setups, so the shot list is short, but every live line is a separate take. Budget the day for takes, not setups.
+1. **`products/ironpal.json`** — `website: https://ironpal.co`, `product_video` = the POC screen recording (HUD → debrief → levels, ≥ 20 s), `brand.accent_color` teal, `brand.presenter` **fixed to the founder** (see below), `holding: none`, `reframe: crop`, `language: en`.
+2. **A refpack for Peter** built from `../geggen/products/handlr/reference/` — anchor `peter_01_tanktop_x4.png`, support `peter_face_colour_x4.png`, **no scene image** (the pack’s scene reference stays empty and the scene tokens above are the only setting).
+3. **A fixed cast, not a rotating persona.** geggen invents a new on-brand person per promo by design (creative.py, Q4). IronPal’s cast is the founder every time, so the persona pool must be bypassed and the refpack character used for every run. This is the one engine change these scripts need; it is recorded as open in the ledger.
+4. **Segments** in §8 cut and frame-verified at both ends before any render; `old_log_typing` is a new recording; `trend_concept` and `stack_pov_concept` are labelled overlays on real POV clips.
+5. **One `promo_config.json` per script**, K1–K5 with the layouts and options above, `end_card.seconds: 2.5`. The `action` strings are used verbatim; the pipeline prepends the no-writing clause, appends framing, wardrobe, scene, the to-camera clause and the delivery instruction, and bakes the `vo`.
+6. **Inspect every rendered clip** with the vision gate before assembly: burned-in text and vanished props are the two defects that made handlr clips unusable, and both are re-rolls at 10 credits, not edits.
+
+---
+
+## 11. Worth your eye before anything renders
+
+- **The site says “Zero taps, ever”; the app asks for one tap after the first sets.** No script says “zero taps”. F2 tells the truth as the story; the others say “typed nothing”, which holds because confirming is a tap. Softening the site copy is a marketing call, left open.
+- **Peter’s clips are generated, not filmed.** That follows the brief (“we will use Google Flow”), and it reverses the founder-led strategy’s “shoot live” default for these six cuts. The reference photographs are low-resolution; the likeness will be checked on the first minted portrait before any clip is paid for.
+- **The generated band carries no logo.** Logos float in generated video and text renders as scribble, so the branded product appears only in the composited live reveal. If a script must show the logo on Peter’s head, that clip has to be filmed, not generated.
+- **There is no gym photograph of Peter**, so the gym is invented from the scene tokens. The first two clips will show whether Flow holds the same room; if not, the fix is a scene reference image, which means a live still of Peter in a gym.
+- **The trend and month views do not exist in the POC.** F3 (K5) and F6 (K1) show them as labelled overlays; the fallback in both is the real levels screen.
+- **2.04 words per second was measured on a generated voice for Eve.** Peter’s minted voice will set its own rate; a line that overruns 8 s is cut at its last clause, never sped up.
+- **Credits.** 50 per script, 300 for six; refusals cost nothing but time. Which account pays is not decided here.
