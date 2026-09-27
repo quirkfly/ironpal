@@ -120,7 +120,30 @@ Keep exactly that gym setting. Natural, healthy, realistic skin tone. Sharp and 
 
 ---
 
-## 5. Slow motion is the one thing K1 cannot have
+## 5. The K1 prompt, ready to paste
+
+Built by the pipeline’s own `cast.py build_prompt` from the config, then two edits it cannot make itself — the delivery clause and the pronouns, both below. Settings chip on **video · 9:16 · 720p · 8s · x1**, Agent chip **off**, and attach **`Peter Pitch`**, not `Peter`.
+
+```
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter Pitch stands squarely on the gym floor facing camera, still and unhurried, weight settled, moving slowly and deliberately, delivering it like a statement of fact in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Medium-wide shot, the person clearly visible from the waist up with room around him, talking to camera. He faces the camera and delivers the line straight to camera, eyes on the lens — not looking down, not looking away, not at a phone. He is wearing a plain black tank top, with nothing on his head — no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck — the exact SAME outfit in every shot. He is ALONE in the shot — no other people in frame. His skin has a natural, healthy, photorealistic tone with realistic warmth — NOT grey, pale-green, waxy, gaunt or zombie-like. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing is worn in or over his ears. No equipment, wires or accessories are visible on him or anywhere in the room. NO devices and NO screens anywhere in this shot: no phone in his hand or at his ear, no laptop, tablet or monitor, and no readable text, logos, UI or writing in frame. His hands are empty and stay visible or out of shot for the whole clip — he never picks anything up or puts anything down. His hands stay RELAXED AND STILL (folded, or at his sides); he does NOT gesture, count on his fingers, or raise a hand — a raised or gesturing hand is where extra and malformed fingers appear. The background is ONE fixed room and does not change, shift or cut to a different place at any point in the clip; the camera does not move. Audio: one clear man's voice, lip-synced to him, spoken SLOWLY and DELIBERATELY, with weight and conviction — an unhurried, measured delivery that lands each figure, real inflection rising and falling as a person's does, a short pause between the two sentences. Serious and matter-of-fact, NOT wry, NOT jokey, NOT flat, NOT monotone, NOT read aloud. ONE single take: "Gyms, a hundred and forty billion a year. Fitness trackers, fifty billion more.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing. Say that line EXACTLY ONCE, word for word, start to finish — all 13 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence. Do NOT say any part of the line a second time. Do NOT ad-lib, pad, or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last. The voice must NOT change speaker, gender, age or timbre part way through, and NO second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed. No other dialogue, no ambient sound, no music. Nothing in this shot is written on.
+```
+
+### 5.1 Two edits the builder cannot make
+
+**The delivery clause.** The builder asks every clip for *“warmth and a little wry humour”*, which is right for the deadpan beats and wrong for a figures pitch. Replaced with a slow, measured read that lands each number and pauses between the two sentences.
+
+**The pronouns — and this one nearly did real damage.** `cast.py` writes every prompt in the plural (*“They face the camera”*, *“Their hands stay still”*) because its personas rotate and gender varies per promo. This cast does not rotate, and a plural pronoun sitting next to a clause that insists he is ALONE is the one ambiguity the shot cannot afford.
+
+The fix is `pipeline/promo/pronouns.py`, and it works **phrase by phrase, never word by word**. A blanket swap was tried first and silently destroyed the two sentences that stop the spoken line being painted into the picture, because their pronouns refer to **the words**, not the man:
+
+> Those words are SPOKEN ALOUD ONLY — **they** are audio, not a caption.  
+> Do NOT write, display, superimpose or print **them**, or any word or fragment of **them** …
+
+Word-level substitution turns those into *“he is audio”* and *“print him”* — nonsense in the exact clause that prevents burned-in captions, which is the defect that ruined three of four clips on a handlr run. Both corruptions were produced and caught before anything rendered. The module now asserts those two clauses survive intact and raises if any plural escapes elsewhere. One trap inside the trap: the tail of that same sentence, *“not on their clothing”*, is the man’s and does get swapped.
+
+---
+
+## 6. Slow motion is the one thing K1 cannot have
 
 The brief asked for slow motion. **A talking clip cannot be slow motion**, and finding that out after a render would cost 10 credits and produce something unusable.
 
@@ -132,7 +155,7 @@ If genuine slow motion is wanted somewhere in this video, it belongs on a clip w
 
 ---
 
-## 6. What this changes downstream
+## 7. What this changes downstream
 
 Recorded, not yet applied. The committed config still holds the original eight clips.
 
@@ -143,7 +166,7 @@ Recorded, not yet applied. The committed config still holds the original eight c
 
 ---
 
-## 7. Open — needs your decision before anything is written or rendered
+## 8. Open — needs your decision before anything is written or rendered
 
 - ~~Which line.~~ **Settled: C.**
 - ~~The bandless character.~~ **Minted as `Peter Pitch`.**
