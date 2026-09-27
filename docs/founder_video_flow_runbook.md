@@ -59,11 +59,13 @@ The first upload on an account raises a **Rights to use this image** dialog. Cli
 
 ### 2.2 The portrait variant — locks the face
 
-With that photo as the reference, paste:
+With that photo as the reference, paste **the whole block** — the background and framing clauses are at the end, and a truncated paste loses them:
 
 ```
-Head-and-shoulders portrait of this exact person. Keep their face: same bone structure, same hairline, same eyes, same mouth. Do not change who they are, do not smooth, slim or de-age them; keep age-appropriate skin texture. Natural, healthy, realistic skin tone — NOT grey, waxy or pale-green. Sharp and in focus, plain neutral background, no text or logos anywhere.
+Head-and-shoulders portrait of this exact person. Keep their face: same bone structure, same hairline, same eyes, same mouth. Do not change who they are, do not smooth, slim or de-age them; keep age-appropriate skin texture. Natural, healthy, realistic skin tone — NOT grey, waxy or pale-green. Replace the background with a plain, evenly lit neutral warm-grey wall — no brick, no texture, no marks, no objects, no other people, and no text or logos anywhere. Framing: head-and-shoulders to mid-chest, squared to camera, eyes open and looking into the lens, soft natural daylight from the front. Sharp and in focus.
 ```
+
+> The background sentence is not the pipeline's. Its own portrait prompt asks for a *“plain neutral background”*, and on the first real mint that lost to the reference photograph's own speckled concrete wall — the variant came back against brick. Saying what to do with the background that is **there** is what wins, and `likeness_prompt` in the same module already had that phrasing.
 
 ### 2.3 The body variant — puts the band on you
 
