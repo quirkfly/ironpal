@@ -120,6 +120,38 @@ Keep exactly that gym setting. Natural, healthy, realistic skin tone. Sharp and 
 
 ---
 
+### 4.5 `Peter Pitch Full Body` — the alternative K1 framing
+
+A third character, for a full-length version of K1. Same man, same portrait, a differently framed body variant. The project then holds three characters whose names all begin *Peter*, so attach the chip deliberately — which of two same-named characters a prompt resolves against is undocumented, and three is worse than two.
+
+**Portrait:** identical to `Peter Pitch` — reuse the same approved image and the same prompt (§4.3). Do not regenerate it; a second generation is a second chance to drift.
+
+**References for the body:** the `Peter Pitch` portrait, then `peter_01_tanktop_x4.png`. Same as §4.2 and for the same reasons.
+
+**Body prompt:**
+
+```
+Full-length shot, head to toe, of the exact man in the portrait reference, standing and facing camera in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm.
+
+FRAMING: a vertical composition in which he fills the full height of the frame from the top of his head to his feet, camera at chest height, close enough that his face stays sharp and clearly recognisable. This is a FULL-LENGTH PORTRAIT, not a wide or distant shot: his head must NOT be small in frame, and the room must not swallow him.
+
+THE FACE IS THE PRIORITY AND MUST MATCH THE PORTRAIT REFERENCE EXACTLY. He is 46 and looks it. His face is BROAD and square, with FULL cheeks — soft flesh over them, NOT hollow, NOT gaunt, NOT carved or chiselled. His jaw is soft and square, NOT tapered to a point. His eyes are rounded and open with visible upper eyelids, NOT narrow, NOT hooded, NOT squinting. His nose is fairly broad with a rounded tip, NOT thin or sharp. His lips are full, especially the lower lip. Ordinary skin with real lines and texture around the eyes and forehead. His head is completely shaved bald, no hair at all, and he has light stubble with a moustache and a short greying chin beard. He is a lean 46-year-old man, NOT a fitness model, NOT a magazine cover athlete. Do not idealise, beautify, slim or harden his face in any way.
+
+He wears a plain black tank top, plain black training shorts and plain dark trainers. His head is BARE — nothing on it at all: no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck. His forehead and shaved scalp are completely uncovered.
+
+He stands squarely with his weight settled and his arms relaxed at his sides. Keep exactly that gym setting, do not move him to a brighter or different gym and do not invent a new background. Natural, healthy, realistic skin tone. Sharp and in focus, nobody else in frame.
+```
+
+Three things in it are there because of what full-length costs:
+
+- **The framing paragraph fights the distance.** A full-length shot is where the face gets the fewest pixels, and it is exactly where the first body variant drifted into a generic athletic model. Demanding a vertical composition that fills the frame height, with the camera close and the head not small, is what keeps the face large enough to hold.
+- **The anti-beautification paragraph is unchanged**, because it is what beat the drift at waist-up and the pull is stronger here, not weaker.
+- **Legwear had to be invented.** No previous variant showed below the waist and no reference photograph does either. Plain black training shorts and dark trainers keep the silhouette dark against the dark gym; say so if you would rather have joggers, and it is a one-line change.
+
+**Judge it against the waist-up version before choosing.** The honest expectation is that the face is weaker here — that is a property of the framing, not of the prompt — and the question is whether the extra scale is worth it for a pitch delivered standing.
+
+---
+
 ## 5. The K1 prompt, ready to paste
 
 Built by the pipeline’s own `cast.py build_prompt` from the config, then two edits it cannot make itself — the delivery clause and the pronouns, both below. Settings chip on **video · 9:16 · 720p · 8s · x1**, Agent chip **off**, and attach **`Peter Pitch`**, not `Peter`.
