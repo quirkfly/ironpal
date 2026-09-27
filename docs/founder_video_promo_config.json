@@ -28,11 +28,11 @@
     "arc": "The objection is owned in the first clip, the gym's existing cameras are the premise, the device and what it does and does not send are the middle, and the last line pays the premise with the privacy fact.",
     "beats": [
       {
-        "beat": "hook",
+        "beat": "pitch",
         "layout": "full",
         "options": {},
         "clip": "K1",
-        "cast_slot": "founder"
+        "cast_slot": "pitch"
       },
       {
         "beat": "old_way",
@@ -144,9 +144,33 @@
         "products/ironpal/reference/peter_face_colour_x4.png"
       ],
       "seed": 960091
+    },
+    {
+      "slot": "pitch",
+      "display_name": "Peter Pitch",
+      "gender": "man",
+      "age_years": 46,
+      "is_customer": false,
+      "wardrobe": "a plain black tank top, with nothing on his head — no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck",
+      "persona": "a lean, athletic 46-year-old White man with a closely shaved head, light stubble with a moustache and a short greying chin beard, fair skin, defined shoulders and arms; calm, a slight dry smile; natural HEALTHY skin tone with realistic warmth and subsurface detail (NOT grey, NOT pale-green, NOT gaunt, NOT waxy or zombie-like), a real photorealistic human face",
+      "portrait_prompt": "Photorealistic portrait of Peter, a lean, athletic 46-year-old White man with a closely shaved head, light stubble with a moustache and a short greying chin beard, fair skin, defined shoulders and arms; calm, a slight dry smile; natural HEALTHY skin tone with realistic warmth and subsurface detail (NOT grey, NOT pale-green, NOT gaunt, NOT waxy or zombie-like), a real photorealistic human face, wearing a plain black tank top, with nothing on his head — no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck. Plain warm-grey wall behind him, soft natural daylight from a window, sharp focus on the face, shot on a 50mm lens.",
+      "reference_photo": "products/ironpal/reference/peter_01_tanktop_x4.png",
+      "reference_photos": [
+        "products/ironpal/reference/peter_portrait_flow.png"
+      ],
+      "_about": "The SAME man as `founder`, minted as a SEPARATE Flow character because clips resolve against a character and `Peter` carries the band in his body variant. K1 must show no product.",
+      "seed": 960092
     }
   ],
   "flow_cast": [
+    {
+      "character": "Peter Pitch",
+      "lead": false,
+      "portrait": "products/ironpal/reference/peter_01_tanktop_x4.png",
+      "body": "products/ironpal/reference/peter_face_bw_x6.png",
+      "description": "a lean, athletic 46-year-old White man with a closely shaved head, light stubble with a moustache and a short greying chin beard, fair skin, defined shoulders and arms; calm, a slight dry smile; natural HEALTHY skin tone with realistic warmth and subsurface detail (NOT grey, NOT pale-green, NOT gaunt, NOT waxy or zombie-like), a real photorealistic human face",
+      "scene": "a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm"
+    },
     {
       "character": "Peter",
       "lead": true,
@@ -159,15 +183,15 @@
   "clips": [
     {
       "id": "K1",
-      "cast_slot": "founder",
-      "action": "stands on the gym floor between sets, squared to camera, calm, with a slight dry smile",
-      "vo": "Yes, there’s a camera on my head at the gym. Here’s exactly what it sends.",
+      "cast_slot": "pitch",
+      "action": "stands squarely on the gym floor facing camera, still and unhurried, weight settled, moving slowly and deliberately, delivering it like a statement of fact",
+      "vo": "Gyms, a hundred and forty billion a year. Fitness trackers, fifty billion more.",
       "claim_refs": [
-        0,
-        7
+        15,
+        16
       ],
       "seed": 8717,
-      "caption": "Yes, there’s a camera on my head at the gym. Here’s exactly what it sends.",
+      "caption": "Gyms, a hundred and forty billion a year. Fitness trackers, fifty billion more.",
       "reference_images": {
         "references": [
           {
@@ -397,7 +421,9 @@
     "IronPal is pre-launch; reserving early-bird access costs nothing today and locks the price and a 48-hour head start.",
     "Early-bird is up to about 50% off the launch price, limited to the first 200 spots.",
     "IronPal is built in the open by a solo founder.",
-    "ironpal.co is where you reserve a spot."
+    "ironpal.co is where you reserve a spot.",
+    "The global health and fitness club market is about 140 billion dollars a year.",
+    "The fitness tracker market is about 50 billion dollars a year, separate from the club market."
   ],
   "targets": [
     "youtube",
@@ -408,7 +434,7 @@
     "words_per_clip_max": 16,
     "words_total_max": 117,
     "words_per_clip": [
-      15,
+      13,
       13,
       14,
       13,
@@ -417,9 +443,9 @@
       15,
       16
     ],
-    "words_total": 115,
-    "speech_seconds_est": 56.4,
-    "with_card_seconds_est": 58.9,
+    "words_total": 113,
+    "speech_seconds_est": 55.4,
+    "with_card_seconds_est": 57.9,
     "wps_measured_on": "handlr-eve-11, four rendered beats"
   }
 }

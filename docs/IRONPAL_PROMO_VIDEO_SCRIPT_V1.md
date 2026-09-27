@@ -1,6 +1,6 @@
 # IronPal promo video — script V1: the opening pitch
 
-**Status:** V1 · 2026-09-27 — **K1 line chosen (C)**; the character it needs is not minted yet  
+**Status:** V1 · 2026-09-27 — **line chosen (C), `Peter Pitch` minted, K1 ready to render**  
 **Scope:** clip K1 only. The other seven clips are unchanged and live in [`founder_video_final.md`](founder_video_final.md).  
 **The six scripts this came from:** [`founder_video_scripts.md`](founder_video_scripts.md) · **the machine form:** [`founder_video_promo_config.json`](founder_video_promo_config.json) · **how to drive Flow:** [`founder_video_flow_runbook.md`](founder_video_flow_runbook.md)
 
@@ -78,6 +78,8 @@ What each option is doing:
 
 ## 4. Task 2 — `Peter Pitch`, the bandless character
 
+> **Minted 2026-09-27.** `Peter Pitch` exists in the project with both variants, built from the approved `Peter` portrait plus the tank-top photograph. The config carries him as cast slot `pitch`, and K1 is the only clip that resolves against him.
+
 ### 4.1 Why a second character and not a second variant
 
 Clips resolve against a **character**, and the existing `Peter` carries the headband in his body variant — that is the whole point of him. A K1 generated against him inherits the band. So K1 needs its own character, minted the same way, wearing nothing on his head.
@@ -118,7 +120,19 @@ Keep exactly that gym setting. Natural, healthy, realistic skin tone. Sharp and 
 
 ---
 
-## 5. What this changes downstream
+## 5. Slow motion is the one thing K1 cannot have
+
+The brief asked for slow motion. **A talking clip cannot be slow motion**, and finding that out after a render would cost 10 credits and produce something unusable.
+
+Flow bakes the voice-over into the clip and lip-syncs it to the mouth. Slowing the picture desynchronises the mouth from the words, whether the retime happens inside the generation or afterwards in the edit. There is no setting that slows the picture and leaves the audio alone.
+
+What the brief actually wants is gravitas, and that is available: **slow, deliberate movement and an unhurried, weighty delivery, at normal frame rate.** The action asks him to stand still with his weight settled and move slowly; the audio clause asks for a measured read that lands each figure, with a pause between the two sentences. The mouth stays in sync and the clip still feels like a pitch rather than a remark.
+
+If genuine slow motion is wanted somewhere in this video, it belongs on a clip with **no speech** — a cutaway, not a piece to camera.
+
+---
+
+## 6. What this changes downstream
 
 Recorded, not yet applied. The committed config still holds the original eight clips.
 
@@ -129,9 +143,10 @@ Recorded, not yet applied. The committed config still holds the original eight c
 
 ---
 
-## 6. Open — needs your decision before anything is written or rendered
+## 7. Open — needs your decision before anything is written or rendered
 
 - ~~Which line.~~ **Settled: C.**
+- ~~The bandless character.~~ **Minted as `Peter Pitch`.**
 - **The industry observations are not product claims.** *“Everyone still types”* and *“wear something ridiculous”* are statements about the market, outside the claims allowlist, the same way the tripods were. None names a competitor, which keeps them safe, but they need your yes.
 - **The revenue figures go on the record.** Quoting a market size in a founder video is a claim about the world; the rounding rules in §1 are there to keep it defensible.
 - **K8’s new punchline**, once K2 is settled.
