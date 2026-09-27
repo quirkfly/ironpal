@@ -6,6 +6,8 @@
 **Budget:** 115 words → ≈ 58.9 s with the card; ≤ 16 words a clip, ≤ 117 a script, both asserted  
 **Ledger:** decisions Q49–Q54 in [`founder_video_scripts_grilled.md`](founder_video_scripts_grilled.md), Branch I  
 
+> **K1 is being reworked.** It becomes an argument about the size of the fitness industry rather than the personal hook below, delivered in slow motion with the headband deliberately absent. The research, the candidate lines and the second bandless character are in [`IRONPAL_PROMO_VIDEO_SCRIPT_V1.md`](IRONPAL_PROMO_VIDEO_SCRIPT_V1.md); the line is not yet chosen, so K1–K8 here are still the committed version.
+
 ---
 
 ## 1. Why this one
