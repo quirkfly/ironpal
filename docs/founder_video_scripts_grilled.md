@@ -1,6 +1,6 @@
 # Grilled — Founder video scripts (auto mode)
 
-Decisions resolved on **2026-09-25**, revised **2026-09-27** for the five-clip Flow structure, against [`founder_video_scripts.md`](founder_video_scripts.md),
+Decisions resolved on **2026-09-25**, revised **2026-09-27** for the Flow structure (five clips, then eight for the 60 s window), against [`founder_video_scripts.md`](founder_video_scripts.md),
 **without user interaction**: each question was posed and answered by walking the decision tree, one
 branch at a time, in order.
 
@@ -13,7 +13,7 @@ Provenance tags:
 - **OPEN** — not mine to settle (a public claim, a fact I cannot verify). Recommendation stated; the
   scripts stay conditional on it.
 
-**Tally: 36 questions — 21 EVIDENCE · 13 ASSUMED · 2 OPEN.**
+**Tally: 41 questions — 25 EVIDENCE · 14 ASSUMED · 2 OPEN.**
 
 **Worth a veto first:**
 
@@ -28,8 +28,9 @@ Provenance tags:
    Flow holds it; the fix is one live still.
 4. **Q33 — geggen rotates personas by design; these need a fixed cast.** A small engine change, or
    six hand-run refpack jobs. Either is a decision.
-5. **Q34 — 300 credits, and no account held 50 on the last count.** Render F1 alone first; it
-   settles likeness, room and speaking rate before the rest is paid for.
+5. **Q38 — the 60 s window rests on shots running at speech length, not the full 8 s slot.** If
+   the assembler pads clips, every script is 66.5 s. And Q34: 480 credits now, with no account
+   holding even 50 on the last count — render F1 alone first.
 
 ---
 
@@ -44,11 +45,10 @@ first draft assumed this from the handlr reference; the revision-2 brief states 
 
 ### Q2 — How many clips, and how long?
 
-**EVIDENCE — five clips of 8 s plus a 2.5 s card.** *Revised 2026-09-27.* The brief says
-“5 clips each lasting 8s”; Flow caps one generation at 8 s (`flow_client.py`,
-`abra_r2v_8s`), and the handlr redesign settled on 5 × 8 s + card after fourteen renders
-(`docs/video_script_redesign_v1.md` §3–§4). The first draft’s six beats are folded into five:
-the old progress beat and the close share K5, which drops to Peter full frame for its last 3 s.
+**EVIDENCE — eight clips of ≤ 8 s plus a 2.5 s card.** *Revised 2026-09-27, twice.* The first
+revision’s brief said “5 clips each lasting 8s”; the second says “stretched to 60s … roughly three
+more 8s clips per script”. Five plus three is eight. Flow caps one generation at 8 s
+(`flow_client.py`, `abra_r2v_8s`). How eight 8 s slots fit a 60 s window is Q38.
 
 ### Q3 — What pace are the timecodes computed from?
 
@@ -240,13 +240,13 @@ as scribble.
 
 ### Q28 — Which layout per clip?
 
-**ASSUMED — K1 `full` (or `cutaway` when the hook is a picture), K2 and K3 `pip`, K4 `cutaway`
-with 1.8 s head, K5 `pip` with `tail_full_seconds: 3.0`, then `card`.** It mirrors the settled
-Eve structure: the screen behind every claim, one J-cut for the honest beat, and the last clip
-dropping to the character full frame to rhyme with the hook (`assemble.py` `tail_full_seconds`,
-built and verified 2026-09-24).
-*Against:* `product_full` for K4 would give the footage the whole 8 s; the 1.8 s of face was kept
-so the honest beat is visibly said by a person.
+**ASSUMED — K1 `full` (or `cutaway` when the hook is a picture), K2 and K3 `pip`, K4–K6 a mix of
+`product_full`, `pip` and `cutaway` by what each beat shows, K7 `pip` over the levels screen, K8
+`full`, then `card`.** *Revised for eight clips.* It keeps the Eve promo’s grammar — the screen
+behind every claim, one J-cut per honest beat — and with a dedicated progress clip the close no
+longer needs `tail_full_seconds`; K8 is Peter full frame for its whole length, rhyming with K1.
+*Against:* `product_full` puts the voice over the reveal with no face for 8 s; if that reads as a
+narrated ad rather than a person talking, swap those beats to `cutaway` with a 1.8 s head.
 
 ### Q29 — How is the `action` written?
 
@@ -292,10 +292,10 @@ change at all, only discipline.
 
 ### Q34 — Which Flow account pays, and when?
 
-**OPEN.** 5 clips × 10 credits = 50 per script, 300 for all six; refusals are free; minting is
-free. The redesign doc records no account holding 50 on 2026-09-24. Whether to wait for resets,
-top up, or spread the six across accounts is a money decision. *Recommendation:* render F1 alone
-first — it settles the likeness, the room and Peter’s speaking rate before 250 more credits go in.
+**OPEN.** 8 clips × 10 credits = **80 per script, 480 for all six**; refusals are free; minting is
+free. The redesign doc records no account holding 50 on 2026-09-24. Whether to wait for resets, top
+up, or spread the six across accounts is a money decision. *Recommendation:* render F1 alone
+first — it settles the likeness, the room and Peter’s speaking rate before 400 more credits go in.
 
 ### Q35 — What is the speaking-rate risk now that the voice is generated?
 
@@ -311,3 +311,54 @@ whole. If F1’s K5 overruns, K5 is rewritten shorter, not trimmed.
 bad one for 10 credits rather than shipping it; the redesign doc §6.7 records burned-in gibberish
 captions as intermittent with no identified cause. Every rendered clip is inspected before the
 assembler sees it.
+
+---
+
+## Branch G — Revision 3: the 60 s window (2026-09-27)
+
+### Q37 — How many more clips, and what are they for?
+
+**EVIDENCE for the count, ASSUMED for the content — three more, spent on the hardware, the first
+session and the correction loop.** The brief says three. The five-clip cut had no room for the
+site’s Hardware section, for showing the teach-once debrief in every script, or for the studio
+where a wrong call is corrected — and the correction loop is the ‘improve’ half of “track and
+improve” that the original brief asked for. Each script takes the three that fit its angle; F3
+spends one on the rest of the Compare table instead of the studio.
+*Against:* three more talking clips is three more chances for Flow to drift the face or the room;
+a 40 s cut was safer to render. The brief chose 60 s.
+
+### Q38 — Eight 8 s slots are 64 s. How is that a 60 s window?
+
+**EVIDENCE — shots run at speech length, and the script is capped at 117 words.** `assemble.py`’s
+invariant: “a shot’s LENGTH is driven by the speaking clip’s detected speech window … product
+footage loops to fill, rather than the voice being trimmed”. The Eve cut proves it: 78 words in
+five 8 s slots rendered as 38.2 s of speech, not 40. At 2.04 w/s, 117 words is 57.4 s; with the
+2.5 s card, 59.9 s. The generator asserts ≤ 117 words per script. Every script here is 113–117
+words.
+*Against (the risk, not a counter-argument):* a slower minted voice than Eve’s breaks the window,
+and so would padding clips to their full slot. Both are flagged in the document.
+
+### Q39 — Does K8 still drop from the product to Peter, as K5 did?
+
+**ASSUMED — no; K8 is Peter full frame for its whole length.** With K7 carrying the levels screen,
+the close no longer has to share a clip with progress, so `tail_full_seconds` is not needed. The
+rhyme with K1 is stronger with a full 8 s of the same framing.
+*Against:* the Eve pattern’s drop-to-full was a deliberate visual punctuation; K8 loses it. It is a
+one-option change per script if the drop is missed.
+
+### Q40 — Do the engine limits allow eight clips?
+
+**EVIDENCE — not today.** `pipeline/promo/primitives.json` sets `max_clips: 4` and `max_beats: 6`,
+validated at concept time (“a variant that needs more is rejected at validation”). The Eve config
+already exceeds `max_clips` with its K5, so the limit is a number, not a design constraint. The
+handoff lists raising both (8 and 9) as a geggen config change, alongside the fixed-cast change
+from Q33.
+
+### Q41 — Are the new lines within the claims allowlist?
+
+**EVIDENCE — yes, with two additions to the app section.** The hardware lines resolve to the
+site’s Hardware section (8 mm flush camera, single teal LED, no screen, first-person view). The
+correction-loop lines (“I fix it right there, and it learns from that”; “when it’s unsure, it says
+so”) resolve to `learner.relabel` in the POC, which re-evaluates a corrected set and keeps it as an
+example, and to the reject rule in `ironpal-neural-model-design-v2.md` §5.3, where a low-confidence
+set is asked about rather than guessed. Both are added to the allowlist in §9 of the document.
