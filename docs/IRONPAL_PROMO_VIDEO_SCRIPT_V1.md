@@ -30,27 +30,33 @@ Do not quote the fitness-app market. The 2026 estimates run from $9.1 bn to $22.
 
 ---
 
-## 2. The K1 line — five candidates, measured
+## 2. The K1 line — scale only
 
-An 8-second clip holds about 16 words at the 2.04 words/second measured on the handlr renders. Numbers below are written as they will be **spoken**, because that is what costs time: “$142 bn” is six spoken words, not one.
+**“Everyone still types” has been cut from every option.** That complaint is K2’s job now, so K1 states the size of the industry and stops. Each line below also says **fitness** out loud: “gyms” on its own leaves the category to be inferred, and this clip exists to establish it.
 
-| | words | est. | line |
-|---|---|---|---|
-| **A** | 16 | 7.8 s | A hundred and forty billion dollars a year. Nearly two hundred million members. Everyone still types. |
-| **B** ← | 16 | 7.8 s | Gyms make a hundred and forty billion a year. Trackers, fifty billion more. Everyone still types. |
-| **C** | 16 | 7.8 s | A hundred and forty billion dollar industry. Two hundred million members. Typing sets into a phone. |
-| **D** | 16 | 7.8 s | Two hundred million gym members. A hundred and forty billion dollars. Not one set logged automatically. |
-| **E** | 15 | 7.4 s | A hundred and forty billion dollars a year. And everybody still logs it by hand. |
+**The delivery changes the budget.** At the 2.04 words/second measured on the handlr renders an 8-second clip holds 16 words — but this one is a slow, deliberate pitch, and at roughly 1.7 words/second it holds only 13. Lines are measured at both rates and the ones that overrun a slow reading are marked. Pick from the safe ones unless the first render shows the voice running faster than expected.
 
-**Recommended: B — gyms plus trackers — earns the cumbersome-device argument.** It is the only candidate that names the tracker market, and that is what earns the next clip’s argument: fifty billion dollars spent on things you strap on, and not one of them can tell you what you lifted. The others state scale without setting up the complaint.
+| | words | normal | slow | line |
+|---|---|---|---|---|
+| **A** | 12 | 5.9 s | 7.1 s | The fitness industry makes a hundred and forty billion dollars a year. |
+| **B** | 14 | 6.9 s | 8.2 s **overruns** | The fitness industry, a hundred and forty billion a year. Trackers, fifty billion more. |
+| **C** ← | 13 | 6.4 s | 7.6 s | Gyms, a hundred and forty billion a year. Fitness trackers, fifty billion more. |
+| **D** | 14 | 6.9 s | 8.2 s **overruns** | The fitness industry, a hundred and forty billion a year. Two hundred million members. |
+| **E** | 13 | 6.4 s | 7.6 s | The fitness industry is worth a hundred and forty billion dollars. Every year. |
+| **F** | 14 | 6.9 s | 8.2 s **overruns** | Nearly two hundred million gym members. A hundred and forty billion dollars a year. |
 
-What each option is doing, in one line each:
+**Recommended: C — gyms plus trackers — fits a slow delivery.** It carries two figures rather than one, which is what makes it an argument instead of a statistic, it names fitness explicitly through “fitness trackers”, and it is one of the few that still fits if the delivery is slow. The tracker number is what earns K2: fifty billion dollars spent on things you strap on, and not one of them can tell you what you lifted.
 
-- **A** — scale of the industry.
-- **B** — gyms plus trackers — earns the cumbersome-device argument.
-- **C** — the absurdity, stated flat.
-- **D** — members first, money second.
-- **E** — shortest — leaves air for the slow motion.
+A note on the arithmetic, in case it is ever challenged. The two figures are **separate markets**, not a whole and its part — health clubs are $142.6 bn, fitness trackers are $51.3 bn alongside them. So “fifty billion more” is correct and “fifty billion of that” would not be. Do not add them into a single number either; the categories are drawn by different firms and the sum would be yours, not theirs.
+
+What each option is doing:
+
+- **A** — plainest, names the industry.
+- **B** — industry plus trackers — two numbers.
+- **C** — gyms plus trackers — fits a slow delivery.
+- **D** — scale plus people.
+- **E** — shortest, heaviest.
+- **F** — members first.
 
 ---
 
@@ -59,6 +65,7 @@ What each option is doing, in one line each:
 | | |
 |---|---|
 | framing | waist-up, facing camera. **No clip in this script is full-body** — verified against the builder: five of eight are tight head-and-shoulders and the widest, K1 and K8, are medium-wide from the waist up. Full-body is also where a generated face drifts worst. |
+| word budget | **13 words, not 16.** A slow delivery costs about two words of the clip — see §2. |
 | delivery | slow motion, a pitch delivered to camera. Measured and unmeasured: the pipeline asks for “genuine expression, real inflection” because a flat reading was the complaint on two handlr clips; slow motion is a new instruction and the first render will say whether Flow honours it. |
 | product | **absent.** No headband, nothing on his head, nothing around his neck. |
 | character | `Peter Pitch`, not `Peter` — see §4. |
