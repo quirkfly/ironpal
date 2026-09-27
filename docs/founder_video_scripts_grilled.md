@@ -1,6 +1,6 @@
 # Grilled — Founder video scripts (auto mode)
 
-Decisions resolved on **2026-09-25**, revised **2026-09-27** three times — for the Flow structure (five clips, then eight for the 60 s window), then rewritten to the comedy rubric — against [`founder_video_scripts.md`](founder_video_scripts.md),
+Decisions resolved on **2026-09-25**, revised **2026-09-27** three times — for the Flow structure (five clips, then eight for the 60 s window), then rewritten to the comedy rubric, then one script selected and rebuilt around the headband — against [`founder_video_scripts.md`](founder_video_scripts.md),
 **without user interaction**: each question was posed and answered by walking the decision tree, one
 branch at a time, in order.
 
@@ -13,24 +13,22 @@ Provenance tags:
 - **OPEN** — not mine to settle (a public claim, a fact I cannot verify). Recommendation stated; the
   scripts stay conditional on it.
 
-**Tally: 48 questions — 29 EVIDENCE · 16 ASSUMED · 3 OPEN.**
+**Tally: 54 questions — 31 EVIDENCE · 19 ASSUMED · 4 OPEN.**
 
 **Worth a veto first:**
 
-1. **Q45 — seven joke lines are facts about Peter or his gym, not the product, and render only
-   with his yes.** ‘Three years, the receptionist still asks my name’; ‘eight companies’; the
-   tripods and the ceiling camera. Each is true or it is cut.
-2. **Q15 — the site says “Zero taps, ever” and the app asks for one confirming tap after the first
-   sets.** The scripts side with the app and never say “zero taps”. The site copy is the founder’s
-   call.
-3. **Q27 — the band Peter wears in every generated clip carries no logo.** The product’s mark
-   appears only in the composited live reveal. If it must be on his head in a talking clip, that
-   clip has to be filmed.
-4. **Q32 — the gym is invented from words.** No photograph of Peter in a gym pins the room across
-   eight clips. The first render will show whether Flow holds it.
-5. **Q38 — the 60 s window rests on shots running at speech length, not the full 8 s slot.** If
-   the assembler pads clips, every script is 66.5 s. And Q34: 480 credits, no account holding 50
-   on the last count — render F1 alone first.
+1. **Q49 — F4 is the one that gets made.** Picked because the band is its subject and the joke is
+   the privacy objection; F1 is the more universal joke, F6 the sharper punchline. One line to
+   change if you disagree, before any credit is spent.
+2. **Q50 / Q51 — the band on Peter in generated clips carries the ring icon only, from a wardrobe
+   clause plus `headband-hero.jpg` as a Flow ingredient.** Untested: Flow may hold it, smear it or
+   drop it. K1 alone (10 credits) settles it.
+3. **Q54 — the reveal clip’s band is unbranded.** Re-shooting it with the branded prop is the
+   physical-prop plan, and the brief said no time and no budget; the branded still cut straight
+   after it is the compromise.
+4. **Q45 — the joke lines that are facts about Peter** (three tripods, a ceiling camera) render
+   only with his yes.
+5. **Q15 — the site says “Zero taps, ever”** and the script says one question, one tap.
 
 ---
 
@@ -425,3 +423,62 @@ the price of the guardrails.
 (F6 K8 uses reps, never a weight, for exactly this reason); one frame is deleted (F4 K8); no screen
 (F1 K4, F4 K5); levels are named Recon and Provisional (F4 K7, F6 K7). Where a line is only a
 joke, it asserts nothing about the product and is a `claim_refs: []` line under Q45.
+
+---
+
+## Branch I — Revision 5: one script, the headband in every clip (2026-09-27)
+
+### Q49 — Which of the six is the most impactful and funny?
+
+**ASSUMED — F4, “Yes, there’s a camera on my head”.** Its hook is the objection every viewer
+already has, so it earns attention with the product in frame one; its joke is about the world
+(everyone at the gym is already filming) and the punchline restates the site’s privacy fact; it
+says the one claim the campaign cannot get wrong in Peter’s deadpan; and the band motivates a
+gesture in every wide shot, so it can be on screen in all eight clips without forcing it. The
+follow-up brief — the band must be prominent — is what F4 is built around.
+*Against:* F1’s “fourth exercise” is the more universal recognition joke and F6’s “made peace with
+six” the sharper punchline. Either is one render away.
+
+### Q50 — What does the band Peter wears in the generated clips carry?
+
+**EVIDENCE — the teal ring icon, the stripe, the lens and the LED; never the wordmark.** The
+pipeline’s first instruction bans letters in a generated frame (`cast.py build_prompt`), the Kling
+runs showed text on a moving band renders as scribble, and `s3-physical-prop-branding-plan.md` §1
+already ranks the icon as the guaranteed deliverable and the wordmark as secondary. The wardrobe
+clause is the printed-headband spec from `body-mounted-image-prompts-updated.md` §587/§620 minus
+the wordmark; the full lockup is carried by the composited stills (`band_in_hand`,
+`headband-hero`, `worn_male`).
+
+### Q51 — Words alone, or a picture of the band as a Flow reference?
+
+**ASSUMED — both: the wardrobe clause in every prompt and `headband-hero.jpg` uploaded as a Flow
+ingredient named “IronPal headband”, referred to by name.** Flow’s reference-to-video path holds
+image references on an entity (`cast.py` `imageReferences`, a list) and the UI takes more than
+one ingredient per prompt; geggen mints one character per cast slot and attaches no object, so this
+is a manual step in Flow or a small engine change.
+*Against:* an object ingredient may pull the render toward the studio still’s lighting. If K1 shows
+that, drop the ingredient and keep the words.
+
+### Q52 — Which repo assets are real, and which are AI?
+
+**EVIDENCE.** `reveal.mp4` is the only footage of the physical band (live-shot, Runway Aleph
+background); every branded image — `headband-hero`, `worn-headband-male`, `hero-bench`,
+`worn-headband`, `wide-athlete`, S3 `selected.jpg` — is an AI still already published on the
+landing page (`web/src/components/Hero|Gallery|ProductSpotlight|VideoReveal.astro`). Using them in
+the video introduces no claim the site does not already make.
+
+### Q53 — Two stills show a man who is not Peter. May a founder video use them?
+
+**ASSUMED — yes, only under “you”, never under “I”.** They are the site’s own gallery images and
+the founder-led strategy already reserves other athletes for social-proof cutaways (S6). K6 is the
+one place they appear, under “You lift with it on”.
+*Against:* a second man in a video whose whole premise is “my head” can read as a cheat; `worn_neck`
+or the reveal are the swaps.
+
+### Q54 — The reveal clip’s band is unbranded. Re-shoot it with the branded prop?
+
+**OPEN.** Frame-checked at six points across its 4 s: a plain black loop, no ring, no LED. The
+branded physical re-shoot is planned in `s3-physical-prop-branding-plan.md` and costs a half-day
+and the prop; the brief said neither time nor budget. *Recommendation:* keep the clip — it is the
+only real, moving band in the repo — and let `band_in_hand` land the logo in the same beat, as K3
+does. Re-shoot only if the render shows the cut from unbranded to branded reads as two products.

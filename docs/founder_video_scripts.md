@@ -6,7 +6,9 @@
 **Word budget:** ≤ 16 words per clip (8 s × 2.04 words/s, the rate measured across the four rendered beats of `handlr-eve-11`) and **≤ 117 words per script** (57.4 s of speech + the card = 59.9 s); every count and estimate below is computed, and both caps are asserted before this file is written  
 **Reference:** the handlr Eve onboarding promo, `handlr-eve-11` → `-17` (geggen `docs/video_script_redesign_v1.md`, `pipeline/promo/`) — 8 s beats, the screen behind every line, one character speaking all of it, the close rhyming with the hook  
 
-> **Decisions from the design review are in [`founder_video_scripts_grilled.md`](founder_video_scripts_grilled.md) (Q1–Q48) and are folded in below.** The review ran **without user interaction**: 29 decisions rest on evidence in the repo, the site or the geggen pipeline, 16 are assumptions tagged for veto, 3 are open (a site claim the scripts contradict, whether the branded prop is finished, and which Flow account pays the credits). The assumptions most worth a veto are at the top of the ledger.
+> **Selected 2026-09-27: F4, “Yes, there’s a camera on my head”.** The final, headband-first version with paste-ready Flow prompts is [`founder_video_final.md`](founder_video_final.md); the six here remain the bench. For the selected script the wardrobe in §1 is superseded: Peter wears the IronPal band with the teal ring mark, not a plain band (final doc §3).
+>
+> **Decisions from the design review are in [`founder_video_scripts_grilled.md`](founder_video_scripts_grilled.md) (Q1–Q54) and are folded in below.** The review ran **without user interaction**: 29 decisions rest on evidence in the repo, the site or the geggen pipeline, 16 are assumptions tagged for veto, 3 are open (a site claim the scripts contradict, whether the branded prop is finished, and which Flow account pays the credits). The assumptions most worth a veto are at the top of the ledger.
 
 ---
 
