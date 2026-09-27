@@ -1853,3 +1853,63 @@ i need to understand why NN is designed the way it is, what are its key componen
 I need to understand how the neural model processes both IMU and video data, how it integrates with the labeling studio, and how it contributes to the overall exercise recognition pipeline.
 I need to understand all the phases of the neural model's operation, from data ingestion and preprocessing to feature extraction, model inference, and integration with the labeling studio and overall app infrastructure.
 
+---
+
+get an in-depth understanding of the conversation in docs/movinet_knn_pipeline.txt and come up with a detailed design for a lightweight neural network not requiring extensive amount of traning data.
+
+here is the end-user goal for the model:
+
+1. on the first visit of the gym user will record and label his exercises using both IMU and video data.
+2. the model will provider embeddings for each labeled exercise. this pair will be initialy stored in the app database (later in the backend db)
+3. on subsequent visits, the model will use the stored embeddings to recognize exercises in real-time, providing feedback and tracking progress without requiring the user to re-label exercises.
+
+make sure the model is compact and perform fast we do not need full-fledge movinet model only the small version of it as it is outlined at the end of docs/movinet_knn_pipeline.txt
+
+save the design and implementation details in ~/job_stuff/prj/ironpal/docs/ironpal-neural-model-design-v2.md and than apply /grill-me-auto skill
+
+---
+
+Pose, 48 numbers. MediaPipe finds body joints in each frame. We do not feed raw joint coordinates into
+  anything. We compute eight human-meaningful measurements per frame, such as elbow angle and wrist height
+  relative to the nose, each divided by shoulder width so body size cancels. Then each of those eight channels
+  is summarised over the window by six statistics: mean, standard deviation, minimum, maximum, range and
+  dominant period. Eight channels times six statistics is 48. Nothing here is learned. This block is the
+  discriminator, because the video block knows "arm moving rhythmically" while this block knows "elbow swept
+  through 110 degrees with the upper arm pinned".
+
+---
+
+come up with six unique video scripts for ironpal featuring me as the founder
+and save them to docs/founder_video_scripts.md and than apply /grill-me-auto skill
+
+the video must walk the watcher must explain the watcher what the web site does explain featuring me as the founder. It must be set in the gym naturally and explain how the app helps users track and improve their exercises.
+
+there must be before and after clips showing the old way and the new way with ironpal.
+
+refs:
+
+- ironpal web site
+- /tmp/h - see how ../geggen generated video script for handlr
+- ../geggen - especially the handlr video feturing me as the founder (Peter, 46)
+-- ../gitnfit - me featured in VS code plugin as a calisthenics trainer - you can you visuals from there
+
+---
+
+modify the video scripts so they are broken down to 5 clips each lasting 8s - we will use google flow for producing video
+
+refs:
+
+../geggen handlr onboarding v17 - study the whole video script, pipeline and workflow carefully and use it as inspiration for structuring the ironpal founder video scripts.
+
+---
+
+modify the video scripts so they are stretched to 60s window. that being said, we need roughly three more 8s clips per script.
+
+---
+
+modify the video scripts so they are genuinly funny
+
+---
+
+i have neither time nor budget to shot all fixed video scripts..select the one you consider the most impactful and funny
+
