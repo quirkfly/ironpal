@@ -35,13 +35,13 @@
         "cast_slot": "pitch"
       },
       {
-        "beat": "old_way",
-        "layout": "pip",
+        "beat": "the_catch",
+        "layout": "cutaway",
         "options": {
-          "pip_pos": "lower-right"
+          "head_seconds": 2.4
         },
         "clip": "K2",
-        "cast_slot": "founder",
+        "cast_slot": "pitch",
         "segment": "old_log_typing"
       },
       {
@@ -204,14 +204,15 @@
     },
     {
       "id": "K2",
-      "cast_slot": "founder",
-      "action": "sits on the flat bench, shoulders down, deadpan, delivering it in three short beats",
-      "vo": "Before, my thumb kept the log, badly, while three tripods filmed everyone else.",
+      "cast_slot": "pitch",
+      "action": "has stopped walking and stands close to camera now, still animated and enthusiastic, talking with his hands, leaning slightly in on the last few words",
+      "vo": "Billions poured into AI, and the smartest thing in this gym is still your thumb.",
       "claim_refs": [
-        2
+        2,
+        17
       ],
       "seed": 16434,
-      "caption": "Before, my thumb kept the log, badly, while three tripods filmed everyone else.",
+      "caption": "Billions poured into AI, and the smartest thing in this gym is still your thumb.",
       "reference_images": {
         "references": [
           {
@@ -423,7 +424,8 @@
     "IronPal is built in the open by a solo founder.",
     "ironpal.co is where you reserve a spot.",
     "The global health and fitness club market is about 140 billion dollars a year.",
-    "The fitness tracker market is about 50 billion dollars a year, separate from the club market."
+    "The fitness tracker market is about 50 billion dollars a year, separate from the club market.",
+    "Fitness tracking apps and wearables still require the user to enter their sets by hand."
   ],
   "targets": [
     "youtube",
@@ -435,7 +437,7 @@
     "words_total_max": 117,
     "words_per_clip": [
       13,
-      13,
+      15,
       14,
       13,
       16,
@@ -443,9 +445,9 @@
       15,
       16
     ],
-    "words_total": 113,
-    "speech_seconds_est": 55.4,
-    "with_card_seconds_est": 57.9,
+    "words_total": 115,
+    "speech_seconds_est": 56.4,
+    "with_card_seconds_est": 58.9,
     "wps_measured_on": "handlr-eve-11, four rendered beats"
   }
 }

@@ -202,7 +202,25 @@ A walk contradicts three clauses, and all three are rewritten rather than left t
 LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter Pitch FullBody walks steadily straight toward the camera, one stride after another, animated and enthusiastic, talking with his hands as he comes, his face alive and engaged — eyebrows active, eyes bright, a genuine smile breaking through as he lands each figure. His movement is fluid and natural throughout, never stiff, never robotic, never stop-start in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. A LOCKED-OFF SHOT ON A 35mm LENS AT CHEST HEIGHT, and he walks INTO it. He begins full-length, head to toe, about five metres from the camera, and closes steadily to about two metres by the end of the clip, finishing framed from the waist up. He grows noticeably larger in frame across the shot. He never walks out of frame, never passes the camera, and stays centred throughout. He faces the camera and delivers the line straight to camera, eyes on the lens — not looking down, not looking away, not at a phone. He is wearing a plain matte-black tank top, matte-black training shorts with a single thin electric-teal stripe running down the outer seam of each leg — the same electric teal as the IronPal accent — and plain black trainers, with nothing on his head — no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck — the exact SAME outfit in every shot. He is ALONE in the shot — no other people in frame. His skin has a natural, healthy, photorealistic tone with realistic warmth — NOT grey, pale-green, waxy, gaunt or zombie-like. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing is worn in or over his ears. No equipment, wires or accessories are visible on him or anywhere in the room. NO devices and NO screens anywhere in this shot: no phone in his hand or at his ear, no laptop, tablet or monitor, and no readable text, logos, UI or writing in frame. His hands are empty for the whole clip but they MOVE: he talks with them the way an enthusiastic person does, open palms, relaxed fingers, easy natural gestures that punctuate the line and flow with his stride. Keep every gesture LOW and OPEN — between waist and chest height, well below his face — with both hands inside the frame at all times. He never picks anything up or puts anything down, never counts on his fingers, never points at the camera, and never splays or fans his fingers. Each hand has exactly five correctly shaped fingers in every frame. The background is ONE fixed room and does not change, shift or cut to a different place at any point in the clip; the camera does not move. Audio: one clear man's voice, lip-synced to him, spoken with ENERGY and ENTHUSIASM — the voice of a man genuinely excited about what he is saying, confident, warm and persuasive, the pitch rising and falling, leaning into each figure and landing it. Upbeat and engaged, NOT flat, NOT monotone, NOT read aloud, NOT shouted, NOT breathless. ONE single take: "Gyms, a hundred and forty billion a year. Fitness trackers, fifty billion more.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing. Say that line EXACTLY ONCE, word for word, start to finish — all 13 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence. Do NOT say any part of the line a second time. Do NOT ad-lib, pad, or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last. The voice must NOT change speaker, gender, age or timbre part way through, and NO second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed. No other dialogue, no ambient sound, no music.
 ```
 
-### 5.3 Two edits the builder cannot make
+### 5.3 K2 — the catch
+
+**“Billions poured into AI, and the smartest thing in this gym is still your thumb.”** 15 words, ≈ 7.4 s.
+
+Same salesman, same performance, three things different:
+
+- **He has stopped walking.** K1 closed from five metres to two; K2 picks him up there, so the cut is continuous rather than a jump back.
+- **Medium framing, not the tight close-up** the old K2 used. A close-up puts the gestures outside the frame; full-length loses the face. Waist-up keeps both, with his hands in the lower half of the shot.
+- **Still the BANDLESS character.** The product does not appear until K3, so K2 resolves against `Peter Pitch`, not `Peter`.
+
+It also sets up the ending. If K8 keeps *“the smartest thing here is the one I forgot I was wearing”*, this line and that one bookend the film: the same question asked at the start and answered at the end. **If K8’s punchline changes, this line loses half its value** and should be revisited.
+
+```
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter Pitch has stopped walking and stands close to camera now, still animated and enthusiastic, talking with his hands, leaning slightly in on the last few words in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Medium waist-up shot, close to camera, upper body and face clearly in frame with his hands visible in the lower half of the shot. NOT a tight close-up and NOT full-body. He faces the camera and delivers the line straight to camera, eyes on the lens — not looking down, not looking away, not at a phone. He is wearing a plain black tank top, with nothing on his head — no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck — the exact SAME outfit in every shot. He is ALONE in the shot — no other people in frame. His skin has a natural, healthy, photorealistic tone with realistic warmth — NOT grey, pale-green, waxy, gaunt or zombie-like. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing is worn in or over his ears. No equipment, wires or accessories are visible on him or anywhere in the room. NO devices and NO screens anywhere in this shot: no phone in his hand or at his ear, no laptop, tablet or monitor, and no readable text, logos, UI or writing in frame. His hands are empty for the whole clip but they MOVE: he talks with them the way an enthusiastic person does, open palms, relaxed fingers, easy natural gestures that punctuate the line. Keep every gesture LOW and OPEN — between waist and chest height, well below his face — with both hands inside the frame at all times. He never picks anything up or puts anything down, never counts on his fingers, never points at the camera, and never splays or fans his fingers. Each hand has exactly five correctly shaped fingers in every frame. The background is ONE fixed room and does not change, shift or cut to a different place at any point in the clip; the camera does not move. Audio: one clear man's voice, lip-synced to him, spoken with ENERGY and ENTHUSIASM — the voice of a man genuinely excited about what he is saying, confident, warm and persuasive, the pitch rising and falling, leaning into each figure and landing it. Upbeat and engaged, NOT flat, NOT monotone, NOT read aloud, NOT shouted, NOT breathless. ONE single take: "Billions poured into AI, and the smartest thing in this gym is still your thumb.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing. Say that line EXACTLY ONCE, word for word, start to finish — all 15 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence. Do NOT say any part of the line a second time. Do NOT ad-lib, pad, or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last. The voice must NOT change speaker, gender, age or timbre part way through, and NO second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed. No other dialogue, no ambient sound, no music.
+```
+
+---
+
+## 6. Two edits the builder cannot make
 
 **The delivery clause.** The builder asks every clip for *“warmth and a little wry humour”*, which is right for the deadpan beats and wrong for a figures pitch. Replaced with a slow, measured read that lands each number and pauses between the two sentences.
 
@@ -217,7 +235,7 @@ Word-level substitution turns those into *“he is audio”* and *“print him�
 
 ---
 
-## 6. Slow motion is the one thing K1 cannot have
+## 7. Slow motion is the one thing K1 cannot have
 
 The brief asked for slow motion. **A talking clip cannot be slow motion**, and finding that out after a render would cost 10 credits and produce something unusable.
 
@@ -229,7 +247,7 @@ If genuine slow motion is wanted somewhere in this video, it belongs on a clip w
 
 ---
 
-## 7. What this changes downstream
+## 8. What this changes downstream
 
 Recorded, not yet applied. The committed config still holds the original eight clips.
 
@@ -240,7 +258,7 @@ Recorded, not yet applied. The committed config still holds the original eight c
 
 ---
 
-## 8. Open — needs your decision before anything is written or rendered
+## 9. Open — needs your decision before anything is written or rendered
 
 - ~~Which line.~~ **Settled: C.**
 - ~~The bandless character.~~ **Minted as `Peter Pitch`.**
