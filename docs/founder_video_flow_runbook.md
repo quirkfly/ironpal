@@ -152,14 +152,14 @@ Every prompt below is rewritten into the masculine by `pipeline/promo/pronouns.p
 LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter Pitch stands squarely on the gym floor facing camera, still and unhurried, weight settled, moving slowly and deliberately, delivering it like a statement of fact in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Medium-wide shot, the person clearly visible from the waist up with room around him, talking to camera. He faces the camera and delivers the line straight to camera, eyes on the lens — not looking down, not looking away, not at a phone. He is wearing a plain black tank top, with nothing on his head — no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck — the exact SAME outfit in every shot. He is ALONE in the shot — no other people in frame. His skin has a natural, healthy, photorealistic tone with realistic warmth — NOT grey, pale-green, waxy, gaunt or zombie-like. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing is worn in or over his ears. No equipment, wires or accessories are visible on him or anywhere in the room. NO devices and NO screens anywhere in this shot: no phone in his hand or at his ear, no laptop, tablet or monitor, and no readable text, logos, UI or writing in frame. His hands are empty and stay RELAXED AND STILL at his sides for the whole clip — he never picks anything up or puts anything down, does NOT gesture, count on his fingers, or raise a hand, because a raised or gesturing hand is where extra and malformed fingers appear. The background is ONE fixed room and does not change, shift or cut to a different place at any point in the clip; the camera does not move. Audio: one clear man's voice, lip-synced to him, spoken at a natural conversational pace with GENUINE EXPRESSION — real inflection, the pitch rising and falling as a person's does, the pace easing and quickening with the sense of the line, warmth and a little wry humour in the voice. NOT flat, NOT monotone, NOT read aloud. ONE single take: "Gyms, a hundred and forty billion a year. Fitness trackers, fifty billion more.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing. Say that line EXACTLY ONCE, word for word, start to finish — all 13 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence. Do NOT say any part of the line a second time. Do NOT ad-lib, pad, or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last. The voice must NOT change speaker, gender, age or timbre part way through, and NO second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed. No other dialogue, no ambient sound, no music.
 ```
 
-### K2 — old way · 13 words ≈ 6.4 s
+### K2 — the catch · 15 words ≈ 7.4 s
 
-**The line you should hear:** “Before, my thumb kept the log, badly, while three tripods filmed everyone else.”
+**The line you should hear:** “Billions poured into AI, and the smartest thing in this gym is still your thumb.”
 
 **Composited afterwards:** the manual log recording
 
 ```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter sits on the flat bench, shoulders down, deadpan, delivering it in three short beats in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Tight head-and-shoulders close-up, face filling the frame, looking directly at camera and talking to camera, plain background. He faces the camera and delivers the line straight to camera, eyes on the lens — not looking down, not looking away, not at a phone. He is wearing a plain black tank top and the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side — the exact SAME outfit in every shot. He is ALONE in the shot — no other people in frame. His skin has a natural, healthy, photorealistic tone with realistic warmth — NOT grey, pale-green, waxy, gaunt or zombie-like. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing is worn in or over his ears. No equipment, wires or accessories are visible on him or anywhere in the room. NO devices and NO screens anywhere in this shot: no phone in his hand or at his ear, no laptop, tablet or monitor, and no readable text, logos, UI or writing in frame. His hands are empty and stay RELAXED AND STILL at his sides for the whole clip — he never picks anything up or puts anything down, does NOT gesture, count on his fingers, or raise a hand, because a raised or gesturing hand is where extra and malformed fingers appear. The background is ONE fixed room and does not change, shift or cut to a different place at any point in the clip; the camera does not move. Audio: one clear man's voice, lip-synced to him, spoken at a natural conversational pace with GENUINE EXPRESSION — real inflection, the pitch rising and falling as a person's does, the pace easing and quickening with the sense of the line, warmth and a little wry humour in the voice. NOT flat, NOT monotone, NOT read aloud. ONE single take: "Before, my thumb kept the log, badly, while three tripods filmed everyone else.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing. Say that line EXACTLY ONCE, word for word, start to finish — all 13 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence. Do NOT say any part of the line a second time. Do NOT ad-lib, pad, or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last. The voice must NOT change speaker, gender, age or timbre part way through, and NO second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed. No other dialogue, no ambient sound, no music.
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no letters or numerals anywhere in frame. Peter Pitch has stopped walking and stands close to camera now, still animated and enthusiastic, talking with his hands, leaning slightly in on the last few words in a dark, moody weights gym: matte black rubber floor, a black flat bench, a rack of dumbbells behind, lit low and warm. Medium waist-up shot, talking directly to camera, upper body and face clearly in frame, plain background. NOT a tight close-up and NOT full-body. He faces the camera and delivers the line straight to camera, eyes on the lens — not looking down, not looking away, not at a phone. He is wearing a plain black tank top, with nothing on his head — no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck — the exact SAME outfit in every shot. He is ALONE in the shot — no other people in frame. His skin has a natural, healthy, photorealistic tone with realistic warmth — NOT grey, pale-green, waxy, gaunt or zombie-like. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing is worn in or over his ears. No equipment, wires or accessories are visible on him or anywhere in the room. NO devices and NO screens anywhere in this shot: no phone in his hand or at his ear, no laptop, tablet or monitor, and no readable text, logos, UI or writing in frame. His hands are empty and stay RELAXED AND STILL at his sides for the whole clip — he never picks anything up or puts anything down, does NOT gesture, count on his fingers, or raise a hand, because a raised or gesturing hand is where extra and malformed fingers appear. The background is ONE fixed room and does not change, shift or cut to a different place at any point in the clip; the camera does not move. Audio: one clear man's voice, lip-synced to him, spoken at a natural conversational pace with GENUINE EXPRESSION — real inflection, the pitch rising and falling as a person's does, the pace easing and quickening with the sense of the line, warmth and a little wry humour in the voice. NOT flat, NOT monotone, NOT read aloud. ONE single take: "Billions poured into AI, and the smartest thing in this gym is still your thumb.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing. Say that line EXACTLY ONCE, word for word, start to finish — all 15 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence. Do NOT say any part of the line a second time. Do NOT ad-lib, pad, or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last. The voice must NOT change speaker, gender, age or timbre part way through, and NO second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed. No other dialogue, no ambient sound, no music.
 ```
 
 ### K3 — the device · 14 words ≈ 6.9 s
@@ -224,7 +224,46 @@ LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: n
 
 ---
 
-## 6. When you have all eight
+## 6. Joining clips — use Extend, not Frames
+
+**This is the single most important thing learned in production.** Two independently generated clips will not cut together cleanly, and the reason is not what it looks like.
+
+### 6.1 What failed, and what the measurements said
+
+The first K1→K2 join was visibly broken. Three diagnoses, in order, each wrong until the last:
+
+| suspected | measured | verdict |
+|---|---|---|
+| wardrobe and room drift | the short fallback prompt had dropped the detailed wardrobe and gym wording; K2 came back with different shorts and a pale wall | real, and fixed by **Frames** mode |
+| frame misalignment at the cut | K1's last frame vs K2's first: mean difference **1.8/255**, brightness delta **0.2** | not the problem — Frames aligned them almost perfectly |
+| dead air | K1's line ends at 7.31 s; the clip runs 0.69 s more with motion at **0.4** | real, but only half of it |
+| **velocity** | K1's motion decays 24 → 16 → 12 → 8.5 → 5.7 → 4.0 → ~0.4. K2 starts at rest and ramps 0.8 → 4.2 | **the actual cause** |
+
+**A still frame cannot carry motion.** Frames-to-Video conditions on one static image, so velocity is exactly the information it discards. K1 decelerates to a standstill, K2 begins from a standstill, and two clips that are both stationary at the join read as two shots no matter how well the pixels line up. No trim and no crossfade repairs it — both were tried and measured.
+
+### 6.2 Extend, which does work
+
+Extend conditions on the **final second, 24 frames**, not one still, and continues the action and the audio. That is the difference.
+
+It is **not in the composer**, which is why it looks absent. It lives in **Scene Builder**:
+
+1. Hover the clip in the project and choose **Add to Scene**.
+2. Switch to **SceneBuilder**. The clip appears on a timeline.
+3. Click the **circled + at the right-hand end of the clip block**. That is Extend.
+4. **Check the model.** Scene Builder may default to Omni 1.1 Flash; Extend requires **Veo 3.1 Lite**, per Google’s help page — all Veo 3.1 8-second videos can be extended, but only Lite performs the extension.
+5. Prompt it, and **open by saying the action is already underway** — *“He continues speaking without pausing…”*. That is what stops it parking the subject and restarting.
+
+Expect extensions of **7 seconds** rather than 8, so budget the timeline accordingly.
+
+### 6.3 The rule for the rest of the film
+
+**Generate K1 in the composer. Build every subsequent clip by extending the previous one in Scene Builder.** Frames-to-Video is still the right tool when a shot deliberately starts somewhere new; it is the wrong tool for continuing an action.
+
+A second-order benefit: an extension inherits the room, the wardrobe and the framing from the footage, so the prompt shrinks to the performance and the line. Shorter prompts are also what reduces policy refusals.
+
+---
+
+## 7. When you have all eight
 
 Download each clip and put it in the run directory as its own id:
 
@@ -244,6 +283,6 @@ The three that already exist are the reveal clip, the branded still from the S3 
 
 ---
 
-## 7. If an account stops working
+## 8. If an account stops working
 
 `cultee` is blocked — flagged 2026-09-26 for unusual activity, and it refused even a manual generation in the interface. It is listed in `flow_auth.BLOCKED_ACCOUNTS` so the automation will not touch it. If the account you are using starts refusing everything rather than the occasional prompt, that is the same thing happening, and the answer is a different account rather than more retries.
