@@ -1,0 +1,91 @@
+# K3 — "the old way": a real workout tracker being thumb-typed, driven for the PIP inset.
+#
+# Why a script at all: a hand-built HTML mock of a tracker looks like a hand-built HTML mock.
+# Driving a real app gives real touch ripples, a real keypad and real commit latency — the
+# small imperfections that read as "someone is actually doing this".
+#
+# Why point taps and not selectors: the app is a WebView. `uiautomator dump` returns an empty
+# FrameLayout for it; Maestro's own driver DOES see inside, which is the only reason the
+# assertions below work at all. But the keypad digits and the set-row numbers are both bare
+# "1"/"2"/"3", so every digit selector is ambiguous, and the generated `ext-element-NNN` ids
+# are not stable across app sessions. Points measured from the live hierarchy are the honest
+# choice, and they are fixed: the keypad renders at the SAME bounds whichever row is opened —
+# only its pointer arrow moves. Verified on the A52 (SM-A525F, 1080x2400), 2026-09-28.
+#
+# Why no explicit pauses: Maestro has no sleep command. The obvious workaround — a held
+# zero-distance swipe — scrolls this app, and an early take ended up parked on the exercise
+# demo video instead of the set rows. Maestro's own per-command latency is ~1-1.5s, which is
+# already an unhurried typing rhythm; final beat timing is set in post against the VO.
+#
+# Recording is bracketed INSIDE the flow. Maestro reinstalls its instrumentation on every
+# `test` invocation, so an external recorder captures 60-70s of static screen before anything
+# happens, and that head varies run to run. startRecording puts the window exactly where the
+# action is.
+appId: com.bodbot.trainer
+env:
+  EXERCISE: "Front Squat"
+---
+
+# The generated K3 clip shows the founder between sets of a specific movement, and the PIP has
+# to agree with it. The app walks forward through the workout as sets are completed, so the
+# exercise on screen drifts run to run — this guard makes that fail loudly instead of quietly
+# producing an inset that contradicts the picture. Override for a different clip:
+#   EXERCISE="Back Squat" scripts/k3/record.sh
+#
+# Caveat worth knowing: Maestro's hierarchy includes OFF-SCREEN WebView nodes, and the
+# workout's other exercises are in that list, so this assertion can pass on a name that is
+# not the one displayed. The runner writes the take's first frame out as a PNG; that is the
+# check that actually settles it.
+- assertVisible: "${EXERCISE}"
+
+# Anchor on the layout, not on the content. The exercise title changes every time a set is
+# completed and the app moves to the next movement, so asserting a name makes the flow
+# single-use — it passed once and then failed on the next exercise.
+- assertVisible: "Replace Exercise"
+
+# Scroll back to the top first. The page is long — below the set rows sit an exercise demo
+# video, "Performance Today" and a muscle map — and a take that starts scrolled shows those
+# instead of the log. Note that assertVisible alone does NOT catch this: Maestro's hierarchy
+# includes off-screen WebView nodes with their bounds clamped to the panel edge, so "kg"
+# asserts true even when it is nowhere near the screen. Scrolling is the guard, and the
+# assertion after the first digit is what actually proves the taps landed.
+- swipe:
+    direction: DOWN
+    duration: 300
+- swipe:
+    direction: DOWN
+    duration: 300
+- swipe:
+    direction: DOWN
+    duration: 300
+
+- startRecording: k3_take
+
+# Leader: the empty log sits there — three rows, every weight field an X.
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# "Exercise, sets, reps, weight." Set 1's weight field opens the keypad; 80 goes in.
+- tapOn:
+    point: "68%,22%"
+- tapOn:
+    point: "57%,31%"          # 8
+- tapOn:
+    point: "48%,53%"          # 0
+- tapOn:
+    point: "90%,47%"          # tick — commits 80 and closes the pad
+
+# The real check that the coordinates landed where they should: the row now reads 80.
+- assertVisible: "80"
+
+# "All by hand." Straight into the next row, so it reads as a routine and not a one-off.
+- tapOn:
+    point: "68%,30%"          # set 2 weight field
+- tapOn:
+    point: "57%,31%"          # 8
+- tapOn:
+    point: "48%,53%"          # 0
+- waitForAnimationToEnd:
+    timeout: 2000
+
+- stopRecording

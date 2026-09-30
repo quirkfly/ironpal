@@ -1,0 +1,50 @@
+# K7 inset — drive the Live set screen through three sets.
+#
+# The screen renders no controls; `liveset-tap-rep` and `liveset-tap-set` are transparent zones
+# (src/screens/LiveSetScreen.tsx), so the recording carries only the interface. That is the whole
+# reason the beat lives here rather than in the screen: a Maestro flow can be retimed against the
+# curls in the rendered clip, an on-screen animation cannot.
+#
+# Sets 1 and 2 are closed quickly so the log fills and the set counter climbs; set 3 is left
+# mid-count, matching the "logging…" row the approved design ends on.
+appId: com.twentydeka.ironpal
+---
+- launchApp
+- assertVisible: "IronPal"
+- tapOn:
+    id: "home-live-set"
+- assertVisible:
+    id: "liveset-screen"
+- assertVisible:
+    id: "liveset-exercise"
+
+- startRecording: k7_liveset
+
+# --- set 1: twelve reps, then close -----------------------------------------
+- repeat:
+    times: 12
+    commands:
+      - tapOn:
+          id: "liveset-tap-rep"
+- tapOn:
+    id: "liveset-tap-set"
+
+# --- set 2 -------------------------------------------------------------------
+- repeat:
+    times: 12
+    commands:
+      - tapOn:
+          id: "liveset-tap-rep"
+- tapOn:
+    id: "liveset-tap-set"
+
+# --- set 3: left mid-count, so the current row still reads "logging…" --------
+- repeat:
+    times: 7
+    commands:
+      - tapOn:
+          id: "liveset-tap-rep"
+- waitForAnimationToEnd:
+    timeout: 2500
+
+- stopRecording

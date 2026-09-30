@@ -30,6 +30,9 @@ SERVER="${SERVER:-root@45.55.36.33}"
 CANONICAL_HOST="ironpal.co"
 ALIAS_HOSTS=("www.ironpal.co")
 REMOTE_WEB="/var/www/${CANONICAL_HOST}"
+REMOTE_API="/opt/ironpal-api"
+API_PORT=3003
+API_SERVICE="ironpal-api"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
@@ -41,10 +44,12 @@ CLOUDFLARE_KEY="${CLOUDFLARE_KEY:-/etc/ssl/private/cloudflare-ironpal.key}"
 # ── CLI args ──────────────────────────────────────────────────────────────
 DO_BUILD=1
 USE_SSL=1
+DO_API=1
 for arg in "$@"; do
   case "$arg" in
     --no-build)  DO_BUILD=0 ;;
     --http-only) USE_SSL=0 ;;
+    --no-api)    DO_API=0 ;;
     -h|--help)   sed -n '1,30p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "Unknown arg: $arg" >&2; exit 2 ;;
   esac
@@ -83,6 +88,62 @@ rsync -avz --delete "${SITE_DIR}/dist/" "${SERVER}:${REMOTE_WEB}/"
 
 step "Setting permissions…"
 ssh "${SERVER}" "chown -R www-data:www-data ${REMOTE_WEB} && chmod -R u=rwX,go=rX ${REMOTE_WEB}"
+
+
+# ── 3b. Deploy the email API ──────────────────────────────────────────────
+if [ "${DO_API}" -eq 1 ]; then
+  step "Deploying email API → ${SERVER}:${REMOTE_API} (port ${API_PORT})…"
+  ssh "${SERVER}" "mkdir -p ${REMOTE_API}/server"
+  # NOTE: no --delete, and emails.db is excluded. The live subscriber list lives in
+  # ${REMOTE_API}/server/emails.db and must survive every redeploy.
+  rsync -avz --exclude 'emails.db*' "${SITE_DIR}/server/" "${SERVER}:${REMOTE_API}/server/"
+  rsync -avz "${SITE_DIR}/package.json" "${SERVER}:${REMOTE_API}/"
+
+  step "Installing API dependencies on the server…"
+  ssh "${SERVER}" "cd ${REMOTE_API} && npm install --omit=dev --silent --no-audit --no-fund"
+
+  step "Writing systemd unit (${API_SERVICE})…"
+  ssh "${SERVER}" "cat > /etc/systemd/system/${API_SERVICE}.service <<'SYSTEMD_EOF'
+[Unit]
+Description=IronPal Early-Bird Email API
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=${REMOTE_API}
+ExecStart=/usr/bin/node server/index.js
+Restart=on-failure
+RestartSec=5
+Environment=NODE_ENV=production
+Environment=API_PORT=${API_PORT}
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=${REMOTE_API}/server
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=${API_SERVICE}
+
+[Install]
+WantedBy=multi-user.target
+SYSTEMD_EOF"
+
+  ssh "${SERVER}" "chown -R www-data:www-data ${REMOTE_API}"
+  ssh "${SERVER}" "systemctl daemon-reload && systemctl enable ${API_SERVICE} >/dev/null 2>&1 && systemctl restart ${API_SERVICE}"
+  sleep 2
+  if [ "$(ssh "${SERVER}" "systemctl is-active ${API_SERVICE}")" = "active" ]; then
+    ok "API service running"
+  else
+    ssh "${SERVER}" "journalctl -u ${API_SERVICE} -n 25 --no-pager"
+    die "API service failed to start"
+  fi
+else
+  warn "Skipping API deploy (--no-api)"
+fi
 
 # ── 4. Ensure an SSL cert exists (auto-generate self-signed if missing) ────
 HAS_CERT=0
@@ -155,6 +216,18 @@ server {
         add_header Cache-Control \"public, immutable\";
     }
 
+    # Early-bird email API (systemd: ${API_SERVICE})
+    location /api/ {
+        proxy_pass http://127.0.0.1:${API_PORT};
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_connect_timeout 10s;
+        proxy_read_timeout 30s;
+    }
+
     # HTML is not fingerprinted — always revalidate so fixes ship immediately
     location / {
         try_files \$uri \$uri/ /index.html;
@@ -194,6 +267,18 @@ server {
         add_header Cache-Control \"public, immutable\";
     }
 
+    # Early-bird email API (systemd: ${API_SERVICE})
+    location /api/ {
+        proxy_pass http://127.0.0.1:${API_PORT};
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_connect_timeout 10s;
+        proxy_read_timeout 30s;
+    }
+
     location / {
         try_files \$uri \$uri/ /index.html;
     }
@@ -224,7 +309,25 @@ echo "${HEAD}" | head -1 | grep -qE 'HTTP/[0-9.]+ (200|301)' \
   && ok "Loopback: $(echo "${HEAD}" | head -1 | tr -d '\r')" \
   || warn "Unexpected loopback response: $(echo "${HEAD}" | head -1 | tr -d '\r')"
 
+# ── 7b. Verify email collection end to end ────────────────────────────────
+if [ "${DO_API}" -eq 1 ]; then
+  step "Testing email collection through nginx…"
+  HEALTH=$(ssh "${SERVER}" "curl -sf http://127.0.0.1:${API_PORT}/api/health" || true)
+  echo "${HEALTH}" | grep -q '"ok"' && ok "API health: ${HEALTH}" || die "API health check failed"
+
+  PROBE="deploy-probe-$(date +%s)@ironpal.co"
+  RESULT=$(ssh "${SERVER}" "curl -sf -k --resolve ${CANONICAL_HOST}:443:127.0.0.1 -X POST https://${CANONICAL_HOST}/api/collect-email -H 'Content-Type: application/json' -d '{\"email\":\"${PROBE}\",\"source\":\"landing_page\"}'" || true)
+  echo "${RESULT}" | grep -q 'collected successfully' \
+    && ok "Email collection working end to end (nginx → API → SQLite)" \
+    || die "Email collection FAILED through nginx: ${RESULT}"
+
+  # The probe is a real row; drop it so the list stays clean.
+  ssh "${SERVER}" "cd ${REMOTE_API} && node -e \"const D=require('better-sqlite3');const d=new D('server/emails.db');d.prepare('DELETE FROM emails WHERE email=?').run('${PROBE}');d.close()\"" 2>/dev/null \
+    && ok "Probe row removed" || warn "Could not remove probe row ${PROBE}"
+fi
+
 echo ""
 ok "Deployment complete!"
 echo -e "${GREEN}🌐 https://${CANONICAL_HOST}${NC}"
 [ "${HAS_CERT}" -eq 1 ] && echo -e "${GREEN}🔁 https://www.${CANONICAL_HOST} → https://${CANONICAL_HOST}${NC}"
+[ "${DO_API}" -eq 1 ] && echo -e "${GREEN}📧 Emails:   ssh ${SERVER} \"cd ${REMOTE_API} && node server/dump-emails.js\"${NC}"

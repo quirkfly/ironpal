@@ -1,0 +1,151 @@
+SASK 2026 — Tally form answers (drafted 2026-09-30)
+Plain text, ready to paste. All product claims stay within
+docs/founder_video_promo_config.json → claims_allowlist; weight reading is "being built", never shipped.
+
+======================================================================
+Section: Product & traction
+Describe your product/solution in one or two sentences. What does it do and for whom?
+
+IronPal is a headband with a small camera and motion sensors that watches your set from your
+own point of view and logs the exercise, the reps and the weight into your training log
+automatically, so you never stop to type between sets. It is for people who lift with free
+weights and machines and already track their workouts by hand; reps and exercise recognition
+run on-device today, and reading the weight off the bar is the hard problem we are building.
+
+Short variant:
+IronPal is a headband that watches your workout from your point of view and automatically logs
+the exercise, reps and weight for lifters who are tired of typing every set into an app.
+
+======================================================================
+What traction have you achieved up to date?
+(number of partnerships, active users, paying users, and ARR)
+
+IronPal is pre-launch, so the commercial numbers are zero: 0 partnerships, 0 active users
+outside the founder, 0 paying users, €0 ARR. The traction so far is product and audience
+groundwork: a working proof of concept running on a phone mounted on the headband since May
+2026, with the on-device rep engine measured at 4.4 ms per tick against a 15 ms budget on a
+mid-range Android phone; the self-training model shipped with its test suites green (native
+8/8, end-to-end 6/6); 131 commits since April 2026 by a solo founder building in public; the
+landing page live at ironpal.co with early-bird reservations open (up to ~50 % off launch
+price, first 200 spots), and a 73-second campaign film finished for the Kickstarter launch.
+Weight reading, the core differentiator, is being built and is not yet validated.
+
+Short variant:
+Pre-launch: 0 partnerships, 0 active users, 0 paying users, €0 ARR. A working proof of concept
+on a phone, the app and model under test, ironpal.co live with early-bird reservations, and the
+campaign film finished.
+
+======================================================================
+How much money have you raised so far? If none, state N/A.
+(own resources, VC investments, and grants separately)
+
+N/A — no money raised so far.
+Own resources: entirely self-funded by the founder, in time and small out-of-pocket costs for
+prototype hardware and tooling.
+VC investments: none.
+Grants: none.
+
+======================================================================
+Who are your main competitors and how are you different from them?
+What's your unique insight – what do you understand about the problem, customer, or market that
+your competitors don't?
+
+Short version (under 1000 characters):
+
+Competitors. Wrist wearables (Garmin, WHOOP) count reps from the arm, often wrongly, and estimate load from body-mass models because they cannot see the bar. Bar sensors (Enode, GymAware) count reps but need the lift picked by hand, drop heavy reps, and take the weight as manual entry. Camera appliances (Tempo) read only their own marked plates in their own classes. Logging apps (Fitbod) sense nothing; every set is typed by thumb.
+
+How we differ. IronPal is the only first-person device: a headband camera plus motion sensors that see the set as the lifter does, so it recognises the exercise, counts every rep and reads the weight off any bar or stack, with no instrumented equipment and nothing to type. Reading the weight is our core bet; no shipping product does it for free weights today.
+
+Insight. Wrist, bar and tripod cannot see the plates; only the lifter's head can. And lifters already type the number by hand, so we need not create the habit, only remove the typing.
+
+Long version:
+
+Competitors. Three groups try to log a workout automatically. Wrist wearables (Garmin, WHOOP)
+count reps from the arm, are often wrong, miss leg work, and estimate load from body-mass
+models because they cannot see the bar. Bar-mounted sensors (Enode, GymAware) count reps well
+but need the lift picked by hand, drop the heaviest reps, and take the weight as manual entry.
+Camera appliances (Tempo) read the weight, but only from their own marked plates inside their
+own classes. Logging apps (Fitbod and the like) do not sense anything; every set is typed in
+by thumb.
+
+How we are different. IronPal is the only first-person device: a headband camera plus motion
+sensors that see the set the way the lifter does, so it can recognise the exercise, count every
+rep including the slow heavy ones, and read the weight off any bar or stack, with no
+instrumented equipment, no proprietary plates and nothing to type. Reps and exercise are
+recognised on the device and the model learns from the lifter's own confirmed sets. Reading
+the weight from that view is the hard part and our core bet; no shipping product does it for
+arbitrary free weights today.
+
+Unique insight. The market has split the three numbers a lifter needs (exercise, reps, weight)
+across separate products and solved none of them together, because every competitor is either
+on the wrist, on the bar, or on a tripod, and none of those positions can see the plates. The
+only place that sees everything the lifter sees is the lifter's own head. The second insight is
+about the customer: people who track strength training have already proven they want the
+number, since they type it in by hand today, so the product does not have to create the habit,
+only remove the typing. Most of the value is in the weight, which is exactly the number the
+rest of the market has given up on.
+
+======================================================================
+Section: Team & vision
+Tell us about the team – who are the founders and what have you done before?
+
+Short version (under 1000 characters):
+
+IronPal has one founder, Peter Dermek, who builds all of it: the hardware prototype, the Android app and on-device model, the landing page, the campaign film and the business side. LinkedIn: https://www.linkedin.com/in/peter-dermek-2b9712a5
+
+Peter is a seasoned software developer with a long career in production systems, and a hybrid athlete (strength and endurance) who started IronPal because he was tired of stopping every set to thumb numbers into an app. He works solo by directing AI agents, which is how one person shipped a working proof of concept, a self-training model with green test suites, a live landing page and a finished campaign film in six months, all in public.
+
+Before IronPal he shipped git & fit (https://gitnfit.dev), a VS Code extension that nudges developers into a short exercise break after meaningful commits, live on the Marketplace with free and Pro tiers.
+
+First hire, once funded: hardware and manufacturing, where a solo software founder is slowest.
+
+Long version:
+
+IronPal has one founder, Peter Dermek, and he does all of it: the hardware prototype, the Android
+app and the on-device model, the landing page, the campaign film, and the business side.
+LinkedIn: https://www.linkedin.com/in/peter-dermek-2b9712a5
+
+Peter is a seasoned software developer with a long career building production systems, and a
+hybrid athlete (strength and endurance) who started IronPal because he was tired of stopping every
+set to thumb numbers into an app. He works solo by directing AI agents through a task-driven
+workflow, which is how one person has shipped a working proof of concept, a self-training model
+with green test suites, a live landing page and a finished campaign film in six months, all built in
+public.
+
+Before IronPal he shipped git & fit (https://gitnfit.dev), a VS Code extension that nudges
+developers into a short exercise break after meaningful commits. It is live on the Visual Studio
+Marketplace with a free tier and a paid Pro plan, and it is the same idea in a different place:
+put fitness where people already are, and make it cost nothing to do.
+
+The first hire, once funded, is hardware and manufacturing, the one area a solo software founder is
+slowest alone.
+
+Short variant:
+Solo founder: Peter Dermek, a seasoned software developer and hybrid athlete who builds IronPal end
+to end (hardware prototype, Android app and on-device model, landing page, campaign film) by
+directing AI agents, in public. Previously shipped git & fit (gitnfit.dev), a VS Code extension live
+on the Marketplace with free and Pro tiers. First hire: hardware and manufacturing.
+
+======================================================================
+If you were to receive investment of 250,000 EUR, what would you use it for?
+
+Short version (under 500 characters):
+
+Twelve months, three outcomes. Hardware (~40 %): the integrated band with its own camera and sensors, hand-built units then a batch of 200, plus the first hire, a hardware engineer. Validation (~30 %): measure weight reading and rep counting against the bar on the 20 most-lifted exercises across several gyms, and publish the accuracy. Launch (~30 %): Kickstarter, fulfilment to the first 200 backers, the first gym packs. Founder salary stays minimal.
+
+Long version:
+
+Twelve months, three outcomes, roughly in this order of spend:
+
+Hardware (about 40 %): move from a phone strapped to a headband to the integrated band with its own camera and motion sensors. Design and certify the capture module, build hand-made units first (about €130–160 each), then a small batch of 200 for the first backers. Includes the first hire: a hardware and manufacturing engineer, the one skill a solo software founder cannot cover.
+
+Validation (about 30 %): prove the core claim before we sell it. Measure weight reading and rep counting against the bar on the twenty most-lifted exercises, in several gyms with different equipment, and publish the accuracy. Today reps and exercise run on-device; the weight is the bet.
+
+Launch (about 30 %): the Kickstarter campaign, fulfilment to the first 200 backers, and the first gym packs, where the first lifter at a gym maps its stations for everyone who follows.
+
+Founder salary stays minimal; the money buys hardware, data and one engineer.
+
+======================================================================
+What is your motivation to apply for SASK 2026 and what do you hope to gain? (500 chars max)
+
+I have built IronPal alone and in public: a working proof of concept, the model, the site and the film. The next step is hardware at scale, and that is where a solo software founder is slowest. From SASK I want three things: mentors who have shipped consumer hardware and taken it to market, honest feedback from a jury before I put the product in front of backers, and a network of Slovak founders and investors for the pre-seed round. The bootcamp and Silicon Valley exposure would compress a year.

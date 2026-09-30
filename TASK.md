@@ -1913,3 +1913,993 @@ modify the video scripts so they are genuinly funny
 
 i have neither time nor budget to shot all fixed video scripts..select the one you consider the most impactful and funny
 
+---
+
+now the most difficult part..video MUST feature ironplan headband prominently
+look around in this repo when ironpal headband photos are available (see landing page for reference) than modify the final video script and update relevant prompts accordingly.
+
+do consult existing prompts in docs to reconsile the prompts where the product is being featured
+
+note there is even a video clip on the langing page featuring product reveal shot
+
+---
+
+ok, let's get started with creating the video in google flow (GF) following geggen process when producing a handlr promo video..i have created a GF project for it.
+
+---
+
+No! i will drive GF UI manually. I need you to guide me step by step through the process. Project is created.
+
+---
+
+i used below prompt:
+
+Head-and-shoulders portrait of this exact person. Keep their face: same bone structure, same hairline,
+  same eyes, same mouth. Do not change who they are, do not smooth, slim or de-age them; keep
+  age-appropriate skin texture. Natural, healthy, realistic skin tone — NOT grey, waxy or pale-green. Sharp
+  Keep both to the face at this stage. Identity lock is the priority and a non-face image here is the one
+  input that can spoil it.
+
+result is satisfactory..we can move on
+
+--
+
+let's regenerate the portrait than again the get rid off the background..give me the updated prompt for that.
+
+---
+
+No! generated portrait WAS attached as a reference..fix the prompt!!!!
+
+---
+
+Peter as character created. Now, regarding K1. This clip must set the stage for the introduction of the ironpal headband.
+8s will likely not be enought.
+
+The clip narrative will go along the lines of fitness industry booming with various AI applications tracking your training but all of them require manual input or wearable devices that are cumbersome. 
+
+let's work out first the the actual wording and see how long the clip will be.
+
+---
+
+No! K1 narrative will be about how much money the fitness industry is making. All 8s dedicated to built up a convincing argument for the necessity of the ironpal headband.
+
+it will feature me in the gym slow motion as if delivering a selling pitch.
+
+ULTRA IMPORTANT: at this tage ironpal headnband must not be visible..i need a different version of peter character without the headband.
+
+TASK 1:
+
+do a thorough research with reagardin to how much money the fitness industry is making annually and prepare a corresponding narrative with the selling pitch and tone
+
+TASK 2:
+
+generate portrait and body prompts for producing another version of me (Peter) character used for K1.
+
+---
+
+ok, let's save both tasks and their outputs to this to docs/IRONPAL_PROMO_VIDEO_SCRIPT_V1.md with a ref to video scripts doc
+
+---
+
+create a destiled versio out of it but skip "everyone still types" section. It wil come in K2.
+
+ Option │ Words │ Est. │                                    Line                                    │
+  ├────────┼───────┼──────┼────────────────────────────────────────────────────────────────────────────┤
+  │ A      │ 16    │ 7.8  │ A hundred and forty billion dollars a year. Nearly two hundred million     │
+  │        │       │ s    │ members. Everyone still types.                                             │
+  ├────────┼───────┼──────┼────────────────────────────────────────────────────────────────────────────┤
+  │ B      │ 16    │ 7.8  │ Gyms make a hundred and forty billion a year. Trackers, fifty billion      │
+  │        │       │ s    │ more. Everyone still types.                                                │
+  ├────────┼───────┼──────┼────────────────────────────────────────────────────────────────────────────┤
+  │ C      │ 16    │ 7.8  │ A hundred and forty billion dollar industry. Two hundred million members.  │
+  │        │       │ s    │ Typing sets into a phone.                                                  │
+  ├────────┼───────┼──────┼────────────────────────────────────────────────────────────────────────────┤
+  │ D      │ 16    │ 7.8  │ Two hundred million gym members. A hundred and forty billion dollars. Not  │
+  │        │       │ s    │ one set logged automatically.                                              │
+  ├────────┼───────┼──────┼────────────────────────────────────────────────────────────────────────────┤
+  │ E      │ 15    │ 7.4  │ A hundred and forty billion dollars a year. And everybody still logs it by │
+  │        │       │ s    │  hand.                                                                     │
+  └────────┴───────┴──────┴────────────────────────────────────────────────────────────────────────────┘
+
+make sure the distilled version clearly communicate that it is fitness industry we are refereing to
+
+---
+
+how do i add approved portrait to the project???
+
+---
+
+portrait in done..what references should i use for body?
+
+---
+
+done, record it and let's move to producing K1.
+
+---
+
+refarding the K1 prompt!!!
+
+they face the camera ??? There is only me in the scene.
+
+---
+
+let's create also full body version of K1. We will create a new character of Peter say "Peter Pitch Full Body". Portrait will be the same as the original K1 portrait. But the body will be newly created to match the full body perspective. Create a prompt for generating the full body image.
+
+---
+
+body generated successfully..record the full body version as "Peter Pitch FullBody" to the doc and give full body version prompt for K1
+
+---
+
+damn it..i did not review K1 full body prompt..and once cut i notice that Peter is barely moving..we need him to be slowly walking forward while talking..rebuilt the prompt accordingly.
+
+hands must move too..image an enthusiastic sales person gesturing naturally while walking forward..make sure the movement looks fluid and realistic..speaking of enthusiasm, facial expressions should also reflect engagement and energy..and so should the voice..it should convey excitement and confidence, matching the overall dynamic of the scene
+
+---
+
+just realized that we must rebuilt full body character as peter must wear a trunk that matches ironpal theme and branding. Update the full body prompt accordingly to reflect this change.
+
+---
+
+naah..teal top makes me look like a claun..i am going with previous prompt with black top, make sure to update the full body K1 prompt (one with hand movements and a sale persona like vibe) accordingly.
+
+---
+
+k1 done! let's move to K2. The narrative should gradually build upon the previous scene, maintaining continuity and character development. 
+
+sth along the line:
+
+Inspite of the vast proliferation of AI into the fitness domain, the majority of the tracking solutions are still not intuitive and require manual intervention for accurate tracking and analysis.
+
+Come up six wordings alternatives for the above statement that fit into the 8s window. They must preserve sales pitch and persuasive tone.
+
+---
+
+let's go with C..built corresponding K2 prompt accordingly and record it in doc
+
+---
+
+K3 will feature a legacy mobile people use nowadays to type their workouts..hence product will appear in K4
+
+---
+
+adjust K2 as GF refuses it 
+
+---
+
+adjusted K2 worked but am affraid there will be a disturbing transition between k1 and k2..stich the clips together and examine the flow to ensure a smooth continuity.
+
+[quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* ± ls
+Man_speaking_in_gym_20260928084333.mp4  Man_walking_in_gym_talking_20260928084323.mp4
+
+---
+
+neither option you suggest would work..K2 must continue where K1 left off, there must not be a cut into a suddent different scene where peter is in completely different pose 
+
+--- 
+
+does GF support start-frame mechanism?
+
+---
+
+give me step-by-step instructions on how to implement the start-frame mechanism in GF to ensure a smooth transition between K1 and K2.
+
+---
+
+No! transition is not smooth at all! there is a visible cut and it disrupts the continuity between K1 and K2. We need to refine the start-frame mechanism or explore alternative methods to achieve a seamless transition.
+
+--
+
+i dont see extend option is GF video interface
+
+---
+
+i'm in K1 scene builder, give me step-by-step instructions on how to extend it to K2
+
+---
+
+k1 to k2 extention via scene did work..document it
+
+i want this promo to be attached as part of my application to startup wards 2026 in slovakia..do a reseach in terms of video requirements (what it must contain, how long must it be..etc.)
+
+---
+
+no! we go with GF shooting..i have re-minted k1 to 19:9 format. the extension to K2 does not work..the audio is too loud and it feels jarring..fix it
+
+i have used this prompt for clip continuation
+
+He continues speaking without pausing, still animated and enthusiastic, talking with his hands — easy, open, low gestures between waist and chest height, both hands inside the frame, five correctly shaped fingers on each. He stays where he is and the camera does not move. Audio: one clear man's voice, lip-synced to him, confident and persuasive, one single take: "Billions poured into AI, and the smartest thing in this gym is still your thumb." Those words are spoken aloud only — they are audio, not a caption; do not write or display them anywhere in the picture. No captions, no subtitles, no letters or numerals anywhere in frame. Say the line exactly once and then stop.
+
+~/Downloads/K1___K2_20260928113336.mp4 
+
+---
+
+now it is too quite..fix it!!!
+
+---
+
+fucking hell you are making it worse at every iteration! fix it!!!!
+
+---
+
+you idot!!! it does not work!!! i need to undrestand in details what the problem is. Just explain it. do not try to fix it yet.
+
+---
+
+why does GF not preserve audio level when transitioning from K1 to K2?
+
+---
+
+we need to fix it at GF level..give modified K2 prompt that address the audio level issue.
+
+---
+
+fucking hell!! it did not work..k2 part is massivly lauder!!! fix it!!!
+
+[quirkfly: ~/job_stuff/prj/LocalAI] $ ls ~/Downloads/K1___K2_20260928120626.mp4 
+/home/quirkfly/Downloads/K1___K2_20260928120626.mp4
+
+---
+
+piece of crap is is not fixed..the audio is still wrong..fix it systematically.
+
+---
+
+NOO!!! is it STILL not fixed..you are making it worse every time! just document the audio issue in detail in docs/audio_issue.md explain what is wrong, why it happens, and any patterns you notice. do not attempt to fix it yet.
+
+---
+
+investigate whether GF offers an audio control feature withing its interface or settings that allows for consistent audio levels when transitioning from K1 to K2.
+
+---
+
+we will not any more time trying to fix the audio issue manually..once the whole video is generated, we will address the audio problem systematicallly using a special audio studio or software designed for consistent audio leveling.
+let's move to K3. K3 should feature a current way of tracking a gym traning session, including exercises, sets, reps, and weight used.
+i have in mind a mobile app held in the user's hand, showing the interface for tracking exercises, sets, reps, and weight used and typed in by the user while the founder's voice talks in the background.
+let's work out the details
+
+---
+
+all these lines are still way too distant from k1 and k2 we need a smoothe transition between them.
+
+---
+
+first we must come with a plausible K3 narrative..those A-F options you gave me aerlier are disqualified as they are not smoothly transitioning to K2. Give me 6 more variants that create a seamless flow from K2 to K3.
+
+---
+
+instead of fabricatina a fictious fitness tracker UI in HTML we will use an existing app and drive it using a dedicated e2e maestro script
+
+attached samsung device has such fitness tracker app opened - ready for interaction.
+
+this project already features a RN app - see how e2e using used there for testing and replicate it
+
+K3 objective re-summarized: while founder's voice talks in the background
+
+E   │ "Mine's been doing it for years. Exercise, sets, reps, weight. All by hand."  │ 13    │ 6.4 s 
+
+the user interacts with the fitness tracker app to log exercises, sets, reps, and weight used.
+
+prepare the e2e maestro script to drive the fitness tracker app interactions and test it thoroughly to ensure smooth and accurate logging of exercises, sets, reps, and weight used.
+
+---
+
+now K3 scene must match the pip screen..it says front squat..hence me founder must be between sets of doing front squats and typing the corresponding data into the fitness tracker app as featured in the pip screen.
+
+---
+
+Reference image: peter_01_tanktop_x4.png, 16:9, -> No! K3 must reference a GF character to maintain visual consistency with the rest of the scenes.
+
+---
+
+K3 original prompt did render eventually. But the clip is showing an empty phone. That is completely off.
+Peter must be typing between sets to the phone featuring the fitness tracker app. Not waving an empty phone around.
+Change the K3 prompt to explicitly show Peter interacting with the phone as if typing what pip will show.
+
+---
+
+K3 video done
+
+[quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* 41m55s ± cp ~/Downloads/Man_typing_into_phone_1080p_20260928234101.mp4 .
+
+compose the complete K3 scene with pip inset showing the fitness tracker app interface.
+
+---
+
+ok, K3 is done..document it
+
+---
+
+now, K4 must feature me full body walking in the gym and poundering, thinking, comteplating, reflecting...
+narattive: "Eventually i got tired of typing and started building my own solution."
+
+this clip is all me being unhappy and frustrated with the manual logging process and trying to come up with a better solution.
+
+K4 must cumulate viewer curiosity and anticipation for the upcoming solution to the manual logging problem. which should be finally revealed in the next scene.
+
+---
+
+let's make it shorter sth along the lines "Eventually i got tired of typing and started building my own solution."
+
+---
+
+K4 prompt must carry the same emotional weight and salesmanship as the previous clips, ensuring continuity in the narrative and maintaining viewer engagement.
+
+---
+
+K4 done, document it
+
+---
+
+now, K5 is about product reveal. We have two options. reveal the product in isolation, lying on a bench or show it on me as i am wearing it while describing its features and benefits.
+
+K6 - K7 will demonstrate how the product works in practice
+
+---
+
+K5 done, document it
+
+---
+
+K6 will discribe IronPal further as an extension of K5 (same way K2 was an extension of K1).
+Give me 6 narratives for K6. they must mention:
+
+- built-in tiny camera combinied with IMU
+- proprietary visual model hosted locally inside a mobile app on the user’s device
+
+---
+
+we go with B, prepare complete K6 prompt
+
+---
+
+[quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* 5h33m34s ± cp ~/Downloads/K5\ _\ K6.zip .
+12:20 θ67° [quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* ± 
+
+send the composed video to attached samsung device and than via whatsapp to Tomas Dermek..give it a short description of the content along with all issues (audio, video, any glitches) you encountered and any relevant context. all in slovak language and greet him with "servus,..." use monkey icon, though, and shrough icons when it makes sense
+
+---
+
+K6 done, document it
+
+now, K7 will demonstrate the practical usage of IronPal, building upon the features introduced in K6.
+
+K7 will feature me doing an alternate bicep curl facing the camera, showcasing the IronPal in action and highlighting its real-time feedback and tracking capabilities.
+
+narrative: It identifies my movements in real-time .. pip will feature ironpal mobile app UI displaying the same exercise i am performing..see web page for UI and the screen to create
+
+come up with a detailed design plan for K7 including camera angles, lighting, props, wardrobe, and specific actions to be performed. Ensure the plan highlights the IronPal's real-time feedback and tracking capabilities effectively.
+
+save it to docs/K7_design_plan.md than apply /grill-me-auto skill
+
+---
+
+K7 will feature biceps curls, K8 will feature bulgarian split squats. As for pip UI we will use existing IronPal mobile app interface to display the exercises in real-time - we will design a dedicated user interface screens for that as featured on landing pages.
+
+update the design plan for K7 to include the dedicated user interface screens for the IronPal mobile app as featured on the landing pages and regrill it.
+
+---
+
+now implement the updated design plan for K7, ensuring that the dedicated user interface screens for the IronPal mobile app are properly integrated and showcased during the bicep curl demonstration.
+
+---
+
+launch the ironpal RN app with the screen featuring biceps curl on attached LG device.
+
+---
+
+No! I dont want to see the labeling and annotations on the IronPal mobile app UI during the demonstration.
+
+I want to see UI screen where biceps curls exercise is displayed as a label i need to see how many sets the use performed I must be increasing and the user does the repetitions correctly in K7 - interactive and also lifted weight must be displayed
+
+use a dedicated meastro script to drive the screen and simulated increasing sets and repetitions, ensuring that the lifted weight is displayed correctly.
+
+---
+
+FUCK!!!! i dont want any fucking debrief i want a dedicated screen featuring biceps curls 
+as on captured screen!!!
+
+---
+
+following docs/K7_design_plan.md let's built narrative for K7, give me 6 alternatives.
+
+---
+
+we go with A..create a complete prompt for K7
+
+---
+
+K7 is not correct..it need to feature FULL body not half body..the alternate bicep curl should be captured from head to toe..both habds must be visible throughout the exercise..and both hands must do the curls in turns..current clip shows only right hand..fix it
+
+---
+
+change the prompt wording:
+
+No buttons. No pausing. I lift, it logs the exercise, the reps and the weight.
+
+---
+
+Fuck it! i am not going to wait for two days until you get you RN shit together. We will go with a html solution. See landing page and replicate the dedicated UI screens for the biceps curl exercise in HTML.
+
+---
+
+k7 prompt is STILL wrong..only one hand is duing the exercise..both hands must alternate as described earlier.
+
+---
+
+k7 prompt is STILL wrong..change the exercise to biceps curl with one long bar rather than dumbbells.
+
+---
+
+k7 prompt is STILL wrong..there is only one arm performing the exercise, both arms must alternate as described earlier.
+
+see [quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* ± cp ~/Downloads/Man_lifting_barbell_in_gym_20260929152409.mp4 .
+
+and fix it
+
+---
+
+k7 prompt is STILL wrong..create prompt for a biceps curl with dumbbells.
+
+---
+
+FUUUCK!!!! no mevement at all!!!! change the prompt so that i face the camera during the biceps curl exercise. I make sure that the exercise is performed correctly and both hands are visible throughout the movement. 
+
+---
+
+second version of K7 prompt did work..but i need it with voice being burned into the video
+
+---
+
+k7 prompt is STILL wrong..there is only one arm performing the exercise, both arms must alternate the lift and there my be voice in the clip burned in GF..no external audio should be present at all...fix it!!!!
+
+---
+
+FUCKING SHIT!!!! only right hand is curling..fix it!!!!!!!
+
+---
+
+give a me a clean prompt for producing 3 reference images for alternating biceps curl exercise. 
+
+image one: right hand down, left hand up
+image two: right hand up, left hand down
+image three: both hands halfway
+
+give me also a clean prompt for producing K7 clip with these three images attached for reference.
+
+---
+
+ref_prompt_1 and ref_prompt_2 both generate same image..right hand up, left hand down. i need them alternate as described earlier: 
+- ref_prompt_1: right hand down, left hand up
+- ref_prompt_2: right hand up, left hand down
+
+---
+
+it still did not worked..i used imge generated from ref_prompt_1 and ref_prompt_3 as references for the K7 clip, but the alternating motion is not captured correctly..only right hard does the curling
+
+Not sure if that would make any difference, but i have noticed though that /home/quirkfly/job_stuff/prj/ironpal/input/kickstarter/k7/clip_prompt.txt refers to character as Peter (there is no character called Peter). My character with headband is called "Peter Headband". Nevertheless i have also attached this character to the prompt but result is not satisfactory.
+
+---
+
+modify /home/quirkfly/job_stuff/prj/ironpal/input/kickstarter/k7/clip_prompt.txt so that both hands move simultaneously in biceps curl exercise.
+
+---
+
+k7 done, document it
+
+k8 will feature a squat exercise performed from a side view.
+
+a narrative will be along the lines:
+
+it even corrects my form during the exercise..no personal trainer needed..give me 6 wording variations for this narrative.
+
+
+---
+
+K8 prompt is doing great when used with Omni 1.1 Flash in terms of capturing the squat exercise from a side view. However, we need to change the narrative so that hightlights the ironpal feature to correct form during the exercise with need of a personal trainer
+
+give me 6 wording variations for this revised narrative.
+
+sth along the lines of: "It even corrects my form during the exercise, so no personal trainer is needed."
+
+---
+
+K9 is the final clip an outtro..a CTA (Call to Action) for the audience to engage with IronPal.
+
+it feature peter with headband full screen, same energy and enthusiasm as in K1, walking towards the camera.
+
+we will use omni 1.1 Flash for capturing the K9 clip 10s long. first 2s should be silent to let k8 sink in.
+
+narrative will be along the lines of:
+
+"Give your thumb a break. Join me on IronPal and take your fitness journey to the next level!"
+
+give me 6 wording variations for this narrative.
+
+---
+
+all raw clips are done..we are moving on to the editing phase..give me three top 3 tools audio and video editing for this project running on ubuntu.
+
+---
+
+i need an audio editing tool allowing me to adjust volume effect at adjacent video clips (e.g. k1 -> k2)..if the tool is not installed, install it
+
+---
+
+[quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* ± audacity K1_K2.mp4 
+Testing for explicit PulseAudio choice...
+
+how do i adjust K2 audio to match K1 audio in Audacity?
+
+---
+
+i need to adjust K1 level to match that of K2..what number do i need ammplification set to? 
+
+---
+
+09:40 θ71° [quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* 2 ± cp ~/Downloads/Man_talking_in_gym_1080p_20260930094032.mp4 K6.mp4
+09:40 θ71° [quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* ± totem K6.mp4
+09:41 θ73° [quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* 30s ± cp ~/Downloads/Man_speaking_to_camera_1080p_20260930094350.mp4  K7.mp4
+09:44 θ72° [quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* ± totem K6.mp4
+09:44 θ73° [quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* 14s ± totem K7.mp4
+
+
+last few frames of K6.mp4 contain character used for reference -> strip them out
+last few frames of K7.mp4 contain a brown mat - strip them out
+
+---
+
+stich k1, k2, k3_extended, k4, k5, k6_trimmed, k7_trimmed and save stiched version to /home/quirkfly/job_stuff/prj/geggen/products/ironpal/clips/K1_K7.mp4
+
+---
+
+rewiew of K1_K7.mp4 - K6 is there twice, need to remove the duplicate.
+
+---
+
+now create K8 composed clips (same approach as you did in case of K3)
+
+this time use HTML script you did for rendering ironpal exercise UI screen
+
+make sure to change the name of the exercise to corespond to the K8 clip - man is doing joined dumbbell biceps curl
+
+- insure the screen is sync with the man's movement in the clip..as he moves the dumbbells, the UI should reflect the number of reps
+- ensure weight is set to 5kg
+
+call it K8_composed.mp4
+
+---
+
+i did a mistake K8 is really K7, i renamed it to K7
+rename it too K7_composed.mp4
+
+also regarding the UI, that wave is changing way too quickly..slow it down to match the pace of the exercise and the wave shape should reflect the actual movement of the dumbbells
+
+---
+
+great work! now adopting the same approach as in K7 create a dedicated UI screen corresponding to K8 clip (doing_barbell_back_squats)
+
+it must be based on same UI as in K7 but it must feature a detailed analytics as mentioned in the clip (knee, angle, depth)..it must be drowned geometrically
+
+use leonardo AI via API to generate a image a man performing the exercise doing_barbell_back_squats and add all the markers (knee, angle, depth) geometrically with number being adjusted as the movement progresses in real-time
+
+- generate threee images and choose the best one
+
+first create a detailed design plan and save it to /home/quirkfly/job_stuff/prj/geggen/products/ironpal/clips/K8_design_plan.md than apply /grill-me-auto 
+
+than implement it
+
+refs:
+
+see ../rrr for reference on accessing Leonardo AI via API
+
+---
+
+here is you squat image
+
+[quirkfly: ~/job_stuff/prj/geggen/products/ironpal/clips] main(+0/-20,4)* 1m4s ± cp ~/Downloads/image_20260930104648.jpg barbell_back_squats.jpg
+
+trimm it, remove background and make sure it fits into the dedicated UI screen for K8 clip seamlessly.
+
+IMPORTANT: dont use leonardo AI for this step, edit the image to fit the UI screen.
+
+---
+
+i had to generate a new K8 clip as the former one featured nike brand on trunks. re-compose K8 with the new clip and ensure it fits seamlessly into the dedicated UI screen for K8.
+
+---
+
+create final video K1_K9.mp4
+
+in case of K3 and K8 use composed versions (K3_composed.mp4 and K8_composed.mp4)
+
+----
+
+create an ironpal_revelation GF prompt featuring me (peter) as i pull ironpal headbend from the bag..this clip is featured in the landing page reuse it for the prompt..make sure i am pulling it in the same gym as the rest of the clips are shot in.
+
+---
+
+now create an extended revelation prompt based on /home/quirkfly/job_stuff/prj/ironpal/input/kickstarter/revelation/clip_prompt.txt
+
+that will replace the below one:
+
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles,
+  no titles, no logos, no UI, and no letters or numerals anywhere in frame. Peter stands on the gym floor
+  talking straight to camera, animated and engaged, his face alive: eyebrows active, eyes bright, in a
+  dark, moody weights gym — matte black rubber floor, a black flat bench, racks of dumbbells behind him,
+  lit low and warm. Medium shot, waist up: his head and upper body sit in the LEFT half of the frame and
+  the RIGHT THIRD is EMPTY, only the dim gym behind and nothing important in it. His head sits high enough
+  that the band across his forehead is CLEARLY VISIBLE and sharp. He is wearing a plain black tank top and
+  the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a
+  small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the
+  right side. The band carries NO lettering and NO writing of any kind — the plain teal ring only. He is
+  ALONE in the shot — no other people in frame. His clothing is plain, with nothing clipped, pinned or
+  attached to it, and nothing worn in or over his ears. His hands MOVE as he talks, the way an enthusiastic
+  person's does — open palms, relaxed fingers, easy natural gestures that punctuate the line, kept LOW and
+  OPEN between waist and chest height, well below his face, and always inside the frame. He never raises a
+  hand to his head or touches the band, never counts on his fingers, never points at the camera and never
+  splays or fans his fingers. Each hand has exactly five correctly shaped fingers in every frame. There are
+  no devices and no screens anywhere in the shot: no phone, laptop, tablet or monitor. The camera does not
+  move and the room behind him never changes or cuts to a different place. Audio: one clear man's voice,
+  lip-synced to him, spoken with ENERGY and ENTHUSIASM — the voice of a man genuinely excited about what he
+  is saying, confident, warm and persuasive, the pitch rising and falling, a note of quiet pride as he
+  names it and real conviction as he says what it does. Upbeat and engaged, NOT flat, NOT monotone, NOT
+  read aloud, NOT shouted, NOT breathless. ONE single take: "IronPal. A headband. It watches my set and
+  fills in the log itself.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT
+  write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not
+  over the shot, not along the bottom, not on his clothing. Say that line EXACTLY ONCE, word for word,
+  start to finish — all 13 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start
+  any word, phrase or sentence, and do NOT ad-lib, pad or add filler words that are not written above. ONE
+  single speaker for the WHOLE line: the same man's voice from the first word to the last, not changing
+  speaker, gender, age or timbre part way through, and no second voice says any part of it. Nobody else
+  speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed. No other
+  dialogue, no ambient sound, no music.
+
+
+  that is instead of wearing it on his head he will pull it from his bag while talking..make sure to voice is synced to his hand movements and the timing of the dialogue. make sure he share his energy and enthusiasm through his gestures and expressions from previous shots.
+
+---
+
+rebuild the whole video K1 to K9 as i have replace K5 clip (no need to trim K5)
+
+---
+
+where is the rebuilt video?
+
+---
+
+i need one more rebuilt as i have replaced K5 again (no need to trim K5).
+
+---
+
+rebuilt one more time and make sure to use K6_trimmed
+
+---
+
+create K7 prompt without me talking .. just performing the exercise.
+
+---
+
+i want to bring quality of K1_K9 to professional level..help me to achieve that.
+
+----
+
+we go with K1_K9_master_eq.mp4
+
+make sure ironpal and ironpal.co are is captions are in brand color (like in CTA card).
+
+---
+
+create K8 prompt without me talking .. just performing the exercise.
+
+---
+
+following ../flaireel approach search and give me six suitable music tracks for the video.
+
+---
+
+~/job_stuff/prj/geggen/products/ironpal/clips/web contains silent videos i want to be used for a short master video featured on the website in the hero section
+
+K7 and K8 must be be composed same way as they are in the master video (using interactive UI screens)
+
+the rest of the page should feature only images of Peter (founder).
+
+make sure to also add a section about exercise form tracking and correct posture guidance also featured in K8. 
+
+come with a detailed design plan how to integrate the silent videos, interactive UI screens, and exercise form tracking sections into a cohesive master video for the website hero section.
+
+save it to docs/web_site_redesign_plan.md and apply /grill-me-auto skill
+
+than implement it
+
+see ../gitnfit web site for reference on layout and design of hero section vide
+
+---
+
+i dont here anything
+
+ Audition previews in the geggen clips folder, named K1_K9_music_1_slow-rain-122.mp4 through
+    K1_K9_music_6_dreaming-big-31.mp4. Each is the 720p master proxy with the track 16 dB down,
+    sidechain-ducked under speech, fading into the end card. Dialogue stays at −14.1 LUFS, the bed sits
+    at −31 LUFS, deliberately conservative for a first listen.
+
+only voice no music
+
+---
+
+let's go with K1_K9_music_6_dreaming-big-31.mp4 
+
+---
+
+modify the K5 reveal prompt so that peter keep holding the headband above the bag once he finishes talking -> now he puts it back immediatelly as soon as he finishes talking and viewer has not had enough time to notice it.
+
+---
+
+i have regenerated K5, rebuilt K1_K9_master_eq_music.mp4 to feature it
+
+---
+
+channel created let's upload K1_K9_master_eq_music.mp4
+
+---
+
+dont want to schedule, want to publish it immediately.
+
+---
+
+update web site:
+
+- mention that IronPal uses AI..speficically a fine-tuned motion model running on user's device
+
+----
+
+come up with detailed design plan for
+
+Section: Attachments
+Pitch deck — shareable link only
+*
+Paste a Google Drive / DocSend link set to "anyone with the link". Required language is English. Max 15 slides, 30 MB. We recommend following a template suggested by YC or a similar program (ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck). Suggested filename: StartupName_PitchDeck_2026.pdf
+
+make sure its engaging, immersive and visually appealing
+
+save it to docs/ironpal_pitch_deck_plan.md and apply /grill-me-auto skill
+
+than implement it
+
+---
+
+web site must feature section with headband product itself..place it right below the old way section.
+- also make sure "product inteface concept" text is fully visible when viewed on mobile
+
+---
+
+resize the cards to accomodate all text
+
+---
+
+add link to YT video in the bottom section of the web site.
+
+https://www.youtube.com/watch?v=5Hs_VxRIlGM
+
+---
+
+Section: Product & traction
+Describe your product/solution in one or two sentences.
+*
+What does it do and for whom?
+
+---
+
+What traction have you achieved up to date?
+*
+Please, state the number of partnerships, active users, paying users, and ARR.
+
+---
+
+How much money have you raised so far? If none, state N/A.
+*
+Please, state own resources, VC investments, and grants separately.
+
+
+i have not raised any money so far. N/A.
+
+---
+
+Who are your main competitors and how are you different from them? 
+*
+What's your unique insight – what do you understand about the problem, customer, or market that your competitors don't?
+
+---
+
+shorten it to less than 1000 chars
+
+Competitors. Three groups try to log a workout automatically. Wrist wearables (Garmin, WHOOP)
+count reps from the arm, are often wrong, miss leg work, and estimate load from body-mass
+models because they cannot see the bar. Bar-mounted sensors (Enode, GymAware) count reps well
+but need the lift picked by hand, drop the heaviest reps, and take the weight as manual entry.
+Camera appliances (Tempo) read the weight, but only from their own marked plates inside their
+own classes. Logging apps (Fitbod and the like) do not sense anything; every set is typed in
+by thumb.
+
+How we are different. IronPal is the only first-person device: a headband camera plus motion
+sensors that see the set the way the lifter does, so it can recognise the exercise, count every
+rep including the slow heavy ones, and read the weight off any bar or stack, with no
+instrumented equipment, no proprietary plates and nothing to type. Reps and exercise are
+recognised on the device and the model learns from the lifter's own confirmed sets. Reading
+the weight from that view is the hard part and our core bet; no shipping product does it for
+arbitrary free weights today.
+
+Unique insight. The market has split the three numbers a lifter needs (exercise, reps, weight)
+across separate products and solved none of them together, because every competitor is either
+on the wrist, on the bar, or on a tripod, and none of those positions can see the plates. The
+only place that sees everything the lifter sees is the lifter's own head. The second insight is
+about the customer: people who track strength training have already proven they want the
+number, since they type it in by hand today, so the product does not have to create the habit,
+only remove the typing. Most of the value is in the weight, which is exactly the number the
+rest of the market has given up on.
+
+----
+
+Section: Team & vision
+Tell us about the team – who are the founders and what have you done before?
+
+Peter Dermek
+
+- founder
+- seasoned software developer
+
+linkedin: https://www.linkedin.com/in/peter-dermek-2b9712a5
+
+https://gitnfit.dev
+
+---
+
+make below less than 1000 chars
+
+IronPal has one founder, Peter Dermek, and he does all of it: the hardware prototype, the Android app and the
+  on-device model, the landing page, the campaign film, and the business side. LinkedIn:
+  https://www.linkedin.com/in/peter-dermek-2b9712a5
+
+  Peter is a seasoned software developer with a long career building production systems, and a hybrid athlete
+  (strength and endurance) who started IronPal because he was tired of stopping every set to thumb numbers into
+  an app. He works solo by directing AI agents through a task-driven workflow, which is how one person has
+  shipped a working proof of concept, a self-training model with green test suites, a live landing page and a
+  finished campaign film in six months, all built in public.
+
+  Before IronPal he shipped git & fit (https://gitnfit.dev), a VS Code extension that nudges developers into a
+  short exercise break after meaningful commits. It is live on the Visual Studio Marketplace with a free tier
+  and a paid Pro plan, and it is the same idea in a different place: put fitness where people already are, and
+  make it cost nothing to do.
+
+  The first hire, once funded, is hardware and manufacturing, the one area a solo software founder is slowest
+  alone.
+
+---
+
+make below less than 1000 chars
+
+Competitors. Wrist wearables (Garmin, WHOOP) count reps from the arm, often wrongly, and estimate load from
+  body-mass models because they cannot see the bar. Bar sensors (Enode, GymAware) count reps but need the lift
+  picked by hand, drop heavy reps, and take the weight as manual entry. Camera appliances (Tempo) read only
+  their own marked plates in their own classes. Logging apps (Fitbod) sense nothing; every set is typed by
+  thumb.
+
+  How we differ. IronPal is the only first-person device: a headband camera plus motion sensors that see the
+  set as the lifter does, so it recognises the exercise, counts every rep and reads the weight off any bar or
+  stack, with no instrumented equipment and nothing to type. Reading the weight is our core bet; no shipping
+  product does it for free weights today.
+
+  Insight. Wrist, bar and tripod cannot see the plates; only the lifter's head can. And lifters already type
+  the number by hand, so we need not create the habit, only remove the typing.
+
+  ---
+
+  If you were to receive investment of 250,000 EUR, what would you use it for?
+
+---
+
+What is your motivation to apply for SASK 2026 and what do you hope to gain?
+
+500 chars max
+
+----
+
+send all links from /home/quirkfly/job_stuff/prj/ironpal/docs/SAS_2026.txt via whatsapp on attached device to Tomas Dermek and include also last image from gallery fesuring SASK 2026 application received confirmation
+
+message text: "zaslanee..mozu si s tym vytret rite" and end with a shrug emoji
+
+---
+
+Edit role
+Notify network
+
+Notify your network of key profile changes and work anniversaries. Learn more
+
+On
+
+Role details
+
+Job title*
+
+Founder
+Organization
+
+IronPal
+Location
+
+Bratislava, Slovakia
+Location type
+
+Select location type
+Employment type
+
+Select employment type
+
+I am currently working in this role
+
+
+End current position as of now - Founder
+
+
+End current position as of now - Backend Developer / Team Leader
+
+
+End current position as of now - CEO & Founder
+
+Start month
+
+April
+Start year*
+
+2026
+Highlights
+
+
+
+Get writing suggestions
+
+with Premium
+
+
+----
+
+
+Role details
+
+Job title*
+
+Founder
+Organization
+
+breakloop.co
+Location
+
+City, region, or Remote
+Location type
+
+Select location type
+Employment type
+
+Select employment type
+
+I am currently working in this role
+
+
+End current position as of now - Founder
+
+
+End current position as of now - Backend Developer / Team Leader
+
+
+End current position as of now - CEO & Founder
+
+Start month
+
+April
+Start year*
+
+2026
+Highlights
+
+
+https://breakloop.co

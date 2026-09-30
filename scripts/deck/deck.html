@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>IronPal — Startup Awards Slovakia 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Tokens from web/src (the site), so film, page and deck read as one company. */
+  :root { --bg:#1A1A2E; --bg2:#16162a; --panel:#20203a; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.14);
+          --accent:#00E5CC; --heading:#F0F4F8; --body:#c3c8d6; --muted:#8e94a8; --no:#ff8a8a;
+          --display:'Montserrat',system-ui,sans-serif; --text:'Inter','Liberation Sans',system-ui,sans-serif; }
+  @page { size: 1920px 1080px; margin: 0; }
+  html, body { margin:0; padding:0; background:var(--bg); }
+  body { font-family:var(--text); color:var(--body); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  section.slide { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--bg); page-break-after:always; break-after:page; }
+  section.slide:last-child { page-break-after:auto; break-after:auto; }
+  .bg { position:absolute; inset:0; z-index:0; overflow:hidden; }
+  .bg img { position:absolute; filter:saturate(.85) brightness(.72); }
+  .scrim { position:absolute; inset:0; z-index:1;
+    background: linear-gradient(90deg, rgba(16,16,30,.97) 0%, rgba(16,16,30,.90) 34%, rgba(16,16,30,.45) 58%, rgba(16,16,30,.15) 100%),
+                linear-gradient(0deg, rgba(16,16,30,.85), transparent 40%); }
+  .glow { position:absolute; inset:0; z-index:0; background: radial-gradient(90% 70% at 50% 0%, rgba(0,229,204,.10), transparent 60%); }
+  .copy { position:absolute; z-index:2; left:120px; top:150px; width:980px; }
+  .kicker { font-family:var(--text); font-weight:600; font-size:22px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin:0 0 26px; }
+  h1 { font-family:var(--display); font-weight:800; font-size:84px; line-height:1.02; letter-spacing:-.012em; color:var(--heading); margin:0 0 34px; }
+  h1.xl { font-size:104px; }
+  h1.lg { font-size:92px; }
+  .lede { font-size:34px; line-height:1.35; color:var(--body); margin:0; max-width:880px; }
+  .lede b, .lede strong { color:var(--heading); font-weight:600; }
+  .sub { font-size:26px; line-height:1.45; color:var(--muted); margin:28px 0 0; max-width:860px; }
+  .tag { position:absolute; z-index:3; right:120px; bottom:44px; font-size:15px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  .foot { position:absolute; z-index:3; left:120px; bottom:44px; font-size:16px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); opacity:.85; display:flex; gap:26px; align-items:center; }
+  .foot b { color:var(--heading); font-weight:600; letter-spacing:.14em; }
+  .foot .rub { color:var(--accent); }
+  .brand { display:inline-flex; align-items:center; gap:16px; }
+  .brand svg { width:44px; height:44px; }
+  .brand span { font-family:var(--display); font-weight:800; letter-spacing:.14em; font-size:30px; color:var(--heading); }
+  /* lists */
+  ol.steps { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:26px; }
+  ol.steps li { display:flex; gap:26px; align-items:flex-start; font-size:30px; line-height:1.3; color:var(--body); }
+  ol.steps li i { flex:0 0 58px; height:58px; border-radius:50%; border:2.5px solid var(--accent); color:var(--accent); font-family:var(--display); font-weight:800; font-style:normal; font-size:26px; display:flex; align-items:center; justify-content:center; margin-top:-6px; }
+  ol.steps li b { display:block; color:var(--heading); font-family:var(--display); font-weight:700; font-size:34px; margin-bottom:4px; }
+  ul.ticks { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:20px; }
+  ul.ticks li { position:relative; padding-left:54px; font-size:29px; line-height:1.3; }
+  ul.ticks li::before { content:""; position:absolute; left:0; top:8px; width:26px; height:26px; border-radius:50%; border:2.5px solid var(--accent); }
+  ul.ticks li::after { content:""; position:absolute; left:9px; top:13px; width:8px; height:14px; border:solid var(--accent); border-width:0 3px 3px 0; transform:rotate(45deg); }
+  ul.ticks.open li::after { display:none; }
+  ul.ticks.open li::before { border-style:dashed; border-color:var(--muted); }
+  ul.ticks li b { color:var(--heading); font-weight:600; }
+  /* tiles */
+  .tiles { position:absolute; z-index:2; left:120px; right:120px; top:420px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .tile { background:linear-gradient(180deg,var(--panel),#1b1b30); border:1px solid var(--line2); border-radius:22px; padding:38px 40px 42px; min-height:330px; }
+  .tile .n { font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:.14em; color:var(--accent); margin-bottom:18px; }
+  .tile h3 { font-family:var(--display); font-weight:700; font-size:36px; color:var(--heading); margin:0 0 16px; line-height:1.15; }
+  .tile p { font-size:25px; line-height:1.42; margin:0; }
+  .tile.later { border-style:dashed; opacity:.92; }
+  .bar { position:absolute; z-index:2; left:120px; right:120px; bottom:120px; background:rgba(0,229,204,.07); border:1px solid rgba(0,229,204,.35); border-radius:16px; padding:22px 34px; font-size:26px; color:var(--heading); }
+  .bar b { color:var(--accent); font-family:var(--display); font-weight:800; }
+  /* stats */
+  .stats { position:absolute; z-index:2; left:120px; right:120px; top:330px; display:grid; grid-template-columns:repeat(3,1fr); gap:40px; }
+  .stat { border-left:1px solid var(--line2); padding-left:44px; }
+  .stat:first-child { border-left:0; padding-left:0; }
+  .stat .n { font-family:var(--display); font-weight:800; font-size:150px; line-height:1; color:var(--accent); letter-spacing:-.03em; }
+  .stat .n small { font-size:64px; letter-spacing:0; }
+  .stat .l { font-family:var(--display); font-weight:700; font-size:34px; color:var(--heading); margin-top:18px; }
+  .stat .s { font-size:24px; color:var(--muted); margin-top:8px; line-height:1.35; }
+  /* table */
+  table.cmp { position:absolute; z-index:2; left:120px; right:120px; top:370px; width:1680px; border-collapse:collapse; font-size:27px; }
+  table.cmp th, table.cmp td { text-align:left; padding:20px 28px; border-bottom:1px solid var(--line2); vertical-align:top; }
+  table.cmp thead th { font-size:18px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; border-bottom:1px solid var(--line2); }
+  table.cmp td:first-child { color:var(--heading); font-weight:500; width:460px; }
+  table.cmp td .s { display:block; font-size:20px; color:var(--muted); margin-top:4px; }
+  table.cmp .no { color:var(--no); }
+  table.cmp .yes { color:var(--accent); font-weight:600; }
+  table.cmp tr.us td { background:rgba(0,229,204,.08); border-bottom:0; }
+  table.cmp tr.us td:first-child { color:var(--accent); font-family:var(--display); font-weight:800; }
+  .fine { position:absolute; z-index:2; left:120px; right:120px; bottom:120px; font-size:24px; color:var(--muted); line-height:1.4; }
+  .fine b { color:var(--heading); font-weight:600; }
+  /* phones */
+  .phones { position:absolute; z-index:2; right:120px; top:110px; display:flex; gap:36px; align-items:flex-start; }
+  .phone { width:380px; border-radius:44px; padding:12px; background:linear-gradient(160deg,#2a2a3e,#0b0b16); box-shadow:0 50px 90px -40px rgba(0,0,0,.9), inset 0 0 0 1px rgba(255,255,255,.05); }
+  .phone img { display:block; width:356px; height:auto; border-radius:34px; }
+  .phone .cap { text-align:center; font-size:15px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); padding:16px 0 8px; }
+  /* columns */
+  .cols { position:absolute; z-index:2; left:120px; right:120px; top:360px; display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+  .col { background:linear-gradient(180deg,var(--panel),#1b1b30); border:1px solid var(--line2); border-radius:22px; padding:36px 40px; }
+  .col.dash { border-style:dashed; background:transparent; }
+  .col h3 { font-family:var(--display); font-weight:700; font-size:30px; color:var(--heading); margin:0 0 22px; letter-spacing:.02em; }
+  .col h3 em { font-style:normal; color:var(--accent); }
+  .col ul.ticks li { font-size:25px; gap:14px; line-height:1.32; }
+  .col ul.ticks { gap:14px; }
+  /* timeline */
+  .tl { position:absolute; z-index:2; left:120px; right:120px; top:430px; display:grid; grid-template-columns:repeat(4,1fr); gap:0; }
+  .tl .st { position:relative; padding:0 36px 0 0; }
+  .tl .st::before { content:""; position:absolute; left:34px; right:0; top:33px; height:3px; background:var(--line2); }
+  .tl .st:last-child::before { right:36px; }
+  .tl .dot { position:relative; z-index:1; width:68px; height:68px; border-radius:50%; border:3px solid var(--accent); background:var(--bg); display:flex; align-items:center; justify-content:center; font-family:var(--display); font-weight:800; font-size:26px; color:var(--accent); }
+  .tl .dot.done { background:var(--accent); color:#0b0b16; }
+  .tl h3 { font-family:var(--display); font-weight:700; font-size:34px; color:var(--heading); margin:30px 0 12px; }
+  .tl p { font-size:24px; line-height:1.4; margin:0; max-width:360px; }
+  .tl .st .k { font-size:17px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-top:14px; }
+  /* diagram */
+  .dia { position:absolute; z-index:2; left:120px; right:120px; top:380px; height:590px; }
+</style></head><body>
+
+<!-- 1 · Cover -->
+<section class="slide">
+  <div class="bg"><img src="../../docs/pitch_deck/assets/cover.jpg" style="width:2100px;left:100px;top:-80px"></div>
+  <div class="scrim"></div>
+  <div class="copy" style="top:120px">
+    <div class="brand"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" fill="none" stroke="#00E5CC" stroke-width="4" stroke-dasharray="62 10" transform="rotate(110 16 16)"/><circle cx="16" cy="7" r="2.4" fill="#00E5CC"/></svg><span>IRONPAL</span></div>
+    <h1 class="xl" style="margin-top:150px">Stop logging.<br>Just lift.</h1>
+    <p class="lede">A headband that watches your set and logs the <b>exercise</b>, your <b>reps</b> and the <b>weight</b> on the bar — automatically. You type nothing.</p>
+    <p class="sub" style="margin-top:60px">Peter Dermek · Startup Awards Slovakia 2026 · Lifestyle · ironpal.co</p>
+  </div>
+  <div class="tag">Campaign footage</div>
+</section>
+
+<!-- 2 · Problem -->
+<section class="slide">
+  <div class="bg"><img src="../../docs/pitch_deck/assets/typing.jpg" style="width:1920px;left:60px;top:0"></div>
+  <div class="scrim"></div>
+  <div class="copy" style="width:800px">
+    <p class="kicker" style="margin-top:-30px">Problem</p>
+    <h1>The smartest thing in the gym is still your thumb.</h1>
+    <p class="lede">Phone out. Gloves off. Thumb-typing <b>3 × 8 @ 80 kg</b> between sets. Every rep logged by hand is a rep you stopped to remember — the rhythm breaks, the numbers get fudged, half of them never make it in.</p>
+    <p class="sub">Billions poured into AI, and every tracker on the market still asks you to type the set.</p>
+  </div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Problem</span><span>2 / 14</span></div>
+  <div class="tag">Campaign footage</div>
+</section>
+
+<!-- 3 · The gap -->
+<section class="slide">
+  <div class="glow"></div>
+  <div class="copy" style="top:100px;width:1600px">
+    <p class="kicker">Why nobody else does this</p>
+    <h1>The whole market makes you type the weight.</h1>
+  </div>
+  <table class="cmp">
+    <thead><tr><th>Device</th><th>Picks the exercise?</th><th>Counts reps?</th><th>Reads the weight?</th></tr></thead>
+    <tbody>
+      <tr><td>Wrist trackers<span class="s">Garmin · WHOOP</span></td><td>auto, often wrong</td><td>unreliable, misses leg work</td><td class="no">✕ estimated from body mass</td></tr>
+      <tr><td>Bar IMU sensors<span class="s">Enode · GymAware</span></td><td>manual / learned per lift</td><td>drops heavy reps</td><td class="no">✕ manual entry</td></tr>
+      <tr><td>Camera appliances<span class="s">Tempo</span></td><td>in-class only</td><td>yes, in class</td><td class="no">✕ only their own marked plates</td></tr>
+      <tr class="us"><td>IronPal</td><td class="yes">automatic, from your point of view</td><td class="yes">sensor fusion — motion + camera</td><td class="yes">✓ any free weight or stack — being built</td></tr>
+    </tbody>
+  </table>
+  <p class="fine" style="bottom:96px"><b>Automatic free-weight reading is an open gap across the entire market.</b> It is the hard problem we are building, and the reason IronPal exists. Sources: product documentation and peer-reviewed validation studies, June 2026.</p>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Market gap</span><span>3 / 14</span></div>
+</section>
+
+<!-- 4 · Solution -->
+<section class="slide">
+  <div class="bg"><img src="../../docs/pitch_deck/assets/bandout.jpg" style="width:1080px;height:1080px;left:840px;top:0"></div>
+  <div class="scrim" style="background:linear-gradient(90deg, rgba(26,26,46,1) 0%, rgba(26,26,46,1) 42%, rgba(26,26,46,.6) 52%, rgba(26,26,46,0) 66%)"></div>
+  <div class="copy" style="width:860px">
+    <p class="kicker">Solution</p>
+    <h1>Wear it. Lift.<br>It's logged.</h1>
+    <ol class="steps" style="margin-top:50px">
+      <li><i>1</i><div><b>Wear it</b>Slip on the band like any other. The camera and motion sensors wake up with you.</div></li>
+      <li><i>2</i><div><b>Lift</b>Just train. A model on your device recognises the set from your point of view — no buttons, no pauses.</div></li>
+      <li><i>3</i><div><b>It's logged</b>Exercise, reps and weight land in your log by themselves. Nothing to type.</div></li>
+    </ol>
+  </div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Solution</span><span>4 / 14</span></div>
+  <div class="tag">Campaign footage</div>
+</section>
+
+<!-- 5 · Product -->
+<section class="slide">
+  <div class="bg"><img src="../../docs/pitch_deck/assets/tolens.jpg" style="width:2400px;left:100px;top:-110px"></div>
+  <div class="scrim"></div>
+  <div class="copy">
+    <p class="kicker">The hardware</p>
+    <h1>One band.<br>Nothing to tap.</h1>
+    <ul class="ticks" style="margin-top:44px">
+      <li><b>8 mm flush camera</b> — a first-person view: it sees what you see</li>
+      <li><b>Motion sensors</b> in the band, fused with the camera</li>
+      <li><b>One teal LED, no screen.</b> Moisture-wicking fabric — forgettable on your head</li>
+      <li><b>Free weights and machines.</b> No equipment instrumentation, no per-machine setup</li>
+    </ul>
+  </div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Product</span><span>5 / 14</span></div>
+  <div class="tag">Campaign footage · product design</div>
+</section>
+
+<!-- 6 · How it works -->
+<section class="slide">
+  <div class="glow"></div>
+  <div class="copy" style="top:110px;width:1500px">
+    <p class="kicker">How it works</p>
+    <h1>It sees what you see — and learns from your own sets.</h1>
+  </div>
+  <svg class="dia" viewBox="0 0 1680 590" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Liberation Sans, sans-serif">
+    <defs><marker id="ar" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto"><path d="M2,2 L12,7 L2,12" fill="none" stroke="#00E5CC" stroke-width="2.5"/></marker></defs>
+    <!-- band -->
+    <rect x="0" y="40" width="470" height="340" rx="22" fill="#20203a" stroke="rgba(255,255,255,.14)"/>
+    <circle cx="90" cy="120" r="34" fill="none" stroke="#00E5CC" stroke-width="5" stroke-dasharray="190 30" transform="rotate(110 90 120)"/><circle cx="90" cy="92" r="7" fill="#00E5CC"/>
+    <text x="150" y="110" fill="#F0F4F8" font-size="34" font-weight="700" font-family="Montserrat, sans-serif">The band</text>
+    <text x="150" y="150" fill="#c3c8d6" font-size="24">camera + motion sensors</text>
+    <text x="40" y="222" fill="#c3c8d6" font-size="23">Sees the set from your point of</text>
+    <text x="40" y="258" fill="#c3c8d6" font-size="23">view. Every rep, including the</text>
+    <text x="40" y="294" fill="#c3c8d6" font-size="23">slow, heavy ones that wrist</text>
+    <text x="40" y="330" fill="#c3c8d6" font-size="23">trackers quietly drop.</text>
+    <!-- phone -->
+    <rect x="600" y="40" width="470" height="340" rx="22" fill="#20203a" stroke="rgba(255,255,255,.14)"/>
+    <text x="640" y="110" fill="#F0F4F8" font-size="34" font-weight="700" font-family="Montserrat, sans-serif">Your phone</text>
+    <text x="640" y="150" fill="#c3c8d6" font-size="24">on-device model, offline</text>
+    <text x="640" y="222" fill="#c3c8d6" font-size="23">Recognises the exercise and</text>
+    <text x="640" y="258" fill="#c3c8d6" font-size="23">counts reps on the device. Learns</text>
+    <text x="640" y="294" fill="#c3c8d6" font-size="23">from the sets you confirm —</text>
+    <text x="640" y="330" fill="#c3c8d6" font-size="23">sharper the more you lift.</text>
+    <!-- log -->
+    <rect x="1200" y="40" width="480" height="340" rx="22" fill="rgba(0,229,204,.08)" stroke="rgba(0,229,204,.45)"/>
+    <text x="1240" y="110" fill="#F0F4F8" font-size="34" font-weight="700" font-family="Montserrat, sans-serif">Your log</text>
+    <text x="1240" y="150" fill="#c3c8d6" font-size="24">after the set, one tap confirms</text>
+    <text x="1240" y="232" fill="#00E5CC" font-size="30" font-weight="600">Exercise</text>
+    <text x="1240" y="278" fill="#00E5CC" font-size="30" font-weight="600">Reps</text>
+    <text x="1240" y="324" fill="#00E5CC" font-size="30" font-weight="600">Weight</text>
+    <line x1="480" y1="210" x2="585" y2="210" stroke="#00E5CC" stroke-width="3" marker-end="url(#ar)"/>
+    <line x1="1080" y1="210" x2="1185" y2="210" stroke="#00E5CC" stroke-width="3" marker-end="url(#ar)"/>
+    <!-- the honest cloud line -->
+    <path d="M835,380 L835,440" stroke="#8e94a8" stroke-width="2.5" stroke-dasharray="8 8"/>
+    <rect x="300" y="440" width="1080" height="130" rx="16" fill="none" stroke="rgba(255,255,255,.14)" stroke-dasharray="8 8"/>
+    <text x="340" y="480" fill="#F0F4F8" font-size="25" font-weight="600">Only the weight leaves the device:</text>
+    <text x="340" y="516" fill="#c3c8d6" font-size="23">a single frame, processed in seconds and deleted.</text>
+    <text x="340" y="550" fill="#c3c8d6" font-size="23">Reps and exercise never leave the band. No footage is stored.</text>
+  </svg>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Solution · how</span><span>6 / 14</span></div>
+</section>
+
+<!-- 7 · In the app -->
+<section class="slide">
+  <div class="bg"><img src="../../docs/pitch_deck/assets/walk.jpg" style="width:1920px;left:0;top:0;filter:saturate(.6) brightness(.32)"></div>
+  <div class="scrim" style="background:linear-gradient(90deg, rgba(16,16,30,.92) 0%, rgba(16,16,30,.75) 45%, rgba(16,16,30,.35) 100%)"></div>
+  <div class="copy" style="width:800px">
+    <p class="kicker">In the app</p>
+    <h1>Three numbers,<br>logged for you.</h1>
+    <ul class="ticks" style="margin-top:40px">
+      <li><b>Live set</b> — the exercise, the rep count and the weight, as you lift</li>
+      <li><b>One tap confirms</b> what the band proposed after the set</li>
+      <li><b>Form, next</b> — depth, back angle, knee tracking from the same camera. Being built, after reps and weight</li>
+    </ul>
+  </div>
+  <div class="phones">
+    <div class="phone"><img src="../../docs/pitch_deck/assets/screen_live.png"><div class="cap">Live set · biceps curl</div></div>
+    <div class="phone"><img src="../../docs/pitch_deck/assets/screen_form.png"><div class="cap">Form · back squat</div></div>
+  </div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Product · app</span><span>7 / 14</span></div>
+  <div class="tag">Product interface concept</div>
+</section>
+
+<!-- 8 · Where we are -->
+<section class="slide">
+  <div class="glow"></div>
+  <div class="copy" style="top:110px;width:1500px">
+    <p class="kicker">Traction</p>
+    <h1>A working proof of concept — on a phone, in a real gym.</h1>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <h3><em>Working, measured</em></h3>
+      <ul class="ticks">
+        <li><b>4.4 ms</b> per tick for the on-device rep engine, against a 15 ms budget — Galaxy A52, release build</li>
+        <li>App running on a phone mounted on the headband since May 2026; sensor link verified on hardware</li>
+        <li>Self-training model shipped: 8/8 native tests, 23 JS, 13 backend; end-to-end suite 6/6</li>
+        <li>131 commits since April 2026 — one person, building in the open</li>
+        <li>ironpal.co live with early-bird reservations; 73-second campaign film finished</li>
+      </ul>
+    </div>
+    <div class="col dash">
+      <h3>Being built</h3>
+      <ul class="ticks open">
+        <li><b>Weight reading</b> from the first-person frame — the core bet, not a shipped feature</li>
+        <li><b>Template matching on device</b> — the engine runs; recognition accuracy is being measured</li>
+        <li><b>Form analysis</b> — depth, back angle, knees; interface concept today</li>
+        <li><b>The band itself</b> — the POC is a phone on a headband; the integrated band is next</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Traction</span><span>8 / 14</span></div>
+</section>
+
+<!-- 9 · Market -->
+<section class="slide">
+  <div class="glow"></div>
+  <div class="copy" style="top:110px;width:1600px">
+    <p class="kicker">Market</p>
+    <h1>$140B of gyms. $50B of trackers.<br>Zero that read the bar.</h1>
+  </div>
+  <div class="stats" style="top:470px">
+    <div class="stat"><div class="n">$140<small>B</small></div><div class="l">fitness clubs, per year</div><div class="s">global health &amp; fitness club market</div></div>
+    <div class="stat"><div class="n">$50<small>B</small></div><div class="l">fitness trackers, per year</div><div class="s">a separate market — and every one of them makes you type the set</div></div>
+    <div class="stat"><div class="n">~200<small>M</small></div><div class="l">gym members worldwide</div><div class="s">industry association estimate</div></div>
+  </div>
+  <p class="fine">Our wedge is the lifter who already logs by hand. Every user of a logging app or a bar sensor has proven they want the number — we remove the typing.</p>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Market</span><span>9 / 14</span></div>
+</section>
+
+<!-- 10 · Business model -->
+<section class="slide">
+  <div class="glow"></div>
+  <div class="copy" style="top:110px;width:1600px">
+    <p class="kicker">Business model</p>
+    <h1>Hardware people pre-order,<br>software they keep paying for.</h1>
+  </div>
+  <div class="tiles" style="top:440px">
+    <div class="tile"><div class="n">01 · NOW</div><h3>Band + premium app</h3><p>Sold direct, launched on Kickstarter. Early-bird up to ~50 % off the launch price for the first 200 backers.</p></div>
+    <div class="tile"><div class="n">02 · RECURRING</div><h3>Premium app subscription</h3><p>After the bundled months: the log, the levels, the model that keeps learning your lifts.</p></div>
+    <div class="tile later"><div class="n">03 · LATER</div><h3>Gym packs</h3><p>The first lifter at a gym maps its stations and stacks; every later member starts from that pack. A gym can sponsor it.</p></div>
+  </div>
+  <div class="bar" style="bottom:110px">Integrated band bill of materials <b>≈ $40–85 per unit at 1,000 units</b> — a sub-$100 build target is achievable.</div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Business model</span><span>10 / 14</span></div>
+</section>
+
+<!-- 11 · Why now -->
+<section class="slide">
+  <div class="glow"></div>
+  <div class="copy" style="top:110px;width:1600px">
+    <p class="kicker">Why now</p>
+    <h1>The parts finally exist.</h1>
+    <p class="lede">Three things that were not true five years ago.</p>
+  </div>
+  <div class="tiles" style="top:450px">
+    <div class="tile"><div class="n">ON-DEVICE ML</div><h3>A rep engine ticks in milliseconds on a mid-range phone.</h3><p>Measured: 4.4 ms on a Galaxy A52. Recognition can stay on the device — private, offline, free to run.</p></div>
+    <div class="tile"><div class="n">MODELS THAT READ</div><h3>A model can read the number off a plate or a stack.</h3><p>The one thing that makes weight reading attackable without instrumenting the gym or the bar.</p></div>
+    <div class="tile"><div class="n">PASSIVE WEARABLES</div><h3>The market is moving to no-logging tracking.</h3><p>The largest wearables now estimate training load — from body-mass models, because they cannot see the bar. We can.</p></div>
+  </div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Why now</span><span>11 / 14</span></div>
+</section>
+
+<!-- 12 · Roadmap -->
+<section class="slide">
+  <div class="glow"></div>
+  <div class="copy" style="top:110px;width:1600px">
+    <p class="kicker">Roadmap</p>
+    <h1>From a phone on a headband<br>to the band.</h1>
+  </div>
+  <div class="tl">
+    <div class="st"><div class="dot done">✓</div><h3>Proof of concept</h3><p>A phone on the headband. On-device rep engine, self-training model, the app and its test suites.</p><div class="k">done · 2026</div></div>
+    <div class="st"><div class="dot">2</div><h3>Capture module</h3><p>The integrated band with its own camera and motion sensors. Hand-built units at ≈ $130–160 each.</p><div class="k">next</div></div>
+    <div class="st"><div class="dot">3</div><h3>Kickstarter</h3><p>The first 200 early-bird backers; weight reading validated on the most-lifted exercises first.</p><div class="k">then</div></div>
+    <div class="st"><div class="dot">4</div><h3>Ship + gym packs</h3><p>Bands to backers; the first gyms mapped by their first lifters.</p><div class="k">after</div></div>
+  </div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Roadmap</span><span>12 / 14</span></div>
+</section>
+
+<!-- 13 · Team -->
+<section class="slide">
+  <div class="bg"><img src="../../docs/pitch_deck/assets/close.jpg" style="width:2500px;left:100px;top:-80px"></div>
+  <div class="scrim"></div>
+  <div class="copy">
+    <p class="kicker">Team</p>
+    <h1>One founder,<br>building it in the open.</h1>
+    <p class="lede"><b>Peter Dermek</b> — solo technical founder. A hybrid athlete who got tired of typing reps mid-set, and went to build the thing that would read the bar.</p>
+    <p class="sub">Designs, builds, shoots and ships everything himself — hardware, app, model, film — directing AI agents for what would otherwise take a team. The whole build is public.</p>
+    <p class="sub" style="color:var(--body)">First hire: <b style="color:var(--heading)">hardware &amp; manufacturing.</b></p>
+  </div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Team</span><span>13 / 14</span></div>
+  <div class="tag">Campaign footage</div>
+</section>
+
+<!-- 14 · The ask -->
+<section class="slide">
+  <div class="glow"></div>
+  <div class="copy" style="top:110px;width:1600px">
+    <p class="kicker">Fundraising</p>
+    <h1>Pre-seed conversations open —<br>what the next twelve months need.</h1>
+  </div>
+  <div class="tiles" style="top:390px">
+    <div class="tile" style="min-height:230px"><div class="n">01</div><h3>200 integrated bands</h3><p>The capture module, hand-built then small-batch — the hardware the campaign ships.</p></div>
+    <div class="tile" style="min-height:230px"><div class="n">02</div><h3>Weight reading, validated</h3><p>On the twenty most-lifted exercises, measured against the bar — the claim earned before it is made.</p></div>
+    <div class="tile" style="min-height:230px"><div class="n">03</div><h3>First backers shipped</h3><p>Kickstarter launched and delivered; the first gyms mapped.</p></div>
+  </div>
+  <div class="bar" style="bottom:200px">What a mentor would unlock: <b>hardware manufacturing</b> and <b>go-to-market</b> — the two places a solo software founder is slowest alone.</div>
+  <div class="fine" style="bottom:100px;font-size:30px;color:var(--heading)"><span style="color:var(--accent);font-family:var(--display);font-weight:800">ironpal.co</span> &nbsp;·&nbsp; p3t3r.d3rm3k@gmail.com</div>
+  <div class="foot"><b>IRONPAL</b><span>Startup Awards Slovakia 2026</span><span class="rub">Fundraising</span><span>14 / 14</span></div>
+</section>
+
+</body></html>

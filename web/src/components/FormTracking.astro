@@ -1,0 +1,193 @@
+---
+// Form tracking — the one genuinely interactive app screen on the page (plan §4).
+// It is scripts/k8/squat_screen.html at phone scale, driven by the depth signal MEASURED from the
+// web K8 clip (src/data/k8_depth.json, written by scripts/web/measure.py), looping while in view.
+// Form tracking is not a shipped capability and is in no claim: the copy says "being built", the
+// screen is labelled "Product interface concept", and nothing on it scores or judges the rep.
+import depthData from '../data/k8_depth.json';
+const depth = depthData.depth as number[];
+const fps = depthData.fps as number;
+// Joint anchors of the figure, fractions of the panel (input/kickstarter/k8/k8_anchors.json).
+const anchors = { shoulder: [0.53, 0.27], hip: [0.652, 0.55], knee: [0.3, 0.68], ankle: [0.41, 0.93] };
+---
+<section class="section formtrack" id="form">
+  <div class="wrap">
+    <div class="ft reveal">
+      <div class="ft__media">
+        <div class="phone" id="ftPhone">
+          <span class="phone__concept">Product interface concept</span>
+          <div class="phone__screen">
+            <div class="scr__top"><span class="scr__brand"><i></i>IRONPAL</span><span class="scr__live">● live</span></div>
+
+            <div class="scr__field is-focus">
+              <span class="scr__lbl">Exercise</span>
+              <span class="scr__ex">Barbell Back Squat</span>
+            </div>
+
+            <div class="panel">
+              <img src="/assets/k8-figure.png" alt="" aria-hidden="true" loading="lazy" />
+              <svg id="ftOverlay" viewBox="0 0 532 470" preserveAspectRatio="none" aria-hidden="true"></svg>
+            </div>
+
+            <div class="reads">
+              <div class="read"><span class="scr__lbl">Depth</span><span class="big"><span id="ftDepth">0</span><small>%</small></span><span class="tag" id="ftDepthTag"></span></div>
+              <div class="read"><span class="scr__lbl">Back</span><span class="big"><span id="ftBack">8</span><small>°</small></span><span class="tag" id="ftBackTag"></span></div>
+              <div class="read"><span class="scr__lbl">Knees</span><span class="big"><span id="ftKnee">176</span><small>°</small></span><span class="tag" id="ftKneeTag"></span></div>
+            </div>
+
+            <div class="scr__log">
+              <div class="scr__row"><span>Set 1</span><span>8 reps</span></div>
+              <div class="scr__row"><span>Set 2</span><span>8 reps</span></div>
+              <div class="scr__row scr__row--cur"><span>Set 3</span><span>logging…</span></div>
+            </div>
+          </div>
+        </div>
+        <img class="ft__bg" src="/assets/peter/peter-squat.jpg" loading="lazy"
+             alt="Peter squatting under a barbell, seen from the side — the view the form screen is reading." />
+      </div>
+
+      <div class="ft__copy">
+        <span class="kicker">Form</span>
+        <h2>It sees the rep.<br />So it can judge the rep.</h2>
+        <p class="muted">From a first-person view, the same camera that counts your reps can watch how they look — squat depth, back angle, whether the knee tracks the foot. This is what the interface will show.</p>
+        <p class="muted">Like reading the weight, it's being built rather than shipped: reps and exercise recognition come first.</p>
+        <ul class="ticks">
+          <li>Depth to parallel, rep by rep</li>
+          <li>Back angle from vertical</li>
+          <li>Knee tracking over the foot</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .formtrack { background: var(--bg-2); }
+  .ft { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px,5vw,72px); align-items: center; }
+  .ft__copy h2 { font-size: clamp(28px,4.2vw,50px); margin-bottom: 16px; }
+  .ft__copy p { max-width: 46ch; }
+  .ft__copy p + p { margin-top: 12px; }
+
+  .ft__media { position: relative; display: flex; align-items: center; justify-content: center; padding: clamp(20px,4vw,44px); border-radius: var(--radius); overflow: hidden;
+    background: radial-gradient(120% 90% at 50% 0%, rgba(0,229,204,.10), transparent 55%), linear-gradient(160deg, #20203a, #14142a 60%, #0e0e1f); border: 1px solid var(--line); }
+  /* the 'Product interface concept' label sits 26px above the phone; keep room for it at every width */
+  .ft__media { padding-top: max(48px, clamp(20px, 4vw, 44px)); }
+  /* the squat still sits behind the phone, dimmed — the view the screen is reading */
+  .ft__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; opacity: .34; filter: saturate(.7); z-index: 0; }
+
+  /* phone mock — the same shell and type as AppModules, so the four screens read as one app */
+  .phone { position: relative; z-index: 1; flex: 0 0 auto; width: clamp(238px, 26vw, 290px); aspect-ratio: 9/18.6; border-radius: 40px; padding: 12px;
+    background: linear-gradient(160deg, #2a2a3e, #0b0b16); box-shadow: 0 50px 90px -40px rgba(0,0,0,.9), inset 0 0 0 1px rgba(255,255,255,.04); }
+  .phone__concept { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--body); }
+  .phone__screen { height: 100%; border-radius: 30px; background: #101023; border: 1px solid rgba(255,255,255,.05); padding: 20px 16px 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+  .scr__top { display: flex; align-items: center; justify-content: space-between; }
+  .scr__brand { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-display); font-weight: 800; letter-spacing: .1em; font-size: 12px; color: var(--heading); }
+  .scr__brand i { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid var(--accent); border-bottom-color: transparent; }
+  .scr__live { font-size: 10px; color: var(--accent); letter-spacing: .08em; }
+  .scr__lbl { font-size: 9px; text-transform: uppercase; letter-spacing: .16em; color: var(--body); }
+  .scr__field { display: flex; flex-direction: column; gap: 3px; padding: 8px 11px; border-radius: 12px; background: rgba(255,255,255,.03); border: 1px solid transparent; }
+  .scr__ex { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--heading); line-height: 1.15; }
+  .is-focus { border-color: rgba(0,229,204,.55); background: rgba(0,229,204,.08); box-shadow: 0 0 24px -8px rgba(0,229,204,.5); }
+  .is-focus .scr__ex { color: var(--accent); }
+
+  .panel { position: relative; width: 100%; aspect-ratio: 532/470; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,.03); }
+  .panel img, .panel svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .panel img { object-fit: contain; filter: saturate(.85) brightness(.92); }
+  .panel :global(.m-line) { stroke: var(--accent); stroke-width: 3; fill: none; }
+  .panel :global(.m-dash) { stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 9 8; fill: none; opacity: .8; }
+  .panel :global(.m-arc) { stroke: var(--accent); stroke-width: 3; fill: rgba(0,229,204,.14); }
+  .panel :global(.m-dot) { fill: var(--accent); }
+  .panel :global(.m-tag) { font: 600 22px var(--font-display); fill: var(--heading); letter-spacing: .06em; }
+  .panel :global(.m-tag.small) { font-size: 17px; fill: var(--body); letter-spacing: .14em; }
+
+  /* three cards across a phone that is 238px wide at its narrowest: ~44px of content each, and the
+     longest tag (TRACKING) has to fit that without spilling into its neighbour */
+  .reads { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+  .read { padding: 7px 6px; border-radius: 10px; background: rgba(255,255,255,.03); display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow: hidden; }
+  .big { font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--heading); line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .big small { font-size: 11px; font-weight: 600; color: var(--body); margin-left: 1px; }
+  .tag { font-size: 7.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); min-height: 10px; white-space: nowrap; }
+  @media (max-width: 420px) { .tag { font-size: 7px; letter-spacing: .05em; } }
+
+  .scr__log { margin-top: auto; display: flex; flex-direction: column; gap: 5px; }
+  .scr__row { display: flex; justify-content: space-between; font-size: 11px; color: var(--body); padding: 6px 9px; border-radius: 8px; background: rgba(255,255,255,.02); }
+  .scr__row--cur { color: var(--accent); background: rgba(0,229,204,.07); }
+
+  @media (max-width: 900px) {
+    .ft { grid-template-columns: 1fr; }
+    .ft__copy { order: 2; }
+  }
+</style>
+
+<script define:vars={{ depth, fps, anchors }}>
+  // The screen's own script (scripts/k8/squat_screen.html), looping on the measured depth signal.
+  const W = 532, H = 470;
+  const P = j => ({ x: anchors[j][0] * W, y: anchors[j][1] * H });
+  const backAngle = d => 8 + 34 * d;
+  const kneeAngle = d => 176 - 88 * d;
+  const $ = id => document.getElementById(id);
+  const ov = $('ftOverlay');
+  if (ov) {
+    const rad = a => a * Math.PI / 180;
+    const angOf = (a, b) => Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+    function arcPath(c, r, a0, a1) {
+      const p0 = { x: c.x + r * Math.cos(rad(a0)), y: c.y + r * Math.sin(rad(a0)) };
+      const p1 = { x: c.x + r * Math.cos(rad(a1)), y: c.y + r * Math.sin(rad(a1)) };
+      const large = Math.abs(a1 - a0) > 180 ? 1 : 0, sweep = a1 > a0 ? 1 : 0;
+      return `M${c.x},${c.y} L${p0.x},${p0.y} A${r},${r} 0 ${large} ${sweep} ${p1.x},${p1.y} Z`;
+    }
+    const S = P('shoulder'), Hp = P('hip'), K = P('knee'), A = P('ankle');
+    const aBack = angOf(Hp, S), aThigh = angOf(K, Hp), aShin = angOf(K, A);
+    const kneeY = K.y, standY = kneeY - 118;
+
+    function render(i) {
+      const d = depth[i] ?? 0;
+      const hipY = standY + (kneeY - standY) * d;
+      ov.innerHTML = `
+        <line class="m-dash" x1="40" x2="${W - 40}" y1="${kneeY}" y2="${kneeY}"/>
+        <text class="m-tag small" x="${W - 150}" y="${kneeY - 8}">PARALLEL</text>
+        <line class="m-line" x1="60" x2="${W - 60}" y1="${hipY}" y2="${hipY}"/>
+        ${kneeY - hipY > 22 ? `<text class="m-tag small" x="64" y="${hipY - 8}">HIP</text>` : ''}
+        <path class="m-arc" d="${arcPath(Hp, 54, -90, aBack)}"/>
+        <line class="m-line" x1="${Hp.x}" y1="${Hp.y}" x2="${S.x}" y2="${S.y}"/>
+        <line class="m-dash" x1="${Hp.x}" y1="${Hp.y}" x2="${Hp.x}" y2="${Hp.y - 90}"/>
+        <text class="m-tag" x="${Hp.x + 62}" y="${Hp.y - 30}">${Math.round(backAngle(d))}°</text>
+        <path class="m-arc" d="${arcPath(K, 48, aThigh, aShin)}"/>
+        <line class="m-line" x1="${K.x}" y1="${K.y}" x2="${Hp.x}" y2="${Hp.y}"/>
+        <line class="m-line" x1="${K.x}" y1="${K.y}" x2="${A.x}" y2="${A.y}"/>
+        <text class="m-tag" x="${K.x - 22}" y="${K.y + 46}">${Math.round(kneeAngle(d))}°</text>
+        <circle class="m-dot" cx="${S.x}" cy="${S.y}" r="7"/>
+        <circle class="m-dot" cx="${Hp.x}" cy="${Hp.y}" r="8"/>
+        <circle class="m-dot" cx="${K.x}" cy="${K.y}" r="8"/>
+        <circle class="m-dot" cx="${A.x}" cy="${A.y}" r="7"/>`;
+      $('ftDepth').textContent = String(Math.round(100 * d));
+      $('ftDepthTag').textContent = d >= 0.92 ? 'parallel' : '';
+      $('ftBack').textContent = String(Math.round(backAngle(d)));
+      $('ftBackTag').textContent = backAngle(d) <= 45 ? 'neutral' : 'leaning';
+      $('ftKnee').textContent = String(Math.round(kneeAngle(d)));
+      $('ftKneeTag').textContent = 'tracking';
+    }
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const n = depth.length, period = n / fps;
+    if (reduce || n === 0) {
+      // hold the deepest frame — all three markers at their extremes
+      render(n ? depth.indexOf(Math.max(...depth)) : 0);
+    } else {
+      let raf = 0, t0 = 0;
+      const loop = now => {
+        if (!t0) t0 = now;
+        const t = ((now - t0) / 1000) % period;
+        render(Math.min(n - 1, Math.floor(t * fps)));
+        raf = requestAnimationFrame(loop);
+      };
+      const start = () => { if (!raf) { t0 = 0; raf = requestAnimationFrame(loop); } };
+      const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
+      const phone = $('ftPhone');
+      if ('IntersectionObserver' in window && phone) {
+        new IntersectionObserver(es => es.forEach(e => (e.isIntersecting ? start() : stop())), { threshold: 0.25 }).observe(phone);
+      } else { start(); }
+      render(0);
+    }
+  }
+</script>

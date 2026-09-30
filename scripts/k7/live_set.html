@@ -1,0 +1,174 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>IronPal — Live set</title>
+<!--
+  K7 inset: the IronPal "Live set" screen, biceps curl.
+
+  Replicates the landing page's interface (web/src/components/AppModules.astro) — every colour,
+  weight and radius below is lifted from it, so the film and the site show the same product.
+
+  What it demonstrates, which is the whole point of K7:
+    · the exercise named          — "Dumbbell Biceps Curl"
+    · reps counting as they happen
+    · the SET NUMBER climbing, with each finished set appended to the log
+    · the lifted weight displayed, exactly as the site's mockup shows it
+
+  It carries the site's own "Product interface concept" label. That label is load-bearing here:
+  the current recogniser treats a curl as its negative class (poc labels.ts), so this is a
+  designed interface, not a recording of a working model. K8 — the Bulgarian split squat — is
+  the enrolled, IMU-led movement where a real recording belongs.
+
+  Driven by an explicit timeline, not a loose animation: SETS below is the score, and the
+  renderer steps a frozen clock so every frame lands on an exact timestamp. Retune SETS against
+  the curls in the rendered K7 take.
+-->
+<style>
+  :root{
+    --accent:#00E5CC; --heading:#F0F4F8; --body:#9aa0b4; --ground:#101023;
+    --display:'Montserrat','DejaVu Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#07070f}
+  body{width:620px;height:1000px;display:flex;flex-direction:column;align-items:center;
+       font-family:var(--display);-webkit-font-smoothing:antialiased}
+
+  .screen{width:600px;height:940px;border-radius:30px;background:var(--ground);
+          border:1px solid rgba(255,255,255,.05);
+          padding:44px 38px 32px;display:flex;flex-direction:column;gap:24px;overflow:hidden}
+
+  .top{display:flex;align-items:center;justify-content:space-between}
+  .brand{display:inline-flex;align-items:center;gap:15px;font-weight:800;
+         letter-spacing:.1em;font-size:26px;color:var(--heading)}
+  .brand i{width:26px;height:26px;border-radius:50%;
+           border:5px solid var(--accent);border-bottom-color:transparent}
+  .live{font-size:21px;color:var(--accent);letter-spacing:.08em}
+  .live b{animation:pulse 1.9s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+  .lbl{font-size:21px;text-transform:uppercase;letter-spacing:.16em;color:var(--body)}
+  .field,.stat{padding:22px 26px;border-radius:26px;background:rgba(255,255,255,.03);
+               border:2px solid transparent;display:flex;flex-direction:column;gap:9px}
+  .ex{font-weight:700;font-size:34px;color:var(--heading);line-height:1.15}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:21px}
+  .big{font-weight:800;font-size:68px;color:var(--heading);line-height:1;
+       font-variant-numeric:tabular-nums}
+  .big small{font-size:30px;font-weight:600;color:var(--body);margin-left:4px}
+
+  /* .is-focus, verbatim from the site */
+  .is-focus{border-color:rgba(0,229,204,.55);background:rgba(0,229,204,.08);
+            box-shadow:0 0 50px -16px rgba(0,229,204,.5)}
+  .is-focus .ex{color:var(--accent)}
+
+  .spark{width:100%;height:132px;opacity:.9}
+  .log{margin-top:auto;display:flex;flex-direction:column;gap:13px}
+  .row{display:flex;justify-content:space-between;font-size:25px;color:var(--body);
+       padding:15px 21px;border-radius:17px;background:rgba(255,255,255,.02)}
+  .row.cur{color:var(--accent);background:rgba(0,229,204,.07)}
+
+  .concept{margin-top:16px;font-size:20px;letter-spacing:.12em;white-space:nowrap;
+           text-transform:uppercase;color:var(--body)}
+</style>
+
+<div class="screen">
+  <div class="top">
+    <span class="brand"><i></i>IRONPAL</span>
+    <span class="live"><b>●</b> live</span>
+  </div>
+
+  <div class="field is-focus">
+    <span class="lbl">Exercise</span>
+    <span class="ex" id="exercise">&nbsp;</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="lbl">Reps</span><span class="big" id="reps">0</span></div>
+    <div class="stat"><span class="lbl">Weight</span>
+      <span class="big"><span id="weight">12</span><small>kg</small></span></div>
+  </div>
+
+  <svg class="spark" viewBox="0 0 240 56" preserveAspectRatio="none">
+    <polyline id="trace" fill="none" stroke="#00E5CC" stroke-width="2"/>
+  </svg>
+
+  <div class="log" id="log"></div>
+</div>
+<div class="concept">Product interface concept</div>
+
+<script>
+  // Config comes from the query string so one screen serves every clip, and so the rep
+  // timings can be MEASURED from the rendered take rather than guessed. The renderer passes
+  // them (scripts/k7/make_inset.sh):
+  //   ?exercise=...&weight=5&dur=8&reps=0.67,3.29,5.38,6.96&start=0&done=2&setno=3
+  const Q = new URLSearchParams(location.search);
+  const num = (k, d) => (Q.has(k) ? parseFloat(Q.get(k)) : d);
+
+  const WEIGHT = num('weight', 12);   // kg — the value the lifter entered, never a camera reading
+  const DUR = num('dur', 7.0);
+
+  // The score. Sets 1 and 2 are already done when the clip opens — he is mid-workout, not
+  // starting — so the log has history and the SET NUMBER visibly climbs during the shot.
+  // `at` is the second each rep lands; retune against the curls in the take.
+  const DONE = num('done', 2);        // sets already in the log when the clip opens
+  const SETNO = num('setno', 3);      // the set being performed on camera
+  const START = num('start', 0);      // reps already counted in that set
+  const REP_TIMES = (Q.get('reps') || '0.30,0.95,1.60,2.25,2.90')
+    .split(',').map(parseFloat).filter(x => !isNaN(x));
+
+  const DONE_AT_START = Array.from({length: DONE}, (_, i) => ({n: i + 1, reps: 12}));
+  const SETS = [{n: SETNO, reps: REP_TIMES, from: START, closesAt: null}];
+
+  const $reps = document.getElementById('reps');
+  const $log = document.getElementById('log');
+  const $trace = document.getElementById('trace');
+  document.getElementById('weight').textContent = WEIGHT;
+  document.getElementById('exercise').textContent =
+    Q.get('exercise') || 'Dumbbell Biceps Curl';
+
+  function render(t) {
+    // Which set is live, how many reps it is showing, and what the log holds by now.
+    let live = SETS[0], done = [...DONE_AT_START];
+    for (const s of SETS) {
+      if (s.closesAt !== null && t >= s.closesAt) {
+        done.push({n: s.n, reps: s.from + s.reps.length});
+      } else { live = s; break; }
+    }
+    const count = live.from + live.reps.filter(x => x <= t).length;
+    $reps.textContent = count;
+
+    $log.innerHTML =
+      done.map(d => `<div class="row"><span>Set ${d.n}</span><span>${d.reps} × ${WEIGHT} kg</span></div>`).join('') +
+      `<div class="row cur"><span>Set ${live.n}</span><span>logging…</span></div>`;
+
+    const all = SETS.flatMap(x => x.reps);
+
+    // The trace IS the dumbbell path, not decoration over it. One full curl = one arch:
+    // the line rises as the weight comes up, peaks at the top of the rep, falls as it lowers.
+    // Between reps it sits near the baseline with a little idle noise.
+    //
+    // It scrolls at SEC_PER_PX seconds of history per SVG x-unit, chosen so a whole set of
+    // reps is legible across the 240-unit width rather than a blur — an earlier version used a
+    // fast carrier wave that changed far quicker than the man was actually moving.
+    const WINDOW_S = 12;                 // seconds of history across the full width
+    const pts = [];
+    for (let x = 0; x <= 240; x += 2) {
+      const tt = t - (240 - x) * (WINDOW_S / 240);
+      // Each rep contributes one smooth arch centred on its top, ~RISE seconds wide.
+      const RISE = 1.1;
+      let y = 0;
+      for (const r of all) {
+        const u = (tt - r) / RISE;
+        if (u > -1 && u < 1) y = Math.max(y, Math.cos(u * Math.PI / 2) ** 2);
+      }
+      const idle = 0.7 * Math.sin(tt * 2.1) + 0.5 * Math.sin(tt * 3.7 + 1.3);
+      pts.push(`${x},${(30 - 21 * y - idle).toFixed(1)}`);
+    }
+    $trace.setAttribute('points', pts.join(' '));
+  }
+
+  const t0 = performance.now();
+  (function frame(now) {
+    const t = (now - t0) / 1000;
+    render(t);
+    if (t < DUR + 0.5) requestAnimationFrame(frame);
+  })(t0);
+</script>

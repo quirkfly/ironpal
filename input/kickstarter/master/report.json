@@ -1,0 +1,202 @@
+{
+ "audio": {
+  "K1/flat": {
+   "speech_before": -23.2,
+   "floor_before": -89.6,
+   "gain": 2.2,
+   "speech": -21.0,
+   "floor": -87.6,
+   "dur": 8.0
+  },
+  "K1/eq": {
+   "speech_before": -24.2,
+   "floor_before": -89.5,
+   "gain": 3.2,
+   "speech": -21.0,
+   "floor": -87.3,
+   "dur": 8.02
+  },
+  "K2/flat": {
+   "speech_before": -21.6,
+   "floor_before": -83.8,
+   "gain": 0.6,
+   "speech": -21.0,
+   "floor": -83.5,
+   "dur": 8.0
+  },
+  "K2/eq": {
+   "speech_before": -22.3,
+   "floor_before": -84.6,
+   "gain": 1.3,
+   "speech": -21.0,
+   "floor": -83.6,
+   "dur": 8.02
+  },
+  "K3_composed/flat": {
+   "speech_before": -20.8,
+   "floor_before": -97.1,
+   "gain": -0.2,
+   "speech": -21.0,
+   "floor": -97.1,
+   "dur": 7.75
+  },
+  "K3_composed/eq": {
+   "speech_before": -21.3,
+   "floor_before": -97.2,
+   "gain": 0.3,
+   "speech": -21.0,
+   "floor": -97.2,
+   "dur": 7.77
+  },
+  "K4/flat": {
+   "speech_before": -26.1,
+   "floor_before": -99.1,
+   "gain": 5.1,
+   "speech": -21.0,
+   "floor": -94.7,
+   "dur": 6.7
+  },
+  "K4/eq": {
+   "speech_before": -25.7,
+   "floor_before": -98.4,
+   "gain": 4.7,
+   "speech": -21.0,
+   "floor": -94.6,
+   "dur": 6.72
+  },
+  "K5/flat": {
+   "speech_before": -19.5,
+   "floor_before": -50.8,
+   "gain": -1.5,
+   "speech": -21.0,
+   "floor": -52.3,
+   "dur": 7.1
+  },
+  "K5/eq": {
+   "speech_before": -18.3,
+   "floor_before": -52.9,
+   "gain": -2.7,
+   "speech": -21.0,
+   "floor": -55.6,
+   "dur": 7.12
+  },
+  "K6_trimmed/flat": {
+   "speech_before": -21.1,
+   "floor_before": -96.5,
+   "gain": 0.1,
+   "speech": -21.0,
+   "floor": -96.5,
+   "dur": 7.787
+  },
+  "K6_trimmed/eq": {
+   "speech_before": -22.0,
+   "floor_before": -96.6,
+   "gain": 1.0,
+   "speech": -21.0,
+   "floor": -96.6,
+   "dur": 7.807
+  },
+  "K7_composed/flat": {
+   "speech_before": -19.9,
+   "floor_before": -128.9,
+   "gain": -1.1,
+   "speech": -21.0,
+   "floor": -128.9,
+   "dur": 8.0
+  },
+  "K7_composed/eq": {
+   "speech_before": -20.5,
+   "floor_before": -124.1,
+   "gain": -0.5,
+   "speech": -21.0,
+   "floor": -124.1,
+   "dur": 8.02
+  },
+  "K8_composed/flat": {
+   "speech_before": -21.0,
+   "floor_before": -100.1,
+   "gain": 0.0,
+   "speech": -21.0,
+   "floor": -100.1,
+   "dur": 8.0
+  },
+  "K8_composed/eq": {
+   "speech_before": -22.2,
+   "floor_before": -100.3,
+   "gain": 1.2,
+   "speech": -21.0,
+   "floor": -100.3,
+   "dur": 8.02
+  },
+  "K9/flat": {
+   "speech_before": -20.0,
+   "floor_before": -180.0,
+   "gain": -1.0,
+   "speech": -21.0,
+   "floor": -180.0,
+   "dur": 8.3
+  },
+  "K9/eq": {
+   "speech_before": -19.3,
+   "floor_before": -124.1,
+   "gain": -1.7,
+   "speech": -21.0,
+   "floor": -124.1,
+   "dur": 8.32
+  }
+ },
+ "grade": {
+  "K5": {
+   "in": {
+    "Y": 60.16,
+    "warmth": 32.4,
+    "sat": 0.46
+   },
+   "want": {
+    "Y": 47.45,
+    "warmth": 25.12,
+    "sat": 0.44
+   },
+   "gamma": 0.869,
+   "mix": -0.029,
+   "sat_mul": 0.978,
+   "out": {
+    "Y": 46.42,
+    "warmth": 29.29,
+    "sat": 0.51
+   }
+  }
+ },
+ "master": {
+  "flat": {
+   "file": "/home/quirkfly/job_stuff/prj/geggen/products/ironpal/clips/K1_K9_master_flat.mp4",
+   "dur": 72.21,
+   "I_LUFS": "-14.0",
+   "TP": "-1.4",
+   "LRA": "4.6"
+  },
+  "eq": {
+   "file": "/home/quirkfly/job_stuff/prj/geggen/products/ironpal/clips/K1_K9_master_eq.mp4",
+   "dur": 72.21,
+   "I_LUFS": "-14.0",
+   "TP": "-1.4",
+   "LRA": "4.4"
+  },
+  "eq_music": {
+   "file": "/home/quirkfly/job_stuff/prj/geggen/products/ironpal/clips/K1_K9_master_eq_music.mp4",
+   "proxy": "/home/quirkfly/job_stuff/prj/geggen/products/ironpal/clips/K1_K9_master_eq_music_proxy.mp4",
+   "dur": 72.21,
+   "I_LUFS": "-14.2",
+   "TP": "-1.3",
+   "LRA": "3.7",
+   "track": "mixkit-dreaming-big-31.mp3",
+   "offset_s": 4.0,
+   "gain_db": -18.6,
+   "dialog_I_pre": -20.0,
+   "music_section_I_pre": -12.4,
+   "bed_stem_I_ducked_pre": -32.7,
+   "rel_db": -11.0
+  }
+ },
+ "captions": 18
+}

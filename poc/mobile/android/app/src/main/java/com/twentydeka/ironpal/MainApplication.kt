@@ -18,6 +18,11 @@ class MainApplication : Application(), ReactApplication {
           // Raw IMU samples never cross the bridge; only results do.
           add(IronPalPackage())
         },
+      // Without this the debug build cannot use Metro. getDefaultReactHost defaults
+      // useDevSupport to React Native's OWN BuildConfig.DEBUG, and the prebuilt RN artifacts
+      // are built in release — so a debuggable app still took the assets path, failed on a
+      // missing index.android.bundle and red-screened with "Unable to load script".
+      useDevSupport = BuildConfig.DEBUG,
     )
   }
 

@@ -5,7 +5,7 @@ import Brand from './Brand.astro';
   <div class="wrap footer__inner">
     <Brand />
     <p class="footer__mission">A headband that logs your lift — so you don't have to.</p>
-    <p class="footer__legal">In development · © IronPal</p>
+    <p class="footer__legal">In development · © IronPal · <a class="footer__link" href="https://www.youtube.com/watch?v=5Hs_VxRIlGM" target="_blank" rel="noopener">Watch the film</a></p>
   </div>
 </footer>
 
@@ -14,4 +14,6 @@ import Brand from './Brand.astro';
   .footer__inner { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
   .footer__mission { font-size: 15px; color: var(--body); }
   .footer__legal { font-size: 13px; color: #6b7088; letter-spacing: .04em; }
+  .footer__link { color: var(--accent); text-decoration: none; }
+  .footer__link:hover { text-decoration: underline; }
 </style>

@@ -1,11 +1,11 @@
 ---
 const shots = [
-  { img: '/assets/worn-headband.jpg', alt: 'Athletic woman wearing the IronPal headband, teal LED glowing.' },
-  { img: '/assets/worn-headband-male.jpg', alt: 'Athletic man bench-pressing while wearing the IronPal headband.' },
-  { img: '/assets/wide-athlete.jpg', alt: 'Athlete resting between sets with the IronPal band on, teal logo and LED visible, checking his phone.' },
+  { img: '/assets/peter/peter-band-out.jpg', alt: 'Peter lifting the IronPal headband out of his gym bag — the reveal.' },
+  { img: '/assets/peter/peter-curl.jpg',     alt: 'Peter wearing the IronPal headband, doing dumbbell biceps curls, facing the camera.' },
+  { img: '/assets/peter/peter-squat.jpg',    alt: "Peter wearing the IronPal headband, squatting under a barbell, seen from the side — the teal ring visible." },
 ];
 ---
-<section class="gallery reveal" aria-label="Athletes wearing IronPal">
+<section class="gallery reveal" aria-label="Peter, IronPal's founder, training with the band">
   {shots.map((s) => (<figure><img src={s.img} alt={s.alt} loading="lazy" /></figure>))}
 </section>
 

@@ -1,0 +1,81 @@
+# K7 inset, take 2 — driving the REAL IronPal HUD instead of a built mock.
+#
+# Shows what the founder asked for: the exercise named, the set number climbing, reps counting as
+# they are performed, and the lifted weight. The labeling/debrief screen is deliberately NOT part
+# of the recording — it is annotation, not demonstration — so recording stops before each set ends
+# and restarts on the next HUD.
+#
+# Reps are deterministic because the runner installs an IMU replay fixture first:
+# case001-curl-6reps ("alternating DB curl, 6 reps/arm confirmed", 15 s). Without the fixture the
+# app reads the real sensor and a phone on a desk produces no reps at all.
+appId: com.twentydeka.ironpal
+env:
+  LEVEL: "level-dumbbell-biceps-curl"
+---
+# NOT clearState: `pm clear` wipes /sdcard/Android/data/<pkg>/, which is where the runner just
+# pushed the replay fixture — clearing here deletes the flow's own input (see e2e/00-launch.yaml).
+- launchApp
+- assertVisible: "IronPal"
+- tapOn: "Campaign (self-training P0)"
+- assertVisible:
+    id: "campaign-screen"
+
+- tapOn:
+    id: "campaign-start-session"
+
+# Boot camp offers calibration before any set; skip it, it is not part of the demonstration.
+- extendedWaitUntil:
+    visible:
+      id: "campaign-calibrate"
+    timeout: 25000
+- tapOn:
+    id: "campaign-skip-calibration"
+
+# The session must be running on the fixture, not the real IMU. If this says anything other than
+# REPLAY the recording will show a flat zero and the whole take is wasted.
+- extendedWaitUntil:
+    visible:
+      id: "session-imu-status"
+    timeout: 20000
+- assertVisible:
+    text: "IMU: REPLAY.*"
+
+# The curl lives in the vision-led "Arms" tab, not the default IMU tab.
+- tapOn:
+    id: "campaign-tab-vision"
+- scrollUntilVisible:
+    element:
+      id: "${LEVEL}"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "${LEVEL}"
+
+- scrollUntilVisible:
+    element:
+      id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "mission-arm"
+
+# --- set 1 ------------------------------------------------------------------
+- extendedWaitUntil:
+    visible:
+      id: "hud-root"
+    timeout: 20000
+- startRecording: k7_hud
+- assertVisible:
+    id: "hud-reps"
+# The gate opening is what proves the replay is driving the counter.
+- extendedWaitUntil:
+    visible: "ACTIVE"
+    timeout: 45000
+- waitForAnimationToEnd:
+    timeout: 12000
+- stopRecording
+
+- tapOn:
+    id: "hud-end-set"

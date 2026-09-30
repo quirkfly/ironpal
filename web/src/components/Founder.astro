@@ -1,11 +1,21 @@
 <section class="section founder">
-  <div class="wrap narrow reveal">
-    <span class="kicker">Who's behind it</span>
-    <h2>One founder, building this in the open.</h2>
-    <p class="muted">I'm a solo founder, not a brand. IronPal started because I was sick of breaking every set to thumb numbers into an app — and because when I looked, nobody could actually read the weight off the bar. I'm building that, on camera, in public. Back the person, watch the progress.</p>
+  <div class="wrap founder__grid">
+    <figure class="founder__media reveal">
+      <img src="/assets/peter/peter-talking.jpg" loading="lazy"
+           alt="Peter, IronPal's founder, mid-sentence on the gym floor." />
+    </figure>
+    <div class="founder__copy reveal">
+      <span class="kicker">Who's behind it</span>
+      <h2>One founder, building this in the open.</h2>
+      <p class="muted">I'm a solo founder, not a brand. IronPal started because I was sick of breaking every set to thumb numbers into an app — and because when I looked, nobody could actually read the weight off the bar. I'm building that, on camera, in public. Back the person, watch the progress.</p>
+    </div>
   </div>
 </section>
 
 <style>
   .founder { background: var(--bg-2); }
+  .founder__grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 6fr); gap: clamp(28px,5vw,72px); align-items: center; }
+  .founder__media { margin: 0; }
+  .founder__media img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line-2); box-shadow: 0 40px 80px -40px rgba(0,0,0,.9); }
+  @media (max-width: 900px) { .founder__grid { grid-template-columns: 1fr; } .founder__media { max-width: 420px; } }
 </style>

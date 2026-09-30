@@ -78,18 +78,22 @@ const absoluteImage = ogImage.startsWith('http') ? ogImage : `${ORIGIN}${ogImage
       });
 
       // ── email capture (both forms) ─────────────────────────────
-      // Wire to your ESP: set ESP_ENDPOINT to a POST URL accepting
-      // { email, source }, or swap the <form> for the ESP's embed.
-      const ESP_ENDPOINT = '';
+      // The IronPal email API (web/server/index.js), proxied by nginx to 127.0.0.1:3003 and
+      // deployed by deployment/deploy.sh. It stores { email, source } in SQLite on the droplet.
+      // Must not be empty: an empty endpoint made the form resolve after a fake 650 ms delay and
+      // tell the visitor "You're in" while storing nothing.
+      const ESP_ENDPOINT = '/api/collect-email';
       const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       function submit(email, source) {
-        if (!ESP_ENDPOINT) return new Promise((res) => setTimeout(res, 650));
         return fetch(ESP_ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, source }),
-        }).then((r) => { if (!r.ok) throw new Error('bad status'); });
+        }).then((r) => {
+          // 201 new, 200 already on the list — both are "you're in" to the visitor.
+          if (!r.ok) throw new Error('bad status ' + r.status);
+        });
       }
 
       function wireForm(formId, hintId, source) {

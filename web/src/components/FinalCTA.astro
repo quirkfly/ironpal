@@ -1,5 +1,5 @@
 <section class="finalcta">
-  <img class="finalcta__bg" src="/assets/cta-bg.jpg" alt="" aria-hidden="true" loading="lazy" />
+  <img class="finalcta__bg" src="/assets/peter/peter-walk-band.jpg" alt="" aria-hidden="true" loading="lazy" />
   <div class="finalcta__scrim"></div>
   <div class="wrap narrow reveal finalcta__inner">
     <h2>Lift. Let IronPal do the logging.</h2>
@@ -10,14 +10,21 @@
       </div>
       <p class="capture__hint" id="formHint2">Up to ~50% off · first 200 spots · 48-hour head start.</p>
     </form>
+    <a class="finalcta__watch" href="https://www.youtube.com/watch?v=5Hs_VxRIlGM" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+      Watch the film on YouTube
+    </a>
   </div>
 </section>
 
 <style>
   .finalcta { position: relative; overflow: hidden; padding-block: clamp(80px,12vw,150px); text-align: center; }
-  .finalcta__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; z-index: 0; }
+  .finalcta__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; z-index: 0; }
   .finalcta__scrim { position: absolute; inset: 0; z-index: 1; background: linear-gradient(0deg, rgba(16,16,30,.92), rgba(16,16,30,.7)); }
   .finalcta__inner { position: relative; z-index: 2; }
   .finalcta h2 { font-size: clamp(28px,5vw,54px); margin-bottom: 30px; }
+  .finalcta__watch { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; padding: 12px 20px; border-radius: 12px; border: 1px solid rgba(0,229,204,.45); color: var(--heading); font-family: var(--font-display); font-weight: 600; font-size: 15px; text-decoration: none; background: rgba(0,229,204,.06); transition: background .25s, border-color .25s, transform .25s var(--ease); }
+  .finalcta__watch svg { width: 18px; height: 18px; color: var(--accent); }
+  .finalcta__watch:hover { background: rgba(0,229,204,.14); border-color: var(--accent); transform: translateY(-2px); }
   @media (max-width: 540px) { .capture__row { flex-direction: column; } .capture :global(.btn) { width: 100%; } }
 </style>

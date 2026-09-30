@@ -294,10 +294,10 @@ Step 3 is the one that matters most and is free. The minted character is where t
 
 ### 7.5 Still to record before assembly
 
-Five of the eight clips composite footage that does not exist yet. The pipeline **refuses** a segment that was never cut, so these gate the assemble step, not the render:
+Several clips composite footage that does not exist yet. The pipeline **refuses** a segment that was never cut, so these gate the assemble step, not the render:
 
 - `hud_live_set`, `debrief_confirm`, `levels_progress` — three POC screen recordings on the A52.
-- `old_log_typing` — a throwaway generic log, screen-recorded. Burgundy on charcoal, never Fitbod.
+- ~~`old_log_typing`~~ — **DONE, and not the way this line planned.** It was specced as a hand-built mock, which is exactly what a hand-built mock looks like. It is a real third-party tracker app on the A52 driven by a Maestro flow, cropped hard so nothing identifying survives: `scripts/k3/` and [`IRONPAL_PROMO_VIDEO_SCRIPT_V1.md`](IRONPAL_PROMO_VIDEO_SCRIPT_V1.md) §5.5. It now belongs to K3 rather than K2 — the manual-logging beat moved into its own clip, which is the restructure §9 of that document is still waiting on a decision about.
 - `frame_privacy` — the one-frame-leaves-and-dissolves motion graphic.
 
 The three that exist — `reveal`, `band_in_hand`, `worn_male` — are already in the repo and pointed at by the config.

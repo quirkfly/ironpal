@@ -1,0 +1,12 @@
+{
+ "generationId": "d1cfaec8-7ce9-4d16-ad8a-11d632a756cf",
+ "model": "de7d3faf-762f-48e0-b3b7-9d0ac3a3fcf3",
+ "apiCreditCost": null,
+ "prompt": "Full-length side-profile photograph of a lean athletic man performing a barbell back squat at mid-depth, facing left, thighs approaching parallel, back straight, chest up, head level. He wears a plain black tank top, matte-black training shorts with a thin electric-teal stripe down the outer seam, plain black trainers, and a matte-black fabric headband with a thin teal stripe along its lower edge. A plain unmarked black barbell rests across his upper back. Dark moody gym, matte black rubber floor, low warm light, evenly exposed. Clean silhouette, whole body in frame, nothing in front of him. No text, no numbers, no logos anywhere.",
+ "negative": "text, letters, numbers, watermark, logo, caption, multiple people, front view, facing camera, extra limbs, deformed hands, six fingers, blurry, cropped, cut off, bright studio, white background",
+ "files": [
+  "/home/quirkfly/job_stuff/prj/ironpal/input/kickstarter/k8/leonardo/squat_1.jpg",
+  "/home/quirkfly/job_stuff/prj/ironpal/input/kickstarter/k8/leonardo/squat_2.jpg",
+  "/home/quirkfly/job_stuff/prj/ironpal/input/kickstarter/k8/leonardo/squat_3.jpg"
+ ]
+}

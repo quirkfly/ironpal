@@ -1,6 +1,6 @@
 # The K1→K2 audio problem
 
-**Written 2026-09-28. Diagnosis only — nothing here is a fix, and no fix is proposed.**
+**Written 2026-09-28.** §1–§6 are diagnosis. §7, added later the same day, is the fix built from it.
 
 Every measurement below is from the actual files. Where a figure comes from a render that has since
 been deleted it is marked, because it was recorded during the session rather than re-measurable now.
@@ -168,3 +168,126 @@ change.** A film of eight clips built by chaining extensions has seven of them. 
 Extend buys does not extend to the soundtrack.
 
 Whatever is decided, it should be decided once for the whole film rather than per join.
+
+---
+
+## 7. Attempt 6 — rejected: "K2 is muffled and distorted and sounds quieter"
+
+Built on the diagnosis above plus two faults §2 missed, found by looking at the join at 50 ms
+resolution instead of per segment:
+
+- **Footstep thumps.** K1 ends with a low-frequency thump at 7.60 s (−23.6 dB, 99 % of its energy
+  below 300 Hz — a footstep, he is walking) and K2 opens with a louder one at 8.15 s (−20.7 dB).
+  They are also what made K2 look 8–18 dB light below 160 Hz in §2.4: that deficit was K1's
+  thumps, not the voice.
+- **A digital hole.** K2's first 0.15 s (8.00–8.12 s) is −57 dB — essentially nothing — where K1's
+  room tone was −41. The first word then lands on top of that hole.
+
+Attempt 6 folded both halves to mono, highpassed at 120 Hz, denoised K1, applied the full
+1/3-octave match-EQ to K2 (two iterations), matched speech level with K1 +7.9 / K2 −4.2 dB, dipped
+the first syllable, and ran a continuous room-tone bed at −36 dB under the whole film.
+
+Every number came out matched — speech −15.8 / −16.1 dB, loudest 50 ms windows −10.6 / −11,
+voice-band tone within 2.6 dB — and the verdict was **"K2 is muffled and distorted and sounds
+quieter."** So the measurement was not describing what is heard: pulling K2's tone toward K1
+made K2 worse, not more similar. **The match-EQ on K2 is the culprit and is withdrawn.** K2 is the
+clearer of the two voices and its tone should not be touched.
+
+## 8. Attempt 7 — rejected: it modified K1
+
+The opposite strategy: treat K2's voice as the reference, leave its tone alone, and bring K1 **up**
+to meet it (K1 +7.9 dB after denoising, K2 −0.5 dB). Every number matched — speech −15.8 / −15.9 dB.
+
+Rejected on a constraint rather than on the sound: **"do not EVER touch K1 — modify K2 to match its
+audio to K1."** That is now a standing rule for this film and everything below obeys it.
+
+## 9. Attempt 8 — K1 untouched, K2 matched to it (current)
+
+K1's samples pass through unchanged; verified by differencing 0–7.9 s of the output against the
+source (−39 dB residual, i.e. AAC re-encode noise only). Everything happens after 8.0 s.
+
+The insight that separates this from attempts 4–7: **speech loudness is judged in the presence band,
+not broadband.** K2 was 8.4 dB hot across 1–6 kHz. Matching broadband level — which every earlier
+attempt did — left K2 dull *and* reading as quieter, because its 3–6 kHz deficit (§2.4) survived the
+match. So the correction is a presence lift plus a band-matched level, not a level alone.
+
+| step | what | why |
+|---|---|---|
+| presence lift | +8 dB peak at 4.5 kHz, one octave wide, K2 only | the band where K2 measured ~6 dB below K1 |
+| level | K2 **−9.0 dB** | set so K2's speech energy equals K1's band by band |
+| first-syllable dip | −2.5 dB, 8.27–8.92 s | §2.3 |
+| room-tone bed | −46 dB, **under K2 only**, donor taken from K1's own quietest 0.4 s | fills the −57 dB hole at 8.00–8.12 s so the floor does not step |
+| nothing else | no broadband EQ, no highpass, no mono fold, no denoise, no compressor, no limiter | peaks land at −8.7 dBFS on their own |
+
+Speech-band result, K2 relative to K1: 100–300 Hz −2.0, 300 Hz–1 kHz −1.0, 1–3 kHz +1.4,
+3–6 kHz −1.3, 6–12 kHz +1.2 dB. Ear band (1–6 kHz): **+0.8 dB**.
+
+Build: `geggen/products/ironpal/clips/build10.py`, with `bands.py`, `verify.py` and `analyse.py`
+beside it: `python3 build10.py OUT.mp4 -9.0 8 0 2.5 -46`. The numbers are specific to this render.
+
+## 10. Does Flow expose any audio control? — investigated 2026-09-28
+
+**Short answer: no. There is no volume, gain, mute, normalisation or audio-track control anywhere in
+Flow.** This closes the "fix it at GF level" line of attack for *level*. Level correction happens in
+post or not at all.
+
+What Scenebuilder and the editor actually offer, per Google's own help page — this is the complete
+list:
+
+- arrange clips in a sequence, and rearrange their order
+- **trim** the beginning and end of each clip with handles
+- **Extend** — "create more footage and add it to the end of your original clip", Veo-generated
+  clips only
+- **refinement editing** on a selection of "up to a 10-second segment", by text prompt
+  ("Change the lighting to a cinematic sunset")
+- agent-based editing of uploaded video by text prompt
+
+No volume slider, no gain field, no audio lane. The composer's settings — model, number of outputs,
+aspect ratio, generation length — contain no audio option either.
+
+### But there is one audio control, and it addresses the residual rather than the level
+
+**Voice Ingredients.** Flow lets a specific voice be attached to a generation and referenced in the
+prompt as `@Voice: <name>`:
+
+| | |
+|---|---|
+| presets | ~30, each with a 10-second preview |
+| custom voice | pick a preset as the base, name it, describe the delivery under **Voice Performance** ("Make the voice sound slightly raspy with a New York accent"), optional 8-second preview from **Sample Dialogue** |
+| Google's stated purpose | "keep your dialogue and characters consistent across every setting, scene, and action" |
+| availability | experimental, Ultra-only from 10 April 2026, since rolled out more widely |
+
+This sets no level. But the fault it targets is the one §5 could not rule out and no filter reaches:
+**that the two halves are different voices.** A pinned voice removes speaker identity as a variable
+at every join.
+
+### Why it cannot be used with Extend
+
+Google's help page states plainly: **"You can add voice references only to video generations that use
+ingredients."** Extend is not an ingredients generation — it takes a prompt and the previous clip's
+final 24 frames, nothing else. The documented walkthrough also routes voices through Omni Flash
+(model selector → Omni Flash → Video → Ingredients → Add → Voices), whereas **Extend runs only on
+Veo 3.1 Lite** — Flow lists Extend as unsupported on Veo 3.1 Fast and Quality, and as "coming soon"
+on Omni Flash.
+
+So the two capabilities are currently mutually exclusive:
+
+| | continuity of motion | continuity of voice |
+|---|---|---|
+| **Extend** | seamless, no cut | none — fresh audio render every hop |
+| **Ingredients + `@Voice`** | hard cut between clips | pinned, consistent |
+
+That is a platform constraint, not a prompting problem, and it is the decision the film has to make
+once (§6) rather than at each of the seven joins.
+
+### One thing to check in the UI, because the documentation conflicts
+
+Open the composer, set the model to **Veo 3.1 Lite**, switch to **Ingredients**, click **Add** — and
+see whether **Voices** is offered there, or only under Omni Flash. Flow's model table does list
+"Ingredients/References to Video" as supported on Lite. If Voices appear on Lite, every clip can be
+generated Ingredients-to-Video with one pinned voice: eight hard cuts, but one voice across the whole
+film, which for a 60-second promo is the better trade than seamless motion with eight different
+voices. Whether a pinned voice also stabilises *level* is undocumented — worth one 10-credit test.
+
+Also worth reading while signed in: `flow.google.com/changelogs`, which is behind a login and could
+not be checked from here.

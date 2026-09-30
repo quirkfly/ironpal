@@ -1,0 +1,195 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>IronPal — Form</title>
+<!--
+  K8 inset: the IronPal form-analytics screen, barbell back squat.
+
+  Same family as scripts/k7/live_set.html — same tokens, brand bar, focused Exercise field and set
+  log — with the sparkline replaced by a FIGURE PANEL: a side-view still of the lifter with three
+  markers drawn over it in geometry, the three things the K8 line names:
+      "Depth, back angle, knees. It checks all of it. That used to need a trainer."
+
+  Every number is a function of the measured per-frame depth signal from K8.mp4 (see
+  ../../input/kickstarter/k8/k8_depth.json), passed in on the query string, so the readouts move
+  because the man in the clip moves. The still does not move; the lines and numbers do.
+
+  Form analysis is NOT a shipped capability and is in no claim — hence the "Product interface
+  concept" label, which is load-bearing here. Nothing the line does not say appears on screen: no
+  score, no verdict.
+
+  Query string:
+    ?img=<file url of the chosen figure>&depth=<comma list, one value per frame>&fps=24
+    &hip=x,y&knee=x,y&shoulder=x,y&ankle=x,y     (fractions of the panel, 0..1; set per image)
+-->
+<style>
+  :root{--accent:#00E5CC;--heading:#F0F4F8;--body:#9aa0b4;--ground:#101023;
+        --display:'Montserrat','DejaVu Sans',system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#07070f}
+  body{width:620px;height:1000px;display:flex;flex-direction:column;align-items:center;
+       font-family:var(--display);-webkit-font-smoothing:antialiased}
+  .screen{width:600px;height:940px;border-radius:30px;background:var(--ground);
+          border:1px solid rgba(255,255,255,.05);padding:40px 34px 30px;
+          display:flex;flex-direction:column;gap:18px;overflow:hidden}
+  .top{display:flex;align-items:center;justify-content:space-between}
+  .brand{display:inline-flex;align-items:center;gap:15px;font-weight:800;letter-spacing:.1em;
+         font-size:26px;color:var(--heading)}
+  .brand i{width:26px;height:26px;border-radius:50%;border:5px solid var(--accent);
+           border-bottom-color:transparent}
+  .live{font-size:21px;color:var(--accent);letter-spacing:.08em}
+  .live b{animation:pulse 1.9s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+  .lbl{font-size:19px;text-transform:uppercase;letter-spacing:.16em;color:var(--body)}
+  .field{padding:18px 24px;border-radius:24px;background:rgba(0,229,204,.08);
+         border:2px solid rgba(0,229,204,.55);box-shadow:0 0 50px -16px rgba(0,229,204,.5);
+         display:flex;flex-direction:column;gap:7px}
+  .ex{font-weight:700;font-size:32px;color:var(--accent);line-height:1.15}
+
+  /* the figure panel */
+  .panel{position:relative;width:100%;height:470px;border-radius:24px;overflow:hidden;
+         background:rgba(255,255,255,.03)}
+  .panel img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+             filter:saturate(.85) brightness(.92)}
+  .panel svg{position:absolute;inset:0;width:100%;height:100%}
+  .m-line{stroke:var(--accent);stroke-width:3;fill:none}
+  .m-dash{stroke:var(--accent);stroke-width:2.5;stroke-dasharray:9 8;fill:none;opacity:.8}
+  .m-arc{stroke:var(--accent);stroke-width:3;fill:rgba(0,229,204,.14)}
+  .m-dot{fill:var(--accent)}
+  .m-tag{font:600 17px var(--display);fill:var(--heading);letter-spacing:.06em}
+  .m-tag.small{font-size:14px;fill:var(--body);letter-spacing:.14em}
+
+  .reads{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .read{padding:16px 18px;border-radius:22px;background:rgba(255,255,255,.03);
+        display:flex;flex-direction:column;gap:6px}
+  .big{font-weight:800;font-size:48px;color:var(--heading);line-height:1;
+       font-variant-numeric:tabular-nums}
+  .big small{font-size:22px;font-weight:600;color:var(--body);margin-left:2px}
+  .tag{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+       min-height:18px}
+  .log{margin-top:auto;display:flex;flex-direction:column;gap:11px}
+  .row{display:flex;justify-content:space-between;font-size:22px;color:var(--body);
+       padding:12px 20px;border-radius:16px;background:rgba(255,255,255,.02)}
+  .row.cur{color:var(--accent);background:rgba(0,229,204,.07)}
+  .concept{margin-top:14px;font-size:20px;letter-spacing:.12em;white-space:nowrap;
+           text-transform:uppercase;color:var(--body)}
+</style>
+
+<div class="screen">
+  <div class="top">
+    <span class="brand"><i></i>IRONPAL</span>
+    <span class="live"><b>●</b> live</span>
+  </div>
+  <div class="field">
+    <span class="lbl">Exercise</span>
+    <span class="ex" id="exercise">Barbell Back Squat</span>
+  </div>
+
+  <div class="panel">
+    <img id="fig" alt="">
+    <svg id="ov" viewBox="0 0 532 470" preserveAspectRatio="none"></svg>
+  </div>
+
+  <div class="reads">
+    <div class="read"><span class="lbl">Depth</span>
+      <span class="big"><span id="rDepth">0</span><small>%</small></span><span class="tag" id="tDepth"></span></div>
+    <div class="read"><span class="lbl">Back angle</span>
+      <span class="big"><span id="rBack">8</span><small>°</small></span><span class="tag" id="tBack"></span></div>
+    <div class="read"><span class="lbl">Knees</span>
+      <span class="big"><span id="rKnee">176</span><small>°</small></span><span class="tag" id="tKnee"></span></div>
+  </div>
+
+  <div class="log">
+    <div class="row"><span>Set 1</span><span>8 reps</span></div>
+    <div class="row"><span>Set 2</span><span>8 reps</span></div>
+    <div class="row cur"><span>Set 3</span><span>logging…</span></div>
+  </div>
+</div>
+<div class="concept">Product interface concept</div>
+
+<script>
+  const Q = new URLSearchParams(location.search);
+  const num = (k, d) => (Q.has(k) ? parseFloat(Q.get(k)) : d);
+  const pt = (k, d) => { const v = Q.get(k); if (!v) return d; const [x, y] = v.split(',').map(parseFloat); return {x, y}; };
+
+  const FPS = num('fps', 24);
+  const DEPTH = (Q.get('depth') || '').split(',').map(parseFloat).filter(x => !isNaN(x));
+  const W = 532, H = 470;
+  // Joint anchors as fractions of the panel; defaults suit a mid-squat, facing LEFT.
+  const J = {
+    shoulder: pt('shoulder', {x: 0.46, y: 0.34}),
+    hip:      pt('hip',      {x: 0.60, y: 0.58}),
+    knee:     pt('knee',     {x: 0.40, y: 0.72}),
+    ankle:    pt('ankle',    {x: 0.47, y: 0.93}),
+  };
+  const P = j => ({x: J[j].x * W, y: J[j].y * H});
+  if (Q.get('img')) document.getElementById('fig').src = Q.get('img');
+
+  // The three mappings from depth d (0 = standing, 1 = deepest) — angles read off the clip's own
+  // standing and bottom stills, interpolated. Interface geometry, not biomechanics.
+  const backAngle = d => 8 + 34 * d;         // from vertical
+  const kneeAngle = d => 176 - 88 * d;       // interior shin–thigh
+  const depthPct  = d => Math.round(100 * d);
+
+  const $ = id => document.getElementById(id);
+  const ov = $('ov');
+  const rad = a => a * Math.PI / 180;
+
+  function arcPath(c, r, a0, a1) {           // filled wedge from angle a0 to a1 (deg, screen coords)
+    const p0 = {x: c.x + r * Math.cos(rad(a0)), y: c.y + r * Math.sin(rad(a0))};
+    const p1 = {x: c.x + r * Math.cos(rad(a1)), y: c.y + r * Math.sin(rad(a1))};
+    const large = Math.abs(a1 - a0) > 180 ? 1 : 0, sweep = a1 > a0 ? 1 : 0;
+    return `M${c.x},${c.y} L${p0.x},${p0.y} A${r},${r} 0 ${large} ${sweep} ${p1.x},${p1.y} Z`;
+  }
+  const angOf = (a, b) => Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+
+  function render(t) {
+    const i = Math.min(DEPTH.length - 1, Math.max(0, Math.round(t * FPS)));
+    const d = DEPTH.length ? DEPTH[i] : 0;
+    const S = P('shoulder'), Hp = P('hip'), K = P('knee'), A = P('ankle');
+
+    // Depth: hip line descends toward the dashed knee (parallel) line as d grows.
+    const kneeY = K.y, standY = kneeY - 118;
+    const hipY = standY + (kneeY - standY) * d;
+    const parallel = d >= 0.92;
+
+    // Back angle: hip→shoulder line, arc measured from vertical at the hip.
+    const aBack = angOf(Hp, S);                 // screen angle of the torso line
+    // Knees: arc between thigh (knee→hip) and shin (knee→ankle) at the knee.
+    const aThigh = angOf(K, Hp), aShin = angOf(K, A);
+
+    ov.innerHTML = `
+      <line class="m-dash" x1="40" x2="${W-40}" y1="${kneeY}" y2="${kneeY}"/>
+      <text class="m-tag small" x="${W-150}" y="${kneeY-8}">PARALLEL</text>
+      <line class="m-line" x1="60" x2="${W-60}" y1="${hipY}" y2="${hipY}"/>
+      ${kneeY - hipY > 22 ? `<text class="m-tag small" x="64" y="${hipY-8}">HIP</text>` : ''}
+
+      <path class="m-arc" d="${arcPath(Hp, 54, -90, aBack)}"/>
+      <line class="m-line" x1="${Hp.x}" y1="${Hp.y}" x2="${S.x}" y2="${S.y}"/>
+      <line class="m-dash" x1="${Hp.x}" y1="${Hp.y}" x2="${Hp.x}" y2="${Hp.y-90}"/>
+      <text class="m-tag" x="${Hp.x+62}" y="${Hp.y-30}">${Math.round(backAngle(d))}°</text>
+
+      <path class="m-arc" d="${arcPath(K, 48, aThigh, aShin)}"/>
+      <line class="m-line" x1="${K.x}" y1="${K.y}" x2="${Hp.x}" y2="${Hp.y}"/>
+      <line class="m-line" x1="${K.x}" y1="${K.y}" x2="${A.x}" y2="${A.y}"/>
+      <text class="m-tag" x="${K.x-22}" y="${K.y+46}">${Math.round(kneeAngle(d))}°</text>
+
+      <circle class="m-dot" cx="${S.x}" cy="${S.y}" r="7"/>
+      <circle class="m-dot" cx="${Hp.x}" cy="${Hp.y}" r="8"/>
+      <circle class="m-dot" cx="${K.x}" cy="${K.y}" r="8"/>
+      <circle class="m-dot" cx="${A.x}" cy="${A.y}" r="7"/>`;
+
+    $('rDepth').textContent = depthPct(d);
+    $('tDepth').textContent = parallel ? 'parallel' : '';
+    $('rBack').textContent = Math.round(backAngle(d));
+    $('tBack').textContent = backAngle(d) <= 45 ? 'neutral' : 'leaning';
+    $('rKnee').textContent = Math.round(kneeAngle(d));
+    $('tKnee').textContent = 'tracking';
+  }
+
+  const t0 = performance.now();
+  (function frame(now) {
+    const t = (now - t0) / 1000;
+    render(t);
+    if (t < 9) requestAnimationFrame(frame);
+  })(t0);
+</script>

@@ -17,6 +17,7 @@ import * as store from './src/model/store';
 import {CampaignScreen} from './src/screens/CampaignScreen';
 import {EnrollScreen} from './src/screens/EnrollScreen';
 import {LiveHudScreen} from './src/screens/LiveHudScreen';
+import {LiveSetScreen} from './src/screens/LiveSetScreen';
 import {ImportScreen} from './src/studio/ImportScreen';
 import type {ReelOpen, StudioOpen} from './src/studio/nav';
 import {QueueScreen} from './src/studio/QueueScreen';
@@ -30,7 +31,7 @@ import type {LevelState} from './src/types/model';
 // Mode controller (design §4.1): enroll (founder-only, Q1) vs live. Testers
 // (role=tester) only get live mode — they never enroll (Q1/Q2).
 
-type Screen = 'home' | 'enroll' | 'live' | 'campaign' | 'queue' | 'reel' | 'studio' | 'import';
+type Screen = 'home' | 'enroll' | 'live' | 'liveset' | 'campaign' | 'queue' | 'reel' | 'studio' | 'import';
 
 /** The Studio surfaces' navigation params (studio design §6) — a tiny stack, no nav library. */
 interface StudioNav {
@@ -100,6 +101,8 @@ function App(): React.JSX.Element {
         <EnrollScreen onBack={() => setScreen('home')} />
       ) : screen === 'live' ? (
         <LiveHudScreen onBack={() => setScreen('home')} />
+      ) : screen === 'liveset' ? (
+        <LiveSetScreen onBack={() => setScreen('home')} />
       ) : screen === 'campaign' ? (
         <CampaignScreen onBack={() => setScreen('home')} onOpenQueue={() => setScreen('queue')} onOpenReel={exerciseId => openReel({exerciseId})} />
       ) : screen === 'queue' ? (
@@ -144,6 +147,11 @@ function App(): React.JSX.Element {
             <Pressable style={styles.btn} onPress={() => setScreen('campaign')}>
               <Text style={styles.btnText}>Campaign (self-training P0)</Text>
               <Text style={styles.btnSub}>Session · calibrate · arm · set · debrief · learn</Text>
+            </Pressable>
+
+            <Pressable testID="home-live-set" style={styles.btn} onPress={() => setScreen('liveset')}>
+              <Text style={styles.btnText}>Live set</Text>
+              <Text style={styles.btnSub}>Exercise · reps · weight · set log</Text>
             </Pressable>
 
             <Pressable testID="home-after-action" style={styles.btn} onPress={() => setScreen('queue')}>

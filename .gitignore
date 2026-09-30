@@ -48,3 +48,6 @@ input/kb/groundtruth-sealed/
 
 # Game assets: raw Leonardo output (paid, regenerable from docs/ironpal-game-asset-prompts.md)
 /input/game-assets/
+
+# the live subscriber list only ever exists on the server
+web/server/emails.db*

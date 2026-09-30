@@ -100,3 +100,18 @@ The organisers publish no video spec, and two answers would change the edit. Wor
 [SAPIE](https://sapie.sk/news/sask) ·
 [Startitup on the deadline extension](https://www.startitup.sk/startup-awards-slovensko-predlzuju-prihlasovanie-do-30-septembra-startupy-caka-bootcamp-finale-aj-cesta-do-silicon-valley/) ·
 [InnoNews on the 2026 round](https://innonews.blog/2026/07/20/startup-awards-slovensko-otvara-prihlasovanie-do-sask-2026-startupy-mozu-zabojovat-o-investorov-aj-cestu-do-silicon-valley/)
+
+---
+
+## 6. Update, 2026-09-30 — both attachments exist
+
+- **Pitch deck:** `docs/pitch_deck/IronPal_PitchDeck_2026.pdf` — 14 slides, 16:9, English, ~11 MB,
+  built by `scripts/deck/build.py` from `scripts/deck/deck.html`. Plan and decision ledger:
+  [`ironpal_pitch_deck_plan.md`](ironpal_pitch_deck_plan.md),
+  [`ironpal_pitch_deck_plan_grilled.md`](ironpal_pitch_deck_plan_grilled.md). The form wants a
+  Google Drive link set to *anyone with the link* — the upload is the founder's step. The ask
+  slide ships without a figure (no raise is set anywhere); the ledger's veto list has the rest.
+- **Video:** the promo film was finished after all, as `K1_K9_master_eq_music.mp4` (72 s, English,
+  founder to camera, product held up, app screens labelled as concepts). §3's prediction that it
+  would not be ready was wrong by a day; §4's honest-minimum advice is superseded by the film plus
+  the deck's traction slide, which carries the POC facts the film does not.
