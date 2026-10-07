@@ -51,3 +51,31 @@ input/kb/groundtruth-sealed/
 
 # the live subscriber list only ever exists on the server
 web/server/emails.db*
+
+# Kickstarter film: media inputs, renders and pipeline caches (large binaries; tracked text and the
+# selected source clips stay in git — these are regenerable or kept locally only)
+/docs/pitch_deck/IronPal_PitchDeck_2026.pdf
+/input/kickstarter/k3/
+/input/kickstarter/k5/
+/input/kickstarter/k5k6/lab_reference.jpg
+/input/kickstarter/k7/k7_app_inset.mp4
+/input/kickstarter/k7/k7_hud_real.mp4
+/input/kickstarter/k7/k7_screen.png
+/input/kickstarter/k7/k7_voice_take4.wav
+/input/kickstarter/k7/ref_*.jpg
+/input/kickstarter/k8/k8_figure.jpg
+/input/kickstarter/k8/k8_figure.png
+/input/kickstarter/k8/k8_form_inset.mp4
+/input/kickstarter/k8/leonardo/*.jpg
+# scripts/master/build.py and build_k11.py intermediates
+/input/kickstarter/master/*.wav
+/input/kickstarter/master/*.mp4
+/input/kickstarter/master/card/
+/input/kickstarter/master_k11/
+# licensed stock music (provenance tracked in input/kickstarter/music/LICENSES.md)
+/input/kickstarter/music/*.mp3
+/input/kickstarter/web/k7_ghost_mask.png
+/input/kickstarter/web/*.mp4
+
+# local backup of the RN bundle
+/poc/mobile/.bundle-backup/
