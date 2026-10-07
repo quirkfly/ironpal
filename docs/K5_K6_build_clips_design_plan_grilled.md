@@ -62,7 +62,9 @@ once he was seated. **EVIDENCE** — `Peter Pitch` is the waist-up variant K2 an
 band before it would also breach Q6.
 
 **Q11. Where are they set?** **Both in the founder's real lab** — K5 assembling the hardware, K6
-coding and testing — one room, from one photo he supplied (`input/kickstarter/k5k6/lab_reference.jpg`).
+coding and testing — one room, from one photo he supplied (`input/kickstarter/k5k6/lab_reference.jpg`; replaced by
+his updated shot of the same corner at 18:17 the same day, masks in `scripts/k5k6/blur_lab.py`
+re-measured to match).
 **EVIDENCE** — the founder's direction, 2026-10-07 (TASK.md, two entries: first lab and office, then
 *"use it in both K5 and K6"*). *Superseded twice:* first both in the gym, then a separate lab and
 office; Branch G is how the room keeps Q6's protection.

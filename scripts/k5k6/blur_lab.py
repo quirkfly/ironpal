@@ -1,6 +1,6 @@
 """Blur every screen in the founder's lab photo so Flow gets the room without legible text.
 
-The original (input/kickstarter/k5k6/lab_reference.jpg, A52, 2026-10-07) shows code, a terminal
+The original (input/kickstarter/k5k6/lab_reference.jpg, A52, 2026-10-07 18:17) shows code, a terminal
 and the landing page. Flow either garbles legible text into pseudo-text or paints a fake app, so the
 reference it gets has each screen blurred to a glow, then cropped to 16:9 at 1920x1080.
 Masks are in 1600-px-wide preview coordinates, scaled to the source. See
@@ -14,15 +14,16 @@ OUT_FLOW = os.path.join(D, "lab_reference_flow_16x9.jpg")
 from PIL import Image, ImageOps, ImageFilter, ImageDraw
 im=ImageOps.exif_transpose(Image.open(IN)).convert('RGB')
 W,H=im.size; s=W/1600
-rects=[(430,240,845,475),(1115,215,1470,525),(535,495,920,725),(925,500,1405,835)]
-lap=[(0,730),(310,725),(395,1000),(80,1075),(0,1085)]
+# masks for the 2026-10-07 18:17 photo (20261007_181724.jpg); re-measure if the photo changes
+rects=[(405,305,785,520),(1000,270,1305,565),(500,535,855,750),(852,540,1260,835)]
+lap=[(0,795),(300,728),(368,935),(130,1060),(0,1070)]
 blur=im.filter(ImageFilter.GaussianBlur(int(40*s)))
 mask=Image.new('L',im.size,0); d=ImageDraw.Draw(mask)
 for r in rects: d.rectangle([int(v*s) for v in r],fill=255)
 d.polygon([(int(x*s),int(y*s)) for x,y in lap],fill=255)
 mask=mask.filter(ImageFilter.GaussianBlur(int(6*s)))
 out=Image.composite(blur,im,mask); out.save(OUT_BLUR,quality=92)
-ch=int(W*9/16); top=min(int(150*s),H-ch)
+ch=int(W*9/16); top=min(int(230*s),H-ch)
 fl=out.crop((0,top,W,top+ch)).resize((1920,1080),Image.LANCZOS); fl.save(OUT_FLOW,quality=92)
 
 # The B-roll still for K6 shot 1b: the ORIGINAL room, real screens kept, with only the wall

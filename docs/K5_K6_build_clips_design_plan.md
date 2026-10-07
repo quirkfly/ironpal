@@ -66,7 +66,8 @@ like the gym. So:
 
 The founder set the locations on 2026-10-07 — **K5: assembling the MVP hardware in the lab; K6:
 coding and testing the software** — and then supplied the room: **one photo of his real workspace,
-used for both clips** (`input/kickstarter/k5k6/lab_reference.jpg`, the A52, 2026-10-07 18:07). It is
+used for both clips** (`input/kickstarter/k5k6/lab_reference.jpg`, the A52, 2026-10-07 18:17 — the founder's updated photo,
+replacing an 18:07 shot of the same corner). It is
 a white-walled corner with a white desk under **five lit screens** — two Samsung monitors side by
 side, one above them on an arm, a fourth on the wall to the right, and a laptop with a green-backlit
 keyboard on the left — a desk lamp, a black keyboard and mouse mat, a phone, cables, and cool daylight
@@ -78,7 +79,8 @@ That puts generated screens in frame in both clips, and generated electronics in
 §2 forbids being *presented as the product*. Five rules keep it honest:
 
 1. **Flow gets a blurred copy of the photo, never the original.** The real screens are full of
-   legible text: code, a terminal, and the IronPal landing page with its *Live set* concept panel.
+   legible text: code, a terminal, and the IronPal landing page's hero, with its
+   *Stop logging. Just lift.* headline and the founder's image.
    Handed that, Flow either reproduces it as garbled pseudo-text or paints a fake app. The reference
    is `input/kickstarter/k5k6/lab_reference_flow_16x9.jpg`: every screen is blurred to a glow with
    nothing legible, and the frame is cropped to 16:9 at 1920×1080. `scripts/k5k6/blur_lab.py` builds
@@ -103,8 +105,8 @@ That puts generated screens in frame in both clips, and generated electronics in
 the founder's actual desk, the actual code. For that use the **original** goes in, with one change:
 the right-hand wall monitor's terminal shows local paths and another project's logs, so it is blurred
 for privacy, and so is the laptop's session. That file is `input/kickstarter/k5k6/lab_broll_still.jpg`,
-built by the same script. The two code monitors and the landing-page monitor, which carries its
-*Product interface concept* label, stay as they are.
+built by the same script. The two code monitors and the landing-page monitor stay as they are: the
+site is public, and its hero image is the same generated founder the film already shows.
 
 **The consequence for K7.** The reveal's inset is the AI product still (`S3/selected.jpg`), and it
 now follows two clips of real prototype. **It needs a `DESIGN RENDER` chip** or the cut implies the
