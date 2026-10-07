@@ -89,10 +89,14 @@ That puts generated screens in frame in both clips, and generated electronics in
    room, and switching them off would make it not this room. He sits in front of the desk, turned to
    camera, with the glowing screens soft behind him. **A take where any screen carries legible or
    pseudo-legible text is a re-roll**, the same gate as burned-in captions.
-3. **In K5, the work on the desk is generic and soft.** A small cleared patch at the left end of the
-   desk, by the laptop, with a few loose components, tweezers and a small anonymous board. **No
-   headband, no camera module, nothing teal.** The first real cutaway — the actual prototype — follows
-   within 1.5 s, so the real thing is what the viewer reads as the prototype.
+3. **In K5, the generated parts are the real parts' plain likeness, never a product.** *Revised on
+   the founder's direction that the clip must show the assembly:* the desk carries what the real
+   prototype is made of — a plain black terry band, a small square bare board with a round wide-angle
+   lens, a small long dark-blue board, amber tape, a cable — and in K5b he assembles them (§3.6).
+   **No branding, no printing, no teal, no stripe, no LED**: that is the line between *the prototype
+   being built*, which is true, and *the product*, which K7 reveals. Every generated step is
+   intercut with a real macro of the same step on the real part, so the close-ups the viewer
+   scrutinises are real.
 4. **The two clips are told apart by where he sits, not by the room.** K5: at the left end of the
    desk by the laptop, three-quarter to camera, turning from the parts. K6: in front of the two
    middle monitors, the keyboard behind him, turning from it. Same room, two positions.
@@ -135,8 +139,9 @@ and get a laugh doing it. The true story, from `ironpal-capture-hardware-decisio
   2026-08-05: 60 Hz, 0 lost packets.
 - **How prototype 2 is assembled** (`ironpal-gym-session-01-plan.md` §2–§4), which is what K5 now
   shows step by step: the ELP board comes **out of its case**; its back is **insulated with kapton or
-  electrical tape** against sweat; a **lens hole is cut** in the terry band and its edge
-  **heat-sealed**; the board goes in behind the hole; the **Nano 33 BLE** rides alongside it; both
+  electrical tape** against sweat; the board is fixed to the **outside front face** of the terry band,
+  so the band sits between the electronics and the skin; the **Nano 33 BLE** goes at the **side** to
+  balance the camera's weight, its antenna end kept clear; both
   cables are **looped once and taped** to the band so a pull loads the tape, not the solder pad; the
   camera cable runs over the shoulder to the A52, the Nano's to a pocket power bank. **The Nano needs
   no soldering** — MCU, BLE and the BMI270/BMM150 motion sensors are one 45×18 mm board.
@@ -209,14 +214,23 @@ are real and are shown by real footage only (§2): the generated desk stays gene
 | 3 | 3.5–5.0 | **the POV from that phone**: the bar in frame; the head tilts and it slides out | **H2**; fallback `input/kb/clips/20260614_*` | `PROTOTYPE 1` | *"Tilt my head, the bar's gone."* |
 | 4 | 5.0–6.4 | **dead-ends cards**, dealt and struck through | HTML graphic | — | the pause |
 | 5 | 6.4–8.0 | **the parts, flat-lay**: top-down on the real desk — the ELP board still in its case, the Arduino Nano 33 BLE, the terry headband, a roll of kapton tape, the cables, the power bank. Each part gets a name tag as it is touched by a finger | **H6** | per part: `ELP IMX415 · 200° FISHEYE` · `ARDUINO NANO 33 BLE · IMU` · `TERRY HEADBAND` | *"So: a fisheye."* |
-| 6a | 8.0–8.8 | **de-casing**: the camera board lifted out of its housing | **H5a** | `ASSEMBLY · AUG 2026` | music |
-| 6b | 8.8–9.5 | **kapton tape** smoothed over the back of the board | **H5b** | — | music |
-| 6c | 9.5–10.2 | **the lens pushed through the cut hole** in the band from behind | **H5c** | — | music |
-| 6d | 10.2–10.9 | **the Nano** set alongside it; **cables looped and taped** to the band | **H5d** | `MCU + BLE + MOTION SENSORS · ONE BOARD` | music |
+| 6a | 8.0–8.8 | **de-casing**: the camera board lifted out of its housing | **K5b** wide + **H5a** macro | `ASSEMBLY · AUG 2026` | music |
+| 6b | 8.8–9.5 | **kapton tape** smoothed over the back of the board | **K5b** wide + **H5b** macro | — | music |
+| 6c | 9.5–10.2 | **the board pressed onto the front of the band**, lens facing out, and taped in place | **K5b** wide + **H5c** macro | — | music |
+| 6d | 10.2–10.9 | **the Nano** taped at the side of the band; **cables looped and taped** | **K5b** wide + **H5d** macro | `MCU + BLE + MOTION SENSORS · ONE BOARD` | music |
 | 6e | 10.9–11.6 | **the band goes on**, the cable over the shoulder to the A52 in the pocket | **H4** | `PROTOTYPE 2` | music |
 | 7 | 11.6–12.4 | **the first fisheye clip**: the 200° view from 2 Aug at the curl | **real**, `IPS_2026-08-02.15.33.00.0640.mp4` | `FIRST TEST · 2 AUG` | music |
 | 8 | 12.4–13.0 | **the next board**: the ESP32-C3 + ICM-42688-P PCB layout drawn on in teal, line by line | `docs/assets/imu-poc-pcb-layout.svg`, animated | `NEXT BOARD · DESIGNED, NOT YET BUILT` | music |
 | 9 | 13.0–14.2 | Peter at the desk, holding the look | **Flow**, its final 1.2 s | — | — |
+
+**The assembly beat is two sources cut together** (§3.6, §6.3): **K5b**, a second, silent Flow
+clip of Peter at the desk assembling the band, gives the beat its wide shots — the founder doing the
+work, in the room — and the real macros H5a–d give its close-ups — the real parts in real hands.
+Alternate them wide / close / wide / close. The founder asked to *see* the assembly in the clip, and
+the talking shot cannot carry it: a lip-synced line suppresses movement, and hands working small
+objects while talking are this film's worst failure (§2.1, rule 5). **A silent clip is where the
+movement renders**: K7's silent two-arm take curled on the first attempt after seven voiced takes had
+failed. **If H5 is never shot, K5b carries the beat alone**; if K5b fails twice, H5 does.
 
 **The assembly beat is cut on the music, not the words** — 0.7 s a step on the bar, five steps in
 one phrase. Each step is one action with a clear start and end, filmed so it reads in 0.7 s:
@@ -242,7 +256,7 @@ All on a second phone, **16:9, 4K, 24 fps**, landscape, and graded afterwards wi
 | **H1** | the founder wearing the A52 strapped to a headband, as in June | second phone on a tripod, side-on or into the mirror; he does a slow curl and tilts his head once | 6 s |
 | **H2** | the A52's own recording during H1 | the strapped phone records at the same time; landscape, the 90° rotation fixed in post as in POC v1 | same take |
 | **H6** | **the parts flat-lay** on the left end of the real desk: the ELP board in its case, the Nano 33 BLE, the terry band, kapton tape, the USB cables, the power bank — laid out square, a finger touching each in turn | phone on a top-down arm or held level above; daylight from the window, no harsh lamp; 4K so each part can be cropped for its name tag | 8 s |
-| **H5a–d** | **the assembly, step by step**, at the same spot: (a) the board out of its case; (b) kapton over its back; (c) the lens through the hole in the band; (d) the Nano alongside, cables looped and taped | **one step per take**, 3–4 s each, so each can be cut to 0.7 s; macro or top-down, hands entering and leaving frame. **Use a spare band or re-do it for the camera** — the working prototype does not need to be taken apart for this, as long as the steps shown are the steps it was built with | 4 × 4 s |
+| **H5a–d** | **the assembly, step by step**, at the same spot: the steps of §3.6, one per take | **one step per take**, 3–4 s each, so each can be cut to 0.7 s; macro or top-down, hands entering and leaving frame. **Use a spare band or re-do it for the camera** — the working prototype does not need to be taken apart for this, as long as the steps shown are the steps it was built with | 4 × 4 s |
 | **H3** | ~~prototype 2 on a bench, push-in~~ | **folded into H6 and H5** | — |
 | **R1** | ~~a wide still of the real lab~~ **DONE** — `input/kickstarter/k5k6/lab_reference.jpg`, supplied by the founder 2026-10-07; the Flow copy has its screens blurred (§2.1) | — | — |
 | **H4** | prototype 2 worn: the band goes on, cable over the shoulder to the A52 in the pocket | tripod, waist up, he turns once to show the cable | 5 s — **shot 6e**, no longer spare |
@@ -258,6 +272,25 @@ filmed from outside. That is honest as long as the chip says `PROTOTYPE 1`, whic
 rig, and not `JUNE 2026 FOOTAGE`, which would describe the recording. The chip dates the prototype.
 
 ---
+
+### 3.6 The assembly, step by step — what is shown and in what order
+
+**This is the assembly as it was actually done**, from `ironpal-gym-session-01-plan.md` §1.1–§1.4.
+It is the script for three things at once: the real macros (H5a–d), the silent Flow clip (K5b, §6.3)
+and the part tags. **Nothing is shown that the session plan does not record.**
+
+| step | action | what it is for, in the docs | shown in |
+|---|---|---|---|
+| 0 | **the parts laid out**: ELP IMX415 200° board in its black case, Arduino Nano 33 BLE, terry headband, kapton tape, USB cables, power bank | — | H6 flat-lay, shot 5 |
+| 1 | **the four case screws out**, the board lifted out **by its edges**, never touching the lens glass | §1.1: the screws are kept, the M2 holes are the mounting points; do not rotate the focused lens | H5a + K5b beat 1 |
+| 2 | **kapton tape smoothed over the back of the board**, a continuous layer, lens left clear | §1.2: sweat is conductive; no bare copper against fabric | H5b + K5b beat 2 |
+| 3 | **the board pressed onto the outside front of the band**, lens facing out, and taped in place | §1.2: outside face, so the band sits between the electronics and the skin | H5c + K5b beat 3 |
+| 4 | **the Nano taped at the side of the band**, its back insulated, antenna end clear | §1.3: side or rear, to balance the camera; nothing over the antenna | H5d + K5b beat 4 |
+| 5 | **both cables looped once and taped to the band** | §1.4: a pull loads the tape, not the soldered USB pad | H5d |
+| 6 | **the band goes on**, the camera cable over the shoulder to the A52 in the pocket | §2: USB-OTG to the phone, the Nano to a pocket power bank | H4, shot 6e |
+
+**Part tags** go on step 0 and step 4 only (§3.4). The steps themselves carry no on-screen text:
+they read from the hands.
 
 ## 4. K6 — the software build
 
@@ -386,8 +419,25 @@ they are out of shot, and describing what is out of frame invites the model to b
 ### 6.1 K5 — the lab, at the parts
 
 ```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no labels, no UI, and no letters or numerals anywhere in frame. Peter Pitch sits on an office chair at the left end of a white desk in a small, white-walled home lab, at first turned toward the work beside him — the same room as the reference image: five computer screens glowing softly behind and beside him, two side by side on the desk, one above them on an arm, one on the wall to the right and an open laptop with a green-backlit keyboard at his left, a small chrome desk lamp, a black keyboard and mouse, cables trailing off the back of the desk, cool daylight from a window on the left. Every screen is OUT OF FOCUS, a soft glow with NOTHING legible on it — no text, no code, no letters, no images, no interface. On the cleared corner of the desk beside him lie a few small loose electronic components, a pair of tweezers and a small plain circuit board, in soft focus. At the very start he sets the tweezers down and turns from the parts to the camera, then talks straight to camera for the rest of the shot, his forearms and hands RESTING STILL on his knees or the desk edge, relaxed, with at most a small lift of one open hand on the punchline. He does NOT pick anything up again, does NOT solder, does NOT hold any device, and there is no headband, no camera and nothing coloured teal anywhere on the desk. His face is alive: eyebrows active, eyes bright, with a dry, self-mocking humour and a rueful half-smile on the middle sentence. He is wearing a plain matte-black tank top, with nothing on his head: no headband, no hat, no cap, no strap, no magnifier visor, no glasses pushed up, nothing across his forehead and nothing around his neck. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing worn in or over his ears. He is ALONE in the room — no other people in frame. Each hand has exactly five correctly shaped fingers in every frame. He never raises a hand to his head or face, never counts on his fingers, never points at the camera and never splays or fans his fingers. A LOCKED-OFF MEDIUM SHOT ON A 35mm LENS AT SEATED CHEST HEIGHT, framed from the waist up, with him CENTRED in the frame and facing the camera. The camera does not move and the room behind him never changes or cuts to a different place. Audio: one clear man's voice, lip-synced to him, warm and confident with a dry, self-deprecating wit — the voice of a man telling a story against himself, the pitch rising and falling. He says the first two sentences briskly, then STOPS for one full second of silence with his mouth closed and the half-smile held, then lands the last three words as the punchline. Upbeat and engaged, NOT flat, NOT monotone, NOT read aloud, NOT shouted, NOT breathless. ONE single take: "Prototype one: my phone, strapped to my forehead. Tilt my head, the bar's gone. So: a fisheye.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing, not on any surface in the room. Say that line EXACTLY ONCE, word for word, start to finish — all 17 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence, and do NOT ad-lib, pad or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last, not changing speaker, gender, age or timbre part way through, and no second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed, holding the look. No other dialogue, no ambient sound, no music.
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no labels, no UI, and no letters or numerals anywhere in frame. Peter Pitch sits on an office chair at the left end of a white desk in a small, white-walled home lab, at first turned toward the work beside him — the same room as the reference image: five computer screens glowing softly behind and beside him, two side by side on the desk, one above them on an arm, one on the wall to the right and an open laptop with a green-backlit keyboard at his left, a small chrome desk lamp, a black keyboard and mouse, cables trailing off the back of the desk, cool daylight from a window on the left. Every screen is OUT OF FOCUS, a soft glow with NOTHING legible on it — no text, no code, no letters, no images, no interface. On the cleared corner of the desk beside him lie the parts he is building with, in soft focus: a plain black fabric headband, a small square bare circuit board with a round wide-angle lens on its face, a small long dark-blue circuit board, a roll of amber tape and a black USB cable — none of them with any printing, label or marking on them. At the very start he sets the tweezers down and turns from the parts to the camera, then talks straight to camera for the rest of the shot, his forearms and hands RESTING STILL on his knees or the desk edge, relaxed, with at most a small lift of one open hand on the punchline. He does NOT pick anything up again, does NOT solder, does NOT hold any device, and nothing on the desk is coloured teal. His face is alive: eyebrows active, eyes bright, with a dry, self-mocking humour and a rueful half-smile on the middle sentence. He is wearing a plain matte-black tank top, with nothing on his head: no headband, no hat, no cap, no strap, no magnifier visor, no glasses pushed up, nothing across his forehead and nothing around his neck. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing worn in or over his ears. He is ALONE in the room — no other people in frame. Each hand has exactly five correctly shaped fingers in every frame. He never raises a hand to his head or face, never counts on his fingers, never points at the camera and never splays or fans his fingers. A LOCKED-OFF MEDIUM SHOT ON A 35mm LENS AT SEATED CHEST HEIGHT, framed from the waist up, with him CENTRED in the frame and facing the camera. The camera does not move and the room behind him never changes or cuts to a different place. Audio: one clear man's voice, lip-synced to him, warm and confident with a dry, self-deprecating wit — the voice of a man telling a story against himself, the pitch rising and falling. He says the first two sentences briskly, then STOPS for one full second of silence with his mouth closed and the half-smile held, then lands the last three words as the punchline. Upbeat and engaged, NOT flat, NOT monotone, NOT read aloud, NOT shouted, NOT breathless. ONE single take: "Prototype one: my phone, strapped to my forehead. Tilt my head, the bar's gone. So: a fisheye.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing, not on any surface in the room. Say that line EXACTLY ONCE, word for word, start to finish — all 17 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence, and do NOT ad-lib, pad or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last, not changing speaker, gender, age or timbre part way through, and no second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed, holding the look. No other dialogue, no ambient sound, no music.
 ```
+
+### 6.1b K5b — the assembly, silent
+
+The second K5 generation (§3.4, §3.6). **Silent on purpose**: in this film a spoken line has
+suppressed movement every time it was asked for both, and the silent take is the one that moved
+(K7). Same character, same reference frame (`lab_reference_flow_16x9.jpg`), Omni 1.1 Flash, **8 s**,
+16:9. Its own sound is discarded; the music carries the beat.
+
+```
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no labels, no UI, and no letters or numerals anywhere in frame — and no printing, labels or markings on any of the parts. A SILENT shot with NO speech: nobody speaks at any point, his mouth stays closed and relaxed. Peter Pitch sits on an office chair at the left end of a white desk in a small, white-walled home lab — the same room as the reference image — turned toward the desk, three-quarter to the camera, concentrating on his hands. The computer screens behind him are OUT OF FOCUS, a soft glow with NOTHING legible on them. A MEDIUM CLOSE SHOT ON A 50mm LENS from slightly above desk height, framing his face, chest, both forearms and the desk surface in front of him, so his hands and the parts are large and sharp in frame and his face is clearly visible above them. The camera does not move. On the white desk in front of him: a plain black fabric terry headband, a small square bare circuit board with one round wide-angle glass lens on its front face, a small long dark-blue circuit board, a roll of amber kapton tape and a short black USB cable. He assembles them by hand, slowly and carefully, in FOUR clear steps, each about two seconds, finishing one before starting the next: FIRST, he lifts the small square lens board off the desk by its edges and turns it over; SECOND, he presses a strip of amber tape flat across the back of the board with his thumb; THIRD, he presses the board onto the outside front of the black headband, lens facing outward, and smooths a strip of tape over its edges to hold it; FOURTH, he lays the small dark-blue board against the side of the headband and tapes it in place. Each step is a real, visible motion — his hands travel, pick up, press and smooth — never a frozen pose. His hands are steady and deliberate, the movements of someone who has done this before. Each hand has exactly five correctly shaped fingers in every frame, and both hands stay in frame throughout. He never raises a hand to his face, never puts the headband on, and never looks at the camera. He is wearing a plain matte-black tank top, with nothing on his head: no headband, no hat, no cap, no strap, no magnifier visor, no glasses, nothing across his forehead. He is ALONE in the room. The headband is plain black with no stripe, no light, no logo and no colour; the boards are bare and unbranded; nothing in frame is coloured teal. Audio: NO voice, NO speech, NO music — only faint, quiet room tone and the small sounds of tape and fabric.
+```
+
+**Judge K5b on the steps, then the hands.** Count the steps that visibly happen: four is a keep,
+three is a keep if they are the first three, fewer is a re-roll. Then: five fingers on every frame,
+no printing on any board, no teal, the band not worn. **If two rolls fail on the steps, split it**:
+K5b-1 with steps 1–2 and K5b-2 with steps 3–4, 6 s each — two motions per clip is a far smaller ask
+than four. And if K5b fails outright, the real macros H5a–d carry the beat alone (§3.4).
 
 ### 6.2 K6 — the lab, at the keyboard
 
@@ -409,7 +459,8 @@ drops (§3.4). If the line overruns 10 s, cut *"So:"* in K5, or *"Then"* in K6.
 1. **The real shoots first** (H1–H5, S1–S5). They are free, **S4
    decides what K6's shot 5 is**, and the lab reference is already built
    (`scripts/k5k6/blur_lab.py`), so Flow can be opened as soon as the shoots are done.
-2. **The two Flow clips** — 2 renders, plus re-rolls.
+2. **The three Flow clips** — K5, K5b (silent assembly) and K6: 3 renders, plus re-rolls. Render
+   K5b first: it is the one most likely to need the split fallback (§6.1b).
 3. **Graphics:** the chips, the dead-ends cards, the animated IMU trace — HTML renders, like the end card.
 4. **Assembly:** `scripts/master/build.py` gains K5/K6 as **composed** segments (Flow audio,
    picture cut from Flow + real material), the renumbered clips, and a `K1_K11` output name. The

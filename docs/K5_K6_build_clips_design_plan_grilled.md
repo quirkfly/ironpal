@@ -7,8 +7,9 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**43 decisions: 18 EVIDENCE · 21 ASSUMED · 4 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
-same day, as the founder set the locations, supplied a photo of his lab and asked for the assembly).
+**48 decisions: 21 EVIDENCE · 23 ASSUMED · 4 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
+same day, as the founder set the locations, supplied a photo of his lab and asked for the assembly — then
+asked to see it in the clip itself, Branch I).
 
 ---
 
@@ -225,6 +226,35 @@ built. Whether its loose parts are on the desk to film is **OPEN** — only the 
 **ASSUMED** — the direction asks for the parts to be featured, and an unnamed board is just a board
 to a backer. *Against:* part numbers on screen invite spec questions; tags carry names, not specs.
 
-**Most worth a veto, riskiest first:** Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
+## Branch I — assembly inside the clip (added 2026-10-07)
+
+**Q44. The founder: *"I don't see any hardware assembly instructions in the K5 clip."* Where were
+they?** Only in the real B-roll plan; the Flow prompt had him talking over generic parts, with no
+step in it. **EVIDENCE** — §6.1 as committed in ba782e8. The direction (Q38) asked for the assembly
+to be *featured*, and the prompt the founder pastes is what he reads as "the clip".
+
+**Q45. Can the talking shot carry the assembly?** No — a second, **silent** Flow clip (K5b) does.
+**EVIDENCE** — K7: seven voiced takes failed to move, the silent two-arm take moved first time
+(`IRONPAL_PROMO_VIDEO_SCRIPT_V1.md` §5.13); hands working small objects while talking is the film's
+worst failure. *Cost:* one more render, and a third Flow clip to keep consistent.
+
+**Q46. Does generating the assembly breach Q6 (no generated prototype)?** Not if the generated parts
+are the real parts' plain likeness and every generated step is intercut with a real macro of the
+same step. **ASSUMED** — Q6 exists to stop a *product* being faked; showing the true build process
+with unbranded likenesses of the real parts depicts something that happened, the same test as the
+re-staging in Q19/Q41. *Against:* the strict reading of Q6 says any generated board is a generated
+prototype; this is the riskiest call in the ledger and the founder made it by direction.
+**Supersedes the "generic parts" half of Q29.**
+
+**Q47. Which steps, and from where?** Steps 1–6 of §3.6, exactly as `ironpal-gym-session-01-plan.md`
+§1.1–§1.4 records them; K5b shows 1–4. **EVIDENCE.** **Correction:** the previous draft had the lens
+pushed through a hole in the band from behind; the plan mounts the board on the **outside face** so
+the band sits between the electronics and the skin.
+
+**Q48. What if K5b will not do four steps?** Split into two 6 s clips of two steps each; if that
+fails, the real macros carry the beat alone. **ASSUMED** — four discrete motions in 8 s is more than
+any clip in this film has rendered. *Against:* two more renders.
+
+**Most worth a veto, riskiest first:** Q46 (generated assembly of the real parts), Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
 Q10 (bandless Peter for two more clips).
