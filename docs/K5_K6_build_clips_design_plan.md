@@ -354,17 +354,16 @@ differences:
   The "testing" half of the brief is carried by the real footage (S2, S4), where it is true.
 - **The read** lifts from wry to **conviction**, landing *"like a game"* with a small grin. **No pause.**
 
-### 4.4 Shot list — 10.0 s
+### 4.4 Shot list — 10.0 s, silent (music only)
 
-| # | time | picture | source | chip | under the line |
+| # | time | picture | source | chip | under it |
 |---|---|---|---|---|---|
-| 1 | 0.0–1.4 | Peter in front of the middle monitors, swivelling from the keyboard to camera | **Flow** | — | *"Then the software."* |
-| 1b | 1.4–2.0 | **the real desk**: the founder's photo, slow push-in toward the code monitors | **real**, `input/kickstarter/k5k6/lab_broll_still.jpg` (§2.1) | `THE LAB · OCT 2026` | *"It counts…"* |
-| 2 | 2.0–2.8 | **the repo**: a fast scroll through `git log`, 130+ commits since April, landing on the rep-counter Kotlin module | **new screen recording S1** of the real repo | `POC · MAY 2026` | *"It counts reps…"* |
-| 3 | 2.8–4.6 | **the motion trace**: a real Nano IMU recording of a set, the trace drawn left to right, each rep peak lighting teal as it is counted | **new capture S2** → `/plot-sensors`, animated | `REAL SENSOR DATA` | *"…from motion,"* |
-| 4 | 4.6–6.6 | **the labeling studio**: a real clip in the studio, the founder tags it and the tag lands | **new screen recording S3** of the app on the A52 | `TRAINING GAME · SEP 2026` | *"and you teach it your exercises,"* |
-| 5 | 6.6–8.6 | **the recogniser, live**: the LiveHud on the A52 naming *Bulgarian split squat* and counting real reps, with the founder doing them, picture-in-picture | **new shoot S4** — the A52 screen recorded during a real set, plus a tripod shot of the set | `LIVE · REAL SET` | *"like a game."* |
-| 6 | 8.6–10.0 | Peter at the desk, landing the grin | **Flow** | — | — |
+| 1 | 0.0–2.0 | **Peter coding**, over the shoulder: hands on the keyboard, the editor and the log on screen, the Nano blinking beside him | **Flow K6** (§6.2), 0.0–2.0 s, real code corner-pinned onto the screens | `THE CODE · MAY–OCT 2026` | music |
+| 2 | 2.0–2.8 | **the repo**: a fast scroll through `git log`, 130+ commits since April, landing on `SignalEngine.kt` | **S1** | `POC · MAY 2026` | music |
+| 3 | 2.8–4.6 | **the motion trace**: a real Nano IMU recording of a set, the trace drawn left to right, each rep peak lighting teal as it is counted | **new capture S2** → `/plot-sensors`, animated | `REAL SENSOR DATA` | music |
+| 4 | 4.6–6.6 | **the labeling studio**: a real clip in the studio, the founder tags it and the tag lands | **new screen recording S3** of the app on the A52 | `TRAINING GAME · SEP 2026` | music |
+| 5 | 6.6–8.6 | **the recogniser, live**: the LiveHud on the A52 naming *Bulgarian split squat* and counting real reps, with the founder doing them, picture-in-picture | **new shoot S4** — the A52 screen recorded during a real set, plus a tripod shot of the set | `LIVE · REAL SET` | music |
+| 6 | 8.6–10.0 | **Peter studying the log**, leaning toward the right monitor | **Flow K6**, its last 1.4 s | — | music |
 
 **Shot 5 is the most valuable four seconds in the crowdfunding cut**: the only real recognition in
 the film. The pairing is the point: the founder's leg goes down on the tripod shot, the counter on
@@ -603,11 +602,49 @@ lab. **If two rolls fail on the part**, the multimeter is already out of the act
 the fisheye dome keeps coming back flat, re-roll rather than accept a plain board — **the dome is what
 makes it the IronPal camera.**
 
-### 6.2 K6 — the lab, at the keyboard
+### 6.2 K6 — the lab, coding (silent, over the shoulder)
+
+**Rewritten 2026-10-07 to the founder's spec:** Peter in the lab, coding and debugging the IronPal
+software; **no talking, no distractions, never facing the camera — his hands on the keyboard and the
+screens**, the screens clearly showing code, legible as code even where single words are not.
+Same reference frame (`lab_reference_flow_16x9.jpg`, attach it), Omni 1.1 Flash, **8 s**, 16:9.
+Written short and as one calm, continuous action — the lesson of K5b's eight takes.
+
+**The debugging is the real thing:** the Arduino Nano on the desk, cabled to the computer, its light
+blinking; the right monitor streaming its log and a live sensor graph — the IMU stream the POC's
+`SignalEngine.kt` counts reps from.
 
 ```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no labels, no UI, and no letters or numerals anywhere in frame. Peter Pitch sits on an office chair in front of a white desk in a small, white-walled home lab — the same room as the reference image — with two computer monitors side by side on the desk directly behind him, a third above them on an arm, a fourth on the wall to the right and an open laptop with a green-backlit keyboard at the far left, a black keyboard and mouse on the desk behind him, a small chrome desk lamp, cool daylight from a window on the left. Every screen is OUT OF FOCUS, a soft glow with NOTHING legible on it — no text, no code, no letters, no images, no interface. At the very start he lifts his hands off the keyboard behind him and swivels his chair round to face the camera, then talks straight to camera for the rest of the shot, his forearms and hands RESTING STILL on his knees, relaxed, with at most a small lift of one open hand as the line builds. He does NOT type, does NOT pick anything up, and never mimes typing. His face is alive: eyebrows active, eyes bright, conviction building across the line, finishing on a small, pleased grin. He is wearing a plain matte-black tank top, with nothing on his head: no headband, no hat, no cap, no strap, no magnifier visor, no glasses pushed up, nothing across his forehead and nothing around his neck. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing worn in or over his ears. He is ALONE in the room — no other people in frame. Each hand has exactly five correctly shaped fingers in every frame. He never raises a hand to his head or face, never counts on his fingers, never points at the camera and never splays or fans his fingers. A LOCKED-OFF MEDIUM SHOT ON A 35mm LENS AT SEATED CHEST HEIGHT, framed from the waist up, with him CENTRED in the frame and facing the camera. The camera does not move and the room behind him never changes or cuts to a different place. Audio: one clear man's voice, lip-synced to him, spoken with ENERGY and CONVICTION — confident, warm and persuasive, the pitch rising and falling, each of the two things landed in turn and the last three words delivered with a grin. Upbeat and engaged, NOT flat, NOT monotone, NOT read aloud, NOT shouted, NOT breathless. ONE single take: "Then the software. It counts reps from motion, and you teach it your exercises, like a game.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing, not on any surface in the room. Say that line EXACTLY ONCE, word for word, start to finish — all 17 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence, and do NOT ad-lib, pad or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last, not changing speaker, gender, age or timbre part way through, and no second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed, holding the grin. No other dialogue, no ambient sound, no music.
+LIVE-ACTION FOOTAGE, ONE CONTINUOUS SHOT, CAMERA LOCKED OFF, NO CUTS, NO SPEECH. No captions, titles or logos.
+
+An over-the-shoulder shot from just behind and to the right of Peter Pitch, who sits at the white desk in the home lab of the reference image, in a plain dark-grey crew-neck long-sleeve top. We see the back and side of his head, his shoulder, both hands on a black keyboard, and the two monitors in front of him filling most of the frame. His face is never turned toward the camera; his eyes are on the screens the whole time.
+
+The LEFT monitor shows a dark-theme code editor full of program code: neat indented lines, a column of line numbers down the left edge, keywords and strings in a few soft syntax colours, the cursor in the middle of a block of code. The RIGHT monitor shows a dark terminal with lines of log output scrolling slowly upward and, at its top, a small live graph of a green wavy line — sensor data. Both screens are bright, sharp and clearly code: the shapes, indentation and colours read at a glance, even if single words are too small to read.
+
+On the desk beside the keyboard lies a narrow blue-green Arduino Nano board, plugged into the computer by a short black USB cable, a tiny orange light on it blinking steadily.
+
+THE ACTION, calm and continuous: he types steadily for a few seconds, the lines of code in the editor growing as he types; he stops, leans slightly toward the right monitor and studies the scrolling log and the wavy graph, his hands resting on the keyboard; then he types again. Nothing is picked up or put down.
+
+Focused, quiet, alone in the room. AUDIO: NO MUSIC of any kind — only the soft clatter of keys and quiet room sound.
 ```
+
+**The screens get real code in post.** Flow will draw code-shaped text, not code. The camera is
+locked off, so each monitor is a fixed four-corner quad: **corner-pin the real screen recordings onto
+them** — S1 (the repo, landing on `poc/mobile/android/app/src/main/java/com/twentydeka/ironpal/SignalEngine.kt`)
+onto the editor, S2 (the real Nano IMU trace) onto the terminal. That makes the code on screen
+**genuinely IronPal's** and as readable as the founder wants, without asking the model to render text
+it cannot. If the generated screens already read well enough, the insert is optional.
+
+**Judge K6 in this order:** never his face to camera → hands on the keyboard and both screens in
+frame → the screens read as code (indentation, line numbers, syntax colours) → the Nano and its cable
+visible → no speech, no music → one shot, no cut → hands with five fingers.
+
+> **The previous K6 — Peter facing camera, speaking *"Then the software. It counts reps from motion,
+> and you teach it your exercises, like a game."*** — is retired by this spec. **The line goes with
+> it:** a clip with no face cannot carry a lip-synced line, and a voice generated over a faceless shot
+> comes back as a different narrator (§5.9). K6 now runs silent under the music, its story told by the
+> picture and the date chips. The old prompt is in git history (`a23b579` and before) if the line is
+> wanted back.
 
 **Judge each take in this order:** the line said once and complete → hands → bandless → no burned
 text → **no screen shows legible or pseudo-legible text** → **nothing on the desk reads as a headband

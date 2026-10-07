@@ -7,7 +7,7 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**67 decisions: 34 EVIDENCE · 28 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
+**71 decisions: 36 EVIDENCE · 30 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
 same day, as the founder set the locations, supplied a photo of his lab and asked for the assembly — then
 asked to see it in the clip itself, Branch I).
 
@@ -352,6 +352,26 @@ the founder asked for it in the scene once.
 
 **Q67. Size?** Sized against his hands, not in centimetres alone. **ASSUMED** — models size objects by
 comparison; "38 mm" did not stop take 4 rendering a lens barrel as tall as the board.
+
+## Branch O — K6 rewritten to the founder's spec (added 2026-10-07)
+
+**Q68. What does K6's generated shot show?** Peter coding, over the shoulder: hands on the keyboard,
+the editor and a log on screen, never his face to camera, silent. **EVIDENCE** — the founder's
+direction (TASK.md).
+
+**Q69. What happens to K6's spoken line?** It is dropped; K6 runs silent under the music. **ASSUMED**
+— "no talking" in the only generated shot leaves nothing to lip-sync it to, and a voice over a
+faceless shot comes back as a different narrator (§5.9). *Against:* K6 loses the film's only line about
+the user teaching the model; the old prompt is in git history if wanted back. **Revises Q21/Q22.**
+
+**Q70. How do the screens show real IronPal code?** Corner-pin the real screen recordings (S1 onto the
+editor, S2 onto the terminal) onto the generated monitors in post; the camera is locked off, so each
+screen is a fixed quad. **ASSUMED** — Flow draws code-shaped text, not code, and the no-writing rule
+exists because it garbles it. *Against:* a corner-pin needs a little grading to sit in the room's light.
+
+**Q71. Where is the debugging?** The Arduino Nano on the desk, cabled to the computer, light blinking,
+with its log and a live sensor graph on the right monitor. **EVIDENCE** — the POC streams the Nano's
+IMU to the app, and `SignalEngine.kt` is where it is counted.
 
 **Most worth a veto, riskiest first:** Q55 (a niche board described in words only), Q51/Q54 (soldering a joint the docs record but not who made it), Q46 (generated assembly of the real parts), Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
