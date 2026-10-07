@@ -129,7 +129,7 @@ for a later, sequential campaign once a US entity exists.
 - [ ] **Stable Pledge:** decide carefully. It cannot be undone once joined and must be enabled before launch.
 
 **6. Story / detailed description outline**
-- [ ] Hero: embed the campaign film https://www.youtube.com/watch?v=5Hs_VxRIlGM
+- [ ] Hero: embed the campaign film https://www.youtube.com/watch?v=PwoSLyIk50c
 - [ ] The problem: logging lifts by hand breaks focus.
 - [ ] How it works: headband camera + IMU; exercise recognition and rep counting **on-device**.
 - [ ] **What we're building next (in development, not validated):** reading the weight from the bar or stack. Never present it as working.
@@ -208,7 +208,7 @@ for a later, sequential campaign once a US entity exists.
 - [ ] Payment options: card (default); leave offline/cheque off.
 
 **My project (story outline)**
-- [ ] Hook: the campaign film https://www.youtube.com/watch?v=5Hs_VxRIlGM embedded at the top; founder on camera.
+- [ ] Hook: the campaign film https://www.youtube.com/watch?v=PwoSLyIk50c embedded at the top; founder on camera.
 - [ ] Problem: logging sets by hand breaks your focus; wrist trackers miss what you are lifting.
 - [ ] What works today (honest): a working proof of concept, an Android app plus a prototype band; **recognises the exercise and counts reps on-device**.
 - [ ] What we are building (framed as being built, never as shipped): **reading the weight off the bar or stack**, the core bet, not yet validated. Present it as the stretch of the roadmap the funds pay for.
@@ -319,7 +319,7 @@ Alternative routes, worse for this timeline:
 - [ ] Add-ons: spare headband, charging dock
 
 **4. Story tab outline**
-- [ ] Hook: campaign film (https://www.youtube.com/watch?v=5Hs_VxRIlGM) as the project video
+- [ ] Hook: campaign film (https://www.youtube.com/watch?v=PwoSLyIk50c) as the project video
 - [ ] The problem: logging sets breaks the flow of training
 - [ ] How it works: headband camera + IMU, exercise recognition and rep counting **on-device**
 - [ ] **Weight-reading, framed as in development:** "we're building it" with current progress. Never shown or claimed as working.
@@ -592,7 +592,7 @@ Leave Crowdcube out of the 2026-10-20 launch. Run the pre-order on a reward plat
   - **Target:** the yen equivalent of a Japan-specific target. The global $50,000 goal belongs to Kickstarter; Makuake would be a separate Japan raise.
   - **Rewards:** early-bird (超早割), early-bird (早割), and a regular Makuake price on the band plus app.
   - **Story:** the problem (manual logging), first-person camera plus IMU, on-device exercise recognition and rep counting. Weight reading must be described as *in development* and never as working. Privacy must be described accurately: reps and exercise on-device, weight-reading sends one frame to a cloud model that is deleted after inference. Never say "no cloud" or "faces blurred".
-  - **Media:** campaign film (https://www.youtube.com/watch?v=5Hs_VxRIlGM) with Japanese subtitles; founder on camera.
+  - **Media:** campaign film (https://www.youtube.com/watch?v=PwoSLyIk50c) with Japanese subtitles; founder on camera.
   - **Launch date:** set only after Makuake's screening passes. Not 2026-10-20.
 - [ ] Submit through the partner for Makuake's screening and keep the project unlaunched until the founder approves.
 

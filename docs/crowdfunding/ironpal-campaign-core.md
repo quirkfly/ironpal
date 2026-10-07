@@ -15,7 +15,7 @@ only what that platform changes (field limits, currency, category names).
 | Legal entity | 20deka, s.r.o., IČO 47 843 411, Bratislava, Slovakia |
 | Contact email | p3t3r.d3rm3k@gmail.com |
 | Website | https://ironpal.co |
-| Film | https://www.youtube.com/watch?v=5Hs_VxRIlGM |
+| Film | https://www.youtube.com/watch?v=PwoSLyIk50c |
 | Funding goal | **$50,000** (or the platform-currency equivalent; see each package) |
 | Launch date | **2026-10-20** (14 days after the task was set on 2026-10-06) — set as the planned date only; nobody presses Launch |
 | Duration | 30 days |

@@ -7,7 +7,7 @@ Profile 10, `iron.paaal@gmail.com`)
 **Built by:** `scripts/master/build_k11.py` — the K1_K9 film with the two build clips after K4
 (`docs/K5_K6_build_clips_design_plan.md` §6.9).
 **Video:** **https://youtu.be/PwoSLyIk50c** — uploaded 2026-10-07 through YouTube Studio (Chrome
-Profile 10), **saved as Private, Publish not yet pressed**. Read back from the edit page: title,
+Profile 10), ****published Public on 2026-10-07**, the founder's go-ahead (subscribers notified). Read back from the edit page: title,
 description (1,313 chars), tags, not-for-kids, Science & Technology, **AI use = Yes** all saved.
 **The custom thumbnail did not take** — the channel is unverified (Studio: *"to make external links
 clickable, first complete a one-time verification"*), and custom thumbnails need the same phone
