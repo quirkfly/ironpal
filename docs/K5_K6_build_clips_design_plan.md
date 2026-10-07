@@ -653,6 +653,25 @@ drops (§3.4). If the line overruns 10 s, cut *"So:"* in K5, or *"Then"* in K6.
 
 ---
 
+## 6.9 The K1_K11 crowdfunding master — BUILT 2026-10-07
+
+**`geggen/products/ironpal/clips/K1_K11_crowdfunding_master.mp4`** (+ `_proxy.mp4`), built by
+`scripts/master/build_k11.py`: **88.2 s, 1920×1080, −14.3 LUFS, −1.2 dBTP, LRA 5.4.**
+
+| | |
+|---|---|
+| order | K1 · K2 · K3 · K4 · **K5 build** (soldering, `K5b_take8_nomusic.mp4`) · **K6 build** (coding, `K6_take1.mp4`) · K7–K11 (the old K5–K9) · end card |
+| the two new clips | 8 s each, **silent**: K5's music stripped at selection, **K6's typing sound removed** here; graded at a 40 % pull so the lab stays a bright lab (§5) and scaled 720p → 1080p for K5 |
+| reused | the K1_K9 pipeline's cached graded clips, per-clip dialogue audio and end card — **the K1_K9 master is untouched** |
+| captions | the K1_K9 master's `captions.ass`, every event after K4 shifted by +16.0 s; frame-checked at the reveal |
+| audio | the K1_K9 chain: room-tone bed, Dreaming Big at the same gain and offset, ducked under dialogue, bus compression, two-pass loudnorm, limiter. **The build section runs on music alone at −17.8 LUFS** against ~−13 for the talking sections — the bed rises as the duck releases; if it reads too quiet, raise it there rather than globally |
+
+**Not in this master yet** (§3.4, §4.4): the real B-roll — H1–H6 and S1–S5 — the date chips, the
+dead-ends cards and the corner-pinned real code. It is the two generated build clips, cut whole.
+**The music's peak no longer lands on the end card**: the track's 74–77 s swell now falls at ~70–73 s
+of film, under the old K8, because the card moved 16 s later and the track cannot start earlier
+than its own beginning.
+
 ## 7. Production order, and what is open
 
 **Order.** Each step is cheap before the next costs anything.

@@ -69,7 +69,11 @@ def measure(p):
     return speech, floor, on
 
 # ---------------------------------------------------------------- 1+2+3  per-clip audio
-tone=json.load(open(f"{SCRATCH}/tone.json")); FC=tone["fc"]; MED=np.array(tone["median"])
+# tone.json is a per-session measurement used only by the per-clip EQ stage; the K1_K11 build imports
+# this module for its later stages with that EQ already cached, so a missing file is not an error here.
+_tone_p=f"{SCRATCH}/tone.json"
+tone=json.load(open(_tone_p)) if os.path.exists(_tone_p) else None
+FC=tone["fc"] if tone else None; MED=np.array(tone["median"]) if tone else None
 def eq_entries(k):
     dev=MED-np.array(tone["clips"][k]["spec"])          # what to ADD to reach the median
     ent=[]
