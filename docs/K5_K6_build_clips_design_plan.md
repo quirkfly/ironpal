@@ -212,8 +212,8 @@ are real and are shown by real footage only (§2): the generated desk stays gene
 | 3 | 3.5–5.0 | **the POV from that phone**: the bar in frame; the head tilts and it slides out | **H2**; fallback `input/kb/clips/20260614_*` | `PROTOTYPE 1` | *"Tilt my head, the bar's gone."* |
 | 4 | 5.0–6.4 | **dead-ends cards**, dealt and struck through | HTML graphic | — | the pause |
 | 5 | 6.4–8.0 | **the parts, flat-lay**: top-down on the real desk — the ELP board still in its case, the Arduino Nano 33 BLE, the terry headband, a roll of kapton tape, the cables, the power bank. Each part gets a name tag as it is touched by a finger | **H6** | per part: `ELP IMX415 · 200° FISHEYE` · `ARDUINO NANO 33 BLE · IMU` · `TERRY HEADBAND` | *"So: a fisheye."* |
-| 6a | 8.0–9.2 | **Peter soldering**: goggles on, the iron touches the joint, a thin wisp of smoke | **K5b**, 0.5–1.7 s | `THE BUILD · AUG 2026` | music |
-| 6b | 9.2–9.9 | **the test**: multimeter probes on the joint, the oscilloscope trace steady beside him | **K5b**, 4.5–5.2 s | — | music |
+| 6a | 8.0–9.2 | **Peter soldering the camera module's USB lead**: goggles on, the fisheye dome up in the clamp, a wisp of smoke | **K5b**, 0.5–1.7 s | `THE BUILD · AUG 2026` | music |
+| 6b | 9.2–9.9 | **the test**: the oscilloscope showing the board's USB packet bursts, his eyes on it | **K5b**, 4.5–5.2 s | — | music |
 | 6c | 9.9–10.5 | **the board pressed onto the front of the band**, lens facing out, and taped in place | **H5c** macro | — | music |
 | 6d | 10.5–10.9 | **the Nano** taped at the side of the band; **cables looped and taped** | **H5d** macro | `MCU + BLE + MOTION SENSORS · ONE BOARD` | music |
 | 6e | 10.9–11.6 | **the band goes on**, the cable over the shoulder to the A52 in the pocket | **H4** | `PROTOTYPE 2` | music |
@@ -222,8 +222,8 @@ are real and are shown by real footage only (§2): the generated desk stays gene
 | 9 | 13.0–14.2 | Peter at the desk, holding the look | **Flow**, its final 1.2 s | — | — |
 
 **The assembly beat is two sources cut together** (§3.6, §6.1b): **K5b**, a second, silent Flow
-clip of Peter at the bench **soldering and then testing with a multimeter, an oscilloscope beside
-him**, opens the beat as one continuous action; the real macros H5c–d then show the parts going onto
+clip of Peter at the bench **soldering the IronPal camera module's USB lead, checking it on the
+multimeter and reading its USB data on the oscilloscope**, opens the beat as one continuous action; the real macros H5c–d then show the parts going onto
 the band. *Revised 2026-10-07:* the first K5b asked for four separate assembly steps in 8 s and came
 back as disconnected slop. **One continuous task — solder, set the iron down, probe — is what a
 generated clip can make legible**; the step-by-step is left to the real macros, where each step is
@@ -288,12 +288,11 @@ and the part tags. **Nothing is shown that the session plan does not record.**
 | 5 | **both cables looped once and taped to the band** | §1.4: a pull loads the tape, not the soldered USB pad | H5d |
 | 6 | **the band goes on**, the camera cable over the shoulder to the A52 in the pocket | §2: USB-OTG to the phone, the Nano to a pocket power bank | H4, shot 6e |
 
-**K5b is not one of these steps.** It shows the bench work around them — soldering a header onto a
-small sensor board, then checking it on the multimeter and the scope — at the founder's direction.
-The docs record a soldering kit and header pins for the next board's breakouts
-(`ironpal-imu-poc-integration-plan.md`, tools list), not a soldered step in prototype 2, so K5b is
-**the build in general, not a step of it**; the cut keeps it before the real assembly macros, never
-in the middle of the sequence.
+**K5b is the step before these.** It shows the camera module's USB lead being soldered to its pads
+and tested — the joint `ironpal-gym-session-01-plan.md` §1.4 records (*"the USB pigtail is soldered
+to a small PCB pad"*) — at the founder's direction. The docs record that the joint exists, not that the
+founder made it, so the cut places K5b **before** the real assembly macros, as preparation of the
+part, never in the middle of the sequence.
 
 **Part tags** go on step 0 and step 4 only (§3.4). The steps themselves carry no on-screen text:
 they read from the hands.
@@ -430,24 +429,47 @@ LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: n
 
 ### 6.1b K5b — the bench work, silent
 
-The second K5 generation (§3.4, §3.6). **Rewritten 2026-10-07** after the four-step assembly version
-came back disconnected and unclear: **one continuous task instead of four separate ones** —
-soldering two pins, setting the iron down, probing with the multimeter, a glance at the scope.
-The founder added the multimeter, the oscilloscope, the soldering, a long-sleeve shirt and safety
-goggles. **Silent on purpose** (§3.4). Same character, same reference frame
-(`lab_reference_flow_16x9.jpg`), Omni 1.1 Flash, **8 s**, 16:9; its own sound is discarded and the
-music carries the beat.
+The second K5 generation (§3.4, §3.6): **Peter soldering the IronPal camera module's USB lead,
+checking it on the multimeter, then reading the board's USB data on the oscilloscope.** Silent on
+purpose (§3.4). Same character, reference frame `lab_reference_flow_16x9.jpg` (**attach it** — see
+take 1 below), Omni 1.1 Flash, **8 s**, 16:9; its own sound is discarded and the music carries the beat.
+
+**The part is the real one, from the docs.** The ELP 4K USB + HDMI board with the Sony IMX415 and the
+**200° fisheye** (`ironpal-capture-hardware-decision-log.md` §5): a **38 × 38 mm double-deck module**
+(two stacked boards, `USB4KCAM01H` line, §7 and the table at line 251), an **M12 lens mount** carrying a
+**1.56 mm fisheye**, an HDMI connector the project never uses, and a **USB lead soldered to small
+pads** on the board (`ironpal-gym-session-01-plan.md` §1.4: *"the USB pigtail is soldered to a small
+PCB pad"*). So the soldering in K5b is **that lead going onto those pads** — red, black, green, white,
+the four USB 2.0 wires. Words only, no reference image of the part: Flow takes one reference per clip
+and it is spent on the room.
+
+**The scope reading is the board's real signal.** The camera is UVC over USB 2.0, so with the board
+streaming to the phone, a probe on the green (D+) wire shows **packet bursts**: dense trains of
+square pulses at a regular rhythm with quiet gaps between. That is described by shape, never by
+numbers — Flow garbles digits — and the take is judged on whether it reads as bursts, not as a
+sine wave or noise.
 
 ```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no labels, no UI, and no letters or numerals anywhere in frame — the multimeter's display and the oscilloscope's screen show no digits, no text and no grid labels. A SILENT shot with NO speech: nobody speaks at any point, his mouth stays closed. Peter Pitch sits at the left end of a white desk in a small, white-walled home lab — the same room as the reference image — turned three-quarter to the camera, absorbed in one careful piece of electronics work. He is wearing a plain dark-grey long-sleeve shirt with the sleeves pulled down to the wrists, and clear safety goggles over his eyes, their thin black strap round the back of his head. Nothing else on his head: no headband, no cap. A MEDIUM CLOSE SHOT ON A 50mm LENS from just above desk height: his face with the goggles, his chest, both forearms and the work area are all in frame, his hands and the board large and sharp, the screens behind him soft and out of focus. The camera does not move. On the desk in front of him: a soldering station with its iron, a small helping-hands clamp holding a small dark-blue circuit board with a row of header pins along one edge, a coil of solder, a yellow digital multimeter with two red and black probe leads, and to his right a small bench oscilloscope whose screen shows a single steady bright-green wave line. ONE CONTINUOUS ACTION, in this order, without cuts and without pauses between the parts: he holds the soldering iron in his right hand and the solder in his left, and touches both to a pin on the clamped board — the solder melts into a small shiny joint and a thin wisp of white smoke rises (about three seconds); he moves the iron to the next pin and does the same; he sets the iron back in its stand; he picks up the two multimeter probes, one in each hand, and touches their tips to the board; he looks across at the oscilloscope's green wave and gives one small, satisfied nod. Every movement is real and continuous — his hands travel, the solder flows, the smoke rises — never a frozen pose, never a jump. His hands are steady and practised. Each hand has exactly five correctly shaped fingers in every frame, both hands stay in frame, and he never raises a hand to his face. The board, the multimeter and the oscilloscope are plain and unbranded; nothing in frame is coloured teal. He is ALONE in the room. Audio: NO voice, NO speech, NO music — only quiet room tone, a faint sizzle at each joint and the click of the iron going back into its stand.
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no labels, no UI, and no letters or numerals anywhere in frame — the multimeter's display and the oscilloscope's screen show no digits, no text and no grid labels. A SILENT shot with NO speech: nobody speaks at any point, his mouth stays closed. Peter Pitch sits at the left end of the white desk in the small, white-walled home lab of the reference image — the same five computer screens glowing softly out of focus behind him, the open laptop with its green-backlit keyboard at his left — seen in profile-to-three-quarter from his right, completely absorbed in the work. His eyes stay DOWN on the camera module and his hands in EVERY frame: he NEVER looks up, NEVER looks toward the camera, NEVER looks at the lens, NEVER acknowledges being filmed. He is wearing a plain dark-grey long-sleeve shirt with the sleeves pulled down to the wrists and clear safety goggles over his eyes with a thin black strap. His shirt is completely plain: NO microphone, NO lavalier, NO clip, NO badge, nothing attached to the collar or chest. Nothing on his head but the goggle strap. A MEDIUM CLOSE SHOT ON A 50mm LENS from just above desk height: his face in profile with the goggles, both forearms and the work area, his hands and the camera module large and sharp in frame. The camera does not move. THE PART HE IS BUILDING — the IronPal prototype's camera module: a tiny square camera board, about four centimetres a side, made of two small square circuit boards stacked one on top of the other with a gap between them, with a short black cylindrical lens barrel screwed into the centre of its front and, on the barrel, a bulging round glass FISHEYE lens like a small clear dome — the widest of wide-angle lenses. It is held face-up in a small helping-hands clamp so the glass dome points at the ceiling. A short black USB cable lies beside it with its end stripped into four thin coloured wires — red, black, green and white. Also on the desk: a soldering station with its iron in the stand, a coil of solder, a yellow digital multimeter with red and black probe leads, a roll of amber kapton tape, a phone lying face-down connected by a cable, and to his right a small bench oscilloscope. ONE CONTINUOUS ACTION, in this order, without cuts and without pauses between the parts: he takes the soldering iron in his right hand and the solder in his left and solders the four coloured wires of the USB cable, one after another, onto four small pads on the edge of the camera board's lower circuit board — at each pad the solder melts into a small shiny joint and a thin wisp of white smoke rises; he sets the iron back in its stand; he touches the multimeter's two probes to the first two pads, glancing down at the meter beside the clamp; then he clips the oscilloscope's probe onto the green wire, and the oscilloscope's screen shows the camera board's USB data: short, dense bursts of sharp square digital pulses repeating at a steady rhythm, separated by flat quiet gaps — the regular packet rhythm of a camera streaming video over USB — and he watches the screen with a small, satisfied nod, his eyes still on the instruments. Every movement is real and continuous — his hands travel, the solder flows, the smoke rises — never a frozen pose, never a jump. The glass fisheye dome is never touched. His hands are steady and practised. Each hand has exactly five correctly shaped fingers in every frame, both hands stay in frame, the iron is held only by its handle, and he never raises a hand to his face. On the desk there is ONLY the electronics work listed above: no clothes iron, no household appliances, no other circuit boards, no header pins, no breadboard. The camera module, the multimeter and the oscilloscope are plain and unbranded; nothing in frame is coloured teal. He is ALONE in the room. Audio: NO voice, NO speech, NO music — only quiet room tone, a faint sizzle at each joint and the click of the iron going back into its stand.
 ```
 
-**Judge K5b on continuity first**: does one action flow into the next — solder, iron down, probes on
-— with no jump or freeze? Then the solder: does it visibly melt and does smoke rise? Then the hands:
-five fingers, both in frame, the iron held by its handle and never by the hot tip. Then: goggles on
-and over the eyes throughout, sleeves down, no digits on either instrument, no teal. **If two rolls
-fail on continuity, drop the probing** and end on the iron going back into its stand — one motion is
-the smallest ask there is.
+**Take 1 review (2026-10-07, `Man_assembling_electronics_at_desk_20261007185435.mp4`).** The
+continuity fix worked: one unbroken solder → iron down → probe action, goggles and long sleeves
+right, his eyes on the work. **Five faults**, each now answered in the prompt:
+
+| fault | fix |
+|---|---|
+| he soldered **a generic blue board with header pins**, not IronPal hardware | the camera module described physically — two stacked 4 cm boards, a black lens barrel, a bulging glass fisheye dome — and the soldering is its USB lead; *"no other circuit boards, no header pins"* |
+| **a lavalier mic clipped to his shirt** | an explicit *no microphone, no lavalier, nothing on the collar or chest*. The model adds one because "man at a desk, filmed" pulls toward an interview set-up |
+| **the oscilloscope trace was generic** | the trace is now the board's USB data, described by shape (§ above) |
+| his gaze must never come to camera | stated five ways: eyes down in every frame, never up, never toward the camera, never at the lens, never acknowledging being filmed |
+| **a clothes iron on the desk**, and **not the founder's lab** — a generic white office with different monitors | *"no clothes iron, no household appliances"*, and the room restated against the reference image, which **must be attached**: this take looks as though it was made without it |
+
+**Judge take 2 in this order:** is it the camera module (stacked square boards, glass dome) → no mic →
+eyes never on the lens → the scope shows bursts → continuity → hands → no digits → the room is the
+lab. **If two rolls fail on the part**, drop the multimeter beat, keep solder → iron down → scope; if
+the fisheye dome keeps coming back flat, re-roll rather than accept a plain board — **the dome is what
+makes it the IronPal camera.**
 
 ### 6.2 K6 — the lab, at the keyboard
 

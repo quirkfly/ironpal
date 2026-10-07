@@ -7,7 +7,7 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**53 decisions: 24 EVIDENCE · 24 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
+**58 decisions: 27 EVIDENCE · 26 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
 same day, as the founder set the locations, supplied a photo of his lab and asked for the assembly — then
 asked to see it in the clip itself, Branch I).
 
@@ -282,6 +282,29 @@ and the wardrobe now changes between K4 and K5.
 for blank of digits; the scope shows only a green wave line. **EVIDENCE** — the film-wide no-writing
 rule; Flow garbles digits (K7 plates).
 
-**Most worth a veto, riskiest first:** Q51 (generated soldering that is not a recorded step), Q46 (generated assembly of the real parts), Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
+## Branch K — K5b take 1 reviewed (added 2026-10-07)
+
+**Q54. What does Peter solder?** The IronPal camera module's USB lead onto its pads. **EVIDENCE** —
+the founder's review (*"must be assembling the IronPal MVP hardware … see docs for the camera spec"*);
+the board is the ELP IMX415 200° (`ironpal-capture-hardware-decision-log.md` §5, §7: 38 × 38 mm,
+double-deck, M12, 1.56 mm fisheye) and its USB lead is pad-soldered (`ironpal-gym-session-01-plan.md`
+§1.4). **Revises Q51:** the soldering is now a joint the docs record, though not one they record the
+founder making.
+
+**Q55. How does Flow know what the board looks like?** Words only — two stacked 4 cm square boards,
+a black lens barrel, a bulging glass fisheye dome — because the clip's one reference is spent on the
+lab. **ASSUMED** — a reference of the board would lose the room, which take 1 already lost.
+*Against:* a word description of a niche board will drift; the dome is the feature to hold.
+
+**Q56. What does the oscilloscope show?** The board's USB 2.0 data: packet bursts, described by
+shape, no numbers. **ASSUMED** — a UVC camera streaming over USB is what a probe on D+ would see;
+it is the "correct signal" the founder asked for that a picture can make legible. *Against:* a
+technical viewer may expect an eye diagram or a decoded trace; bursts are the honest coarse view.
+
+**Q57. The lavalier mic and the clothes iron?** Banned by name. **EVIDENCE** — take 1 frames.
+
+**Q58. Gaze?** Never at the camera, stated five ways. **EVIDENCE** — the founder's direction.
+
+**Most worth a veto, riskiest first:** Q55 (a niche board described in words only), Q51/Q54 (soldering a joint the docs record but not who made it), Q46 (generated assembly of the real parts), Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
 Q10 (bandless Peter for two more clips).
