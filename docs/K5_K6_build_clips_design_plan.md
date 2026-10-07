@@ -212,10 +212,10 @@ are real and are shown by real footage only (§2): the generated desk stays gene
 | 3 | 3.5–5.0 | **the POV from that phone**: the bar in frame; the head tilts and it slides out | **H2**; fallback `input/kb/clips/20260614_*` | `PROTOTYPE 1` | *"Tilt my head, the bar's gone."* |
 | 4 | 5.0–6.4 | **dead-ends cards**, dealt and struck through | HTML graphic | — | the pause |
 | 5 | 6.4–8.0 | **the parts, flat-lay**: top-down on the real desk — the ELP board still in its case, the Arduino Nano 33 BLE, the terry headband, a roll of kapton tape, the cables, the power bank. Each part gets a name tag as it is touched by a finger | **H6** | per part: `ELP IMX415 · 200° FISHEYE` · `ARDUINO NANO 33 BLE · IMU` · `TERRY HEADBAND` | *"So: a fisheye."* |
-| 6a | 8.0–9.2 | **Peter soldering the camera module's USB lead**: goggles on, the fisheye dome up in the clamp, a wisp of smoke | **K5b**, 0.5–1.7 s | `THE BUILD · AUG 2026` | music |
-| 6b | 9.2–10.2 | **the test**: the oscilloscope behind the board showing its USB packet bursts, his eyes on it — the same shot, no cut | **K5b**, 4.5–5.2 s | — | music |
-| 6c | 10.2–10.6 | **the board pressed onto the front of the band**, lens facing out, and taped in place | **H5c** macro | — | music |
-| 6d | 10.6–10.9 | **the Nano** taped at the side of the band; **cables looped and taped** | **H5d** macro | `MCU + BLE + MOTION SENSORS · ONE BOARD` | music |
+| 6a | 8.0–9.6 | **Peter soldering the camera module**: goggles on, eyes on the joint | **K5b — SELECTED**: `input/kickstarter/k5k6/K5b_take4_1.15-5.00.mp4` (3.88 s available; use the steadiest 1.6 s) | `THE BUILD · AUG 2026` | music |
+ **K5b**, 4.5–5.2 s | — | music |
+| 6c | 9.6–10.3 | **the board pressed onto the front of the band**, lens facing out, and taped in place | **H5c** macro | — | music |
+| 6d | 10.3–10.9 | **the Nano** taped at the side of the band; **cables looped and taped** | **H5d** macro | `MCU + BLE + MOTION SENSORS · ONE BOARD` | music |
 | 6e | 10.9–11.6 | **the band goes on**, the cable over the shoulder to the A52 in the pocket | **H4** | `PROTOTYPE 2` | music |
 | 7 | 11.6–12.4 | **the first fisheye clip**: the 200° view from 2 Aug at the curl | **real**, `IPS_2026-08-02.15.33.00.0640.mp4` | `FIRST TEST · 2 AUG` | music |
 | 8 | 12.4–13.0 | **the next board**: the ESP32-C3 + ICM-42688-P PCB layout drawn on in teal, line by line | `docs/assets/imu-poc-pcb-layout.svg`, animated | `NEXT BOARD · DESIGNED, NOT YET BUILT` | music |
@@ -428,6 +428,15 @@ LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: n
 ```
 
 ### 6.1b K5b — the bench work, silent
+
+> **SELECTED 2026-10-07 — the founder's pick:** **take 4, 1.15–5.00 s**, cut to
+> `input/kickstarter/k5k6/K5b_take4_1.15-5.00.mp4` (1280×720, 24 fps, 3.88 s, re-encoded CRF 16 from
+> `Man_soldering_circuit_board_20261007192943.mp4`). The rest of the take is unusable — the soldering
+> iron vanishes from his hand after 5 s. **What the selection does not have**, so the edit must cover it:
+> **no oscilloscope payoff** (the scope beat was after 5 s), so §3.4's shot 6b is dropped and the real
+> assembly macros follow directly; and **two known defects are inside the kept range** — a small
+> clip-on mic on his chest, and a camera module larger than the real 38 mm board. Both were accepted
+> with the pick. **The take-5 prompt below stays on file** in case K5b is ever re-rolled.
 
 The second K5 generation (§3.4, §3.6): **Peter soldering the IronPal camera module's USB lead,
 checking it on the multimeter, then reading the board's USB data on the oscilloscope.** Silent on
