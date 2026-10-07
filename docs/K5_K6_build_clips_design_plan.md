@@ -78,13 +78,12 @@ construction.
 That puts generated screens in frame in both clips, and generated electronics in K5 — the two things
 §2 forbids being *presented as the product*. Five rules keep it honest:
 
-1. **Flow gets a blurred copy of the photo, never the original.** The real screens are full of
-   legible text: code, a terminal, and the IronPal landing page's hero, with its
-   *Stop logging. Just lift.* headline and the founder's image.
-   Handed that, Flow either reproduces it as garbled pseudo-text or paints a fake app. The reference
-   is `input/kickstarter/k5k6/lab_reference_flow_16x9.jpg`: every screen is blurred to a glow with
-   nothing legible, and the frame is cropped to 16:9 at 1920×1080. `scripts/k5k6/blur_lab.py` builds
-   it from the original and is re-runnable.
+1. **Flow gets the photo as it is — not blurred.** The founder's direction, 2026-10-07: the screens
+   stay exactly as photographed — code, a terminal, and the landing page's *Stop logging. Just lift.*
+   hero. The only changes are the EXIF rotation and a 16:9 crop at 1920×1080:
+   `input/kickstarter/k5k6/lab_reference_flow_16x9.jpg`, built by `scripts/k5k6/prep_lab.py`.
+   **What that costs:** Flow may copy the screens' text into the generated room as garbled
+   pseudo-text. The prompt still asks for nothing legible (rule 2), and the take gate below catches it.
 2. **The screens stay lit, behind him and out of focus.** Turning them away is impossible in this
    room, and switching them off would make it not this room. He sits in front of the desk, turned to
    camera, with the glowing screens soft behind him. **A take where any screen carries legible or
@@ -106,11 +105,10 @@ That puts generated screens in frame in both clips, and generated electronics in
    eyeline between the work and the lens.
 
 **The photo is also real footage**, and it belongs in K6 as an establishing still (§4.4, shot 1b):
-the founder's actual desk, the actual code. For that use the **original** goes in, with one change:
-the right-hand wall monitor's terminal shows local paths and another project's logs, so it is blurred
-for privacy, and so is the laptop's session. That file is `input/kickstarter/k5k6/lab_broll_still.jpg`,
-built by the same script. The two code monitors and the landing-page monitor stay as they are: the
-site is public, and its hero image is the same generated founder the film already shows.
+the founder's actual desk, the actual code, **unblurred, as photographed** —
+`input/kickstarter/k5k6/lab_broll_still.jpg`, the original upright at full resolution. The wall
+terminal shows local paths and another project's logs; at a 0.6 s push-in toward the code monitors
+they do not read, but **check the final frame before publishing**.
 
 **The consequence for K7.** The reveal's inset is the AI product still (`S3/selected.jpg`), and it
 now follows two clips of real prototype. **It needs a `DESIGN RENDER` chip** or the cut implies the
@@ -258,7 +256,7 @@ All on a second phone, **16:9, 4K, 24 fps**, landscape, and graded afterwards wi
 | **H6** | **the parts flat-lay** on the left end of the real desk: the ELP board in its case, the Nano 33 BLE, the terry band, kapton tape, the USB cables, the power bank — laid out square, a finger touching each in turn | phone on a top-down arm or held level above; daylight from the window, no harsh lamp; 4K so each part can be cropped for its name tag | 8 s |
 | **H5a–d** | **the assembly, step by step**, at the same spot: the steps of §3.6, one per take | **one step per take**, 3–4 s each, so each can be cut to 0.7 s; macro or top-down, hands entering and leaving frame. **Use a spare band or re-do it for the camera** — the working prototype does not need to be taken apart for this, as long as the steps shown are the steps it was built with | 4 × 4 s |
 | **H3** | ~~prototype 2 on a bench, push-in~~ | **folded into H6 and H5** | — |
-| **R1** | ~~a wide still of the real lab~~ **DONE** — `input/kickstarter/k5k6/lab_reference.jpg`, supplied by the founder 2026-10-07; the Flow copy has its screens blurred (§2.1) | — | — |
+| **R1** | ~~a wide still of the real lab~~ **DONE** — `input/kickstarter/k5k6/lab_reference.jpg`, supplied by the founder 2026-10-07; used unblurred (§2.1) | — | — |
 | **H4** | prototype 2 worn: the band goes on, cable over the shoulder to the A52 in the pocket | tripod, waist up, he turns once to show the cable | 5 s — **shot 6e**, no longer spare |
 
 **The real founder is on screen in H1 and H4, next to a generated Peter minted from his photos.**
@@ -409,8 +407,8 @@ opening, the hand rules, the bandless head, the one-speaker audio block — and 
 with a seated medium shot in the founder's lab. The rules of §2.1 are written into each.
 Paste as **plain text**: markup reaches Flow as prompt text (§5.12). Add the **`Peter Pitch`**
 character via *Add ingredients* and keep the name in the pasted text, then add
-**`input/kickstarter/k5k6/lab_reference_flow_16x9.jpg`** — the founder's lab with its screens
-blurred — as the frame reference for **both** clips. After a refusal, **retry before
+**`input/kickstarter/k5k6/lab_reference_flow_16x9.jpg`** — the founder's lab, unblurred, as
+photographed — as the frame reference for **both** clips. After a refusal, **retry before
 rewording** — policy refusals are free and often clear on a retry (runbook §0).
 
 The wardrobe clause drops the shorts and trainers: he is seated and framed from the waist up, so
@@ -458,7 +456,7 @@ drops (§3.4). If the line overruns 10 s, cut *"So:"* in K5, or *"Then"* in K6.
 
 1. **The real shoots first** (H1–H5, S1–S5). They are free, **S4
    decides what K6's shot 5 is**, and the lab reference is already built
-   (`scripts/k5k6/blur_lab.py`), so Flow can be opened as soon as the shoots are done.
+   (`scripts/k5k6/prep_lab.py`), so Flow can be opened as soon as the shoots are done.
 2. **The three Flow clips** — K5, K5b (silent assembly) and K6: 3 renders, plus re-rolls. Render
    K5b first: it is the one most likely to need the split fallback (§6.1b).
 3. **Graphics:** the chips, the dead-ends cards, the animated IMU trace — HTML renders, like the end card.

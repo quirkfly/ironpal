@@ -64,8 +64,7 @@ band before it would also breach Q6.
 
 **Q11. Where are they set?** **Both in the founder's real lab** — K5 assembling the hardware, K6
 coding and testing — one room, from one photo he supplied (`input/kickstarter/k5k6/lab_reference.jpg`; replaced by
-his updated shot of the same corner at 18:17 the same day, masks in `scripts/k5k6/blur_lab.py`
-re-measured to match).
+his updated shot of the same corner at 18:17 the same day, used unblurred, `scripts/k5k6/prep_lab.py`).
 **EVIDENCE** — the founder's direction, 2026-10-07 (TASK.md, two entries: first lab and office, then
 *"use it in both K5 and K6"*). *Superseded twice:* first both in the gym, then a separate lab and
 office; Branch G is how the room keeps Q6's protection.
@@ -160,12 +159,11 @@ at the same desk, so the cut matches by construction.
 hands resting. **EVIDENCE** — hands in motion near small objects are the film's worst failure (K7:
 eight takes; K6 broke its gesture guards), and working splits the eyeline from the lens.
 
-**Q32. The room has five lit screens. What does Flow see?** A copy with every screen blurred to a
-glow (`scripts/k5k6/blur_lab.py` → `lab_reference_flow_16x9.jpg`), and a prompt that keeps them lit,
-behind him, out of focus, with nothing legible; a take with pseudo-text on any screen is a re-roll.
-**EVIDENCE** — the original shows legible code, a terminal and the landing page; Flow cannot render
-text under the no-writing rule and garbles it, and a garbled screen would be a generated app. Turning
-the screens off or away would stop it being this room.
+**Q32. The room has five lit screens. What does Flow see?** The photo **unblurred**, as
+photographed, cropped to 16:9 (`scripts/k5k6/prep_lab.py`). **EVIDENCE** — the founder's explicit
+direction, 2026-10-07 (*"don't blur it like you did last time"*), reversing the blurred copy this
+question first chose. The prompt still asks for nothing legible on the generated screens, and a
+take with pseudo-text is a re-roll. *Risk now carried by the gate, not the reference.*
 
 **Q33. Wardrobe for the lab and office?** The same black tank top, bare head; shorts and trainers
 dropped from the prompt because they are out of shot. **ASSUMED** — continuity of the man across
@@ -189,7 +187,7 @@ consecutive clips in one room at one size can read as one long clip; the real cu
 carry most of the difference.
 
 **Q37. Does the photo also appear as real footage?** Yes — as K6 shot 1b, a 0.6 s establishing still,
-with the wall terminal and the laptop session blurred for privacy (`lab_broll_still.jpg`).
+unblurred, as the founder directed (`lab_broll_still.jpg`); check the final frame before publishing.
 **ASSUMED** — it is the only real image of the founder's workspace, and *"use it in both clips"*
 reads as wanting it seen. *Against:* "use it" may have meant only as the reference; the shot is
 0.6 s and drops without touching anything else.
