@@ -7,7 +7,7 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**61 decisions: 29 EVIDENCE · 27 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
+**63 decisions: 31 EVIDENCE · 27 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
 same day, as the founder set the locations, supplied a photo of his lab and asked for the assembly — then
 asked to see it in the clip itself, Branch I).
 
@@ -319,6 +319,18 @@ one, behind the clamp; "one single continuous shot, no cuts"; the last three sec
 **Q61. What gives up time for the scope?** Two wires instead of four, and the multimeter beat.
 **ASSUMED** — the fallback already written for this clip; the multimeter stays on the desk.
 *Against:* the founder asked for the multimeter in the scene; it is now a prop, not an action.
+
+## Branch M — K5b take 3 reviewed (added 2026-10-07)
+
+**Q62. Why did he solder the holder?** The board was clamped by its edges and the pads were "on the
+edge", so the iron went to the jaw. **EVIDENCE** — take 3 frames. Fix: no clamp or holder anywhere;
+the board flat on a mat; the pads described as silver squares on the board with the wires already on
+them; the iron's tip placed where wire meets pad.
+
+**Q63. Look, then smile?** Ordered explicitly: eyes lift to the screen, a held neutral look, then
+the smile with eyes still on it. **EVIDENCE** — the founder's direction; take 3 smiled at the board.
+The scope sits higher than the board so the look reads as a head movement. **ASSUMED**: that placement
+— *against:* a raised scope may crowd the frame above the board.
 
 **Most worth a veto, riskiest first:** Q55 (a niche board described in words only), Q51/Q54 (soldering a joint the docs record but not who made it), Q46 (generated assembly of the real parts), Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
