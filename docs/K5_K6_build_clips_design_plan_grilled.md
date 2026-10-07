@@ -7,7 +7,7 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**63 decisions: 31 EVIDENCE · 27 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
+**67 decisions: 34 EVIDENCE · 28 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
 same day, as the founder set the locations, supplied a photo of his lab and asked for the assembly — then
 asked to see it in the clip itself, Branch I).
 
@@ -331,6 +331,27 @@ them; the iron's tip placed where wire meets pad.
 the smile with eyes still on it. **EVIDENCE** — the founder's direction; take 3 smiled at the board.
 The scope sits higher than the board so the look reads as a head movement. **ASSUMED**: that placement
 — *against:* a raised scope may crowd the frame above the board.
+
+## Branch N — K5b take 4 reviewed (added 2026-10-07)
+
+**Q64. How is the camera "connected to the Arduino module"?** Both into one small USB hub, the hub to
+the phone. **EVIDENCE** — `ironpal-gym-session-01-plan.md` §1.3 (powered OTG hub → camera + Nano +
+phone) and the decision log: the camera is UVC over USB to the phone, the Nano streams over BLE.
+The founder pointed at "the actual circuit schema in docs"; the only schematic there
+(`docs/assets/imu-poc-schematic.svg`) is the unbuilt ESP32-C3 + ICM-42688-P motion board and contains
+no camera, so a direct camera-to-Arduino wire would be invented. *Against:* the founder may want the
+two visibly wired together; the hub is the truthful version of that.
+
+**Q65. The smile?** None — serious throughout. **EVIDENCE** — the founder's direction; reverses Q63's
+smile.
+
+**Q66. Tools?** A closed inventory of seven objects, with everything take 4 added banned by name.
+**EVIDENCE** — take 4 frames; the multimeter, which the founder added earlier, is dropped: it was
+already only a prop (Q61) and it was one of the unused, badly rendered tools. **ASSUMED** — *against:*
+the founder asked for it in the scene once.
+
+**Q67. Size?** Sized against his hands, not in centimetres alone. **ASSUMED** — models size objects by
+comparison; "38 mm" did not stop take 4 rendering a lens barrel as tall as the board.
 
 **Most worth a veto, riskiest first:** Q55 (a niche board described in words only), Q51/Q54 (soldering a joint the docs record but not who made it), Q46 (generated assembly of the real parts), Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
