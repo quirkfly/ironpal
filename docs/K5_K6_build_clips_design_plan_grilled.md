@@ -7,7 +7,7 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**48 decisions: 21 EVIDENCE · 23 ASSUMED · 4 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
+**53 decisions: 24 EVIDENCE · 24 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
 same day, as the founder set the locations, supplied a photo of his lab and asked for the assembly — then
 asked to see it in the clip itself, Branch I).
 
@@ -253,6 +253,35 @@ the band sits between the electronics and the skin.
 fails, the real macros carry the beat alone. **ASSUMED** — four discrete motions in 8 s is more than
 any clip in this film has rendered. *Against:* two more renders.
 
-**Most worth a veto, riskiest first:** Q46 (generated assembly of the real parts), Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
+## Branch J — K5b rewritten (added 2026-10-07)
+
+**Q49. Why did the four-step K5b produce slop?** Four discrete hand tasks in 8 s, each a separate
+start and stop, with no through-line. **EVIDENCE** — the founder's review (*"the assembly is
+disconnected and unclear"*), and it matches the film's record: no clip has rendered more than one
+continuous movement well (K7, K8). Q48's split fallback treated the symptom.
+
+**Q50. What replaces it?** One continuous bench task: solder two pins, set the iron down, probe with
+the multimeter, glance at the oscilloscope, nod. **EVIDENCE** for the instruments, soldering and
+wardrobe (the founder's direction, TASK.md); the single-through-line construction is **ASSUMED** —
+each part leads physically into the next, so there is nothing to disconnect. *Against:* still five
+beats; the fallback drops the probing and ends on the iron going back.
+
+**Q51. Is soldering true to this build?** Not as a step of prototype 2: the Nano needs no soldering
+and the docs record no soldered step. The docs do record a soldering kit and header pins for the next
+board's breakouts. **OPEN** — K5b is framed as *the build in general*, cut before the real assembly
+macros, never inside the step sequence; whether that is fair is the founder's call, since he asked
+for it and knows what he soldered.
+
+**Q52. Long sleeves and goggles in K5's talking shot too?** Long sleeves yes, goggles on the desk.
+**ASSUMED** — K5 and K5b are cut together inside one clip; a tank top in the talking head and a
+long-sleeve shirt in the bench shot reads as a continuity error. Goggles off for the talking shot
+keeps the face clear for lip-sync. K6 keeps the tank top. *Against:* the founder asked only for K5b,
+and the wardrobe now changes between K4 and K5.
+
+**Q53. Numerals on the instruments?** None — the multimeter display and the scope screen are asked
+for blank of digits; the scope shows only a green wave line. **EVIDENCE** — the film-wide no-writing
+rule; Flow garbles digits (K7 plates).
+
+**Most worth a veto, riskiest first:** Q51 (generated soldering that is not a recorded step), Q46 (generated assembly of the real parts), Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
 Q10 (bandless Peter for two more clips).
