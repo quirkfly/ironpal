@@ -19,7 +19,10 @@ Settings carried over from [`youtube_upload_K1_K9.md`](youtube_upload_K1_K9.md) 
 
 ## Title
 
-> IronPal — it logs your sets, you just lift
+> IronPal — how I built a headband that logs your sets
+
+*Retitled 2026-10-07 after publishing: it first shipped with the K1_K9 video's exact title, which made
+the two indistinguishable on the channel page.*
 
 ## Description
 
