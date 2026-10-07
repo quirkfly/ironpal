@@ -26,6 +26,13 @@ variants listed in `credentials/crowdfunding_accounts.txt` (gitignored, mode 600
 - Story from `ironpal-campaign-core.md`, written to the claim guardrails (weight reading in development; hybrid privacy; AI-video disclosure for the film)
 - Rewards (EUR, net of VAT, placeholders until a BOM exists): Founding Supporter €13 · Super Early Bird €42 (≤200) · Early Bird €59 (≤500) · Complete Kit €85 · Gym Owner Pack €344 (≤50); delivery estimate September 2027
 
+- Reward items (added 2026-10-07): Founding Supporter = Founders page listing + early app access ×1 · Super Early Bird = IronPal headband ×1 + Premium app – 6 months ×1 · Early Bird = headband ×1 + Premium app – 12 months ×1 · Complete Kit = headband ×1 + Spare band ×1 + Premium app – lifetime ×1 · Gym Owner Pack = headband ×5 + Spare band ×5 + Premium app – lifetime ×5 + Gym partnership onboarding ×1. A reward's *Is published* switch is read-only; the platform sets it.
+- Currency: **USD isn't offered.** In Settings → General → Change currency, the only choices are EUR (the existing SK IBAN) and EUR (new account). The dialog says to email help@indiegogo.com for any other currency. Changing currency doesn't convert prices that are already set.
+
+- Website: set to `https://ironpal.co` under Creator → Settings → Communication channels (`/admin/creator-settings/quirkfly/communication`). The project's own General settings have no website field. The story ends its "Who is behind it" section with "Follow the build, and get launch-day updates, at ironpal.co.", where ironpal.co links to https://ironpal.co. The creator avatar is `docs/crowdfunding/media/thumb_700.jpg`.
+
+- Submission (2026-10-07): **not possible yet.** Business verification (individual data and bank account SK…448, EUR) is IN REVIEW, which can take up to 5 working days. *Publish project preview* stays disabled until it clears, and submitting comes after that. Run `/indiegogo-status` to check; it is read-only and never clicks Publish or Submit.
+
 ## Things noticed along the way
 
 - **Gmail storage is at 14.71 of 15 GB.** Once it fills, platform mail (KYC, review results, backer messages) bounces.

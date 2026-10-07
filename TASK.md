@@ -2903,3 +2903,165 @@ Highlights
 
 
 https://breakloop.co
+
+---
+
+using /swarm skill execute the following tasks:
+
+create a detailed plan outlining all steps required to product a crowdfunding campaign for ironplan on top 10 crowdfunding platforms in the world
+
+save the plan to docs than apply /grill-me-auto skill then implement the plan
+
+make sure each agent from the swarm focuses on one specific crowdfunding platform
+
+use credentials/peter.dermek.txt when registering on the crowdfunding platforms and creating a campaign
+
+sum to crowdfund: $50,000
+
+do not launch the campaigns only create and prepare them for review and approval before going live
+
+set launch date for all campaigns to 14 days from now
+
+operate in autonomous mode until all tasks are completed and only than report back with the results
+
+
+---
+
+where do i speficify individual pledge amounts in indiegogo platform and related perks?
+
+----
+
+translate below bank statement to english and redact total amounts
+
+file:///home/quirkfly/Downloads/2026-09-30_9_SK7575000000004020320448_M_SK%20(3).pdf
+
+---
+
+why there is not ironpal website anywhere?
+
+---
+
+what is the minimum pledge amount on the Indiegogo platform?
+
+---
+
+submit the indiegogo campaign for review and approval before going live and create a claude skill to check its status
+
+---
+
+we need to extend YT promo video taht was built in GF to be suitable for crowdfunding campaigns. Such a video in our case require two clips dedicated to IronPal MVP research and building process (hardware and software included).
+
+here is a timeline for the video clips:
+
+K4 - "i got tired of counting and started to build my own solution" - as is
+K5 - new clip dedicated to IronPal MVP hardware building process
+K6 - new clip dedicated to IronPal MVP software building process
+existing K5 - will become K7
+
+come up with a detailed design and storyboard for the new video clips, including shot lists, dialogue, and visual elements.
+
+save the plan to docs that apply the /grill-me-auto skill
+
+---
+
+K5 will shot inside a lab where i am assembling the IronPal MVP hardware components.
+K6 will shot inside an office where i am working on the IronPal MVP software development, including coding and testing.
+
+--
+
+last photo in the gallery of attached samsung device contains a shot of my lab..use it in both K5 and K6 clips.
+
+---
+
+K5 must feature head band prefabricated components being assembled into the IronPal MVP hardware and also hardware parts mentioned in docs (e.g. IMU arduino modules, sensors, and microcontrollers)
+
+---
+
+i have updated lab photo..use last photo in the samsung device gallery for both K5 and K6 clips.
+
+---
+
+i dont see any hardware assembly instructions in the K5 clip.
+
+---
+
+K5b prompt is produces a slop..the assembly is disconnected and unclear. Add there a multimeter and an oscilloscope and make peter do some soldering work. Also ensure he is wearing a long-sleeve shirt and safety goggles.
+
+---
+
+review of /home/quirkfly/Downloads/Man_assembling_electronics_at_desk_20261007185435.mp4
+
+- peter is soldering a completely different piece of hardware..he must be assembling the IronPal MVP hardware component see docs for the camera spec and adjust the prompt accordingly
+- peter is wearing a mic cliped to his shirt - remove it
+- oscilloscope shows a bogus reading - it must be showing the correct signal from the IronPal MVP hardware component being assembled
+- peter MUST NOT LOOK into the camera, he must be focused on the assembly of the IronPal MVP hardware component
+
+---
+
+review of [quirkfly: ~/job_stuff/prj/ironpal] main(+100/-1,11)* 12m0s 130 ± ls ~/Downloads/Man_soldering_camera_module_20261007190602.mp4 
+/home/quirkfly/Downloads/Man_soldering_camera_module_20261007190602.mp4
+
+- screens are white and sudenly they contain a content
+- oscilloscope scene is shot from a different angle from a completely different lab and the scene is very short
+
+---
+
+review of /home/quirkfly/Downloads/Person_soldering_camera_module_20261007192226.mp4
+
+- peter is soldering a corner of the holder not the IronPal MVP hardware component - fix it!!!
+- peter must look at the oscilloscope screen prior to smile in satisfaction
+
+---
+
+review /home/quirkfly/Downloads/Man_soldering_circuit_board_20261007192943.mp4
+
+- peter must not smile with a smirk, make his face focused and serious while assembling the IronPal MVP hardware component
+- there are too many soldering tools visible in the scene, some of them are not even being used and wrongly rendered
+- arduino IMU module is MISSING
+
+---
+
+use 1:15s - 5:00s snippet from below video for K5 clip - the rest is unusable (as solding tool suddenly disappears)
+
+/home/quirkfly/Downloads/Man_soldering_circuit_board_20261007192943.mp4
+
+---
+
+you are right, that is unacceptable. change the prompt to address both flaws
+
+---
+
+this a complete SLOP with unlogical actions in the clip..FIX IT
+
+/home/quirkfly/Downloads/Engineer_soldering_circuit_board_20261007212419.mp4
+
+---
+
+it is even worse than the previous takes, with multiple illogical actions and disconnected assembly steps.
+
+there is a flame which never happens while soldering..fucking SLOP..fix it
+
+/home/quirkfly/Downloads/Man_soldering_circuit_board_comp…_20261007213320.mp4
+
+---
+
+review of /home/quirkfly/Downloads/Man_soldering_circuit_board_20261007214156.mp4
+
+- there is no smoke comming from the soldering point
+- there is music playing in the background, which should be removed to maintain focus on the assembly process
+
+---
+
+K5 is acceptable..let's focus on K6 now.
+
+K6 must feature peter in the lab coding..he is focused on writing and debugging the software for the IronPal MVP hardware component. No talking or distractions should be present in the scene. No facing the camera etiher, just showing his hands on the keyboard and the computer screen. It is important that the screens feature the code he is working on clearly..it does not have to be readable from a distance, but it should be clear enough to understand the context of his work.
+
+---
+
+here is K6 source
+
+/home/quirkfly/Downloads/Man_typing_code_at_desk_20261007220221.mp4
+
+
+remove typing sound and produce a master video featuring all clips
+
