@@ -7,7 +7,8 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**28 decisions: 10 EVIDENCE · 15 ASSUMED · 3 OPEN.**
+**35 decisions: 14 EVIDENCE · 18 ASSUMED · 3 OPEN** (Q29–Q35 and revisions to Q10–Q12 added
+the same day, after the founder set the locations).
 
 ---
 
@@ -55,18 +56,19 @@ planned, not built.
 
 ## Branch C — the generated shots
 
-**Q10. Which character?** `Peter Pitch FullBody`, bandless. **ASSUMED** — the band's reveal belongs
-to K7; a generated band before it spends the reveal, and a generated *prototype* would breach Q6.
-*Against:* two more clips without the product on his head.
+**Q10. Which character?** `Peter Pitch`, bandless — revised 2026-10-07 from `Peter Pitch FullBody`
+once he was seated. **EVIDENCE** — `Peter Pitch` is the waist-up variant K2 and K3 resolved against
+(`IRONPAL_PROMO_VIDEO_SCRIPT_V1.md` §4); the band's reveal still belongs to K7, and a generated
+band before it would also breach Q6.
 
-**Q11. Where are they set?** The same gym, at the rack (K5) and the bench (K6). **ASSUMED** — a
-workbench scene would need screens and electronics, which Flow garbles under the no-writing rule,
-and which would be generated prototype. *Against:* a build story told in a gym is a little
-abstract; the real B-roll carries the workshop.
+**Q11. Where are they set?** **K5 in a lab, assembling the hardware; K6 in an office, coding and
+testing.** **EVIDENCE** — the founder's direction, 2026-10-07 (TASK.md). *Superseded:* the first pass
+set both in the gym, to keep generated electronics and screens out of frame; Branch G is how the
+new locations keep that protection.
 
-**Q12. Framing?** Waist-up, centred, standing, locked-off 35 mm. **EVIDENCE** — the standing
-waist-up talk is the old K5's proven shot; left-of-centre has the worst record in the film
-(`K7_design_plan.md` §3.1), and no inset means nothing needs it.
+**Q12. Framing?** Seated, waist-up, centred, locked-off 35 mm at seated chest height.
+**EVIDENCE** — the waist-up talk is the old K5's proven shot; left-of-centre has the worst record
+in the film (`K7_design_plan.md` §3.1), and no inset means nothing needs it.
 
 **Q13. Clip length and model?** 10 s, Omni 1.1 Flash, fresh generation. **EVIDENCE** — K9 was 10 s on
 Omni 1.1 Flash; an Extend comes back at 720p and loses its gesture guards (§5.12). *Cost:* uniform
@@ -139,6 +141,41 @@ one clip).
 
 ---
 
-**Most worth a veto, riskiest first:** Q16 (did the phone rig really fail on tilt?), Q22/Q25
+## Branch G — the lab and the office (added 2026-10-07)
+
+**Q29. May a generated lab and office show electronics and screens?** The *room* may be generated;
+nothing in it may read as the product. **ASSUMED** — a lab and an office are settings like the gym;
+the line Q6 draws is at the prototype and the app. *Against:* a viewer cannot tell a generated
+bench from a real one, so any board in shot is a risk — hence Q31–Q32.
+
+**Q30. How do the generated rooms match the real B-roll shot in the real rooms?** A wide still of
+each real room (R1, R2) as Flow's reference frame. **ASSUMED** — the K7/K8 reference-still technique
+held; otherwise the cut between generated and real lab shows a different room. *Against:* a
+reference frame may pull the composition away from the waist-up framing the prompt asks for.
+
+**Q31. Does he assemble or type while talking?** No — he stops, looks up and talks with his hands
+resting. **EVIDENCE** — hands in motion near small objects are the film's worst failure (K7: eight
+takes; K6 broke its gesture guards), and working splits the eyeline from the lens.
+
+**Q32. What is on the bench and the desk?** Generic, soft-focus parts: no headband, no camera
+module, nothing teal; every screen faces away or is dark. **EVIDENCE** — Flow cannot render UI under
+the no-writing rule, and a garbled screen would be a generated app; the first real cutaway of the
+prototype follows within 1.5 s.
+
+**Q33. Wardrobe for the lab and office?** The same black tank top, bare head; shorts and trainers
+dropped from the prompt because they are out of shot. **ASSUMED** — continuity of the man across
+eleven clips outweighs dressing for the room. *Against:* a tank top in an office reads as costume.
+
+**Q34. Grade them to the gym?** No — pull toward the film's look at ~40 % instead of 70 %, keeping
+the lab warm-lamp and the office daylight-cool. **ASSUMED** — two new rooms graded into the gym look
+like the gym. *Against:* less unity across the cut.
+
+**Q35. Film the real assembly and coding too?** Yes — H5 (soldering and seating the board in the
+real lab) and S5 (over-the-shoulder coding with tests passing in the real office), as spares cut
+into K5 shot 5 and K6 shot 2. **ASSUMED** — the real rooms will be lit and set up anyway, and real
+hands on the real prototype are the strongest frames a crowdfunding viewer can get. *Against:*
+another ~15 min of shooting.
+
+**Most worth a veto, riskiest first:** Q29 (generated lab electronics next to the real prototype), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
 Q10 (bandless Peter for two more clips).

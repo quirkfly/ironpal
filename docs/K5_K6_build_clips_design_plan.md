@@ -1,6 +1,8 @@
 # K5 + K6 — how IronPal was built · design plan
 
-**Written 2026-10-07. Grilled in auto mode the same day — ledger:
+**Written 2026-10-07. Grilled in auto mode the same day, then revised the same day when the founder
+set the locations: K5 in a lab where he assembles the MVP hardware, K6 in an office where he codes and
+tests the software (§2.1). Ledger:
 [`K5_K6_build_clips_design_plan_grilled.md`](K5_K6_build_clips_design_plan_grilled.md).** Two new
 clips that turn the K1–K9 YouTube promo into a crowdfunding film: the MVP **hardware** build (new K5)
 and the MVP **software** build (new K6), inserted between the turn and the reveal. Companion to
@@ -42,12 +44,13 @@ as appendix. Put after the reveal, they would read as a technical footnote to a 
 backers judge a hardware project on whether the thing exists. Both platforms' rules point the same
 way: Kickstarter bans photorealistic renderings presented as a product; Indiegogo requires an honest
 representation of the project's current state. The rest of the film is generated, and that is
-acceptable because it is a founder talking. **A generated workbench, a generated circuit board or a
-generated app screen in a "how I built it" clip would be a fabricated prototype.** So:
+acceptable because it is a founder talking. **A generated circuit board or a generated app screen in
+a "how I built it" clip would be a fabricated prototype.** A generated *room* is not: the lab and the
+office are settings, like the gym. So:
 
-- **Google Flow generates Peter only.** He delivers the line, so the voice comes from the
-  generation, as the founder has ruled for every clip (`K7_design_plan.md` §1). He is on screen for
-  the head and the tail of each clip.
+- **Google Flow generates Peter and the room, never the product.** He delivers the line, so the
+  voice comes from the generation, as the founder has ruled for every clip (`K7_design_plan.md` §1).
+  He is on screen for the head and the tail of each clip, in the lab (K5) or the office (K6).
 - **The middle of each clip is real material, full frame**, cut over his voice: footage shot through
   the prototypes, photographs and video of the actual rig, real screen recordings of the real app
   and repo, and real sensor data.
@@ -58,6 +61,29 @@ generated app screen in a "how I built it" clip would be a fabricated prototype.
   enclosure and the custom PCB are planned, not built (`ironpal-capture-hardware-decision-log.md`,
   `ironpal-tier1-capture-module-spec.md`). The PCB *layout* may appear, chipped `DESIGN · NOT YET
   BUILT`. A rendered board may not.
+
+### 2.1 The lab and the office — what may be generated in them
+
+The founder set the locations on 2026-10-07: **K5 in a lab, assembling the MVP hardware; K6 in an
+office, coding and testing the software.** That moves the head and the tail of both clips out of
+the gym and puts generated electronics and generated screens in frame — exactly the two things §2
+forbids being *presented as the product*. Four rules keep the settings honest:
+
+1. **Shoot the real rooms first and give Flow a still of each as a reference.** The real B-roll is
+   filmed in the same lab and office (§3.5, §4.5), so a generated room that looks nothing like the
+   real one would show up at every cut. One wide still of each real room, taken from the generated
+   shot's camera position, goes in as the reference frame, the technique K7 and K8 established.
+2. **In the lab, the work on the bench is generic and soft.** Loose components, a soldering
+   station, tweezers and a small anonymous board, kept in shallow focus. **No headband on the bench,
+   no camera module, nothing teal.** The first real cutaway — the actual prototype — follows within
+   1.5 s, so the real thing is what the viewer reads as the prototype.
+3. **In the office, every screen faces away from the camera, or is off.** Flow cannot render UI
+   under the no-writing rule, and a garbled screen would be a generated app. The real code and the
+   real app are the screen recordings (S1, S3).
+4. **He stops working to talk.** He is at the bench or desk, mid-task, and looks up and talks to
+   camera with his hands resting on the surface. Talking while soldering or typing puts both hands
+   in motion near small objects — the highest hand risk in this film (`K7_design_plan.md` §3.4) — and
+   splits the eyeline between the work and the lens.
 
 **The consequence for K7.** The reveal's inset is the AI product still (`S3/selected.jpg`), and it
 now follows two clips of real prototype. **It needs a `DESIGN RENDER` chip** or the cut implies the
@@ -115,12 +141,16 @@ entry **20** (entry 19 is K10's pending form claim):
 
 | | |
 |---|---|
-| character | **`Peter Pitch FullBody`**, bandless. The band is revealed in K7; the prototype is shown in real footage, never generated |
-| framing | medium, **waist up, centred**, locked-off 35 mm at chest height. No inset, so no reserved third |
-| place | the dumbbell rack of the same dark gym, the same scene tokens as K1–K4 |
-| action | standing, talking to camera, low open gestures; **one rueful half-smile** on *"the bar's gone"* |
+| character | **`Peter Pitch`**, bandless — the waist-up variant K2 and K3 resolved against, because he is seated. The band is revealed in K7; the prototype is shown in real footage, never generated |
+| framing | medium, **waist up, centred**, locked-off 35 mm at seated chest height. No inset, so no reserved third |
+| place | **a small electronics lab**: a workbench with a soldering station, a magnifier lamp, small loose components and a coil of cable; pegboard of tools behind; lit by a warm desk lamp and the cool spill of a window — matched to the real lab's reference still (§2.1) |
+| wardrobe | the same plain black tank top and nothing on his head: the film's continuity outweighs dressing for the room |
+| action | seated at the bench, he sets a small tool down, looks up and talks to camera with his hands resting on the bench edge; **one rueful half-smile** on *"the bar's gone"* |
 | pause | **a deliberate beat of silence before *"So: a fisheye."*** — the dead-ends graphic plays in it |
 | model | **Omni 1.1 Flash, 10 s, 16:9, 1080p**, a fresh generation — the K9/K10 precedent; an Extend comes back at 720p (§5.12) |
+
+**K4 → K5 is now a change of room**: the gym walk-in ends on *"started building my own solution"*
+and the next frame is the lab. That cut is the story; it needs no transition.
 
 Only the first ~1.5 s and the last ~1.5 s of Peter are on screen. **The take is still judged on the
 whole lip-sync**, because the voice runs under the cutaways and a slip in the middle is audible.
@@ -129,13 +159,13 @@ whole lip-sync**, because the voice runs under the cutaways and a slip in the mi
 
 | # | time | picture | source | chip | under the line |
 |---|---|---|---|---|---|
-| 1 | 0.0–1.5 | Peter, waist up | **Flow** | — | *"Prototype one:"* |
+| 1 | 0.0–1.5 | Peter at the lab bench, looking up from the work | **Flow** | — | *"Prototype one:"* |
 | 2 | 1.5–3.5 | **the founder wearing the A52 strapped to a headband**, seen from a second phone, side-on in the gym mirror | **new real shoot H1** | `PROTOTYPE 1 · JUN 2026` | *"my phone, strapped to my forehead."* |
 | 3 | 3.5–5.0 | **the POV from that phone**: a barbell in frame; the head tilts and the bar slides out of the top | **new real shoot H2**, recorded at the same time as H1; fallback is the most tilted stretch of `input/kb/clips/20260614_*` | `PROTOTYPE 1` | *"Tilt my head, the bar's gone."* |
 | 4 | 5.0–6.4 | **dead-ends graphic**: four cards dealt fast and struck through — *cap · brim blocks the view*, *360 camera · 8 cm tall*, *"8K mini" · fake listing*, *narrow lens · loses the bar* | HTML motion graphic, brand tokens | — | the pause |
 | 5 | 6.4–8.0 | **prototype 2 on the bench**: the uncased ELP board and the Nano in the terry band, slow handheld push-in, the cable trailing off frame | **new real shoot H3** | `PROTOTYPE 2 · AUG 2026` | *"So: a fisheye."* |
 | 6 | 8.0–8.8 | **the first fisheye clip**: the 200° view from `IPS_2026-08-02…` at the curl | **real**, `input/kb/clips/IPS_2026-08-02.15.33.00.0640.mp4` | `200° · FIRST TEST 2 AUG` | — |
-| 7 | 8.8–10.0 | Peter, waist up, holding the look | **Flow** | — | — |
+| 7 | 8.8–10.0 | Peter at the bench, holding the look | **Flow** | — | — |
 
 **Cut on the words, not the seconds.** The times above assume ~2 w/s. Re-time every cut to the
 whisper word boundaries of the actual take, the way the master's captions already are (`K1_K9_mastering.md`
@@ -150,6 +180,8 @@ All on a second phone, **16:9, 4K, 24 fps**, landscape, and graded afterwards wi
 | **H1** | the founder wearing the A52 strapped to a headband, as in June | second phone on a tripod, side-on or into the mirror; he does a slow curl and tilts his head once | 6 s |
 | **H2** | the A52's own recording during H1 | the strapped phone records at the same time; landscape, the 90° rotation fixed in post as in POC v1 | same take |
 | **H3** | prototype 2 on a black bench: the uncased ELP board plus the Nano in the terry band, cable trailing | handheld, slow push-in, low warm light, macro-close at the end | 8 s |
+| **H5** | **the founder assembling in the real lab**: soldering the Nano's header pins, then seating the ELP board in the band | tripod over the shoulder, then a close-up of the hands; 1080p is enough | 10 s — **cut into shot 5** before the push-in if H3 alone is too static |
+| **R1** | **a wide still of the real lab** from where the generated shot's camera sits | for Flow's reference frame (§2.1); the bench, the lamp, the window side | 1 still |
 | **H4** | prototype 2 worn: the band on, cable over the shoulder to the A52 in the pocket | tripod, waist up, he turns once to show the cable | 5 s — **spare**, used if H3 reads as too static |
 
 **The real founder is on screen in H1 and H4, next to a generated Peter minted from his photos.**
@@ -211,20 +243,27 @@ game."* — 17 words, the same picture, true today.
 
 ### 4.3 The generated shot (Peter)
 
-The same as K5 (§3.3), with two differences: **he stands by the flat bench**, so the two clips are
-not one shot, and the read lifts from wry to **conviction**, landing *"like a game"* with a small
-grin. **No pause.**
+The same as K5 (§3.3) — `Peter Pitch`, seated, waist up, centred, locked off — with three
+differences:
+
+- **The room is an office**: a desk with a laptop and a second monitor, **both screens facing away
+  from the camera or dark** (§2.1); a phone face-down on the desk; a shelf and a window behind;
+  cooler, daylight-led light than the lab, so the two rooms read as two rooms. Matched to the real
+  office's reference still.
+- **The action:** he turns from the laptop to the camera, hands resting on the desk, and talks.
+  The "testing" half of the brief is carried by the real footage (S2, S4), where it is true.
+- **The read** lifts from wry to **conviction**, landing *"like a game"* with a small grin. **No pause.**
 
 ### 4.4 Shot list — 10.0 s
 
 | # | time | picture | source | chip | under the line |
 |---|---|---|---|---|---|
-| 1 | 0.0–1.4 | Peter, by the bench | **Flow** | — | *"Then the software."* |
+| 1 | 0.0–1.4 | Peter at the office desk, turning from the laptop to camera | **Flow** | — | *"Then the software."* |
 | 2 | 1.4–2.8 | **the repo**: a fast scroll through `git log`, 130+ commits since April, landing on the rep-counter Kotlin module | **new screen recording S1** of the real repo | `POC · MAY 2026` | *"It counts reps…"* |
 | 3 | 2.8–4.6 | **the motion trace**: a real Nano IMU recording of a set, the trace drawn left to right, each rep peak lighting teal as it is counted | **new capture S2** → `/plot-sensors`, animated | `REAL SENSOR DATA` | *"…from motion,"* |
 | 4 | 4.6–6.6 | **the labeling studio**: a real clip in the studio, the founder tags it and the tag lands | **new screen recording S3** of the app on the A52 | `TRAINING GAME · SEP 2026` | *"and you teach it your exercises,"* |
 | 5 | 6.6–8.6 | **the recogniser, live**: the LiveHud on the A52 naming *Bulgarian split squat* and counting real reps, with the founder doing them, picture-in-picture | **new shoot S4** — the A52 screen recorded during a real set, plus a tripod shot of the set | `LIVE · REAL SET` | *"like a game."* |
-| 6 | 8.6–10.0 | Peter, landing the grin | **Flow** | — | — |
+| 6 | 8.6–10.0 | Peter at the desk, landing the grin | **Flow** | — | — |
 
 **Shot 5 is the most valuable four seconds in the crowdfunding cut**: the only real recognition in
 the film. The pairing is the point: the founder's leg goes down on the tripod shot, the counter on
@@ -238,6 +277,8 @@ the phone moves. The same rule as K9's inset applies, but this time nothing need
 | **S1** | the repo: `git log --oneline` scrolling, then the rep-counter source | screen capture at 1080p, dark terminal theme, font ≥ 20 px so it survives at film scale; **no secrets, tokens or `.env` on screen** | 6 s |
 | **S2** | a real set with the Nano on: 6–8 Bulgarian split squats | record the BLE session to `input/kb/sessions/`, run `/plot-sensors`, then animate the trace with the rep marks; the only real IMU log on disk today is stationary | one set |
 | **S3** | the studio on the A52: open a real KB clip, tag it, confirm | Android screen recording at native resolution | 8 s |
+| **S5** | **the founder coding in the real office**: over the shoulder, the real repo on the real screen, then a run of the tests passing | tripod behind the chair; the screen is real here, so it may show; **no secrets on screen**, as S1 | 6 s — **spare**, intercut with S1 if the scroll alone is thin |
+| **R2** | **a wide still of the real office** from the generated shot's camera position | for Flow's reference frame (§2.1) | 1 still |
 | **S4** | **the live split squat**: the A52 screen recording LiveHud while the founder does 4–6 reps wearing the rig, plus a tripod side shot of the same set | the screen recording and the tripod clip synced on a clap | one set, 3 takes |
 
 **S4 is a test, not just a shot.** No gym session documenting a correct live recognition exists on
@@ -253,7 +294,7 @@ shot 5 is real and is used as recorded. If it does not, it is not faked.** The f
 | element | spec |
 |---|---|
 | aspect | 1920×1080, 24 fps — the master's format |
-| Flow head/tail | graded with the film by `scripts/master/build.py` stage 5 (Y ≈ 42, warmth +22) |
+| Flow head/tail | graded by `scripts/master/build.py` stage 5, but **not pulled all the way to the gym look**: the lab keeps its warm lamp against cool window spill, the office stays cooler and daylight-led. Two new rooms should not be graded into the gym; the solver's 70 % pull toward Y 42 / warmth +22 is reduced to ~40 % for these two |
 | real footage | **lighter grade than the Flow clips**: the same warmth target, contrast left alone, no fake film look. Raw phone footage should look like phone footage |
 | fisheye | shown **uncorrected** in shot 6 of K5. The distortion is the point |
 | screen recordings | full frame, no phone bezel, slow 1.00→1.04 push-in so a static UI still moves |
@@ -267,27 +308,32 @@ shot 5 is real and is used as recorded. If it does not, it is not faked.** The f
 
 ## 6. The two Flow prompts, ready to paste
 
-Both are built on the accepted K4 prompt (`IRONPAL_PROMO_VIDEO_SCRIPT_V1.md` §5.7), with the walk-in
-replaced by a standing medium shot, the phone removed, the line changed and a pause clause added in
-K5. Paste as **plain text**: markup reaches Flow as prompt text (§5.12). Add the
-**`Peter Pitch FullBody`** character via *Add ingredients* and keep the name in the pasted text.
-After a refusal, **retry before rewording** — policy refusals are free and often clear on a retry
-(runbook §0).
+Both keep the accepted K4 prompt's guards (`IRONPAL_PROMO_VIDEO_SCRIPT_V1.md` §5.7) — the no-writing
+opening, the hand rules, the bandless head, the one-speaker audio block — and replace the gym walk-in
+with a seated medium shot in the lab or the office. The four rules of §2.1 are written into each.
+Paste as **plain text**: markup reaches Flow as prompt text (§5.12). Add the **`Peter Pitch`**
+character via *Add ingredients* and keep the name in the pasted text, then add the **real room's
+reference still** (R1 for K5, R2 for K6) as the frame reference. After a refusal, **retry before
+rewording** — policy refusals are free and often clear on a retry (runbook §0).
 
-### 6.1 K5
+The wardrobe clause drops the shorts and trainers: he is seated and framed from the waist up, so
+they are out of shot, and describing what is out of frame invites the model to bring it into frame.
 
-```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no UI, and no letters or numerals anywhere in frame. Peter Pitch FullBody stands by a rack of dumbbells in a dark, moody weights gym — matte black rubber floor, a black flat bench, racks of dumbbells and a squat rack around him, lit low and warm — talking straight to camera, animated and engaged, his face alive: eyebrows active, eyes bright, with a dry, self-mocking humour, and a rueful half-smile on the middle sentence. He stands on the spot the whole time, square to the camera, his weight settled; he does not walk. His hands MOVE as he talks, the way an amused person's do — open palms, relaxed fingers, easy natural gestures that punctuate the line, kept LOW and OPEN between waist and chest height, well below his face, and always inside the frame. He never raises a hand to his head or face, never mimes strapping anything to his head, never counts on his fingers, never points at the camera and never splays or fans his fingers. Each hand has exactly five correctly shaped fingers in every frame. A LOCKED-OFF MEDIUM SHOT ON A 35mm LENS AT CHEST HEIGHT, framed from the waist up, with him CENTRED in the frame. The camera does not move and the room behind him never changes or cuts to a different place. He is wearing a plain matte-black tank top, matte-black training shorts with a single thin electric-teal stripe running down the outer seam of each leg — the same electric teal as the IronPal accent — and plain black trainers, with nothing on his head: no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing worn in or over his ears. He is ALONE in the shot — no other people in frame. There are no devices anywhere in the shot: no phone, laptop, tablet or monitor, and nothing in his hands. Audio: one clear man's voice, lip-synced to him, warm and confident with a dry, self-deprecating wit — the voice of a man telling a story against himself, the pitch rising and falling. He says the first two sentences briskly, then STOPS for one full second of silence with his mouth closed and the half-smile held, then lands the last three words as the punchline. Upbeat and engaged, NOT flat, NOT monotone, NOT read aloud, NOT shouted, NOT breathless. ONE single take: "Prototype one: my phone, strapped to my forehead. Tilt my head, the bar's gone. So: a fisheye.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing. Say that line EXACTLY ONCE, word for word, start to finish — all 17 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence, and do NOT ad-lib, pad or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last, not changing speaker, gender, age or timbre part way through, and no second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed, holding the look. No other dialogue, no ambient sound, no music.
-```
-
-### 6.2 K6
+### 6.1 K5 — the lab
 
 ```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no UI, and no letters or numerals anywhere in frame. Peter Pitch FullBody stands beside a black flat bench in a dark, moody weights gym — matte black rubber floor, racks of dumbbells and a squat rack behind him, lit low and warm — talking straight to camera, animated and engaged, his face alive: eyebrows active, eyes bright, conviction building across the line, finishing on a small, pleased grin. He stands on the spot the whole time, square to the camera, his weight settled; he does not walk and does not sit. His hands MOVE as he talks, the way an enthusiastic person's do — open palms, relaxed fingers, easy natural gestures that punctuate the line, kept LOW and OPEN between waist and chest height, well below his face, and always inside the frame. He never raises a hand to his head or face, never counts on his fingers, never points at the camera, never mimes typing and never splays or fans his fingers. Each hand has exactly five correctly shaped fingers in every frame. A LOCKED-OFF MEDIUM SHOT ON A 35mm LENS AT CHEST HEIGHT, framed from the waist up, with him CENTRED in the frame. The camera does not move and the room behind him never changes or cuts to a different place. He is wearing a plain matte-black tank top, matte-black training shorts with a single thin electric-teal stripe running down the outer seam of each leg — the same electric teal as the IronPal accent — and plain black trainers, with nothing on his head: no headband, no hat, no cap, no strap, nothing across his forehead and nothing around his neck. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing worn in or over his ears. He is ALONE in the shot — no other people in frame. There are no devices anywhere in the shot: no phone, laptop, tablet or monitor, and nothing in his hands. Audio: one clear man's voice, lip-synced to him, spoken with ENERGY and CONVICTION — confident, warm and persuasive, the pitch rising and falling, each of the two things landed in turn and the last three words delivered with a grin. Upbeat and engaged, NOT flat, NOT monotone, NOT read aloud, NOT shouted, NOT breathless. ONE single take: "Then the software. It counts reps from motion, and you teach it your exercises, like a game.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing. Say that line EXACTLY ONCE, word for word, start to finish — all 17 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence, and do NOT ad-lib, pad or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last, not changing speaker, gender, age or timbre part way through, and no second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed, holding the grin. No other dialogue, no ambient sound, no music.
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no labels, no UI, and no letters or numerals anywhere in frame. Peter Pitch sits at a workbench in a small, cluttered electronics lab — a soldering station with its iron in the stand, a magnifier lamp on an arm, tweezers, a few small loose electronic components and a coil of black cable on a dark anti-static mat, a pegboard of hand tools on the wall behind him — lit by a warm desk lamp from one side and the cool daylight of a window from the other, the bench detail behind and around him in soft, shallow focus. At the very start he sets a pair of tweezers down on the mat, then looks up and talks straight to camera for the rest of the shot, his forearms and hands RESTING STILL on the edge of the bench, relaxed, with at most a small lift of one open hand on the punchline. He does NOT pick anything up again, does NOT solder, does NOT hold any device, and there is no headband, no camera and nothing coloured teal anywhere on the bench. His face is alive: eyebrows active, eyes bright, with a dry, self-mocking humour and a rueful half-smile on the middle sentence. He is wearing a plain matte-black tank top, with nothing on his head: no headband, no hat, no cap, no strap, no magnifier visor, no glasses pushed up, nothing across his forehead and nothing around his neck. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing worn in or over his ears. He is ALONE in the room — no other people in frame. Each hand has exactly five correctly shaped fingers in every frame. He never raises a hand to his head or face, never counts on his fingers, never points at the camera and never splays or fans his fingers. A LOCKED-OFF MEDIUM SHOT ON A 35mm LENS AT SEATED CHEST HEIGHT, framed from the waist up, with him CENTRED in the frame and facing the camera square-on across the work surface. The camera does not move and the room behind him never changes or cuts to a different place. Audio: one clear man's voice, lip-synced to him, warm and confident with a dry, self-deprecating wit — the voice of a man telling a story against himself, the pitch rising and falling. He says the first two sentences briskly, then STOPS for one full second of silence with his mouth closed and the half-smile held, then lands the last three words as the punchline. Upbeat and engaged, NOT flat, NOT monotone, NOT read aloud, NOT shouted, NOT breathless. ONE single take: "Prototype one: my phone, strapped to my forehead. Tilt my head, the bar's gone. So: a fisheye.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing, not on any surface in the room. Say that line EXACTLY ONCE, word for word, start to finish — all 17 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence, and do NOT ad-lib, pad or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last, not changing speaker, gender, age or timbre part way through, and no second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed, holding the look. No other dialogue, no ambient sound, no music.
+```
+
+### 6.2 K6 — the office
+
+```
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: no captions, no subtitles, no titles, no logos, no labels, no UI, and no letters or numerals anywhere in frame. Peter Pitch sits at a desk in a small, quiet home office — an open laptop and a second monitor on the desk, BOTH turned AWAY from the camera so only their plain dark backs are visible and no screen is ever seen, a phone lying face-down beside them, a shelf and a window behind him — lit by cool, soft daylight from the window with a little warm lamp light, the background in soft, shallow focus. At the very start he takes his hands off the laptop and turns from it to the camera, then talks straight to camera for the rest of the shot, his forearms and hands RESTING STILL on the desk, relaxed, with at most a small lift of one open hand as the line builds. He does NOT type, does NOT pick up the phone, does NOT turn either screen toward the camera, and never mimes typing. His face is alive: eyebrows active, eyes bright, conviction building across the line, finishing on a small, pleased grin. He is wearing a plain matte-black tank top, with nothing on his head: no headband, no hat, no cap, no strap, no magnifier visor, no glasses pushed up, nothing across his forehead and nothing around his neck. His clothing is plain, with nothing clipped, pinned or attached to it, and nothing worn in or over his ears. He is ALONE in the room — no other people in frame. Each hand has exactly five correctly shaped fingers in every frame. He never raises a hand to his head or face, never counts on his fingers, never points at the camera and never splays or fans his fingers. A LOCKED-OFF MEDIUM SHOT ON A 35mm LENS AT SEATED CHEST HEIGHT, framed from the waist up, with him CENTRED in the frame and facing the camera square-on across the work surface. The camera does not move and the room behind him never changes or cuts to a different place. Audio: one clear man's voice, lip-synced to him, spoken with ENERGY and CONVICTION — confident, warm and persuasive, the pitch rising and falling, each of the two things landed in turn and the last three words delivered with a grin. Upbeat and engaged, NOT flat, NOT monotone, NOT read aloud, NOT shouted, NOT breathless. ONE single take: "Then the software. It counts reps from motion, and you teach it your exercises, like a game.". Those words are SPOKEN ALOUD ONLY — they are audio, not a caption. Do NOT write, display, superimpose or print them, or any word or fragment of them, anywhere in the picture — not over the shot, not along the bottom, not on his clothing, not on any surface in the room. Say that line EXACTLY ONCE, word for word, start to finish — all 17 words, in that order, and then STOP. Do NOT repeat, echo, stammer or re-start any word, phrase or sentence, and do NOT ad-lib, pad or add filler words that are not written above. ONE single speaker for the WHOLE line: the same man's voice from the first word to the last, not changing speaker, gender, age or timbre part way through, and no second voice says any part of it. Nobody else speaks, on or off camera. After the final word he stops speaking and stays silent, mouth closed, holding the grin. No other dialogue, no ambient sound, no music.
 ```
 
 **Judge each take in this order:** the line said once and complete → hands → bandless → no burned
-text → centred waist-up → the pause (K5 only). A take that fails the pause is still usable: shot 4
+text → **no screen visible (K6) / nothing on the bench that reads as a headband or camera (K5)** →
+the room matches the real one → centred waist-up → the pause (K5 only). A take that fails the pause is still usable: shot 4
 drops (§3.4). If the line overruns 10 s, cut *"So:"* in K5, or *"Then"* in K6.
 
 ---
@@ -296,7 +342,9 @@ drops (§3.4). If the line overruns 10 s, cut *"So:"* in K5, or *"Then"* in K6.
 
 **Order.** Each step is cheap before the next costs anything.
 
-1. **The real shoots first** (H1–H4, S1–S4). They are free, and **S4 decides what K6's shot 5 is.**
+1. **The real shoots first** (H1–H5, S1–S5, and the two room stills R1/R2). They are free, **S4
+   decides what K6's shot 5 is**, and R1/R2 must exist before Flow is opened, because they are the
+   generated rooms' reference frames.
 2. **The two Flow clips** — 2 renders, plus re-rolls.
 3. **Graphics:** the chips, the dead-ends cards, the animated IMU trace — HTML renders, like the end card.
 4. **Assembly:** `scripts/master/build.py` gains K5/K6 as **composed** segments (Flow audio,
