@@ -26,7 +26,7 @@ inset mechanism) and [`K1_K9_mastering.md`](K1_K9_mastering.md) (the assembly an
 | K11 | K9 | the outro / CTA | renumbered |
 
 The brief named only *existing K5 → K7*; the rest shift by two because nothing is cut.
-**Runtime:** the K1–K9 master is 72.96 s; two 10 s clips trimmed to ~9.5 s each make it **≈ 92 s**.
+**Runtime:** the K1–K9 master is 72.96 s; K5 at ≈ 14 s (its silent assembly beat, §3.4) and K6 at ~9.5 s make it **≈ 96 s**.
 That is short for a crowdfunding page, where two to three minutes is normal, so length is no longer
 an argument against these clips. The ≈ 59 s target in `founder_video_final.md` was a YouTube target.
 **The YouTube cut stays as it is**; this is a second deliverable, `K1_K11_crowdfunding`.
@@ -131,6 +131,16 @@ and get a laugh doing it. The true story, from `ironpal-capture-hardware-decisio
   plus an **Arduino Nano 33 BLE** motion board, in a terry headband, with the camera cabled to the
   phone in a pocket. First fisheye clip: `IPS_2026-08-02.15.33.00.0640.mp4`. BLE link verified
   2026-08-05: 60 Hz, 0 lost packets.
+- **How prototype 2 is assembled** (`ironpal-gym-session-01-plan.md` §2–§4), which is what K5 now
+  shows step by step: the ELP board comes **out of its case**; its back is **insulated with kapton or
+  electrical tape** against sweat; a **lens hole is cut** in the terry band and its edge
+  **heat-sealed**; the board goes in behind the hole; the **Nano 33 BLE** rides alongside it; both
+  cables are **looped once and taped** to the band so a pull loads the tape, not the solder pad; the
+  camera cable runs over the shoulder to the A52, the Nano's to a pocket power bank. **The Nano needs
+  no soldering** — MCU, BLE and the BMI270/BMM150 motion sensors are one 45×18 mm board.
+- **The next board is a drawing:** an ESP32-C3 microcontroller with an ICM-42688-P motion sensor and
+  TP4056 charging, schematic and PCB layout in `docs/assets/imu-poc-{schematic,pcb-layout}.svg`.
+  Designed, not built.
 
 ### 3.2 The line
 
@@ -154,7 +164,10 @@ history, not product claims, but `validate_claims` traces every line to the allo
 entry **20** (entry 19 is K10's pending form claim):
 
 > *"IronPal's first prototype was a phone strapped to a headband; the current prototype is a 200°
-> fisheye camera and a motion-sensor board on a headband, wired to the phone."*
+> fisheye camera board and an Arduino Nano 33 BLE motion-sensor board on a headband, wired to the
+> phone. A custom board (ESP32-C3, ICM-42688-P) is designed but not built."*
+
+The part names on the chips (§3.4 shots 5, 6d, 8) are covered by the same entry.
 
 **OPEN** — allowlist entries are claims on the record and need the founder's yes.
 
@@ -177,23 +190,48 @@ and the next frame is the lab. That cut is the story; it needs no transition.
 Only the first ~1.5 s and the last ~1.5 s of Peter are on screen. **The take is still judged on the
 whole lip-sync**, because the voice runs under the cutaways and a slip in the middle is audible.
 
-### 3.4 Shot list — 10.0 s
+### 3.4 Shot list — ≈ 14 s
 
-| # | time | picture | source | chip | under the line |
+**The founder's direction, 2026-10-07: K5 must show the prefabricated parts being assembled into
+the MVP, and the parts the docs name — the Arduino IMU module, the sensors, the microcontrollers.**
+Ten seconds of line cannot also carry an assembly, so **K5 grows a 3.6 s silent assembly beat after
+the line**, cut to the music with no voice. The voice rule is about where the voice comes from, not
+about every second having one. The Flow clip supplies the head, and its **silent final hold** —
+he finishes the line and holds the look — supplies the tail, placed after the assembly. The parts
+are real and are shown by real footage only (§2): the generated desk stays generic.
+
+| # | time | picture | source | chip | under it |
 |---|---|---|---|---|---|
-| 1 | 0.0–1.5 | Peter at the lab bench, looking up from the work | **Flow** | — | *"Prototype one:"* |
-| 2 | 1.5–3.5 | **the founder wearing the A52 strapped to a headband**, seen from a second phone, side-on in the gym mirror | **new real shoot H1** | `PROTOTYPE 1 · JUN 2026` | *"my phone, strapped to my forehead."* |
-| 3 | 3.5–5.0 | **the POV from that phone**: a barbell in frame; the head tilts and the bar slides out of the top | **new real shoot H2**, recorded at the same time as H1; fallback is the most tilted stretch of `input/kb/clips/20260614_*` | `PROTOTYPE 1` | *"Tilt my head, the bar's gone."* |
-| 4 | 5.0–6.4 | **dead-ends graphic**: four cards dealt fast and struck through — *cap · brim blocks the view*, *360 camera · 8 cm tall*, *"8K mini" · fake listing*, *narrow lens · loses the bar* | HTML motion graphic, brand tokens | — | the pause |
-| 5 | 6.4–8.0 | **prototype 2 on the bench**: the uncased ELP board and the Nano in the terry band, slow handheld push-in, the cable trailing off frame | **new real shoot H3** | `PROTOTYPE 2 · AUG 2026` | *"So: a fisheye."* |
-| 6 | 8.0–8.8 | **the first fisheye clip**: the 200° view from `IPS_2026-08-02…` at the curl | **real**, `input/kb/clips/IPS_2026-08-02.15.33.00.0640.mp4` | `200° · FIRST TEST 2 AUG` | — |
-| 7 | 8.8–10.0 | Peter at the bench, holding the look | **Flow** | — | — |
+| 1 | 0.0–1.5 | Peter at the left end of the desk, turning from the parts | **Flow**, 0.0–1.5 | — | *"Prototype one:"* |
+| 2 | 1.5–3.5 | **the founder wearing the A52 strapped to a headband**, side-on | **H1** | `PROTOTYPE 1 · JUN 2026` | *"my phone, strapped to my forehead."* |
+| 3 | 3.5–5.0 | **the POV from that phone**: the bar in frame; the head tilts and it slides out | **H2**; fallback `input/kb/clips/20260614_*` | `PROTOTYPE 1` | *"Tilt my head, the bar's gone."* |
+| 4 | 5.0–6.4 | **dead-ends cards**, dealt and struck through | HTML graphic | — | the pause |
+| 5 | 6.4–8.0 | **the parts, flat-lay**: top-down on the real desk — the ELP board still in its case, the Arduino Nano 33 BLE, the terry headband, a roll of kapton tape, the cables, the power bank. Each part gets a name tag as it is touched by a finger | **H6** | per part: `ELP IMX415 · 200° FISHEYE` · `ARDUINO NANO 33 BLE · IMU` · `TERRY HEADBAND` | *"So: a fisheye."* |
+| 6a | 8.0–8.8 | **de-casing**: the camera board lifted out of its housing | **H5a** | `ASSEMBLY · AUG 2026` | music |
+| 6b | 8.8–9.5 | **kapton tape** smoothed over the back of the board | **H5b** | — | music |
+| 6c | 9.5–10.2 | **the lens pushed through the cut hole** in the band from behind | **H5c** | — | music |
+| 6d | 10.2–10.9 | **the Nano** set alongside it; **cables looped and taped** to the band | **H5d** | `MCU + BLE + MOTION SENSORS · ONE BOARD` | music |
+| 6e | 10.9–11.6 | **the band goes on**, the cable over the shoulder to the A52 in the pocket | **H4** | `PROTOTYPE 2` | music |
+| 7 | 11.6–12.4 | **the first fisheye clip**: the 200° view from 2 Aug at the curl | **real**, `IPS_2026-08-02.15.33.00.0640.mp4` | `FIRST TEST · 2 AUG` | music |
+| 8 | 12.4–13.0 | **the next board**: the ESP32-C3 + ICM-42688-P PCB layout drawn on in teal, line by line | `docs/assets/imu-poc-pcb-layout.svg`, animated | `NEXT BOARD · DESIGNED, NOT YET BUILT` | music |
+| 9 | 13.0–14.2 | Peter at the desk, holding the look | **Flow**, its final 1.2 s | — | — |
+
+**The assembly beat is cut on the music, not the words** — 0.7 s a step on the bar, five steps in
+one phrase. Each step is one action with a clear start and end, filmed so it reads in 0.7 s:
+macro, top-down or over the shoulder, hands entering and leaving frame.
+
+**Shot 8 is the only place the microcontroller design appears**, and it is chipped as a design.
+**If the founder owns the loose next-board parts** (a XIAO ESP32-C3, an ICM-42688-P breakout, a
+TP4056 module), a real 0.6 s flat-lay of them replaces the drawing — chipped `NEXT BOARD · PARTS`,
+not as something assembled. **OPEN:** whether they are on the desk is something only he knows.
 
 **Cut on the words, not the seconds.** The times above assume ~2 w/s. Re-time every cut to the
 whisper word boundaries of the actual take, the way the master's captions already are (`K1_K9_mastering.md`
-stage 8). Shot 4 sits in the pause, so if the take has no pause, shot 4 drops and shot 3 holds.
+stage 8). Shot 4 sits in the pause, so if the take has no pause, shot 4 drops and shot 3 holds. Shots 6a–8 are
+silent by design, so their length is set by the music, not the take; **the Flow clip's last 1.2 s
+must be silent, mouth closed**, which the prompt already asks for, or shot 9 has nothing to show.
 
-### 3.5 The new real shoot — hardware (≈ 30 min, one gym visit)
+### 3.5 The new real shoot — hardware (≈ 1 h 15 min: the gym for H1/H2, the lab desk for the rest)
 
 All on a second phone, **16:9, 4K, 24 fps**, landscape, and graded afterwards with the film.
 
@@ -201,10 +239,11 @@ All on a second phone, **16:9, 4K, 24 fps**, landscape, and graded afterwards wi
 |---|---|---|---|
 | **H1** | the founder wearing the A52 strapped to a headband, as in June | second phone on a tripod, side-on or into the mirror; he does a slow curl and tilts his head once | 6 s |
 | **H2** | the A52's own recording during H1 | the strapped phone records at the same time; landscape, the 90° rotation fixed in post as in POC v1 | same take |
-| **H3** | prototype 2 on a black bench: the uncased ELP board plus the Nano in the terry band, cable trailing | handheld, slow push-in, low warm light, macro-close at the end | 8 s |
-| **H5** | **the founder assembling at the real desk** (the left end, by the laptop): soldering the Nano's header pins, then seating the ELP board in the band | tripod over the shoulder, then a close-up of the hands; 1080p is enough | 10 s — **cut into shot 5** before the push-in if H3 alone is too static |
+| **H6** | **the parts flat-lay** on the left end of the real desk: the ELP board in its case, the Nano 33 BLE, the terry band, kapton tape, the USB cables, the power bank — laid out square, a finger touching each in turn | phone on a top-down arm or held level above; daylight from the window, no harsh lamp; 4K so each part can be cropped for its name tag | 8 s |
+| **H5a–d** | **the assembly, step by step**, at the same spot: (a) the board out of its case; (b) kapton over its back; (c) the lens through the hole in the band; (d) the Nano alongside, cables looped and taped | **one step per take**, 3–4 s each, so each can be cut to 0.7 s; macro or top-down, hands entering and leaving frame. **Use a spare band or re-do it for the camera** — the working prototype does not need to be taken apart for this, as long as the steps shown are the steps it was built with | 4 × 4 s |
+| **H3** | ~~prototype 2 on a bench, push-in~~ | **folded into H6 and H5** | — |
 | **R1** | ~~a wide still of the real lab~~ **DONE** — `input/kickstarter/k5k6/lab_reference.jpg`, supplied by the founder 2026-10-07; the Flow copy has its screens blurred (§2.1) | — | — |
-| **H4** | prototype 2 worn: the band on, cable over the shoulder to the A52 in the pocket | tripod, waist up, he turns once to show the cable | 5 s — **spare**, used if H3 reads as too static |
+| **H4** | prototype 2 worn: the band goes on, cable over the shoulder to the A52 in the pocket | tripod, waist up, he turns once to show the cable | 5 s — **shot 6e**, no longer spare |
 
 **The real founder is on screen in H1 and H4, next to a generated Peter minted from his photos.**
 That is deliberate. A crowdfunding viewer is asking whether there is a real person behind this, and
@@ -320,7 +359,8 @@ shot 5 is real and is used as recorded. If it does not, it is not faked.** The f
 | fisheye | shown **uncorrected** in shot 6 of K5. The distortion is the point |
 | screen recordings | full frame, no phone bezel, slow 1.00→1.04 push-in so a static UI still moves |
 | date chips | lower left, 64 px in from the edges; `IRONPAL` display face, 800, 22 px, letter-spacing .1em; accent `#00E5CC` dot + white text on `rgba(16,16,35,.72)`, 8 px radius; in 0.2 s after the cut, out with it. Rendered from HTML like the end card |
-| transitions | hard cuts on word boundaries. No whip pans, no glitches — the material is the energy |
+| part name tags | K5 shots 5, 6d: the date-chip style, placed beside the part with a 1 px teal leader line to it; in as the finger touches the part, out on the cut. Real part names only — no specs beyond what the docs record |
+| transitions | hard cuts on word boundaries; in K5's silent assembly beat, on the music's beat instead. No whip pans, no glitches — the material is the energy |
 | dead-ends cards | four `#101023` cards, 30 px radius, dealt left to right in 0.25 s each, then struck through by a single teal line together; card text is the only on-screen text over 3 words in the clip |
 | captions | the master's burned captions continue through both clips (stage 8), held clear of the date chips, which sit lower left while captions are bottom centre |
 | audio | **voice from Flow only**. Real footage is muted; the music bed continues; no sync sound from the shoots |
@@ -373,12 +413,15 @@ drops (§3.4). If the line overruns 10 s, cut *"So:"* in K5, or *"Then"* in K6.
    picture cut from Flow + real material), the renumbered clips, and a `K1_K11` output name. The
    per-clip floor/dialogue/EQ stages already handle a new clip; the music needs re-fitting, because
    the track was placed so its peak lands on the end card at 74–77 s, and the end card moves to
-   ≈ 90 s.
+   ≈ 94 s.
 5. **The config**, if the scripted pipeline is ever used again: 11 clips, two 10 s durations, and
    `primitives.json` caps raised a third time — or the crowdfunding cut stays a `build.py`-only
    artefact, which is the recommendation.
 
 **Open — the founder's call:**
+
+0. **Whether the loose next-board parts are on hand** (XIAO ESP32-C3, ICM-42688-P breakout, TP4056) —
+   if yes, a real flat-lay replaces the PCB drawing in K5 shot 8 (§3.4).
 
 1. **Allowlist entries 20 and 21** (§3.2, §4.2) — prototype history and the self-training claim.
 2. **The tense of K6's line** — *"you teach it"* (design) or *"I'm teaching it"* (true today) (§4.2).

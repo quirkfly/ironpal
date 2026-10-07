@@ -7,8 +7,8 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**37 decisions: 15 EVIDENCE · 19 ASSUMED · 3 OPEN** (Q29–Q37 and revisions to Q10–Q12 added the
-same day, after the founder set the locations and supplied a photo of his lab).
+**43 decisions: 18 EVIDENCE · 21 ASSUMED · 4 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
+same day, as the founder set the locations, supplied a photo of his lab and asked for the assembly).
 
 ---
 
@@ -191,6 +191,38 @@ with the wall terminal and the laptop session blurred for privacy (`lab_broll_st
 reads as wanting it seen. *Against:* "use it" may have meant only as the reference; the shot is
 0.6 s and drops without touching anything else.
 
-**Most worth a veto, riskiest first:** Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
+## Branch H — the assembly in K5 (added 2026-10-07)
+
+**Q38. How does K5 show parts being assembled when the line already fills 10 s?** A 3.6 s silent
+assembly beat after the line, cut to the music; the Flow clip's silent final hold becomes the tail.
+K5 grows to ≈ 14 s. **EVIDENCE** for the direction (TASK.md: *"K5 must feature … components being
+assembled"*); the silent-beat construction is **ASSUMED** — the voice rule governs the voice's
+source, not wall-to-wall speech. *Against:* a 3.6 s gap in a film where the founder talks for 70 of
+73 s may read as a stall; the music has to carry it.
+
+**Q39. Are the featured parts real or generated?** Real only — H6 flat-lay and H5a–d assembly at the
+real desk; the Flow desk stays generic. **EVIDENCE** — the ELP board, the Nano 33 BLE and the terry
+band physically exist (`ironpal-gym-session-01-plan.md`, BLE verified 2026-08-05), and Q6 forbids a
+generated prototype. *The direction does not say which*; real is the reading that cannot mislead.
+
+**Q40. What does the assembly show?** The steps the docs record: de-case the board, kapton on its
+back, lens through the cut hole, Nano alongside, cables looped and taped. **EVIDENCE** —
+`ironpal-gym-session-01-plan.md` §2–§4. **Correction:** the previous draft had the Nano's header
+pins being soldered; the Nano 33 BLE is one board and needs none (`ironpal-imu-poc-integration-plan.md`).
+
+**Q41. Must the working prototype be taken apart to film it?** No — the steps are re-done on a spare
+band or re-performed for the camera. **ASSUMED** — the same honesty test as Q19: the steps shown are
+the steps it was built with. *Against:* a re-performed build is a re-enactment, if anyone asks.
+
+**Q42. How do the microcontrollers the direction names appear?** The Nano (MCU + BLE + IMU on one
+board) is assembled for real; the ESP32-C3 + ICM-42688-P board appears only as its PCB layout,
+chipped `DESIGNED, NOT YET BUILT`. **EVIDENCE** — schematic and layout exist, the board was never
+built. Whether its loose parts are on the desk to film is **OPEN** — only the founder knows.
+
+**Q43. Name the parts on screen?** Yes — tags with real part names on the flat-lay and the Nano step.
+**ASSUMED** — the direction asks for the parts to be featured, and an unnamed board is just a board
+to a backer. *Against:* part numbers on screen invite spec questions; tags carry names, not specs.
+
+**Most worth a veto, riskiest first:** Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
 Q10 (bandless Peter for two more clips).
