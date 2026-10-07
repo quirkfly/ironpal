@@ -7,7 +7,7 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**58 decisions: 27 EVIDENCE · 26 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
+**61 decisions: 29 EVIDENCE · 27 ASSUMED · 5 OPEN** (Q29–Q43 and revisions to Q10–Q12 added the
 same day, as the founder set the locations, supplied a photo of his lab and asked for the assembly — then
 asked to see it in the clip itself, Branch I).
 
@@ -304,6 +304,21 @@ technical viewer may expect an eye diagram or a decoded trace; bursts are the ho
 **Q57. The lavalier mic and the clothes iron?** Banned by name. **EVIDENCE** — take 1 frames.
 
 **Q58. Gaze?** Never at the camera, stated five ways. **EVIDENCE** — the founder's direction.
+
+## Branch L — K5b take 2 reviewed (added 2026-10-07)
+
+**Q59. Why did the screens go white, then fill with code?** "Out of focus, nothing legible" reads as
+blank panels, and the prompt never said they must not change. **EVIDENCE** — take 2 frames at 0–6 s
+and ~6 s. Fix: dark code editors with soft unreadable lines, unchanging in every frame — which is
+also what the real lab photo shows.
+
+**Q60. Why did the scope arrive as a 1 s cut from another room?** It was outside the 50 mm frame and
+the last of five actions. **EVIDENCE** — take 2 frames at ~7 s. Fix: the scope in frame from frame
+one, behind the clamp; "one single continuous shot, no cuts"; the last three seconds given to it.
+
+**Q61. What gives up time for the scope?** Two wires instead of four, and the multimeter beat.
+**ASSUMED** — the fallback already written for this clip; the multimeter stays on the desk.
+*Against:* the founder asked for the multimeter in the scene; it is now a prop, not an action.
 
 **Most worth a veto, riskiest first:** Q55 (a niche board described in words only), Q51/Q54 (soldering a joint the docs record but not who made it), Q46 (generated assembly of the real parts), Q38 (a silent beat in a wall-to-wall-talk film), Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
