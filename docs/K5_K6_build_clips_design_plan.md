@@ -429,6 +429,21 @@ LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: n
 
 ### 6.1b K5b — the bench work, silent
 
+> **TAKE 8 REVIEW, 2026-10-07** (`Man_soldering_circuit_board_20261007214156.mp4`) — **the held
+> moment works**: the iron rests on the board for the whole shot, nothing appears, vanishes or repeats.
+> Two faults, both fixed in the prompt below:
+>
+> - **No smoke at the joint.** Take 7's smoke became a flame, so take 8 banned smoke outright. The
+>   smoke is now back as **a thin, faint thread of pale grey flux vapour**, rising slowly and fading
+>   below his face, with flame, fire, glow and sparks still banned in the next sentence. The colour
+>   and size are stated so the model cannot escalate them to fire.
+> - **Music in the background.** "Silent: quiet room sound only" was not enough. The audio line now
+>   leads with **"NO MUSIC of any kind"**, naming soundtrack, score, song and beat. **Take 8 itself
+>   is already fixed in post**: `input/kickstarter/k5k6/K5b_take8_nomusic.mp4`, the same picture with
+>   the audio track removed. The edit discards K5b's own sound anyway (§3.4).
+>
+> **Still not the founder's lab** (a different room, with storage bins behind) — attach the reference image.
+
 > **TAKE 7 REVIEW, 2026-10-07** (`Man_soldering_circuit_board_comp…_20261007213320.mp4`) — rejected:
 > **a flame at the iron tip** (~2.5 s), **the iron going to the board, away and back** — steps that
 > connect to nothing — and **not the founder's lab** (parts bins at left, mirrored view; the reference
@@ -524,7 +539,9 @@ On a dark mat in front of him, in sharp focus: on the left, a small square camer
 
 THE WHOLE SHOT IS ONE STILL, HELD MOMENT: from the first frame to the last he holds a pencil-thin soldering iron in his right hand with its tip resting steadily on one point at the edge of the camera board, his left hand resting flat on the mat beside it. He keeps the iron exactly there and does not lift it, put it down, or pick anything else up. The only movement is his breathing and a slight, careful adjustment of his fingers.
 
-Soldering is flameless: NO flame, NO fire, NO glow, NO sparks, NO smoke. Both hands have five fingers. Silent: quiet room sound only.
+From the point where the iron's tip touches the board, a thin, faint thread of pale grey solder smoke rises slowly and continuously the whole time, curling gently upward past his hands and fading before it reaches his face — the ordinary vapour of melting flux, nothing more. Soldering is flameless: NO flame, NO fire, NO orange or red glow, NO sparks — only that thin grey thread of smoke. Both hands have five fingers.
+
+AUDIO: NO MUSIC of any kind — no soundtrack, no score, no background song, no beat. Only quiet room sound and a very faint sizzle at the iron's tip.
 ```
 
 **Take 1 review (2026-10-07, `Man_assembling_electronics_at_desk_20261007185435.mp4`).** The
