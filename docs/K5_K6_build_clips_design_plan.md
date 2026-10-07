@@ -429,6 +429,20 @@ LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. Nothing in this shot is written on: n
 
 ### 6.1b K5b — the bench work, silent
 
+> **TAKE 7 REVIEW, 2026-10-07** (`Man_soldering_circuit_board_comp…_20261007213320.mp4`) — rejected:
+> **a flame at the iron tip** (~2.5 s), **the iron going to the board, away and back** — steps that
+> connect to nothing — and **not the founder's lab** (parts bins at left, mirrored view; the reference
+> image was evidently not attached). **The lesson after seven takes:** Flow cannot carry a multi-step
+> fine-hand task, and every step asked for comes back as one more illogical action. **The prompt now
+> asks for the minimum that can still read as building: one held moment** — the iron resting on the
+> camera board's edge for all eight seconds, nothing picked up or put down, the scope showing pulses
+> throughout so there is no transition to get wrong. **"Melts" and "smoke" are gone**: they are the
+> likeliest source of the flame, and a flameless-soldering line bans flame, fire, glow, sparks and smoke.
+>
+> **If this take also fails, stop generating soldering.** The real lab and the real parts exist: a
+> phone on a tripod filming the founder soldering for two minutes (H5, §3.5) is truthful, cannot
+> produce a flame or a vanishing part, and is what §2 asked for in the first place.
+
 > **REWRITTEN SHORT, 2026-10-07 (take 6 review).** Take 6
 > (`Engineer_soldering_circuit_board_20261007212419.mp4`) was rejected as slop: **no camera module
 > on the mat at all, the Arduino connected to nothing, and illogical actions** (the iron picked up
@@ -502,20 +516,15 @@ numbers — Flow garbles digits — and the take is judged on whether it reads a
 sine wave or noise.
 
 ```
-LIVE-ACTION FOOTAGE, ONE CONTINUOUS SHOT, NO CUTS, NO SPEECH. No text, captions, logos or numbers anywhere in frame.
+LIVE-ACTION FOOTAGE, ONE CONTINUOUS SHOT, CAMERA LOCKED OFF, NO CUTS, NO SPEECH. No text, captions, logos or numbers anywhere in frame.
 
-Peter Pitch sits at the white desk in the home lab of the reference image, seen from his right side, wearing a plain dark-grey crew-neck long-sleeve top with nothing attached to it, and clear safety goggles. His face is calm, focused and serious the whole time. He never looks at the camera.
+Peter Pitch sits at the white desk in the home lab of the reference image, seen from his right side, in a plain dark-grey crew-neck long-sleeve top and clear safety goggles. Calm, focused, serious. He never looks at the camera.
 
-On a dark mat in front of him, clearly visible and in sharp focus, lie TWO small electronic parts side by side, connected together:
-- On the LEFT, the camera module: a small square circuit board about the size of a matchbox, with a short round black lens on top capped by a small clear glass dome.
-- On the RIGHT, the Arduino Nano: a narrow blue-green circuit board about the length of a finger.
-- Just beyond them, a small grey USB hub. A short black cable runs from the camera module into the hub, and a second short black cable runs from the Arduino Nano into the same hub. Both cables are plainly visible.
+On a dark mat in front of him, in sharp focus: on the left, a small square camera circuit board the size of a matchbox with a short round black lens on top; on the right, a narrow blue-green Arduino Nano board the length of a finger. A short black cable runs from each board into a small grey USB hub just behind them. Behind the mat, one oscilloscope faces the camera, its screen showing regular bursts of green square pulses the whole time.
 
-Behind the mat stands one oscilloscope, its screen facing the camera, showing a flat green line.
+THE WHOLE SHOT IS ONE STILL, HELD MOMENT: from the first frame to the last he holds a pencil-thin soldering iron in his right hand with its tip resting steadily on one point at the edge of the camera board, his left hand resting flat on the mat beside it. He keeps the iron exactly there and does not lift it, put it down, or pick anything else up. The only movement is his breathing and a slight, careful adjustment of his fingers.
 
-THE ACTION, slow and simple: he holds a soldering iron in his right hand and a strand of solder in his left. He touches the iron and the solder to one point on the edge of the camera module, where its cable meets the board. The solder melts into a small shiny joint and a thin wisp of smoke rises. He lifts the iron away and places it back in its stand. He looks up at the oscilloscope: its flat line turns into regular bursts of square pulses. He watches the screen, serious and still, until the end of the shot.
-
-He picks up the iron only once and puts it down only once. Nothing else is picked up, added or removed. Both hands have five fingers. Silent: only quiet room sound and a faint sizzle.
+Soldering is flameless: NO flame, NO fire, NO glow, NO sparks, NO smoke. Both hands have five fingers. Silent: quiet room sound only.
 ```
 
 **Take 1 review (2026-10-07, `Man_assembling_electronics_at_desk_20261007185435.mp4`).** The
