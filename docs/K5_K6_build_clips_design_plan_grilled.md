@@ -7,8 +7,8 @@ founder. Nobody confirmed any of these, so the tag is the provenance:
 strongest objection recorded so it can be vetoed cheaply; **OPEN** = a claim on the record, an edit
 to accepted work, or something else not mine to settle.
 
-**35 decisions: 14 EVIDENCE · 18 ASSUMED · 3 OPEN** (Q29–Q35 and revisions to Q10–Q12 added
-the same day, after the founder set the locations).
+**37 decisions: 15 EVIDENCE · 19 ASSUMED · 3 OPEN** (Q29–Q37 and revisions to Q10–Q12 added the
+same day, after the founder set the locations and supplied a photo of his lab).
 
 ---
 
@@ -61,10 +61,11 @@ once he was seated. **EVIDENCE** — `Peter Pitch` is the waist-up variant K2 an
 (`IRONPAL_PROMO_VIDEO_SCRIPT_V1.md` §4); the band's reveal still belongs to K7, and a generated
 band before it would also breach Q6.
 
-**Q11. Where are they set?** **K5 in a lab, assembling the hardware; K6 in an office, coding and
-testing.** **EVIDENCE** — the founder's direction, 2026-10-07 (TASK.md). *Superseded:* the first pass
-set both in the gym, to keep generated electronics and screens out of frame; Branch G is how the
-new locations keep that protection.
+**Q11. Where are they set?** **Both in the founder's real lab** — K5 assembling the hardware, K6
+coding and testing — one room, from one photo he supplied (`input/kickstarter/k5k6/lab_reference.jpg`).
+**EVIDENCE** — the founder's direction, 2026-10-07 (TASK.md, two entries: first lab and office, then
+*"use it in both K5 and K6"*). *Superseded twice:* first both in the gym, then a separate lab and
+office; Branch G is how the room keeps Q6's protection.
 
 **Q12. Framing?** Seated, waist-up, centred, locked-off 35 mm at seated chest height.
 **EVIDENCE** — the waist-up talk is the old K5's proven shot; left-of-centre has the worst record
@@ -148,27 +149,29 @@ nothing in it may read as the product. **ASSUMED** — a lab and an office are s
 the line Q6 draws is at the prototype and the app. *Against:* a viewer cannot tell a generated
 bench from a real one, so any board in shot is a risk — hence Q31–Q32.
 
-**Q30. How do the generated rooms match the real B-roll shot in the real rooms?** A wide still of
-each real room (R1, R2) as Flow's reference frame. **ASSUMED** — the K7/K8 reference-still technique
-held; otherwise the cut between generated and real lab shows a different room. *Against:* a
-reference frame may pull the composition away from the waist-up framing the prompt asks for.
+**Q30. How does the generated room match the real B-roll?** The founder's photo is Flow's
+reference frame for both clips. **EVIDENCE** — supplied 2026-10-07; the real B-roll (H5, S5) is shot
+at the same desk, so the cut matches by construction.
 
-**Q31. Does he assemble or type while talking?** No — he stops, looks up and talks with his hands
-resting. **EVIDENCE** — hands in motion near small objects are the film's worst failure (K7: eight
-takes; K6 broke its gesture guards), and working splits the eyeline from the lens.
+**Q31. Does he assemble or type while talking?** No — he turns from the work and talks with his
+hands resting. **EVIDENCE** — hands in motion near small objects are the film's worst failure (K7:
+eight takes; K6 broke its gesture guards), and working splits the eyeline from the lens.
 
-**Q32. What is on the bench and the desk?** Generic, soft-focus parts: no headband, no camera
-module, nothing teal; every screen faces away or is dark. **EVIDENCE** — Flow cannot render UI under
-the no-writing rule, and a garbled screen would be a generated app; the first real cutaway of the
-prototype follows within 1.5 s.
+**Q32. The room has five lit screens. What does Flow see?** A copy with every screen blurred to a
+glow (`scripts/k5k6/blur_lab.py` → `lab_reference_flow_16x9.jpg`), and a prompt that keeps them lit,
+behind him, out of focus, with nothing legible; a take with pseudo-text on any screen is a re-roll.
+**EVIDENCE** — the original shows legible code, a terminal and the landing page; Flow cannot render
+text under the no-writing rule and garbles it, and a garbled screen would be a generated app. Turning
+the screens off or away would stop it being this room.
 
 **Q33. Wardrobe for the lab and office?** The same black tank top, bare head; shorts and trainers
 dropped from the prompt because they are out of shot. **ASSUMED** — continuity of the man across
 eleven clips outweighs dressing for the room. *Against:* a tank top in an office reads as costume.
 
-**Q34. Grade them to the gym?** No — pull toward the film's look at ~40 % instead of 70 %, keeping
-the lab warm-lamp and the office daylight-cool. **ASSUMED** — two new rooms graded into the gym look
-like the gym. *Against:* less unity across the cut.
+**Q34. Grade them to the gym?** No — one look for both, because they share one room: white walls,
+cool daylight, screen glow, pulled toward the film's look at ~40 % instead of 70 %. **ASSUMED** — the
+gym's warm Y 42 would turn the photo's room into a different room. *Against:* less unity across the
+K4→K5 and K6→K7 cuts.
 
 **Q35. Film the real assembly and coding too?** Yes — H5 (soldering and seating the board in the
 real lab) and S5 (over-the-shoulder coding with tests passing in the real office), as spares cut
@@ -176,6 +179,18 @@ into K5 shot 5 and K6 shot 2. **ASSUMED** — the real rooms will be lit and set
 hands on the real prototype are the strongest frames a crowdfunding viewer can get. *Against:*
 another ~15 min of shooting.
 
-**Most worth a veto, riskiest first:** Q29 (generated lab electronics next to the real prototype), Q16 (did the phone rig really fail on tilt?), Q22/Q25
+**Q36. How are K5 and K6 told apart in one room?** By where he sits: K5 at the left end of the
+desk by the laptop, turning from loose parts; K6 in front of the two middle monitors, swivelling from
+the keyboard. **ASSUMED** — the room is fixed, so position is the only lever. *Against:* two
+consecutive clips in one room at one size can read as one long clip; the real cutaways between them
+carry most of the difference.
+
+**Q37. Does the photo also appear as real footage?** Yes — as K6 shot 1b, a 0.6 s establishing still,
+with the wall terminal and the laptop session blurred for privacy (`lab_broll_still.jpg`).
+**ASSUMED** — it is the only real image of the founder's workspace, and *"use it in both clips"*
+reads as wanting it seen. *Against:* "use it" may have meant only as the reference; the shot is
+0.6 s and drops without touching anything else.
+
+**Most worth a veto, riskiest first:** Q29 (generated lab electronics next to the real prototype), Q32 (Flow may still paint pseudo-text on blurred screens), Q16 (did the phone rig really fail on tilt?), Q22/Q25
 (the claims), Q23 (whether the live recognition works at all), Q19 (re-staging prototype 1),
 Q10 (bandless Peter for two more clips).
