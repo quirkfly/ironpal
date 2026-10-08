@@ -16,7 +16,7 @@ variants listed in `credentials/crowdfunding_accounts.txt` (gitignored, mode 600
 | StartEngine | Created, phone (SMS) + email verified | **None** | The founder fit check (`/raise-capital-ai`) rejects Gmail: "Please use only work email addresses". ironpal.co has no MX record, so there is no work mailbox | Create `peter@ironpal.co` (e.g. the `cf-email-routing` skill, forwarding to Gmail), then answer the 3 questions. Reg CF still requires a US issuer |
 | Republic | **Republic Europe** account created, email verified | **None submitted** | Application form `europe.republic.com/raise/apply/` filled truthfully, but it rejects the goal: "The minimum raise amount is 150,000" (vs €43k). Not submitted; entering €150k would misstate the raise | Only with a ≥ €150k equity round |
 | Crowdcube | Created on crowdcube.eu (country SK), registration unfinished (personal-details step) | **None** | `crowdcube.eu/get-started` requires sign-in; password sign-in fails until registration completes; a sign-in link was emailed but the Samsung phone (Gmail) disconnected before it could be read | Peter: open the Crowdcube sign-in mail, finish personal details (DOB, address), then *Apply to raise* |
-| Makuake | Sign-up email requested; confirmation mail never arrived while the phone was connected | **None** | Account not confirmed. Even then, Makuake's guideline refuses foreign corporations without a Japan branch | Peter: click the Makuake link if it arrives; a campaign needs a Japanese partner (Makuake Global) |
+| Makuake | Registered 2026-10-08 (see below) | **None** | Account not confirmed. Even then, Makuake's guideline refuses foreign corporations without a Japan branch | Peter: click the Makuake link if it arrives; a campaign needs a Japanese partner (Makuake Global) |
 
 ## Draft contents (Indiegogo and Ulule)
 
@@ -38,3 +38,15 @@ variants listed in `credentials/crowdfunding_accounts.txt` (gitignored, mode 600
 - **Gmail storage is at 14.71 of 15 GB.** Once it fills, platform mail (KYC, review results, backer messages) bounces.
 - Gmail shows a **"Critical security alert"** on the account. It may be from this session's automated sign-in attempt; check it at myaccount.google.com.
 - The Google session in desktop Chrome can't be reused by automation (device-bound cookies), so "Continue with Google" was not used anywhere.
+
+## Registration pass, 2026-10-08
+
+| Platform | Registration |
+|---|---|
+| Makuake | **Complete.** The first confirmation link (in Spam, sent 01:09) had expired; a new one was requested and used. Account username `IronPal` |
+| Patreon, StartEngine, GoFundMe | Complete (no further steps pending) |
+| Wefunder | Investor terms accepted (step 1). Identity step saved with legal name + the company seat as address (Ovručská 7, 831 02 Bratislava, SK); **blocked on Birthday** (Next disabled without it) |
+| Republic Europe | Logged in; personal-details step needs **Date of birth** + nationality on page 1 (then a tax ID) |
+| Crowdcube | Account resumes at `/register/your-name`: needs **Date of birth** + address. Nothing saved |
+
+Only Peter's date of birth (and, for Republic, a Slovak tax ID) is missing to finish all three. The company seat is used as the address, per Peter (2026-10-08).
