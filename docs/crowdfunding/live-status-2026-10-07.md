@@ -50,3 +50,14 @@ variants listed in `credentials/crowdfunding_accounts.txt` (gitignored, mode 600
 | Crowdcube | Account resumes at `/register/your-name`: needs **Date of birth** + address. Nothing saved |
 
 Only Peter's date of birth (and, for Republic, a Slovak tax ID) is missing to finish all three. The company seat is used as the address, per Peter (2026-10-08).
+
+### Update (2026-10-08, after Peter supplied DOB 23.07.1974 and asked to use 20deka's DIČ)
+
+| Platform | Registration |
+|---|---|
+| Wefunder | **Complete.** Identity: name, DOB, company seat as address, Tax ID = 20deka DIČ 2024120692. Phone verification skipped (no SMS arrived on +421 948 615 037); net worth, income, bank, interests skipped (optional) |
+| Republic Europe | About you (name, DOB, nationality Slovakia), address (company seat) and tax residency (Slovakia, DIČ 2024120692) saved. **Stopped at Finance**: employment = company owner/director, but it requires annual income *or* net assets; not guessed |
+| Crowdcube | **Dropped by Peter (not suitable).** Personal details were filled but the account was not created |
+| Patreon | **Dropped by Peter (not suitable).** The unpublished page `patreon.com/ironpal` and its two tiers still exist; delete them if unwanted |
+
+Note: the DIČ entered on Wefunder and Republic is the company's tax number, used on Peter's instruction in fields that ask for the individual's TIN.
