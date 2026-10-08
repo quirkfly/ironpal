@@ -94,7 +94,7 @@ Note: Indiegogo is planned for the same 2026-10-20 date. Running both at once sp
 
 Modelled on the Iron Horizon pre-launch page Peter supplied: branded 16:9 banner, then image-led sections.
 - Banner `media/backerkit/banner.jpg` (logo + "Your lifts, logged hands-free." centred so card crops keep it)
-- Animated loop `hero_loop.gif` (6 s of the site hero video), film card `film_card.jpg` + text link to the YouTube film (1:12) — BackerKit pre-launch pages have no video field
+- Film card `film_card.jpg` + text link to the longer YouTube film **https://www.youtube.com/watch?v=PwoSLyIk50c (1:28, K1–K11 crowdfunding cut)**. The animated hero loop was removed (Peter: the 1-second exercise flash felt disconnected). Campaign video (Basics → Image and Video) set to the same film as an iframe embed — BackerKit rejects plain URLs there
 - Section header graphics `hdr_problem / meet / today / building / privacy / founder.jpg`, each followed by its story text
 - `app_concept.png` labelled "PRODUCT INTERFACE CONCEPT · … weight reading is in development" (the screens show a kg value)
 - Risks + AI-video disclosure at the end. Verified on the public page, logged out.

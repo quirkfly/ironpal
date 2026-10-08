@@ -29,7 +29,7 @@ for n,t,s,img in secs:
      .c{{position:absolute;left:80px;top:50%;transform:translateY(-50%);max-width:820px}}.k{{display:flex;align-items:center;gap:12px;font:700 22px M;color:#9aa0b4;letter-spacing:3px;margin-bottom:18px}}.mk{{width:30px;height:30px}}
      h2{{font:800 72px/1 M;color:#F0F4F8;margin:0 0 18px;letter-spacing:-1px}}p{{font:500 26px/1.35 I;color:#00E5CC;margin:0}}.bar{{position:absolute;left:0;bottom:0;height:8px;width:100%;background:linear-gradient(90deg,#00E5CC,#0fb6a6 40%,transparent)}}""")
 # film card
-render("film_card",1440,810,f"""<div class=bg></div><div class=sh></div><div class=pl><div class=tri></div></div><div class=t>WATCH THE FILM</div><div class=s>1:12 · youtube.com</div>""",
+render("film_card",1440,810,f"""<div class=bg></div><div class=sh></div><div class=pl><div class=tri></div></div><div class=t>WATCH THE FILM</div><div class=s>1:28 · youtube.com</div>""",
  f""".bg{{position:absolute;inset:0;background:url(file://{R}/web/public/video/hero-poster.jpg) center/cover}}.sh{{position:absolute;inset:0;background:rgba(14,14,24,.45)}}
  .pl{{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:170px;height:170px;border-radius:50%;background:#00E5CC;box-shadow:0 10px 40px rgba(0,0,0,.5)}}
  .tri{{position:absolute;left:64px;top:46px;border-left:62px solid #0e0e18;border-top:39px solid transparent;border-bottom:39px solid transparent}}
