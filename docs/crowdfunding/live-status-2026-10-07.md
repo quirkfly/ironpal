@@ -77,3 +77,9 @@ Added after research confirmed Slovakia among BackerKit's 34 creator countries (
 | Peter to do | Connect Stripe and verify identity (20deka, s.r.o. + ID), then publish the pre-launch page and gather followers; review takes 2–4 business days |
 
 Note: Indiegogo is planned for the same 2026-10-20 date. Running both at once splits one $50k goal; pick one or stagger them.
+
+### Verification-email sweep (2026-10-08 evening)
+
+- **BackerKit:** "Set up your Account Profile" mail acted on — avatar (founder photo) + bio saved. Review checklist now: ✅ Set Up Your Profile, ✅ Import Your Past Projects, ✅ Build Your Campaign; ⬜ Connect with Stripe, ⬜ Verify Your Identity, ⬜ Gather Enough Project Followers.
+- **Indiegogo:** "Confirm contact address" shows **success**; 5/6 steps done, only *Add business data* (Adyen KYC) remains.
+- No other platform has an unanswered verification email (Makuake, StartEngine, Wefunder, Republic, Patreon, GoFundMe all confirmed or not requiring one).
