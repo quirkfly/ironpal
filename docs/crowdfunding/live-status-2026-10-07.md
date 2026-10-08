@@ -83,3 +83,9 @@ Note: Indiegogo is planned for the same 2026-10-20 date. Running both at once sp
 - **BackerKit:** "Set up your Account Profile" mail acted on — avatar (founder photo) + bio saved. Review checklist now: ✅ Set Up Your Profile, ✅ Import Your Past Projects, ✅ Build Your Campaign; ⬜ Connect with Stripe, ⬜ Verify Your Identity, ⬜ Gather Enough Project Followers.
 - **Indiegogo:** "Confirm contact address" shows **success**; 5/6 steps done, only *Add business data* (Adyen KYC) remains.
 - No other platform has an unanswered verification email (Makuake, StartEngine, Wefunder, Republic, Patreon, GoFundMe all confirmed or not requiring one).
+
+### BackerKit pre-launch page published (2026-10-08, on Peter's instruction)
+
+- **Public:** https://www.backerkit.com/c/projects/ironpal/ironpal-the-headband-camera-that-logs-your-lifts — listed on BackerKit's Coming Soon page, "Get notified" follow button live, countdown to 2026-10-20 01:00 PDT.
+- Page body: teaser from the story (problem, product, what works today, what's being built, privacy) + film link + AI-video disclosure. Verified logged-out.
+- Campaign itself still **Draft**; review not requested. Remaining for review: Stripe, identity verification, followers.
