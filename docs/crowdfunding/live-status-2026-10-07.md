@@ -61,3 +61,19 @@ Only Peter's date of birth (and, for Republic, a Slovak tax ID) is missing to fi
 | Patreon | **Dropped by Peter (not suitable).** The unpublished page `patreon.com/ironpal` and its two tiers still exist; delete them if unwanted |
 
 Note: the DIČ entered on Wefunder and Republic is the company's tax number, used on Peter's instruction in fields that ask for the individual's TIN.
+
+## BackerKit Crowdfunding (2026-10-08)
+
+Added after research confirmed Slovakia among BackerKit's 34 creator countries (Stripe account + national ID).
+
+| | |
+|---|---|
+| Account | Created and email-confirmed (`p3t3r.d3rm3k@gmail.com`; password variant in `credentials/crowdfunding_accounts.txt`) |
+| Project | **Draft** — admin at `backerkit.com/c/admin/projects/ironpal-the-headband-camera-that-logs-your-lifts/start_dashboard` |
+| Basics | Title, creator IronPal, Design & Tech, goal **$50,000** (internal target $50,000, est. avg pledge $75 → ~667 backers), est. launch **2026-10-20 01:00 PDT** (= 10:00 Bratislava), end **2026-11-19 11:00 PST**, est. shipping Sep 2027, support email, hero image, campaign film |
+| Story | 8 sections from `ironpal-campaign-core.md` (guardrail wording, AI-video disclosure) |
+| Rewards | Founding Supporter $15 · Super Early Bird $49 (≤200, featured) · Early Bird $69 (≤500) · Complete Kit $99 · Gym Owner Pack $399 (≤50), each with items attached (8 items). Gym Owner Pack item quantities still 1 — set headband ×5 |
+| Not done (deliberately) | **Pre-launch page not published** (it would list publicly on Coming Soon). **Review not requested.** Ironpal.co early-bird list not imported (subscriber data to a third party) |
+| Peter to do | Connect Stripe and verify identity (20deka, s.r.o. + ID), then publish the pre-launch page and gather followers; review takes 2–4 business days |
+
+Note: Indiegogo is planned for the same 2026-10-20 date. Running both at once splits one $50k goal; pick one or stagger them.
