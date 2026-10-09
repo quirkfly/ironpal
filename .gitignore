@@ -79,3 +79,5 @@ web/server/emails.db*
 
 # local backup of the RN bundle
 /poc/mobile/.bundle-backup/
+poc/mobile/android/app/src/main/assets/models/
+/input/kickstarter/fisheye/curl_overlay_frames/

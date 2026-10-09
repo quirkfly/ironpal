@@ -1,0 +1,101 @@
+<!doctype html><meta charset=utf-8>
+<!-- One-arm curl tracking overlay (docs/curl_tracking_overlay_plan.md §4). Transparent 1280x720 page;
+     render(i) draws frame i from window.TRACKS. Tokens: web/src/styles/tokens.css, FormTracking.astro. -->
+<style>
+@font-face{font-family:Mont;src:url("../../web/node_modules/@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2") format("woff2");font-weight:100 900}
+:root{--accent:#00E5CC;--heading:#F0F4F8;--body:#9aa0b4}
+html,body{margin:0;width:1920px;height:1080px;background:transparent;overflow:hidden;font-family:Mont,sans-serif}
+svg{position:absolute;inset:0}
+.m-line{stroke:var(--accent);stroke-width:3;fill:none}
+.m-lead{stroke:var(--accent);stroke-width:1.5;fill:none;opacity:.8}
+.m-dash{stroke:var(--accent);stroke-width:2.5;stroke-dasharray:9 8;fill:none;opacity:.85}
+.m-arc{stroke:var(--accent);stroke-width:3;fill:rgba(0,229,204,.14)}
+.m-dot{fill:var(--accent)}
+.m-halo{fill:none;stroke:#0b0b16;stroke-width:5;opacity:.55}
+.m-tag{font:600 19px Mont;fill:var(--heading);letter-spacing:.06em;paint-order:stroke;stroke:#0b0b16;stroke-width:4px;stroke-opacity:.6}
+.m-small{font:600 12px Mont;fill:var(--body);letter-spacing:.14em;text-transform:uppercase;paint-order:stroke;stroke:#0b0b16;stroke-width:3px;stroke-opacity:.6}
+.m-rep{font:800 30px Mont;fill:var(--accent);letter-spacing:.06em;paint-order:stroke;stroke:#0b0b16;stroke-width:5px;stroke-opacity:.6}
+/* HUD — the K7 live-set language */
+.hud{position:absolute;left:1500px;top:120px;width:260px;transform:scale(1.48);transform-origin:0 0;padding:18px 16px 14px;border-radius:22px;background:#101023;border:1px solid rgba(255,255,255,.06);box-sizing:border-box}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:7px;font-weight:800;letter-spacing:.1em;font-size:12px;color:var(--heading)}
+.brand i{width:12px;height:12px;border-radius:50%;border:2.5px solid var(--accent);border-bottom-color:transparent;box-sizing:border-box}
+.live{font-size:10px;color:var(--accent);letter-spacing:.08em}
+.f{border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:9px 11px;margin-bottom:9px}
+.f.focus{border-color:rgba(0,229,204,.55);background:rgba(0,229,204,.08);box-shadow:0 0 24px -8px rgba(0,229,204,.5)}
+.lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.16em;color:var(--body);display:block;margin-bottom:3px}
+.ex{font-weight:700;font-size:15px;color:var(--heading);line-height:1.15}
+.focus .ex{color:var(--accent)}
+.big{font-weight:800;font-size:34px;line-height:1;color:var(--heading);font-variant-numeric:tabular-nums}
+.big small{font-size:13px;font-weight:600;color:var(--body);margin-left:3px}
+.f.pulse{border-color:rgba(0,229,204,.9);box-shadow:0 0 30px -4px rgba(0,229,204,.75)}
+.parts{margin-top:6px;font-size:11px;color:var(--body);line-height:1.6}
+.parts b{color:var(--heading);font-weight:600}
+.row{display:flex;justify-content:space-between;font-size:11px;color:var(--body);padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.02);margin-top:5px}
+.row.cur{color:var(--accent);background:rgba(0,229,204,.07)}
+.concept{position:absolute;left:1480px;bottom:70px;font-size:13px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--body);line-height:1.7}
+.gauge{position:absolute;left:62px;top:330px;width:16px;height:420px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden}
+.gauge i{position:absolute;left:0;bottom:0;width:100%;background:var(--accent);border-radius:6px}
+.glbl{position:absolute;left:52px;top:298px;font-size:10px;letter-spacing:.16em;color:var(--body)}
+.gtop{position:absolute;left:44px;top:322px;width:52px;border-top:2px dashed rgba(0,229,204,.6)}
+</style>
+<svg id="ov" viewBox="0 0 1920 1080" width="1920" height="1080"><g id="g0" transform="translate(0,90) scale(1.25)"></g></svg>
+<div class="glbl">LIFT</div><div class="gtop"></div><div class="gauge"><i id="g"></i></div>
+<div class="concept">Product interface concept<br>Simulated footage</div>
+<div class="hud">
+  <div class="top"><span class="brand"><i></i>IRONPAL</span><span class="live">● live</span></div>
+  <div class="f focus"><span class="lbl">Exercise</span><span class="ex">One-Arm<br>Biceps Curl</span></div>
+  <div class="f" id="repsF"><span class="lbl">Reps</span><span class="big" id="reps">0</span></div>
+  <div class="f"><span class="lbl">Weight</span><span class="big">18<small>kg</small></span>
+    <div class="parts"><b>2 × 5 kg</b> plates<br><b>2 × 3.5 kg</b> plates<br><b>1 kg</b> bar</div></div>
+  <div class="row"><span>Set 1</span><span>8 × 18 kg</span></div>
+  <div class="row cur"><span>Set 2</span><span id="logc">logging…</span></div>
+</div>
+<script>
+const T = window.TRACKS;
+const ov = document.getElementById('g0');
+const rad = a => a * Math.PI / 180;
+function arc(cx, cy, r, frac) {
+  if (frac <= 0) return '';
+  if (frac >= 0.999) return `<circle class="m-arc" cx="${cx}" cy="${cy}" r="${r}"/>`;
+  const a0 = -90, a1 = -90 + 360 * frac;
+  const x0 = cx + r * Math.cos(rad(a0)), y0 = cy + r * Math.sin(rad(a0));
+  const x1 = cx + r * Math.cos(rad(a1)), y1 = cy + r * Math.sin(rad(a1));
+  return `<path class="m-arc" d="M${cx},${cy} L${x0},${y0} A${r},${r} 0 ${frac > .5 ? 1 : 0} 1 ${x1},${y1} Z"/>`;
+}
+window.render = function (i) {
+  const f = T.frames[i], [fx, fy] = f.fist;
+  const [nx, ny, nrx, nry] = f.near, [qx, qy, qrx, qry] = f.far;
+  const [hnx, hny] = f.hubN, [hfx, hfy] = f.hubF;
+  // rep pulse: 12 frames after each count
+  const last = T.reps.filter(r => r <= i).pop();
+  const since = last === undefined ? 99 : i - last;
+  const pulse = since < 12 ? since / 12 : null;
+  // tags: near-stack tag left of its ring (into the black margin), far-stack tag above-right of its ring
+  const ntx = nx - 30, nty = ny + nry + 30;   // below the near ring, inside the picture
+  const ftx = qx + qrx * 0.55 + 18, fty = Math.max(40, qy - qry * 0.85);
+  const mx = (fx + hfx) / 2, my = (fy + hfy) / 2;
+  ov.innerHTML = `
+    <ellipse class="m-dash" cx="${nx}" cy="${ny}" rx="${nrx}" ry="${nry}"/>
+    <ellipse class="m-dash" cx="${qx}" cy="${qy}" rx="${qrx}" ry="${qry}"/>
+    <line class="m-halo" x1="${hnx}" y1="${hny}" x2="${hfx}" y2="${hfy}"/>
+    <line class="m-line" x1="${hnx}" y1="${hny}" x2="${hfx}" y2="${hfy}"/>
+    <circle class="m-dot" cx="${hnx}" cy="${hny}" r="7"/>
+    <circle class="m-dot" cx="${hfx}" cy="${hfy}" r="7"/>
+    ${arc(fx, fy, 26, f.p)}
+    <circle cx="${fx}" cy="${fy}" r="26" fill="none" stroke="#00E5CC" stroke-width="1.5" opacity=".5"/>
+    <circle class="m-dot" cx="${fx}" cy="${fy}" r="8"/>
+    ${pulse !== null ? `<circle cx="${fx}" cy="${fy}" r="${26 + 54 * pulse}" fill="none" stroke="#00E5CC" stroke-width="${4 - 3 * pulse}" opacity="${1 - pulse}"/>
+       <text class="m-rep" x="${fx + 40}" y="${fy + 70}" opacity="${since < 9 ? 1 : 1 - (since - 9) / 3}">REP ${f.count}</text>` : ''}
+    <line class="m-lead" x1="${nx}" y1="${ny + nry}" x2="${nx}" y2="${nty - 20}"/>
+    <text class="m-tag" x="${ntx}" y="${nty}">5 + 3.5 kg</text>
+    <text class="m-small" x="${ntx}" y="${nty + 18}">plates</text>
+    <text class="m-tag" x="${ftx}" y="${fty}">5 + 3.5 kg</text>
+    <text class="m-small" x="${ftx}" y="${fty + 18}">plates</text>
+    <text class="m-small" x="${mx + 26}" y="${my - 26}">bar 1 kg</text>`;
+  document.getElementById('g').style.height = (f.p * 100) + '%';
+  document.getElementById('reps').textContent = f.count;
+  document.getElementById('repsF').classList.toggle('pulse', since < 12);
+  document.getElementById('logc').textContent = f.count ? `${f.count} × 18 kg` : 'logging…';
+};
+</script>
