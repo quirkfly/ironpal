@@ -19,7 +19,13 @@ MOBILE="$ROOT/poc/mobile"
 E2E="$MOBILE/e2e"
 FIXTURES="$E2E/fixtures"
 APP_ID="com.twentydeka.ironpal"
+# Maestro ≥ 2.11 (installed side by side in ~/.maestro-2.11) has the hidden --driver-host-port,
+# so this suite can run while another project's Maestro holds the default port 7001.
+if [ -z "${MAESTRO:-}" ] && [ -x "$HOME/.maestro-2.11/maestro/bin/maestro" ]; then
+  MAESTRO="$HOME/.maestro-2.11/maestro/bin/maestro"
+fi
 MAESTRO="${MAESTRO:-$HOME/.maestro/bin/maestro}"
+DRIVER_PORT="${MAESTRO_DRIVER_PORT:-7011}"
 APK="$MOBILE/android/app/build/outputs/apk/release/app-release.apk"
 DEVICE_FILES="/sdcard/Android/data/$APP_ID/files"
 
@@ -114,10 +120,11 @@ declare -A FIXTURE=(
   [10-studio-pins-weight]=split-squat-8reps
   [11-studio-reel]=split-squat-8reps
   [12-studio-queue-import]=case001-curl-6reps
+  [13-enrol-and-recognise]=case001-curl-6reps
 )
 ORDER=(01-campaign-map 02-session-and-hud 03-labeling-round 04-quality-gates 05-hard-class 06-inspector-benchmark \
        07-studio-navigation 08-studio-marks-bounds 09-studio-exercise-relabel 10-studio-pins-weight \
-       11-studio-reel 12-studio-queue-import)
+       11-studio-reel 12-studio-queue-import 13-enrol-and-recognise)
 
 push_fixture() { # $1 = fixture basename
   local fx="$1"
@@ -158,7 +165,11 @@ for flow in "${ORDER[@]}"; do
   info "${C_B}── $flow${C_0}  (fixture: $fx)"
   push_fixture "$fx"
   log="$ROOT/out/e2e/$flow.log"
-  if "$MAESTRO" --device "$DEVICE" test "$E2E/$flow.yaml" >"$log" 2>&1; then
+  PORT_ARGS=()
+  [[ "$MAESTRO" == *maestro-2.11* ]] && PORT_ARGS=(--driver-host-port "$DRIVER_PORT")
+  # A pulled-down notification shade hides the app from Maestro; collapse it before each flow.
+  adb -s "$DEVICE" shell cmd statusbar collapse >/dev/null 2>&1 || true
+  if "$MAESTRO" --device "$DEVICE" test "${PORT_ARGS[@]}" "$E2E/$flow.yaml" >"$log" 2>&1; then
     ok "$flow"
     RESULTS+=("PASS $flow")
   else

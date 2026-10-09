@@ -1,0 +1,190 @@
+{
+"_source": "docs/video-analysis-kb/ontology.json (tier-1 fields; regenerate with scripts/model/embed_fit.py --ontology)",
+"exercises": {
+"barbell-back-squat": {
+"head": "moving",
+"rep": "imu",
+"vis": "occluded"
+},
+"barbell-bench-press": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"barbell-bent-over-row": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"barbell-curl": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"barbell-deadlift": {
+"head": "moving",
+"rep": "imu",
+"vis": "visible"
+},
+"barbell-front-squat": {
+"head": "moving",
+"rep": "imu",
+"vis": "partial"
+},
+"barbell-hip-thrust": {
+"head": "moving",
+"rep": "fusion",
+"vis": "partial"
+},
+"barbell-overhead-press": {
+"head": "moving",
+"rep": "fusion",
+"vis": "visible"
+},
+"bulgarian-split-squat": {
+"head": "moving",
+"rep": "imu",
+"vis": "partial"
+},
+"cable-biceps-curl": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"cable-lateral-raise": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"chest-press-machine": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"chin-up": {
+"head": "moving",
+"rep": "imu",
+"vis": "visible"
+},
+"dip": {
+"head": "moving",
+"rep": "imu",
+"vis": "partial"
+},
+"dumbbell-bench-press": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"dumbbell-biceps-curl": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"dumbbell-fly": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"dumbbell-front-raise": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"dumbbell-lateral-raise": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"dumbbell-pullover": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"dumbbell-row": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"dumbbell-shoulder-press": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"goblet-squat": {
+"head": "moving",
+"rep": "imu",
+"vis": "visible"
+},
+"hack-squat-machine": {
+"head": "moving",
+"rep": "imu",
+"vis": "occluded"
+},
+"incline-barbell-bench-press": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"lat-pulldown": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"leg-extension": {
+"head": "still",
+"rep": "vision",
+"vis": "partial"
+},
+"leg-press": {
+"head": "still",
+"rep": "vision",
+"vis": "partial"
+},
+"pull-up": {
+"head": "moving",
+"rep": "imu",
+"vis": "visible"
+},
+"push-up": {
+"head": "moving",
+"rep": "imu",
+"vis": "floor_reference"
+},
+"romanian-deadlift": {
+"head": "moving",
+"rep": "imu",
+"vis": "visible"
+},
+"seated-cable-row": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"seated-leg-curl": {
+"head": "still",
+"rep": "hard",
+"vis": "occluded"
+},
+"shoulder-press-machine": {
+"head": "still",
+"rep": "vision",
+"vis": "visible"
+},
+"standing-calf-raise-machine": {
+"head": "moving",
+"rep": "imu",
+"vis": "occluded"
+},
+"triceps-cable-pushdown": {
+"head": "still",
+"rep": "hard",
+"vis": "visible"
+},
+"walking-lunge": {
+"head": "moving",
+"rep": "imu",
+"vis": "partial"
+}
+}
+}

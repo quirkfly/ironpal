@@ -58,6 +58,10 @@ android {
             keyPassword props.getProperty('IRONPAL_RELEASE_KEY_PASSWORD', 'android')
         }
     }
+    // Model binaries are memory-mapped by LiteRT/MediaPipe, which needs them stored uncompressed.
+    androidResources {
+        noCompress += ["tflite", "task"]
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -89,6 +93,11 @@ dependencies {
     implementation("androidx.media3:media3-transformer:${media3Version}")
     implementation("androidx.media3:media3-effect:${media3Version}")
     implementation("androidx.media3:media3-common:${media3Version}")
+
+    // Neural model v2 (docs/ironpal-neural-model-design-v2.md): MoViNet-A0-Stream on LiteRT, and
+    // MediaPipe Pose Landmarker Lite. Both Apache 2.0 (poc/ASSET_LICENCES.md).
+    implementation("com.google.ai.edge.litert:litert:1.4.2")
+    implementation("com.google.mediapipe:tasks-vision:1.1.0")
 
     // JVM unit tests for the pure-Kotlin signal engine (design §11 — no test source set existed).
     testImplementation("junit:junit:4.13.2")

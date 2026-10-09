@@ -369,6 +369,8 @@ export async function relabel(labeledSetId: string, input: CommitInput): Promise
 
   const confirmed: ConfirmedSet = {...input.confirmed, setId: labeledSetId, labelSource: input.confirmed.labelSource ?? 'studio'};
   const out = await commit({...input, confirmed, revision});
+  // Neural design v2 §7.2: a relabel moves the set's embedding row with it.
+  await store.relabelEmbedding(labeledSetId, confirmed.exerciseId).catch(() => undefined);
 
   // Demotion after a relabel: the old exercise (if changed) and the new one are re-evaluated
   // against their counts — commit only ever moves a level up.

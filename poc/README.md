@@ -94,6 +94,58 @@ surface. What exists and how it was verified:
 - The A52 measurements the design gates on (frame step ≤ 50 ms p95, proxy transcode ratio, the
   nod cross-check residual) have **not** been taken — no device was attached in this session.
 
+## Neural model v2 — enrol and recognise by embedding (2026-10-08)
+
+This build implements the smallest slice of [`docs/ironpal-neural-model-design-v2.md`](../docs/ironpal-neural-model-design-v2.md)
+that makes "label a set once, recognise it the next time" testable on the A52.
+
+**What's in it**
+- `EmbedModule.kt`: MoViNet-A0-Stream (LiteRT, CPU) and MediaPipe Pose Lite run over the set's
+  recorded clip at 5 fps. It returns 600 video numbers and 48 pose numbers. `PoseGeometry.kt` holds
+  the 8 geometry channels × 6 statistics.
+- `src/model/embed.ts`: the three blocks, each L2-normalised. Video is whitened from 600 to 64
+  dimensions with the bundled `embed_params.json`. Pose is z-scored. IMU is the engine's features
+  plus a 32-bin spectrum.
+- `src/model/recognizer.ts`: the weighted cosine per candidate exercise, with weights taken from
+  the ontology. It blends prototype and k=3 exemplars and applies the reject rule (low confidence,
+  tie, negative, nothing seen, looked different from the usual spread).
+- Schema v3 adds the `embeddings` table. One row is written per labelled set on Debrief save, and a
+  Studio relabel moves it.
+- **Debrief:** a recognition card shows the answer, the per-block similarities and the reject
+  reason.
+- **Campaign:** **ARM BLIND SET** appears once anything is enrolled. You arm without choosing, and
+  the model names the exercise.
+
+**Deliberate deviations from the design**
+1. **Per set, from the recorded clip.** There is no live 5 fps stream and no live HUD label yet;
+   that is design phase V2.
+2. **The video feature is MoViNet's 600 logits averaged over the set**, not the 2048-d pooled layer.
+   The logits are a fixed linear map of that layer, so whitening recovers the same subspace without
+   editing the model file.
+3. **Whitening is 64-d, fitted on 150 windows from 4 KB clips.** The design asks for 128-d from
+   about 1,000 windows. Refit with `scripts/model/embed_fit.py` once more footage exists. The
+   `model_version` changes with every refit.
+4. **The IMU block uses the engine's 11 feature numbers plus a 32-bin spectrum.** The design
+   specifies 9 + 32. It is not z-scored, because no IMU fit set exists.
+5. **No video negatives.** Rest and walk windows are not embedded yet, so the `negative` reject
+   route is wired up and tested but empty on the device.
+6. **The "≥ 3 IMU cycles" enrolment gate applies only to `imu`/`fusion` classes.** A head-still
+   curl barely moves a head IMU, so that gate would refuse exactly the sets this design is meant to
+   learn.
+
+**Offline evidence (KB clips, leave-one-clip-out):** the two alternate-curl clips found each other
+in 27 % of windows on video alone and 52 % on pose alone. They came from different cameras, weeks
+apart, and were not trimmed to the set. That is the hard case. The design's regime is the same rig,
+the same day and trimmed sets.
+
+**Models:** `scripts/model/fetch_embed_models.sh` downloads them into the Android assets, which
+are not committed. Licences are listed in [`MODEL_LICENCES.md`](MODEL_LICENCES.md).
+
+**Tests**
+- Jest: `__tests__/embedding.test.ts` (15 tests).
+- JVM: `PoseGeometryTest` (4 tests).
+- Device: Maestro `13-enrol-and-recognise`.
+
 ## Dev-stack registration (antinloop `rnctl`)
 
 Registered in the multi-RN-app registry (`~/.config/rn-devstack/registry.json`, serial-bearing so

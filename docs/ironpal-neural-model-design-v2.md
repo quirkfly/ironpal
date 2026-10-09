@@ -1,6 +1,6 @@
 # IronPal Neural Model v2 — Enrol once, recognise by embedding
 
-**Status:** Draft v1.1 · 2026-09-22 — design review complete (auto mode)
+**Status:** Draft v1.1 · 2026-09-22 — design review complete (auto mode) · **first slice implemented 2026-10-08** (per-set enrol + recognise; see `poc/README.md`, "Neural model v2")
 **Owner:** founder (solo)
 **Source of the brief:** [`movinet_knn_pipeline.txt`](movinet_knn_pipeline.txt) — the licence-vetted,
 Apache-2.0-only stack (MoViNet · MediaPipe Pose · MobileNetV4 · PaddleOCR; **no YOLO**, which is

@@ -2,6 +2,9 @@
 // handle; every write that must be atomic runs inside `transaction`.
 
 import {getDb} from '../store/db';
+import {decodeF16, encodeF16} from './f16';
+import type {Embedding, EmbedQuality} from './embed';
+import type {EmbeddingRow} from './recognizer';
 import type {
   ClipRow,
   Decision,
@@ -699,4 +702,93 @@ export async function eraseAll(): Promise<void> {
       await run(`DELETE FROM ${t}`);
     }
   });
+}
+
+// ---- embeddings (neural design v2 §4.1) ----
+
+export interface StoredEmbedding {
+  id: string;
+  exerciseId: string;
+  labeledSetId: string | null;
+  sessionId: string;
+  gymId: string | null;
+  kind: 'set' | 'negative' | 'prior';
+  source: 'own' | 'gym_pack';
+  emb: Embedding;
+  quality: EmbedQuality & {gates?: Record<string, boolean>; dims?: Record<string, number>};
+  modelVersion: string;
+  weightDeclared: number | null;
+  createdAt: number;
+  revision: number;
+}
+
+const vecToF16 = (v: number[] | null) => (v ? encodeF16([v]) : null);
+const f16ToVec = (b64: unknown, dims: number | undefined): number[] | null =>
+  typeof b64 === 'string' && b64 && dims ? decodeF16(b64, dims)[0] ?? null : null;
+
+export async function upsertEmbedding(e: StoredEmbedding): Promise<void> {
+  const dims = {video: e.emb.video?.length ?? 0, pose: e.emb.pose?.length ?? 0, imu: e.emb.imu?.length ?? 0};
+  await run(
+    `INSERT OR REPLACE INTO embeddings
+       (id, exercise_id, labeled_set_id, session_id, gym_id, station_id, kind, source, video_f16, pose_f16, imu_f16,
+        quality_json, model_version, weight_declared, created_at, revision)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [
+      e.id, e.exerciseId, e.labeledSetId, e.sessionId, e.gymId, null, e.kind, e.source,
+      vecToF16(e.emb.video), vecToF16(e.emb.pose), vecToF16(e.emb.imu),
+      JSON.stringify({...e.quality, dims}), e.modelVersion, e.weightDeclared, e.createdAt, e.revision,
+    ],
+  );
+}
+
+function rowToEmbedding(r: Row): StoredEmbedding {
+  const quality = JSON.parse(r.quality_json as string);
+  const dims = quality.dims ?? {};
+  return {
+    id: r.id as string,
+    exerciseId: r.exercise_id as string,
+    labeledSetId: (r.labeled_set_id as string) ?? null,
+    sessionId: r.session_id as string,
+    gymId: (r.gym_id as string) ?? null,
+    kind: r.kind as StoredEmbedding['kind'],
+    source: r.source as StoredEmbedding['source'],
+    emb: {video: f16ToVec(r.video_f16, dims.video), pose: f16ToVec(r.pose_f16, dims.pose), imu: f16ToVec(r.imu_f16, dims.imu)},
+    quality,
+    modelVersion: r.model_version as string,
+    weightDeclared: (r.weight_declared as number) ?? null,
+    createdAt: r.created_at as number,
+    revision: r.revision as number,
+  };
+}
+
+export async function embeddings(filter: {modelVersion?: string; kinds?: StoredEmbedding['kind'][]} = {}): Promise<StoredEmbedding[]> {
+  const where: string[] = [];
+  const params: unknown[] = [];
+  if (filter.modelVersion) {
+    where.push('model_version = ?');
+    params.push(filter.modelVersion);
+  }
+  if (filter.kinds?.length) {
+    where.push(`kind IN (${filter.kinds.map(() => '?').join(',')})`);
+    params.push(...filter.kinds);
+  }
+  const rows = await all(`SELECT * FROM embeddings${where.length ? ` WHERE ${where.join(' AND ')}` : ''} ORDER BY created_at`, params);
+  return rows.map(rowToEmbedding);
+}
+
+/** The recogniser's view: rows of the current model version that passed their enrolment gates. */
+export async function recognizerRows(modelVersion: string): Promise<EmbeddingRow[]> {
+  const rows = await embeddings({modelVersion, kinds: ['set', 'negative']});
+  return rows
+    .filter(r => r.kind === 'negative' || Object.values(r.quality.gates ?? {}).every(Boolean))
+    .map(r => ({id: r.id, exerciseId: r.exerciseId, kind: r.kind as 'set' | 'negative', emb: r.emb}));
+}
+
+/** A relabel moves the row (design §7.2: "relabel moves it"). */
+export async function relabelEmbedding(labeledSetId: string, exerciseId: string): Promise<void> {
+  await run('UPDATE embeddings SET exercise_id = ?, revision = revision + 1 WHERE labeled_set_id = ?', [exerciseId, labeledSetId]);
+}
+
+export async function deleteEmbeddingsForSet(labeledSetId: string): Promise<void> {
+  await run('DELETE FROM embeddings WHERE labeled_set_id = ?', [labeledSetId]);
 }

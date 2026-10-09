@@ -2,7 +2,7 @@
 // database as the POC tables (store/db.ts). Encryption (op-sqlite/SQLCipher, ledger Q11) is
 // the D6 spike; until it lands the file is app-private and the manifest disables backup.
 
-export const MODEL_SCHEMA_VERSION = 2;
+export const MODEL_SCHEMA_VERSION = 3;
 
 export const MODEL_SCHEMA: string[] = [
   `CREATE TABLE IF NOT EXISTS model_templates (
@@ -96,6 +96,20 @@ export const MODEL_SCHEMA: string[] = [
      id INTEGER PRIMARY KEY AUTOINCREMENT, at INTEGER NOT NULL, labeled_set_id TEXT, kind TEXT NOT NULL, ms INTEGER, n INTEGER
    );`,
   `CREATE TABLE IF NOT EXISTS studio_drafts (labeled_set_id TEXT PRIMARY KEY, answers_json TEXT NOT NULL, updated_at INTEGER NOT NULL);`,
+  // ---- schema v3: neural design v2 §4.1 — one embedding per labelled set ----
+  // Blocks are float16 base64 (f16.ts); NULL = modality absent. Dims live in quality_json.
+  `CREATE TABLE IF NOT EXISTS embeddings (
+     id TEXT PRIMARY KEY,
+     exercise_id TEXT NOT NULL,
+     labeled_set_id TEXT, session_id TEXT NOT NULL, gym_id TEXT, station_id TEXT,
+     kind TEXT NOT NULL CHECK (kind IN ('set','negative','prior')),
+     source TEXT NOT NULL CHECK (source IN ('own','gym_pack')),
+     video_f16 TEXT, pose_f16 TEXT, imu_f16 TEXT,
+     quality_json TEXT NOT NULL,
+     model_version TEXT NOT NULL,
+     weight_declared REAL, created_at INTEGER NOT NULL, revision INTEGER NOT NULL DEFAULT 1
+   );`,
+  `CREATE INDEX IF NOT EXISTS embeddings_ex ON embeddings(exercise_id, kind, source);`,
 ];
 
 /**

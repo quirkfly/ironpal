@@ -23,6 +23,7 @@ class IronPalPackage : ReactPackage {
       CameraModule(reactContext),
       KeystoreModule(reactContext),
       ClipModule(reactContext),
+      EmbedModule(reactContext),
     )
   }
 

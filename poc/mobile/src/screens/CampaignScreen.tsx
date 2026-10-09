@@ -6,7 +6,10 @@ import {useDebrief, type DebriefAnswers} from '../controller/useDebrief';
 import {useSession} from '../controller/useSession';
 import {useSet} from '../controller/useSet';
 import {BACKDROP, BADGE, CAMPAIGN, EMBLEM, glyphFor, HUD, rankFor, type CampaignKey} from '../game/assets';
+import {embedSet, enrolGates, enrolSet, recognizeSet, type SetEmbedding} from '../model/enrol';
 import {repSignalOf} from '../model/packageManager';
+import type {Recognition} from '../model/recognizer';
+import ontologyWeights from '../model/ontology_weights.json';
 import * as store from '../model/store';
 import {SignalModule} from '../native/SignalModule';
 import type {LevelProgress, LevelState} from '../types/model';
@@ -72,6 +75,9 @@ export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
   const [labeling, setLabeling] = useState(false);
   const [studio, setStudio] = useState<{draft: StudioDraft; focus: QueueFocus} | null>(null);
   const [queueCount, setQueueCount] = useState(0);
+  /** Neural design v2: the set's embedding and what the recogniser made of it (null until run). */
+  const [recog, setRecog] = useState<{status: 'running' | 'done' | 'error'; e?: SetEmbedding; r?: Recognition; error?: string; enrolled?: boolean} | null>(null);
+  const [enrolledCount, setEnrolledCount] = useState(0);
 
   const pkg = session.state.pkg;
   const names = useMemo(() => ((pkg as unknown as {exercise_names?: Record<string, string>})?.exercise_names ?? {}), [pkg]);
@@ -91,6 +97,7 @@ export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
   const refresh = useCallback(async () => {
     setLevels(await store.allLevelProgress());
     setQueueCount(await store.openQueueCount().catch(() => 0));
+    setEnrolledCount((await store.embeddings({kinds: ['set']}).catch(() => [])).length);
   }, []);
   useEffect(() => {
     void refresh();
@@ -104,10 +111,26 @@ export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
   const armOpts = session.state.sessionId ? {sessionId: session.state.sessionId, rigId: IMU_SOURCE === 'BLE' ? 'elp-nano' : 'phone', rotationDeg: 90} : undefined;
 
   const endSet = async () => {
+    const blind = !set.live.exerciseHint;
+    const clipId = set.live.clipId ?? null;
     const result = await set.end();
     if (result && ctx) {
-      await debrief.open(result, ctx, exerciseId);
-      const proposed = result.match?.label && result.match.label !== 'unknown' ? result.match.label : exerciseId ?? '';
+      // Embed + recognise in the background; the Debrief opens at once and fills in when done.
+      setRecog({status: 'running'});
+      void (async () => {
+        try {
+          const e = await embedSet(clipId, result);
+          const r = await recognizeSet(e);
+          setRecog({status: 'done', e, r});
+          if (blind && r.label !== 'unknown') {
+            setAnswers(a => (a.exerciseId ? a : {...a, exerciseId: r.label}));
+          }
+        } catch (err) {
+          setRecog({status: 'error', error: (err as Error).message});
+        }
+      })();
+      await debrief.open(result, ctx, blind ? null : exerciseId);
+      const proposed = blind ? '' : result.match?.label && result.match.label !== 'unknown' ? result.match.label : exerciseId ?? '';
       const prior = await store.weightPrior(proposed, ctx.gymId);
       setAnswers({
         exerciseId: proposed,
@@ -124,6 +147,13 @@ export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
   const save = async () => {
     if (set.live.result && ctx) {
       const out = await debrief.confirm(set.live.result, answers, ctx);
+      if (out && recog?.status === 'done' && recog.e && answers.exerciseId) {
+        const onto = (ontologyWeights as unknown as {exercises: Record<string, {head: string | null}>}).exercises[answers.exerciseId];
+        const gates = enrolGates(recog.e.quality, repSignalOf(ctx.pkg, answers.exerciseId) ?? 'vision', onto?.head === 'still', set.live.result.repsDetected);
+        await enrolSet({setId: set.live.result.setId, sessionId: ctx.sessionId, gymId: ctx.gymId, exerciseId: answers.exerciseId, e: recog.e, gates, weight: answers.weight})
+          .then(() => setRecog(rc => (rc ? {...rc, enrolled: true} : rc)))
+          .catch(err => setRecog(rc => (rc ? {...rc, error: `enrol failed: ${(err as Error).message}`} : rc)));
+      }
       if (out) {
         await refresh();
       }
@@ -163,15 +193,17 @@ export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
         proposals={debrief.proposals}
         answers={answers}
         onChange={setAnswers}
-        exercises={ids.map(id => ({id, name: names[id] ?? id, state: levelOf(id)}))}
+        exercises={(answers.exerciseId && !ids.includes(answers.exerciseId) ? [answers.exerciseId, ...ids] : ids).map(id => ({id, name: names[id] ?? id, state: levelOf(id)}))}
         busy={debrief.busy}
         onSave={() => void save()}
         onBack={() => {
           setLabeling(false);
+          setRecog(null);
           set.reset();
           void refresh();
         }}
         outcome={outcome}
+        recognition={recog}
         onOpenStudio={ctx ? focus => setStudio({draft: {result: set.live.result!, clipId: set.live.clipId ?? null, answers, ctx}, focus}) : undefined}
       />
     );
@@ -183,7 +215,7 @@ export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
     return (
       <SafeAreaView style={styles.safe}>
         <View testID="hud-root" style={styles.hudRoot}>
-          <Text style={styles.hudExercise}>{exerciseId ? (names[exerciseId] ?? exerciseId).toUpperCase() : 'UNKNOWN'}</Text>
+          <Text style={styles.hudExercise}>{set.live.exerciseHint ? (names[set.live.exerciseHint] ?? set.live.exerciseHint).toUpperCase() : 'BLIND SET'}</Text>
           <Image source={armed ? HUD.crosshairIdle : HUD.crosshairLocked} style={styles.crosshair} />
           <Text testID="hud-reps" style={styles.repCount}>{set.live.reps}</Text>
           <Text style={styles.repLabel}>REPS</Text>
@@ -312,6 +344,19 @@ export function CampaignScreen({onBack, onOpenQueue, onOpenReel}: Props) {
                 <Text style={styles.armText}>ARM SET</Text>
               </Pressable>
             </ImageBackground>
+          ) : null}
+
+          {session.state.phase === 'ready' && enrolledCount > 0 ? (
+            <View style={styles.card}>
+              <Text style={styles.section}>RECOGNITION TEST</Text>
+              <Text testID="campaign-enrolled-count" style={styles.hint}>
+                {enrolledCount} enrolled set{enrolledCount === 1 ? '' : 's'} · arm without choosing — the model names the exercise
+              </Text>
+              <Pressable testID="campaign-arm-blind" style={styles.armBtn} onPress={() => void set.arm(null, armOpts)}>
+                <Image source={HUD.crosshairIdle} style={styles.armIcon} />
+                <Text style={styles.armText}>ARM BLIND SET</Text>
+              </Pressable>
+            </View>
           ) : null}
 
           <Pressable testID="campaign-after-action" style={styles.card} onPress={onOpenQueue}>

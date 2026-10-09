@@ -7,6 +7,8 @@ import {RepTrace} from '../game/RepTrace';
 import {decodeF16} from '../model/f16';
 import type {DebriefAnswers} from '../controller/useDebrief';
 import type {Proposals} from '../model/decide';
+import type {Recognition} from '../model/recognizer';
+import type {SetEmbedding} from '../model/enrol';
 import type {LevelState, QueueFocus, SetResult} from '../types/model';
 
 // The exercise labeling UI — the debrief / tagging round (design §7.4, §17.2).
@@ -28,9 +30,64 @@ interface Props {
   outcome: string | null;
   /** Studio design §6: each card links to After Action, positioned on that card. */
   onOpenStudio?: (focus: QueueFocus) => void;
+  /** Neural design v2: the set's embedding and the recogniser's answer, when it has run. */
+  recognition?: {status: 'running' | 'done' | 'error'; e?: SetEmbedding; r?: Recognition; error?: string; enrolled?: boolean} | null;
 }
 
-export function LabelingScreen({result, proposals, answers, onChange, exercises, busy, onSave, onBack, outcome, onOpenStudio}: Props) {
+const REJECT_TEXT: Record<string, string> = {
+  no_enrolment: 'nothing enrolled yet — pick the exercise below; this set becomes the first example',
+  low_confidence: 'not close enough to anything you have enrolled',
+  tie: 'two of your exercises scored about the same',
+  negative: 'closer to rest/walking than to an exercise',
+  looked_different: 'closest match, but outside its usual spread — looked different from your usual sets',
+  nothing_seen: 'the camera did not see enough of the movement',
+};
+
+function fmtSim(x: number | null): string {
+  return x == null ? '—' : x.toFixed(2);
+}
+
+function RecognitionCard({rec, names}: {rec: NonNullable<Props['recognition']>; names: Record<string, string>}) {
+  if (rec.status === 'running') {
+    return <Text testID="recognition-status" style={styles.explain}>Recognising… (video + pose + IMU)</Text>;
+  }
+  if (rec.status === 'error' || !rec.r || !rec.e) {
+    return <Text testID="recognition-status" style={styles.explain}>Recognition failed: {rec.error ?? 'unknown error'}</Text>;
+  }
+  const {r, e} = rec;
+  const best = r.candidates[0];
+  const q = e.quality;
+  const headline =
+    r.label !== 'unknown'
+      ? `RECOGNISED: ${names[r.label] ?? r.label} · ${Math.round(r.confidence * 100)}%`
+      : best
+        ? `NOT SURE (best: ${names[best.exerciseId] ?? best.exerciseId} · ${Math.round(best.confidence * 100)}%)`
+        : 'NOT RECOGNISED';
+  return (
+    <>
+      <Text testID="recognition-status" style={styles.recogHead}>{headline}</Text>
+      {r.rejectReason ? <Text testID="recognition-reason" style={styles.explain}>{REJECT_TEXT[r.rejectReason] ?? r.rejectReason}</Text> : null}
+      {best ? (
+        <Text testID="recognition-evidence" style={styles.explain}>
+          similarity to your {best.n} enrolled set{best.n === 1 ? '' : 's'}: video {fmtSim(best.sims.video)} · pose {fmtSim(best.sims.pose)} · IMU {fmtSim(best.sims.imu)} · distance {best.d.toFixed(3)}
+          {best.spread != null ? ` (usual spread ${best.spread.toFixed(3)})` : ''}
+        </Text>
+      ) : null}
+      {r.candidates.slice(1, 4).map(c => (
+        <Text key={c.exerciseId} style={styles.alt}>
+          {names[c.exerciseId] ?? c.exerciseId} · {Math.round(c.confidence * 100)}% · d {c.d.toFixed(3)}
+        </Text>
+      ))}
+      <Text testID="recognition-quality" style={styles.alt}>
+        {q.frames ?? 0} frames · pose seen {Math.round((q.poseVisible ?? 0) * 100)}% · IMU {q.imuSamples} samples · {q.ms != null ? `${(q.ms / 1000).toFixed(1)} s` : '—'}
+        {rec.enrolled ? ' · saved as an example ✓' : ''}
+      </Text>
+    </>
+  );
+}
+
+export function LabelingScreen({result, proposals, answers, onChange, exercises, busy, onSave, onBack, outcome, onOpenStudio, recognition}: Props) {
+  const exerciseNames = useMemo(() => Object.fromEntries(exercises.map(e => [e.id, e.name])), [exercises]);
   const studioLink = (focus: QueueFocus, id: string) =>
     onOpenStudio ? (
       <Pressable testID={id} onPress={() => onOpenStudio(focus)} hitSlop={8} style={styles.studioLink}>
@@ -111,6 +168,7 @@ export function LabelingScreen({result, proposals, answers, onChange, exercises,
 
           {/* 2 — exercise */}
           <View style={styles.card}>
+            {recognition ? <RecognitionCard rec={recognition} names={exerciseNames} /> : null}
             <Text style={styles.q}>Which exercise?</Text>
             <Text testID="labeling-exercise-explain" style={styles.explain}>{proposals.exercise.explanation.summary}</Text>
             <View style={styles.grid}>
@@ -190,6 +248,7 @@ export function LabelingScreen({result, proposals, answers, onChange, exercises,
 }
 
 const styles = StyleSheet.create({
+  recogHead: {color: colors.accent, fontSize: 15, fontWeight: '800', letterSpacing: 0.5, marginBottom: spacing.xs},
   safe: {flex: 1, backgroundColor: colors.bg},
   bg: {flex: 1},
   bgImg: {opacity: 0.35, resizeMode: 'cover'},

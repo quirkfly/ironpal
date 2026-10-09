@@ -1,0 +1,115 @@
+# NEURAL MODEL v2 — enrol, then recognise blind (design §12, "13-enrol-and-recognise").
+# Fixture: case001-curl-6reps (the IMU of KB case 001). The camera records whatever is in front
+# of the phone, so this flow proves the PIPELINE on the device — EmbedModule loads MoViNet and
+# Pose Lite, embeds the clip, the row is stored, and a blind set gets a recognition answer with
+# its evidence. Whether the answer is RIGHT is the founder's real-footage test, not this flow's.
+appId: com.twentydeka.ironpal
+---
+- runFlow: 00-launch.yaml
+- tapOn:
+    id: "campaign-start-session"
+- extendedWaitUntil:
+    visible:
+        id: "campaign-calibrate"
+    timeout: 20000
+- tapOn:
+    id: "campaign-calibrate"
+- tapOn:
+    id: "campaign-tab-vision"
+- scrollUntilVisible:
+    element:
+        id: "level-dumbbell-biceps-curl"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "level-dumbbell-biceps-curl"
+- scrollUntilVisible:
+    element:
+        id: "mission-arm"
+    direction: DOWN
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "mission-arm"
+
+# ---- set 1: labelled (enrolment) ----
+- extendedWaitUntil:
+    visible:
+        id: "hud-reps"
+        text: "[3-9]|[0-9]{2}"
+    timeout: 90000
+- tapOn:
+    id: "hud-end-set"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 30000
+# The recogniser runs in the background; with nothing enrolled it must say so, not guess.
+- extendedWaitUntil:
+    visible: ".*nothing enrolled yet.*"
+    timeout: 120000
+- assertVisible:
+    id: "recognition-quality"
+- scrollUntilVisible:
+    element:
+        id: "labeling-exercise-dumbbell-biceps-curl"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "labeling-exercise-dumbbell-biceps-curl"
+- scrollUntilVisible:
+    element:
+        id: "labeling-save"
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: "labeling-save"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-outcome"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+        id: "labeling-back"
+    direction: UP
+    timeout: 20000
+- tapOn:
+    id: "labeling-back"
+- tapOn:
+    id: "labeling-back"
+    optional: true
+
+# ---- set 2: blind ----
+- extendedWaitUntil:
+    visible:
+        id: "campaign-screen"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+        id: "campaign-arm-blind"
+    direction: DOWN
+    timeout: 20000
+- assertVisible: ".*1 enrolled set.*"
+- tapOn:
+    id: "campaign-arm-blind"
+- assertVisible: "BLIND SET"
+- extendedWaitUntil:
+    visible:
+        id: "hud-reps"
+        text: "[3-9]|[0-9]{2}"
+    timeout: 90000
+- tapOn:
+    id: "hud-end-set"
+- extendedWaitUntil:
+    visible:
+        id: "labeling-screen"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+        id: "recognition-quality"
+    timeout: 120000
+# An answer with evidence — recognised, not sure, or nothing seen — but never a crash.
+- assertNotVisible: ".*Recognition failed.*"
+- assertVisible:
+    id: "recognition-status"
