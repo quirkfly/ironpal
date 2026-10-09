@@ -51,18 +51,24 @@ THE VIEW: one CIRCULAR fisheye image filling the full height of a 16:9 frame, pu
 Bright daylight, slightly washed-out highlights, mild noise. No other people.
 ```
 
-## 2. Clip prompt (the still as start frame · Omni Flash · 8 s · 16:9 · silent)
+## 2. Clip prompt (the accepted still as start frame · Omni Flash · 8 s · 16:9 · silent)
+
+*Written against still 4 (accepted 2026-10-09): the hands at the bar's left tip gripping a yellow
+plate, a yellow plate and a blue plate on the bar to its right, the right end bare, knees at the top,
+dumbbell racks around the left rim, the window along the bottom. The prompt describes that frame
+exactly, so the model continues it and does not reinvent it. The action is the shortest believable
+loading move: slide the plate home against the yellow one, seat it, let go.*
 
 ```
 Continue exactly from the starting image. ONE CONTINUOUS SHOT, NO CUTS. SILENT. No text, no logos, no numbers anywhere; the plates carry no printing.
 
-Keep EVERYTHING about the picture exactly as in the starting image for the whole clip: the black left and right sides, the single circular fisheye image, the strong fisheye curvature, the man's hands and forearms at the TOP of the circle, the gym curving around the bottom, the barbell lying on the floor. The frame never straightens out, never becomes a normal wide shot, and never turns the right way up.
+Keep EVERYTHING about the picture exactly as in the starting image for the whole clip: the black surround, the single circular fisheye image and its curvature, the man squatting with his knees at the TOP of the circle, the black rubber floor, the dumbbell racks around the left rim and the bright window along the bottom. The frame never straightens out, never becomes a normal shot and never turns the right way up.
 
-THE PLATES never change colour, size or number: on the near sleeve, a SOLID BLUE plate against the collar and a SOLID YELLOW plate next to it; the third plate, SOLID YELLOW, is the one in his hands. Exactly three plates in total, all the same diameter.
+THE BAR AND PLATES never change: the barbell lies straight across the floor from left to right; on it, a SOLID YELLOW plate and, to its right, a SOLID BLUE plate; the right end of the bar is bare. The plate in his hands is the third one, SOLID YELLOW. Exactly three plates, all the same size, all three faces always parallel to each other — the plate in his hands is never turned sideways.
 
-THE ACTION, slow and clear, ONE continuous movement: with both hands on its rim he lifts the yellow plate a little off the floor, lines its centre hole up with the end of the chrome sleeve, and slides it on along the sleeve until it presses flat against the other yellow plate; then he gives it one firm push with both palms to seat it, and lets go, his hands resting on the bar's sleeve for the last moment. Every movement is real and continuous, never a frozen pose, never a jump; the plate travels along the sleeve and never passes through it.
+THE ACTION, slow and clear, ONE continuous movement: holding the yellow plate by its rim with both hands, he slides it to the RIGHT along the chrome sleeve, keeping it upright and square to the bar, until it presses flat against the yellow plate already on the bar. He gives it one firm push with his right palm to seat it, then lets go and rests both hands on top of the seated plates for the last moment. The plate travels ALONG the bar — it never passes through the bar, never floats free, never tilts. Every movement is real and continuous, never a frozen pose, never a jump.
 
-Five correctly shaped fingers on each hand whenever they are in view; the black smartwatch stays on his LEFT wrist. The camera moves only with his head: small, natural sways, never a jump. The gym stays the same gym; nothing appears or disappears. Audio: NO MUSIC — only quiet room sound and a dull clunk as the plate seats.
+Five correctly shaped fingers on each hand in every frame; the black smartwatch stays on his left wrist. His knees and feet stay where they are; the camera moves only with his head, small natural sways, never a jump. The gym stays the same gym; nothing appears or disappears. Audio: NO MUSIC — only quiet room sound and a dull rubber clunk as the plate seats.
 ```
 
 ## Judge the take in this order
