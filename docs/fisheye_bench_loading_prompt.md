@@ -19,25 +19,35 @@ to right**, all faces **parallel**, the held plate at the **sleeve tip**, and on
 
 ## 1. Image prompt (attach `input/kickstarter/fisheye/ref_curl_86s.jpg` as style/geometry reference)
 
+*Revision 2, 2026-10-09.* The first four stills all put him **behind the bench at the middle of the
+bar** (the lifter's spot, not the loader's), held the green plate **flat like a tray** over the
+bench, and added plates to the right sleeve. The cause was in my prompt: *"stands at the end of a
+bench-press station"* reads as *behind the bench*. This version leads with **where he stands**: the
+bar's left end, beside the bench, body at the top-left of the circle. It places the bench under the
+**middle** of the bar, says the green plate is held **upright on its edge, never flat**, and leaves
+the right sleeve **bare chrome**.
+
 ```
-A single photograph from a tiny 200-degree fisheye camera worn on a man's forehead, looking straight down while he stands at the end of a bench-press station in a gym. No text, no logos, no numbers anywhere; the plates are plain coloured rubber with no printing.
+A single photograph from a tiny 200-degree fisheye camera worn on a man's forehead, looking straight down while he loads a bench-press bar in a gym. No text, no logos, no numbers anywhere; the plates are plain coloured rubber with no printing.
 
-THE VIEW: one CIRCULAR fisheye image filling the full height of a 16:9 frame, pure black on the left and right, a thin pale bluish glow on the rim. It is upside down like all forehead-camera footage: his own torso and the tops of his thighs in grey shorts are at the very TOP edge of the circle, the bench and the black rubber floor fill the middle, and the gym's walls, racks and bright window curve around the BOTTOM of the circle. No ceiling at the top.
+WHERE HE STANDS: at the LEFT END of the barbell, beside the bench — NOT behind the bench, NOT at its head, NOT in the middle of the bar. So in the picture his body is at the TOP-LEFT of the circle and the bench is to his right.
 
-THE BENCH-PRESS STATION in the middle of the picture: a flat black padded bench running away from him toward the bottom of the circle, with two upright steel J-hook posts. An OLYMPIC BARBELL rests in the J-hooks, horizontal, crossing the picture from left to right just below his body, about at his hip height. He stands at the LEFT end of the bar.
+THE BAR runs straight ACROSS the picture from left to right, horizontal, resting in two steel J-hook uprights. THE BENCH is a flat black padded bench under the MIDDLE of the bar, running from the bar down toward the bottom of the circle; the uprights stand at the bench's top end, one on each side of it.
 
-Reading along the bar from LEFT to RIGHT, there is exactly this, in this order:
-1. at the far left, a SOLID GREEN plate held in his two hands, upright, just beyond the tip of the bar, about to slide on;
+Reading along the bar from LEFT to RIGHT, exactly this, in this order:
+1. at the far left, near his hands, a SOLID GREEN plate held in his two hands, standing UPRIGHT ON ITS EDGE, just beyond the tip of the bar, about to slide on;
 2. the bare shiny chrome tip of the left sleeve;
 3. a SOLID RED plate already on the sleeve;
 4. a SOLID YELLOW plate already on the sleeve, pressed against the collar;
-5. the collar, the bare knurled bar across the bench, and the right end of the bar, which is EMPTY.
+5. the left upright, the bare knurled bar over the bench, the right upright, and the right sleeve, which is BARE CHROME with NO plates on it.
 
-ALL THREE PLATES ON THE LEFT FACE THE SAME WAY: their flat round faces are PARALLEL, each upright with its face pointing along the bar, like slices of the same loaf; the green plate in his hands is just the next slice. All plates are the same large diameter.
+ALL THREE PLATES ARE UPRIGHT AND FACE THE SAME WAY: their flat round faces PARALLEL, each standing on its edge with its face pointing along the bar, like slices of the same loaf. The green plate in his hands is held exactly like the other two — upright, NEVER flat, NEVER horizontal like a tray, NEVER held over the bench.
 
-There are EXACTLY THREE plates in the whole picture: yellow, red and green, all at the left end of the bar. No other plates anywhere: none on the right end, none on the floor, none leaning against the bench.
+There are EXACTLY THREE plates in the whole picture: green in his hands, red and yellow on the left sleeve. None on the right side, none on the floor, none on the bench.
 
-HIS HANDS are at the LEFT of the picture, gripping the green plate by its rim: one hand at the top of the rim, one at the side, fingers wrapped over the edge, thumbs on the plate's face, elbows bent. Five correctly shaped fingers on each hand, tanned forearms, a black smartwatch on his left wrist.
+HIS HANDS are at the LEFT of the picture, gripping the green plate's rim: one hand at the top of the rim, one at its side, fingers wrapped over the edge, thumbs on the plate's face, elbows bent. Five correctly shaped fingers on each hand, tanned forearms, a black smartwatch on his left wrist.
+
+THE VIEW: one CIRCULAR fisheye image filling the full height of a 16:9 frame, pure black on the left and right, a thin pale bluish glow on the rim. Upside down like all forehead-camera footage: his own body and grey shorts at the TOP edge of the circle, the bench and the black rubber floor in the middle, the gym's walls and bright window curving around the BOTTOM. No ceiling at the top.
 
 Bright daylight, slightly washed-out highlights, mild noise. No other people.
 ```
