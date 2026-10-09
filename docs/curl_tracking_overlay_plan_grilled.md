@@ -4,7 +4,7 @@
 answered without the founder. **EVIDENCE** = measured or read from the repo; **ASSUMED** = the
 recommended default with its strongest objection; **OPEN** = not mine to settle.
 
-**15 decisions: 9 EVIDENCE · 5 ASSUMED · 1 OPEN.**
+**16 decisions: 10 EVIDENCE · 5 ASSUMED · 1 OPEN.**
 
 **Q1. How many reps, and where are the tops?** Three; tops at #42, #77, #111. **EVIDENCE**: the
 frame grid and the skin-area peaks (1.67, 3.2, 4.7 s) agree.
@@ -56,6 +56,13 @@ edit's choice. *Against:* a faint gym ambience reads as real.
 from reps 1–2. **EVIDENCE**: the skin-area peak for rep 3 lands at #116 because the plate hides the
 forearm; counting on it put REP 3 four frames after the visual top. *Against:* one rep's rise is
 modelled, not measured; the frame grid (#101 → #111) agrees with it.
+
+**Q16. How are the plates tracked, after the founder found them inaccurate?** The far plate is
+detected per frame (GrabCut + ellipse fit, 180/192 frames); the near plate is measured on 28 frames
+and interpolated; both are drawn as bracket boxes. **EVIDENCE**: the founder's review; the near
+plate and the floor are indistinguishable by brightness (47 vs 44); an ellipse cannot follow the
+stack's D-shaped silhouette. *Supersedes Q5's keyframe-and-interpolate model.* *Against:* the near
+plate between measured frames is still interpolated, at a 2–4 frame spacing.
 
 **Q14. Where will it be published?** **OPEN**: site, campaign or film. Wherever it goes, the label
 stays and the copy around it says *concept*.

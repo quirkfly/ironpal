@@ -30,11 +30,12 @@ def fist_and_area(f):
     sel = ys >= cut
     return (float(xs[sel].mean()), float(ys[sel].mean())), int(st[best][4])
 
-cap = cv2.VideoCapture(SRC); fists, area = [], []
+cap = cv2.VideoCapture(SRC); fists, area, FR = [], [], []
 while True:
     ok, f = cap.read()
     if not ok: break
-    fp, a = fist_and_area(f); fists.append(fp); area.append(a)
+    FR.append(f); fp, a = fist_and_area(f); fists.append(fp); area.append(a)
+H, W = FR[0].shape[:2]
 N = len(area); fps = 24.0
 A = np.convolve(np.array(area, float), np.ones(5) / 5, mode="same")
 # rep windows split at the midpoints between tops; rest level = median of the at-rest stretches
@@ -82,6 +83,79 @@ for i in range(N):
     frames.append({"i": i, "p": round(t, 3), "count": sum(1 for r in reps if r <= i),
                    "fist": [round(fist[0], 1), round(fist[1], 1)],
                    "near": geo("near"), "far": geo("far"), "hubN": geo("hubN"), "hubF": geo("hubF")})
+
+# ---- stage 2: detect each plate on every frame -------------------------------------------------
+# The interpolated geometry above is only the PRIOR. Each plate is segmented around it with GrabCut
+# (the other plate's core and all skin forced to background), an ellipse is fitted to the convex hull
+# of the plate silhouette, and kept only if it stays within 0.35 radius of the prior and 0.7-1.3x its
+# size. Gaps are filled by interpolation between fitted frames; the result is median-5 / mean-3
+# smoothed. Hubs and the bar line come from the fitted centres.
+def skin(f):
+    ycc=cv2.cvtColor(f,cv2.COLOR_BGR2YCrCb); return cv2.inRange(ycc,(40,135,85),(255,180,135))>0
+def fit(f, pred, other):
+    cx,cy,rx,ry=pred
+    mask=np.full((H,W),cv2.GC_BGD,np.uint8)
+    e=lambda s,v,c=(cx,cy,rx,ry): cv2.ellipse(mask,(int(c[0]),int(c[1])),(max(3,int(c[2]*s)),max(3,int(c[3]*s))),0,0,360,int(v),-1)
+    e(1.25,cv2.GC_PR_BGD); e(0.95,cv2.GC_PR_FGD); e(0.5,cv2.GC_FGD)
+    # the other plate's core and the skin are background
+    cv2.ellipse(mask,(int(other[0]),int(other[1])),(int(other[2]*0.8),int(other[3]*0.8)),0,0,360,cv2.GC_BGD,-1)
+    mask[skin(f)]=cv2.GC_BGD
+    x0,y0=max(0,int(cx-rx*1.4)),max(0,int(cy-ry*1.4)); x1,y1=min(W,int(cx+rx*1.4)),min(H,int(cy+ry*1.4))
+    sub=mask[y0:y1,x0:x1].copy()
+    if not ((sub==cv2.GC_FGD)|(sub==cv2.GC_PR_FGD)).any(): return None
+    bg=np.zeros((1,65)); fg=np.zeros((1,65))
+    cv2.grabCut(f[y0:y1,x0:x1],sub,None,bg,fg,5,cv2.GC_INIT_WITH_MASK)
+    m=((sub==cv2.GC_FGD)|(sub==cv2.GC_PR_FGD)).astype(np.uint8)
+    m=cv2.morphologyEx(m,cv2.MORPH_OPEN,np.ones((9,9),np.uint8))
+    cs,_=cv2.findContours(m,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+    if not cs: return None
+    c=max(cs,key=cv2.contourArea)
+    if len(c)<20: return None
+    (ex,ey),(a,b),ang=cv2.fitEllipse(cv2.convexHull(c))
+    ex+=x0; ey+=y0; A,Bb=a/2,b/2
+    # sanity: centre within 0.35 of the radius, size within 0.7-1.3x
+    pr=(rx+ry)/2; fr=(A+Bb)/2
+    if np.hypot(ex-cx,ey-cy)>0.35*pr or not (0.7<fr/pr<1.3): return None
+    return [ex,ey,A,Bb,ang]
+
+def smooth(rows):
+    arr = np.array([r if r else [np.nan]*5 for r in rows], float); idx = np.arange(len(rows)); out = arr.copy()
+    for c in range(5):
+        ok = ~np.isnan(arr[:, c]); out[:, c] = np.interp(idx, idx[ok], arr[ok, c])
+        med = np.array([np.median(out[max(0, i-2):i+3, c]) for i in range(len(rows))])
+        out[:, c] = np.convolve(np.pad(med, 1, mode="edge"), np.ones(3)/3, mode="valid")
+    return out, int((~np.isnan(arr[:, 0])).sum())
+fitsN, fitsF = [], []
+for i, fr in enumerate(frames):
+    fitsN.append(fit(FR[i], fr["near"], fr["far"])); fitsF.append(fit(FR[i], fr["far"], fr["near"]))
+nearS, kn = smooth(fitsN); farS, kf = smooth(fitsF)
+# ---- near plate: measured outlines ---------------------------------------------------------------
+# GrabCut cannot tell the near plate's black rubber from the black rubber floor (median V 47 vs 44
+# at #77), so its fit sat low in reps 2-3. The near plate's silhouette extremes were therefore READ
+# OFF A 25 px GRID on 28 frames through all three reps and at rest: (centre x, centre y, half-width,
+# half-height) of its bounding box. Between them it is interpolated; the tilt is the detected one.
+NEAR_KF = {0: (385, 327, 110, 133), 32: (397, 340, 122, 160), 36: (345, 337, 160, 222), 40: (315, 335, 185, 255),
+           42: (325, 342, 175, 242), 45: (360, 350, 145, 205), 48: (385, 347, 125, 168), 51: (402, 340, 102, 140),
+           68: (405, 330, 100, 130), 72: (372, 330, 128, 170), 75: (335, 310, 140, 205), 77: (327, 302, 152, 218),
+           80: (357, 315, 142, 200), 83: (380, 328, 125, 168), 86: (395, 327, 110, 142), 101: (400, 312, 100, 142),
+           104: (372, 307, 132, 172), 107: (345, 282, 160, 212), 109: (330, 267, 170, 222), 111: (315, 280, 165, 230),
+           114: (347, 302, 152, 207), 117: (360, 322, 140, 177), 120: (377, 327, 122, 157), 124: (380, 330, 105, 135),
+           128: (387, 327, 102, 127), 150: (380, 325, 105, 135), 170: (382, 330, 107, 130), 190: (385, 330, 110, 135)}
+kfi = sorted(NEAR_KF); kfv = np.array([NEAR_KF[k] for k in kfi], float)
+def near_at(i, theta_deg):
+    cx, cy, ex, ey = (np.interp(i, kfi, kfv[:, c]) for c in range(4))
+    t = np.radians(theta_deg); c2, s2 = np.cos(t) ** 2, np.sin(t) ** 2; det = c2 - s2
+    if abs(det) > 0.25:
+        a2 = (ex ** 2 * c2 - ey ** 2 * s2) / det; b2 = (ey ** 2 * c2 - ex ** 2 * s2) / det
+        if a2 > 0 and b2 > 0: return [cx, cy, a2 ** .5, b2 ** .5, theta_deg]
+    return [cx, cy, ex, ey, 0.0]   # axis-aligned fallback: the ring still spans the measured box
+# drawn as the measured bounding box (axis-aligned): the stack's silhouette is a D-shape, not an
+# ellipse, so the box is the shape the measurements actually describe
+nearS = np.array([[*(np.interp(i, kfi, kfv[:, c]) for c in range(4)), 0.0] for i in range(len(frames))])
+for i, fr in enumerate(frames):
+    fr["near"] = [round(float(v), 1) for v in nearS[i]]; fr["far"] = [round(float(v), 1) for v in farS[i]]
+    fr["hubN"] = fr["near"][:2]; fr["hubF"] = fr["far"][:2]
+print("near plate: measured on", len(NEAR_KF), "frames, interpolated | far plate detected on", kf, "of", len(frames), "| near tilt from", kn, "fits")
 json.dump({"fps": fps, "n": N, "reps": reps, "frames": frames}, open(OUT, "w"))
 print("frames", N, "| rest area", round(rest), "| rep frames", reps, "->", [round(r / fps, 2) for r in reps])
 print("windows (start, top, end):", windows); print("p at tops:", [round(float(p[t]), 2) for t in TOPS], "| max p per window:", [round(float(p[bounds[r]:bounds[r+1]].max()), 2) for r in range(3)])

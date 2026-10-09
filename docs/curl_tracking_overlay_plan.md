@@ -44,11 +44,21 @@ motion is one degree of freedom: how far up the curl it is.
    length reps 1–2 measured, which matches the frame grid (#101 → #111). `p` is a raised cosine
    from start to top and from top to end. Measured windows: **(32, 42, 51), (68, 77, 86),
    (101, 111, 126)**.
-3. **Plate geometry, keyframed from the frames, driven by `p`.** Near and far plate centres, ellipse
-   radii and the two bar hubs were read off a coordinate grid at rest (#0) and at each rep's top
-   (#42, #77, #111). Per frame, each value is `rest + p · (top_rep − rest)`, expressed as an offset
-   from the **measured fist**, so the rings move with the hand between keyframes and grow with the
-   lift.
+3. **Plates — measured, not modelled** *(revised 2026-10-09 after the founder's review: "plates
+   overlay tracking is not accurate")*. The first version interpolated four keyframes by `p` and
+   drifted off the plates between them. Now:
+   - **Far plate: detected on every frame.** GrabCut around the prior (the other plate's core and all
+     skin forced to background), an ellipse fitted to the silhouette's convex hull, kept only within
+     0.35 radius and 0.7–1.3× size of the prior: 180 of 192 frames; gaps interpolated, median-5 /
+     mean-3 smoothed.
+   - **Near plate: measured on 28 frames.** GrabCut cannot separate its black rubber from the black
+     rubber floor (median brightness 47 vs 44 at #77), and its fits sat low in reps 2–3. Its silhouette
+     extremes were read off a 25 px grid every 2–4 frames through each rep, and at rest
+     (`NEAR_KF` in `track.py`), then interpolated.
+   - **Drawn as corner-bracket boxes, not rings.** The plate stack's silhouette is a thick D-shape,
+     not an ellipse. An ellipse spanning its measured extent crosses the wall on one side and cuts
+     the plate on the other. The bracket box is exactly the shape the measurements describe.
+   - Hubs and the bar line come from the two boxes' centres.
 4. **Rep events.** Up-crossings of `p = 0.85`, with hysteresis (re-armed below 0.35), so blur
    noise cannot double-count.
 
@@ -64,7 +74,7 @@ From `web/src/components/FormTracking.astro` and `web/src/styles/tokens.css`:
 |---|---|---|
 | accent | `#00E5CC` | every line, ring, dot and the focused text |
 | `m-line` | 3 px solid accent | the bar axis |
-| `m-dash` | 2.5 px accent, dash 9/8, 80 % | plate rings |
+| `m-box` | 3 px accent corner brackets + a faint 6 % teal fill, 1 px dashed edge | the plate-stack boxes (revised from dashed rings) |
 | `m-arc` | 3 px accent, fill `rgba(0,229,204,.14)` | the lift-progress ring on the fist |
 | `m-dot` | solid accent | the fist and the two hubs |
 | `m-tag` | Montserrat 600, Ice White `#F0F4F8`, +.06em | weight tags, **REP n** |

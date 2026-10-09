@@ -11,6 +11,8 @@ svg{position:absolute;inset:0}
 .m-dash{stroke:var(--accent);stroke-width:2.5;stroke-dasharray:9 8;fill:none;opacity:.85}
 .m-arc{stroke:var(--accent);stroke-width:3;fill:rgba(0,229,204,.14)}
 .m-dot{fill:var(--accent)}
+.m-box{stroke:var(--accent);stroke-width:3;fill:none;stroke-linecap:round}
+.m-boxfill{fill:rgba(0,229,204,.06);stroke:var(--accent);stroke-width:1;stroke-opacity:.35;stroke-dasharray:4 6}
 .m-halo{fill:none;stroke:#0b0b16;stroke-width:5;opacity:.55}
 .m-tag{font:600 19px Mont;fill:var(--heading);letter-spacing:.06em;paint-order:stroke;stroke:#0b0b16;stroke-width:4px;stroke-opacity:.6}
 .m-small{font:600 12px Mont;fill:var(--body);letter-spacing:.14em;text-transform:uppercase;paint-order:stroke;stroke:#0b0b16;stroke-width:3px;stroke-opacity:.6}
@@ -63,21 +65,31 @@ function arc(cx, cy, r, frac) {
   const x1 = cx + r * Math.cos(rad(a1)), y1 = cy + r * Math.sin(rad(a1));
   return `<path class="m-arc" d="M${cx},${cy} L${x0},${y0} A${r},${r} 0 ${frac > .5 ? 1 : 0} 1 ${x1},${y1} Z"/>`;
 }
+// detector-style corner brackets around a box (centre, half-extents): the measured plate-stack extent
+function brackets(cx, cy, ex, ey) {
+  const x0 = cx - ex, x1 = cx + ex, y0 = cy - ey, y1 = cy + ey, k = Math.min(ex, ey) * 0.38;
+  const c = (x, y, dx, dy) => `M${x + dx * k},${y} L${x},${y} L${x},${y + dy * k}`;
+  return `<path class="m-box" d="${c(x0, y0, 1, 1)} ${c(x1, y0, -1, 1)} ${c(x0, y1, 1, -1)} ${c(x1, y1, -1, -1)}"/>
+          <rect x="${x0}" y="${y0}" width="${2 * ex}" height="${2 * ey}" class="m-boxfill"/>`;
+}
 window.render = function (i) {
   const f = T.frames[i], [fx, fy] = f.fist;
-  const [nx, ny, nrx, nry] = f.near, [qx, qy, qrx, qry] = f.far;
+  const [nx, ny, nrx, nry, nang] = f.near, [qx, qy, qrx, qry, qang] = f.far;
+  // half-extents of the rotated ellipses, for label placement
+  const ext = (rx, ry, a) => { const t = a * Math.PI / 180; return [Math.hypot(rx * Math.cos(t), ry * Math.sin(t)), Math.hypot(rx * Math.sin(t), ry * Math.cos(t))]; };
+  const [nex, ney] = ext(nrx, nry, nang), [qex, qey] = ext(qrx, qry, qang);
   const [hnx, hny] = f.hubN, [hfx, hfy] = f.hubF;
   // rep pulse: 12 frames after each count
   const last = T.reps.filter(r => r <= i).pop();
   const since = last === undefined ? 99 : i - last;
   const pulse = since < 12 ? since / 12 : null;
   // tags: near-stack tag left of its ring (into the black margin), far-stack tag above-right of its ring
-  const ntx = nx - 30, nty = ny + nry + 30;   // below the near ring, inside the picture
-  const ftx = qx + qrx * 0.55 + 18, fty = Math.max(40, qy - qry * 0.85);
+  const ntx = nx - 30, nty = ny + ney + 30;   // below the near ring, inside the picture
+  const ftx = qx + qex * 0.55 + 18, fty = Math.max(40, qy - qey * 0.85);
   const mx = (fx + hfx) / 2, my = (fy + hfy) / 2;
   ov.innerHTML = `
-    <ellipse class="m-dash" cx="${nx}" cy="${ny}" rx="${nrx}" ry="${nry}"/>
-    <ellipse class="m-dash" cx="${qx}" cy="${qy}" rx="${qrx}" ry="${qry}"/>
+    ${brackets(nx, ny, nex, ney)}
+    ${brackets(qx, qy, qex, qey)}
     <line class="m-halo" x1="${hnx}" y1="${hny}" x2="${hfx}" y2="${hfy}"/>
     <line class="m-line" x1="${hnx}" y1="${hny}" x2="${hfx}" y2="${hfy}"/>
     <circle class="m-dot" cx="${hnx}" cy="${hny}" r="7"/>
@@ -87,7 +99,7 @@ window.render = function (i) {
     <circle class="m-dot" cx="${fx}" cy="${fy}" r="8"/>
     ${pulse !== null ? `<circle cx="${fx}" cy="${fy}" r="${26 + 54 * pulse}" fill="none" stroke="#00E5CC" stroke-width="${4 - 3 * pulse}" opacity="${1 - pulse}"/>
        <text class="m-rep" x="${fx + 40}" y="${fy + 70}" opacity="${since < 9 ? 1 : 1 - (since - 9) / 3}">REP ${f.count}</text>` : ''}
-    <line class="m-lead" x1="${nx}" y1="${ny + nry}" x2="${nx}" y2="${nty - 20}"/>
+    <line class="m-lead" x1="${nx}" y1="${ny + ney}" x2="${nx}" y2="${nty - 20}"/>
     <text class="m-tag" x="${ntx}" y="${nty}">5 + 3.5 kg</text>
     <text class="m-small" x="${ntx}" y="${nty + 18}">plates</text>
     <text class="m-tag" x="${ftx}" y="${fty}">5 + 3.5 kg</text>
