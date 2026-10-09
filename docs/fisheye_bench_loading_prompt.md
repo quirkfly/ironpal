@@ -1,8 +1,8 @@
 # Synthetic fisheye clip — loading a bench-press bar · Omni Flash prompts
 
 **Written 2026-10-09.** The forehead-fisheye view again: the founder loads a barbell racked over a
-flat bench, about to bench press. Plates: **1 × 20 kg yellow, 2 × 15 kg red, 2 × 10 kg green**, as
-briefed. Built on what the barbell-loading still finally needed (rev 4 of
+flat bench, about to bench press. Plates: **1 × 20 kg yellow, 1 × 15 kg red, 1 × 10 kg green** (revised from 2 × 15 and 2 × 10 at
+the founder's call, 2026-10-09). Built on what the barbell-loading still finally needed (rev 4 of
 [`fisheye_barbell_loading_prompt.md`](fisheye_barbell_loading_prompt.md)): the plates listed **left
 to right**, all faces **parallel**, the held plate at the **sleeve tip**, and one continuous action.
 
@@ -10,7 +10,7 @@ to right**, all faces **parallel**, the held plate at the **sleeve tip**, and on
 
 | | decision | why |
 |---|---|---|
-| balance | **loading in progress**: the near sleeve gets yellow 20 + red 15 + green 10 (the green one is being slid on); the second red 15 and green 10 **wait on the floor** beside the bench for the far side | five plates with a single 20 kg cannot balance (any split leaves 10 kg between the sides); a lifter would spot a finished, unbalanced bar, but nobody questions a bar half-loaded |
+| balance | **loading in progress**: all three plates go on the near sleeve, yellow 20 + red 15 + the green 10 being slid on; the far sleeve is empty, the next side to load | three single plates cannot balance a bar; a half-loaded bar is the normal state mid-loading and reads as such |
 | bar | **racked in the bench's uprights**, horizontal, at about hip height; he stands at the end of the bar | that is a bench-press setup; a forehead camera looking down sees the sleeve below it |
 | plate colours | yellow 20, red 15, green 10, as briefed | competition code differs (20 blue, 15 yellow, 25 red; 10 green matches); kept as briefed |
 | plates | plain bumpers, **no printing**, all **the same diameter** | Flow garbles numerals; bumper plates of 10–20 kg share a 450 mm diameter |
@@ -35,7 +35,7 @@ Reading along the bar from LEFT to RIGHT, there is exactly this, in this order:
 
 ALL THREE PLATES ON THE LEFT FACE THE SAME WAY: their flat round faces are PARALLEL, each upright with its face pointing along the bar, like slices of the same loaf; the green plate in his hands is just the next slice. All plates are the same large diameter.
 
-On the floor beside the bench, leaning upright against it, wait the other two plates: one SOLID RED and one SOLID GREEN, the same size. Exactly five plates in the picture: yellow, red and green at the left end of the bar, red and green leaning against the bench.
+There are EXACTLY THREE plates in the whole picture: yellow, red and green, all at the left end of the bar. No other plates anywhere: none on the right end, none on the floor, none leaning against the bench.
 
 HIS HANDS are at the LEFT of the picture, gripping the green plate by its rim: one hand at the top of the rim, one at the side, fingers wrapped over the edge, thumbs on the plate's face, elbows bent. Five correctly shaped fingers on each hand, tanned forearms, a black smartwatch on his left wrist.
 
@@ -49,7 +49,7 @@ Continue exactly from the starting image. ONE CONTINUOUS SHOT, NO CUTS. SILENT. 
 
 Keep EVERYTHING about the picture exactly as in the starting image for the whole clip: the black surround, the single circular fisheye image and its curvature, his own body at the TOP of the circle, the bench, the uprights, the gym curving around the bottom. The frame never straightens out, never becomes a normal shot and never turns the right way up.
 
-THE BAR AND PLATES never change: the barbell rests in the J-hooks, horizontal; on its left sleeve a SOLID YELLOW plate against the collar and a SOLID RED plate next to it; the plate in his hands is SOLID GREEN; a red plate and a green plate lean against the bench and never move. Exactly five plates, all the same size, the three on the left always parallel — the green plate is never turned sideways.
+THE BAR AND PLATES never change: the barbell rests in the J-hooks, horizontal; on its left sleeve a SOLID YELLOW plate against the collar and a SOLID RED plate next to it; the plate in his hands is SOLID GREEN; the right end of the bar stays empty. Exactly three plates, all the same size, always parallel — the green plate is never turned sideways, and no other plate ever appears.
 
 THE ACTION, slow and clear, ONE continuous movement: holding the green plate by its rim with both hands, he slides it to the RIGHT along the chrome sleeve, keeping it upright and square to the bar, until it presses flat against the red plate. He gives it one firm push with his right palm to seat it, lets go, and rests both hands on the bar beside the plates for the last moment, ready to load the other side. The plate travels ALONG the bar — it never passes through it, never floats, never tilts — and the bar never moves in the hooks.
 
@@ -59,8 +59,7 @@ Five correctly shaped fingers on each hand in every frame; the black smartwatch 
 ## Judge the take in this order
 
 The circle on black sides → the inversion (his body at the top) → **the bar in the hooks over the
-bench** → **five plates: yellow, red, green at the left in that order, red and green leaning on the
-bench** → all left plates parallel → the plate goes along the sleeve, never through it → five
+bench** → **exactly three plates: yellow, red, green at the left in that order, nothing else** → all left plates parallel → the plate goes along the sleeve, never through it → five
 fingers → no printed numbers.
 
 ## Labelling
