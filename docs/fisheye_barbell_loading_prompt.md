@@ -19,20 +19,32 @@ specified.
 
 ## 1. Image prompt (attach `input/kickstarter/fisheye/ref_curl_86s.jpg` as style/geometry reference)
 
-*Revision 3, 2026-10-09.* Still 1 hung straight arms onto a distant plate and was the right way up.
-Still 2 fixed the orientation, but the hands rested empty on the floor, the bar ran out from between
-the knees, and the plate order was reversed. **This version is shorter and leads with the held
-plate as the subject.** A long prompt lets the image model keep some details and drop others, and
-it kept the scene and dropped the hands. The bar now lies **across** the picture in front of his
-feet, and the plate order is described as the camera sees it: blue against the collar, yellow
-outside it.
+*Revision 4, 2026-10-09.* Still 3 got the hands holding a plate and the view right. Two faults were
+left: **the held plate stood across the middle of the bar, turned 90°**, and **blue sat outside
+yellow**. Image models do poorly with *inner / outer* and *lined up with the sleeve*, and better with
+an explicit left-to-right order and *parallel*. This version lists the bar from left to right, says
+all three plates face the same way ("slices of the same loaf"), and puts the hands and the held
+plate at the bar's left tip.
+
+**If two more rolls miss the geometry, stop prompting and edit.** Still 3's hands are good. Keep
+that still and fix only the held plate's angle and the plate order with the image model's
+inpainting/edit tool: select the held plate, ask for *"the same yellow plate turned 90 degrees so its
+face is parallel to the plates on the bar, held just beyond the left tip of the bar"*. Changing one
+region rarely breaks the rest; regenerating the whole frame usually does.
 
 ```
 A single photograph from a tiny 200-degree fisheye camera worn on a man's forehead, looking straight down while he squats in a gym. No text, no logos, no numbers anywhere; the plates are plain coloured rubber with no printing.
 
-THE SUBJECT, in the centre of the picture: BOTH of his hands holding ONE SOLID YELLOW rubber bumper plate upright in front of him, a little above the floor. His left hand grips the left side of the plate's rim, his right hand grips the right side of the rim, fingers wrapped over the edge, thumbs on the face of the plate, elbows bent. The yellow plate is clearly IN HIS HANDS, lifted, not lying on the floor. Five correctly shaped fingers on each hand, tanned forearms, a black smartwatch on his left wrist.
+THE BARBELL lies on the black rubber floor in front of his feet, running straight ACROSS the picture from left to right. Reading along the bar from LEFT to RIGHT, there is exactly this, in this order:
+1. at the far left, a SOLID YELLOW plate held in his two hands, standing upright just beyond the tip of the bar, a few centimetres from it;
+2. the bare shiny chrome tip of the left sleeve;
+3. a SOLID YELLOW plate already on the sleeve;
+4. a SOLID BLUE plate already on the sleeve, pressed against the collar;
+5. the collar, then the long bare knurled middle of the bar running to the right edge, with NO plates on the right side at all.
 
-THE BARBELL lies on the black rubber floor just below his hands, running ACROSS the picture from left to right, in front of his feet — it does NOT pass between his knees. Its LEFT end is a thick shiny chrome sleeve, and the yellow plate in his hands is lined up with the end of that sleeve, about to slide on. Already on that left sleeve, near the middle of the bar, sit two plates: a SOLID BLUE plate pushed against the collar, and outside it, toward the sleeve end, a SOLID YELLOW plate. The right end of the bar is EMPTY. Exactly three plates in the whole picture: blue and yellow on the bar, yellow in his hands. All three the same large size.
+ALL THREE PLATES FACE THE SAME WAY: their flat round faces are PARALLEL to each other, each standing upright with its face pointing along the bar, like slices of the same loaf, so all three look the same shape from the camera. The plate in his hands is simply the next slice, waiting to slide onto the left end of the bar. It is NOT turned sideways and NOT standing across the bar.
+
+HIS HANDS are at the LEFT of the picture, gripping the held yellow plate by its rim: one hand at the top of the rim, one at the side, fingers wrapped over the edge, thumbs on the plate's face, elbows bent. Five correctly shaped fingers on each hand, tanned forearms, a black smartwatch on his left wrist.
 
 THE VIEW: one CIRCULAR fisheye image filling the full height of a 16:9 frame, pure black on the left and right, a thin pale bluish glow on the rim. It is upside down like all forehead-camera footage: his knees in grey shorts are at the very TOP edge of the circle, the floor fills the middle, and the gym's walls, plate racks and bright window curve around the BOTTOM of the circle. No ceiling at the top.
 
