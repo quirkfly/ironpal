@@ -19,24 +19,24 @@ specified.
 
 ## 1. Image prompt (attach `input/kickstarter/fisheye/ref_curl_86s.jpg` as style/geometry reference)
 
-*Revised 2026-10-09 after the first still: arms hung straight from the top, pressing on top of a
-plate standing a metre from the bar; the room was the right way up (window at the top); a fourth
-plate appeared on the far sleeve. The orientation rule now leads, the grip is described as lifters
-hold a plate (rim at ten and two, thumbs on the face, elbows bent by the knees, plate at the sleeve
-end), and the far sleeve is stated empty.*
+*Revision 3, 2026-10-09.* Still 1 hung straight arms onto a distant plate and was the right way up.
+Still 2 fixed the orientation, but the hands rested empty on the floor, the bar ran out from between
+the knees, and the plate order was reversed. **This version is shorter and leads with the held
+plate as the subject.** A long prompt lets the image model keep some details and drop others, and
+it kept the scene and dropped the hands. The bar now lies **across** the picture in front of his
+feet, and the plate order is described as the camera sees it: blue against the collar, yellow
+outside it.
 
 ```
-A single photograph from a tiny 200-degree fisheye camera worn on a man's forehead, looking STRAIGHT DOWN at the floor between his feet while he squats low beside a barbell. No text, no logos, no numbers anywhere — the weight plates carry no printing.
+A single photograph from a tiny 200-degree fisheye camera worn on a man's forehead, looking straight down while he squats in a gym. No text, no logos, no numbers anywhere; the plates are plain coloured rubber with no printing.
 
-The frame is 16:9 and PURE BLACK on the left and right; in the middle is ONE large CIRCULAR fisheye image filling the full height of the frame, its top and bottom edges just clipped. A thin pale bluish-white glow runs around the rim of the circle. Inside the circle everything bends into a sphere and the room wraps around the edges.
+THE SUBJECT, in the centre of the picture: BOTH of his hands holding ONE SOLID YELLOW rubber bumper plate upright in front of him, a little above the floor. His left hand grips the left side of the plate's rim, his right hand grips the right side of the rim, fingers wrapped over the edge, thumbs on the face of the plate, elbows bent. The yellow plate is clearly IN HIS HANDS, lifted, not lying on the floor. Five correctly shaped fingers on each hand, tanned forearms, a black smartwatch on his left wrist.
 
-ORIENTATION — the most important rule: the camera hangs face-down from his forehead, so the picture is UPSIDE DOWN compared with a normal photo. The man's OWN body is at the TOP of the circle: his two knees in grey shorts appear along the very top edge, close to the lens, because he is squatting, and his forearms come down into the circle from between and beside his knees. The black rubber floor fills the MIDDLE of the circle. The gym's walls, plate racks and the bright window appear ONLY around the BOTTOM half of the circle, upside down and curving along the rim. There is NO ceiling, NO window and NO horizon at the top of the circle.
+THE BARBELL lies on the black rubber floor just below his hands, running ACROSS the picture from left to right, in front of his feet — it does NOT pass between his knees. Its LEFT end is a thick shiny chrome sleeve, and the yellow plate in his hands is lined up with the end of that sleeve, about to slide on. Already on that left sleeve, near the middle of the bar, sit two plates: a SOLID BLUE plate pushed against the collar, and outside it, toward the sleeve end, a SOLID YELLOW plate. The right end of the bar is EMPTY. Exactly three plates in the whole picture: blue and yellow on the bar, yellow in his hands. All three the same large size.
 
-On the floor in the middle of the circle lies an OLYMPIC BARBELL, almost straight, its near end — a thick, shiny chrome sleeve — pointing toward his feet, slightly to the left of centre. The far end of the bar runs out toward the bottom of the circle and its far sleeve is EMPTY, with no plates on it. On the near sleeve, pushed against the collar, sit TWO plain rubber bumper plates of the same large diameter: innermost a SOLID BLUE plate, next to it a SOLID YELLOW plate. These are the ONLY plates on the bar.
+THE VIEW: one CIRCULAR fisheye image filling the full height of a 16:9 frame, pure black on the left and right, a thin pale bluish glow on the rim. It is upside down like all forehead-camera footage: his knees in grey shorts are at the very TOP edge of the circle, the floor fills the middle, and the gym's walls, plate racks and bright window curve around the BOTTOM of the circle. No ceiling at the top.
 
-HIS HANDS — natural, the way lifters actually hold a bumper plate to load it: he holds a third SOLID YELLOW plate, the same size, UPRIGHT and right at the end of the near sleeve, a few centimetres off the floor, its centre hole lined up with the sleeve, about to slide on. His forearms come in from the top of the circle and angle INWARD toward the plate, elbows bent and close to his knees. His LEFT hand grips the plate's rim at about the ten o'clock position and his RIGHT hand at about the two o'clock position: fingers curled around the rim's edge, thumbs resting flat on the plate's face. His wrists are firm and straight, the grip relaxed and practised — he is not pressing down on the top of the plate and his arms are not straight. Both hands are clearly visible and sharp: tanned forearms, five correctly shaped fingers on each hand, a black smartwatch on his LEFT wrist.
-
-Consumer action-camera look: bright, slightly washed-out highlights, mild noise, slight purple fringing at the rim of the circle. No other people.
+Bright daylight, slightly washed-out highlights, mild noise. No other people.
 ```
 
 ## 2. Clip prompt (the still as start frame · Omni Flash · 8 s · 16:9 · silent)
