@@ -33,6 +33,8 @@ variants listed in `credentials/crowdfunding_accounts.txt` (gitignored, mode 600
 
 - Submission (2026-10-07): **not possible yet.** Business verification (individual data and bank account SK…448, EUR) is IN REVIEW, which can take up to 5 working days. *Publish project preview* stays disabled until it clears, and submitting comes after that. Run `/indiegogo-status` to check; it is read-only and never clicks Publish or Submit.
 
+- **2026-10-09: business verification failed.** The bank account SK…448 (EUR) was rejected with the reason *"Invalid bank document, it has to be an individual statement."* Individual data now shows READY TO SUBMIT. Fix it under Settings → Business account details → *Correct the data*, then resubmit. The profile is verified as an **individual**, while the 20deka plan assumed a company. That mismatch is the likely cause.
+
 ## Things noticed along the way
 
 - **Gmail storage is at 14.71 of 15 GB.** Once it fills, platform mail (KYC, review results, backer messages) bounces.

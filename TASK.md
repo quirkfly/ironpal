@@ -3065,3 +3065,120 @@ here is K6 source
 
 remove typing sound and produce a master video featuring all clips
 
+---
+
+let's upload the master video featuring all clips to YT
+
+---
+
+video is not there..what account did you use? you were suppose to use ironpal account!!!
+
+---
+
+implement ~/job_stuff/prj/ironpal/docs/ironpal-neural-model-design-v2.md design allowing me to:
+
+1. tag and label recorded exercise session containing one exercise - alternate biceps curl
+2. re-record the same exercise session again and test whether the tagging and labeling system correctly identifies performed exercise
+
+install the app on the attached samsung device and ensure it is functioning correctly before proceeding with the exercise tagging and labeling tests.
+
+---
+
+Since this Maestro version can't change ports, I'll queue a rerun to start automatically once the other session's Maestro exits,
+  using the already-installed build (--no-install).
+
+the other session will not exit any time soon..it is running continuously
+
+upgrate Maestro to a version that allows changing ports
+
+---
+
+looking at the below platforms
+
+   Platform   │                                                 Registration                                                  │
+  ├──────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │              │ Done, using your name, date of birth, the company address and 20deka's DIČ (2024120692) as tax ID. Phone      │
+  │ Wefunder     │ verification was skipped because no SMS arrived, along with the optional net worth, income and bank           │
+  │              │ questions.                                                                                                    │
+  ├──────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ Makuake      │ Done; the username is IronPal.                                                                                │
+  ├──────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ StartEngine  │ Done.                                                                                                         │
+  ├──────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ GoFundMe     │ Done.                                                                                                         │
+  ├──────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ Republic     │ Name, date of birth, Slovak nationality, address and tax residency are saved. It stops at the Finance step,   │
+  │ Europe       │ which requires either annual income or net assets.                 
+
+  i feel like none of them is suitable for IronPal.
+
+  ---
+
+  ulule targets french speaking backers primarily and the amount pledged per project is pathetically low compared to other platforms.
+
+  ---
+
+  give me another five platforms accepting slovak creators similar to indiegogo.
+
+  ---
+
+  create ironpal campaign on BackerKit
+
+  ---
+
+  using another agent create ironpal campaign on https://www.crowdsupply.com/
+
+  ---
+
+  samsung device is connected complete the registration process by reading any verification emails as neccessary
+
+  ---
+
+  modify backerkit prelaunch page for IronPal campaign to feature graphics and video 
+
+  here is an example
+
+  https://www.backerkit.com/c/projects/imunesky/iron-horizon-skirmish-table-top-game-of-ww2-mechs/pre-launch?ref=bk-discover-search
+
+  ---
+
+  ironpal is not listed in comming up soon projects
+
+  https://www.backerkit.com/c/feeds/coming_soon?ref=bk-discover-leftnav
+
+  investigate why
+
+  ---
+
+  come up with a detailed plan how to get 10k YT subscribers to @getironpal channel
+
+  we need to identify all fitness mobile apps video on YT and add a comment to their feed RELATED to the content of the video..if they want they can look at ironpal on their own - no spam!!!!
+
+  save the plan to docs than apply /grill-me-auto and then implement it
+
+  operate in autonomous mode using /swarm skill and get back to me only after there are > 10k YT subscribers to @getironpal channel
+
+  ---
+
+  have a detailed look at last exercise clip taken by the fisheye camera..i need to product an identical clip but not inside my living room like this clip was shoot in, but in a gym..the clip must clearly show my hads holding a weight and voing it around..i dont have time to go to a gym to shoshouldot hence it must be produced sythentically using AI.
+
+  come up with a detailed prompt i can hand over to omni flash model to produce the synthetic gym exercise clip.
+
+  ---
+
+  come up with a detailed design plan how to add markers and dynamic tracking points to the below video
+
+  /home/quirkfly/Downloads/Man_lifting_dumbbell_in_gym_20261009173801.mp4
+
+  - they must detect exercise: one arm bicep curl
+  - they must detect number of repetitions: the count must increase as the arm moves up - it must be sync with the actual movement
+  - they must mark and track lifted weights in real time (dumbbell: 2x5kg, 2x3.5kg, bar 1kg) 
+  - use brand color for the markers and text labels same as in squat clip featured on the landing page
+
+  save the plan to docs than apply /grill-me-auto than implement it
+
+  ---
+
+  plates overlay tracking in not accurate..fix it
+  
+
