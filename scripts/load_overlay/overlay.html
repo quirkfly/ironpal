@@ -1,0 +1,79 @@
+<!doctype html><meta charset=utf-8>
+<!-- Barbell-loading plate overlay, 720x1280 (the clip's own portrait frame). Same tokens as the curl
+     overlay (scripts/curl_overlay/overlay.html): accent #00E5CC, Ice White, Slate Gray, Montserrat. -->
+<style>
+@font-face{font-family:Mont;src:url("../../web/node_modules/@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2") format("woff2");font-weight:100 900}
+:root{--accent:#00E5CC;--heading:#F0F4F8;--body:#9aa0b4}
+html,body{margin:0;width:720px;height:1280px;background:transparent;overflow:hidden;font-family:Mont,sans-serif}
+svg{position:absolute;inset:0}
+.m-box{stroke:var(--accent);stroke-width:3;fill:none;stroke-linecap:round}
+.m-boxfill{fill:rgba(0,229,204,.07);stroke:var(--accent);stroke-width:1;stroke-opacity:.35;stroke-dasharray:4 6}
+.m-lead{stroke:var(--accent);stroke-width:1.5;fill:none;opacity:.85}
+.m-dot{fill:var(--accent)}
+.m-tag{font:700 22px Mont;fill:var(--heading);letter-spacing:.04em;paint-order:stroke;stroke:#0b0b16;stroke-width:5px;stroke-opacity:.65}
+.m-small{font:700 12px Mont;fill:var(--body);letter-spacing:.14em;text-transform:uppercase;paint-order:stroke;stroke:#0b0b16;stroke-width:4px;stroke-opacity:.65}
+.m-ok{fill:var(--accent)}
+/* HUD in the top black band */
+.hud{position:absolute;left:30px;top:26px;width:660px;height:220px;box-sizing:border-box;padding:18px 22px;border-radius:24px;background:#101023;border:1px solid rgba(255,255,255,.06)}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.1em;font-size:15px;color:var(--heading)}
+.brand i{width:15px;height:15px;border-radius:50%;border:3px solid var(--accent);border-bottom-color:transparent;box-sizing:border-box}
+.live{font-size:12px;color:var(--accent);letter-spacing:.08em}
+.row{display:flex;align-items:flex-end;gap:26px;margin-top:14px}
+.f{border:1px solid rgba(0,229,204,.55);background:rgba(0,229,204,.08);box-shadow:0 0 24px -8px rgba(0,229,204,.5);border-radius:14px;padding:10px 16px;min-width:210px;transition:none}
+.f.pulse{border-color:rgba(0,229,204,.95);box-shadow:0 0 34px -2px rgba(0,229,204,.8)}
+.lbl{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--body);margin-bottom:4px}
+.big{font-weight:800;font-size:46px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.big small{font-size:18px;font-weight:600;color:var(--body);margin-left:4px}
+.chips{display:flex;flex-direction:column;gap:7px;font-size:15px;color:var(--heading)}
+.chip{display:flex;align-items:center;gap:9px}
+.chip b{width:12px;height:12px;border-radius:50%;display:inline-block}
+.chip .st{color:var(--body);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-left:4px}
+.chip .st.ok{color:var(--accent)}
+.note{position:absolute;left:0;right:0;bottom:62px;text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--body)}
+</style>
+<svg id="ov" viewBox="0 0 720 1280" width="720" height="1280"></svg>
+<div class="hud">
+  <div class="top"><span class="brand"><i></i>IRONPAL</span><span class="live">● live</span></div>
+  <div class="row">
+    <div class="f" id="totF"><span class="lbl">Plates on bar</span><span class="big"><span id="tot">45</span><small>kg</small></span></div>
+    <div class="chips">
+      <div class="chip"><b style="background:#f2c230"></b>20 kg<span class="st ok">on bar ✓</span></div>
+      <div class="chip"><b style="background:#2f6fd0"></b>25 kg<span class="st ok">on bar ✓</span></div>
+      <div class="chip"><b style="background:#f2c230"></b>20 kg<span class="st" id="mst">loading…</span></div>
+    </div>
+  </div>
+</div>
+<div class="note">Product interface concept · Simulated footage</div>
+<script>
+const T = window.TRACKS, ov = document.getElementById('ov');
+function brackets(x, y, w, h) {
+  const k = Math.min(w, h) * 0.45 + 6, x1 = x + w, y1 = y + h;
+  const c = (px, py, dx, dy) => `M${px + dx * k},${py} L${px},${py} L${px},${py + dy * k}`;
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" class="m-boxfill"/>
+          <path class="m-box" d="${c(x, y, 1, 1)} ${c(x1, y, -1, 1)} ${c(x, y1, 1, -1)} ${c(x1, y1, -1, -1)}"/>`;
+}
+// tag above a box with a leader line; dx shifts it sideways so the three tags never overlap
+function tag(b, dx, ty, kg, sub, ok) {
+  const cx = b[0] + b[2] / 2, top = b[1];
+  return `<line class="m-lead" x1="${cx}" y1="${top - 4}" x2="${cx + dx}" y2="${ty + 8}"/>
+          <circle class="m-dot" cx="${cx}" cy="${top - 4}" r="3.5"/>
+          <text class="m-tag" x="${cx + dx}" y="${ty}" text-anchor="middle">${kg}</text>
+          ${sub ? `<text class="m-small ${ok ? 'm-ok' : ''}" x="${cx + dx}" y="${ty + 22}" text-anchor="middle">${sub}</text>` : ''}`;
+}
+window.render = function (i) {
+  const f = T.frames[i], S = T.S, B = T.B, M = f.M, seated = f.seated;
+  const since = T.seated_at == null ? 99 : i - T.seated_at;
+  const pulse = seated && since < 14 ? since / 14 : null;
+  ov.innerHTML = `
+    ${brackets(...B)} ${brackets(...S)} ${brackets(...M)}
+    ${tag(B, 70, B[1] - 70, '25 kg', 'blue', false)}
+    ${tag(S, 0, S[1] - 118, '20 kg', 'yellow', false)}
+    ${tag(M, seated ? -70 : -40, M[1] - 70, '20 kg', seated ? 'seated ✓' : 'loading…', seated)}
+    ${pulse !== null ? `<rect x="${M[0] - 8 - 20 * pulse}" y="${M[1] - 8 - 20 * pulse}" width="${M[2] + 16 + 40 * pulse}" height="${M[3] + 16 + 40 * pulse}" rx="10" fill="none" stroke="#00E5CC" stroke-width="${4 - 3 * pulse}" opacity="${1 - pulse}"/>` : ''}`;
+  document.getElementById('tot').textContent = seated ? 65 : 45;
+  const st = document.getElementById('mst');
+  st.textContent = seated ? 'on bar ✓' : 'loading…'; st.classList.toggle('ok', seated);
+  document.getElementById('totF').classList.toggle('pulse', pulse !== null);
+};
+</script>
