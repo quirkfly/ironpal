@@ -81,3 +81,5 @@ web/server/emails.db*
 /poc/mobile/.bundle-backup/
 poc/mobile/android/app/src/main/assets/models/
 /input/kickstarter/fisheye/curl_overlay_frames/
+/input/kickstarter/fisheye/ironpal-curl-tracked-6s.mp4
+/input/kickstarter/shorts/
