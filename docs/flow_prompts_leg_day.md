@@ -107,3 +107,52 @@ Continue exactly from the starting image. ONE CONTINUOUS SHOT, NO CUTS. No text,
 
 THE ACTION, slow and controlled, TWO Romanian deadlifts: with soft knees and a flat back he pushes his hips back and hinges forward, sliding the bar down the front of his thighs to just below his knees, the bar staying close to his legs the whole way; then he drives his hips forward and stands back up, twice. From the camera's view, as he hinges the floor and his shoes come closer and the bar travels down toward the middle of the circle, then rises back as he stands. His grip and the lifting straps never change and the plates never change. Every movement is continuous, never a jump. Audio: NO MUSIC — quiet gym room sound and his breathing.
 ```
+
+---
+
+## 7. Third-person series with an original character, `Ava Headband`
+
+**2026-10-10.** The founder asked for these exercises performed by the woman in the reference Short,
+wearing the IronPal headband. **That is not done here.** She is a real, identifiable creator, and
+generating her likeness wearing our product would put an endorsement in her mouth that she never
+gave. The series uses an **original character** instead: invented, not modelled on her face, hair
+or outfit. The prompts take only the exercises and their setup from the Short.
+
+### 7.1 Mint the character in Flow (free, do this once)
+
+In the Flow project: **Characters → New character → describe it**, paste the description below,
+generate, pick the variant that matches it best, and **rename it `Ava Headband`**. An unnamed
+character matches nothing (runbook §0, trap 3), so the name in later prompts must match it exactly.
+
+```
+Ava Headband: a woman in her late twenties, athletic and strong, an experienced lifter. Warm medium-brown skin, dark brown eyes, a friendly, focused expression. Straight black hair, shoulder-length, tied back in a low, neat ponytail so her forehead is clear. She is wearing a fitted charcoal-grey sports crop top, high-waisted black training leggings, and plain white training shoes with white socks. On her forehead she wears the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side. The band carries NO lettering and NO writing of any kind. No other jewellery, no headphones, no earbuds, no cap. Full-length, standing naturally, front view, neutral studio background.
+```
+
+**Check the mint before using it.** The band is on her forehead with the lens front-centre, the
+stripe is along the lower edge, there are no letters on the band, and her forehead is clear of hair.
+If the band is missing or garbled, re-generate; minting is free.
+
+### 7.2 Exercise 1 — barbell back squat (still not needed; a fresh 8 s clip)
+
+Add **`Ava Headband`** via *Add ingredients*, keep the name in the pasted text, 16:9, 8 s, Omni 1.1
+Flash. Paste as plain text.
+
+```
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. No captions, no subtitles, no titles, no logos, no UI, and no letters or numerals anywhere in frame; the weight plates are plain coloured rubber with no printing. ONE CONTINUOUS SHOT, NO CUTS. SILENT: nobody speaks.
+
+Ava Headband trains alone in a bright, clean strength gym in daylight: grey carpet-tile floor, pale walls with high windows, a steel power rack with its safety arms set at mid-thigh height. A loaded Olympic barbell rests in the rack's J-hooks at shoulder height, with one SOLID GREEN bumper plate on each end, both the same size.
+
+A LOCKED-OFF SHOT ON A 35mm LENS AT HIP HEIGHT, from the front and about 30 degrees to her left, about three metres away, framing her full length from head to toe inside the rack, with the IronPal headband on her forehead clearly visible and sharp in every frame. The camera does not move.
+
+THE ACTION, slow and controlled, ONE continuous movement: she steps under the bar, sets it across her upper back with her hands just outside her shoulders, stands up to lift it out of the hooks, and takes two small steps back. With her feet a little wider than her shoulders and her toes turned slightly out, she performs TWO full back squats, about three seconds each: she sits her hips down and back until her thighs are parallel to the floor, knees tracking over her toes, chest up and back flat, then drives up to standing. Every movement is real and continuous, never a frozen pose, never a jump. Her eyes look forward, never at the camera.
+
+The headband stays exactly in place throughout: matte black, the thin teal stripe, the small lens and tiny teal light at the front, the small teal ring mark on the right side, NO lettering. Each hand has exactly five correctly shaped fingers. She is ALONE in the gym. Audio: NO MUSIC — quiet gym room sound, her steady breathing and the soft clink of the plates.
+```
+
+**Judge it in this order:** the band on her forehead, sharp and with no letters → the unrack, then
+two complete squats to parallel → a continuous shot with no cuts → hands → no text on the plates →
+she never looks at the camera.
+
+**For the next exercises**, reuse the same opening (no-writing line, `Ava Headband`, the same gym),
+the band clause and the audio line, and swap only the setup and THE ACTION paragraph, taken from
+§1's analysis.
