@@ -53,6 +53,37 @@ along the lower edge, no letters, forehead clear of hair.
 Ava Headband: a woman in her late twenties, athletic and strong, an experienced lifter. Warm medium-brown skin, dark brown eyes, a friendly, focused expression. Straight black hair, shoulder-length, tied back in a low, neat ponytail so her forehead is clear. She is wearing a fitted charcoal-grey sports crop top, high-waisted black training leggings, and plain white training shoes with white socks. On her forehead she wears the IronPal headband: a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side. The band carries NO lettering and NO writing of any kind. No other jewellery, no headphones, no earbuds, no cap. Full-length, standing naturally, front view, neutral studio background.
 ```
 
+### 3.1 Portrait prompt (image model, text only; it creates her face)
+
+Generate this first, pick the best of the batch, and use it as the reference for everything else.
+It is head-and-shoulders on a plain wall, so the face is all the model has to get right.
+
+```
+Head-and-shoulders portrait photograph of an original woman, Ava: late twenties, an experienced strength athlete. Warm medium-brown skin with natural texture, a light scatter of freckles across the nose, dark brown eyes, straight dark eyebrows, a fairly broad nose, full lips, a strong, square jaw and a small scar through her left eyebrow. Straight black hair, shoulder-length, pulled back into a low, neat ponytail so her forehead is fully clear. Calm, friendly, focused expression with a slight closed-mouth smile.
+
+On her forehead she wears the IronPal headband, sitting just above the eyebrows: a matte-black fabric band about four centimetres tall, a thin electric-teal stripe along its lower edge, a small flush round camera lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side. The band carries NO lettering and NO writing of any kind.
+
+Framing: head-and-shoulders to mid-chest, squared to camera, eyes open and looking into the lens, the whole band visible and sharp. She wears a fitted charcoal-grey sports top. Plain, evenly lit neutral warm-grey wall behind her, no texture, no objects, no other people, no text or logos anywhere. Soft natural daylight from the front. Natural, healthy, realistic skin tone; real skin texture, NOT airbrushed, NOT a beauty-filter face, NOT a fashion model. Sharp and in focus.
+```
+
+### 3.2 Body prompt (the accepted portrait attached as the reference)
+
+```
+Full-length photograph, head to toe, of the exact woman in the portrait reference, standing relaxed and facing the camera in a bright, clean strength gym in daylight: grey carpet-tile floor, pale blue-grey walls with high windows and wall mirrors, a steel power rack and dumbbell racks behind her, slightly out of focus.
+
+THE FACE MUST MATCH THE PORTRAIT REFERENCE EXACTLY: same face shape and square jaw, same eyes, eyebrows and small scar through the left eyebrow, same nose and lips, same freckles, same skin tone and texture. Do not slim, beautify, sharpen or change her face in any way.
+
+She has a strong, athletic lifter's build: solid shoulders and legs, NOT skinny, NOT a fitness-model physique. She wears a fitted charcoal-grey sports crop top, high-waisted black training leggings, white socks and plain white training shoes. Her black hair is in the same low ponytail, forehead clear.
+
+On her forehead, exactly as in the portrait: the IronPal headband, a matte-black fabric band with a thin electric-teal stripe along its lower edge, a small flush round lens at the front centre with a tiny teal light beside it, and a small teal ring mark on the right side. NO lettering and NO writing anywhere on the band. No other jewellery, no headphones, no earbuds, no cap.
+
+Arms relaxed at her sides, hands open and natural, five correctly shaped fingers on each. No text or logos anywhere in the picture. Natural daylight, natural skin tone. Sharp and in focus, nobody else in frame.
+```
+
+**Then mint:** in Flow, create the character from the **portrait and the body image** (or from the
+§3 description if Flow only offers text), and rename it **`Ava Headband`**. The scar, the freckles
+and the square jaw give her a distinct, repeatable identity. A generic face drifts between clips.
+
 ## 4. Exercise 1 — barbell back squat
 
 ```
