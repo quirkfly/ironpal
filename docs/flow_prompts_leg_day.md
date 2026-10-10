@@ -87,17 +87,35 @@ and the square jaw give her a distinct, repeatable identity. A generic face drif
 
 ## 4. Exercise 1 — barbell back squat
 
+*Revision 2, 2026-10-10.* Take 1 (`Woman_trains_in_gym_20261010030402.mp4`) broke the physics:
+- **The bar teleported.** She walked in from the side and the bar was simply on her back. Flow
+  cannot render an unrack, so the bar now **starts on her back** and the walk-in is gone.
+- **Giant plates filled the foreground.** Shooting through the rack's upright put stored plates on
+  its pegs right in front of the lens. The camera is now **outside the rack with a clear line of
+  sight**, and nothing is stored on the pegs.
+- **Quarter-depth squats.** Depth is now stated by landmarks, the hip crease below the top of the
+  knee, with the **bar path** stated too: straight down and up over mid-foot, both ends level.
+- **Printed numbers and brand names on the plates.** The plates are now *completely smooth, solid
+  green, nothing printed*, said twice.
+
 ```
-LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. No captions, no subtitles, no titles, no logos, no UI, and no letters or numerals anywhere in frame; the weight plates are plain coloured rubber with no printing. ONE CONTINUOUS SHOT, NO CUTS. SILENT: nobody speaks.
+LIVE-ACTION FOOTAGE WITH NO WRITING IN IT. No captions, no subtitles, no titles, no logos, no UI, and no letters, numbers or brand names anywhere in frame. ONE CONTINUOUS SHOT, NO CUTS. SILENT: nobody speaks.
 
-Ava Headband trains alone in a bright, clean strength gym in daylight: grey carpet-tile floor, pale blue-grey walls with high windows and wall mirrors, dumbbell racks along the wall, inside a steel power rack with its safety arms set at mid-thigh height. A loaded Olympic barbell rests in the rack's J-hooks at shoulder height, one SOLID GREEN bumper plate on each end, both the same size.
+Ava Headband stands inside a steel power rack in a bright, clean strength gym in daylight: grey carpet-tile floor, pale blue-grey walls with high windows. The rack's two safety arms are set at mid-thigh height on both sides of her. Nothing is stored on the rack's pegs.
 
-A LOCKED-OFF SHOT ON A 35mm LENS AT HIP HEIGHT, from the front and about 30 degrees to her left, about three metres away, through the rack's upright, framing her full length from head to toe, the near green plate large in the left of the frame, the IronPal headband on her forehead clearly visible. The camera does not move.
+FROM THE FIRST FRAME the loaded barbell is ALREADY RESTING ACROSS HER UPPER BACK, below the base of her neck, and she is already standing upright with it, unracked, in the middle of the rack. Both hands grip the bar just outside her shoulders, elbows pointing down. On each end of the bar sits ONE SOLID GREEN bumper plate, both the same size, their faces completely smooth with NOTHING printed on them — no numbers, no letters, no brand. The bar is long and straight and both of its ends, with their plates, are fully inside the frame.
 
-THE ACTION, slow and controlled, ONE continuous movement: she steps under the bar, sets it across her upper back with her hands just outside her shoulders, stands to lift it out of the hooks and takes two small steps back. Feet a little wider than her shoulders, toes turned slightly out, she performs TWO full back squats, about three seconds each: hips down and back until her thighs are parallel to the floor, knees tracking over her toes, chest up, back flat, then she drives back up to standing. Every movement is real and continuous, never a frozen pose, never a jump.
+A LOCKED-OFF SHOT ON A 35mm LENS AT HIP HEIGHT, from in front of her and about 25 degrees to her left, about four metres away, OUTSIDE the rack with a clear view of her: nothing between the camera and her body, framing her full length from head to toe with both ends of the bar and both plates inside the frame, the IronPal headband on her forehead clearly visible. The camera does not move.
 
-The headband stays exactly in place throughout: matte black, the thin teal stripe, the small lens and tiny teal light at the front, the small teal ring mark on the right side, NO lettering. Each hand has exactly five correctly shaped fingers. Her eyes stay on her work, never on the camera. She is ALONE in the gym. Audio: NO MUSIC — quiet gym room sound, her steady breathing and the soft clink of the plates.
+THE ACTION, ONE continuous movement, real gym physics: feet a little wider than her shoulders, toes turned slightly out, she performs THREE full back squats, about three seconds each. On the way down she bends her knees and pushes her hips back at the same time, knees tracking over her toes, chest up, back flat, until the crease of her hips is BELOW the top of her knees — a full, deep squat, not a partial one; then she drives straight back up to standing tall. The bar stays fixed on her upper back and moves ONLY with her body, straight down and straight up over the middle of her feet, both ends level, both plates moving together. Her hands never leave the bar, her heels stay flat on the floor, the plates never change size and the bar never passes through the rack or her body. Every movement is continuous, never a frozen pose, never a jump.
+
+The headband stays exactly in place throughout: matte black, the thin teal stripe, the small lens and tiny teal light at the front, the small teal ring mark on the right side, NO lettering. Each hand has exactly five correctly shaped fingers. Her eyes look straight ahead, never at the camera. She is ALONE in the gym. Audio: NO MUSIC — quiet gym room sound and her steady breathing.
 ```
+
+**Judge it in this order:** the bar is on her back from frame 1 and never jumps → three squats
+with the hip crease below the knee → both bar ends and plates in frame, level, nothing in front of
+the lens → no numbers or text on the plates → the band, sharp, with no letters → hands. The take
+came back **9:16, 6 s**; for the 16:9 film, set *aspect 16:9* and *8 s* in Flow before generating.
 
 ## 5. Exercise 2 — barbell hip thrust
 
